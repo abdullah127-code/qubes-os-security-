@@ -4410,24 +4410,141 @@ free -h</pre>
     </div>
 </div>
 <!-- ==================== نهاية تبويب 9 ==================== -->
-        <!-- ==================== تبويب 10: تطبيقات محمولة ==================== -->
-    <div class="tab-pane" id="tab10">
-        <div class="section-title">
-            <i class="fas fa-mobile-alt"></i>
-            <h2>📱 التطبيقات المحمولة (Portable Apps) لـ Whonix / Qubes</h2>
+<!-- ==================== تبويب 10: التطبيقات المحمولة (النسخة الكاملة والموحدة) ==================== -->
+<div class="tab-pane" id="tab10">
+    <div class="section-title">
+        <i class="fas fa-mobile-alt"></i>
+        <h2>📱 التطبيقات المحمولة (Portable Apps) لـ Whonix / Qubes</h2>
+    </div>
+    <div class="note">
+        <i class="fas fa-info-circle"></i> 
+        <strong>ما هي التطبيقات المحمولة؟</strong><br>
+        هذه السكريبتات تسمح بتشغيل تطبيقات سطح المكتب بشكل <strong>محمول بالكامل</strong>، حيث يتم حفظ جميع بيانات التطبيق داخل مجلد بجانب السكريبت (وليس في <code>/home/user</code>). هذا يوفر طبقة إضافية من العزل والخصوصية، ويمكن نقلها بسهولة على فلاشة USB.
+    </div>
+
+    <!-- ==================== 📊 جدول المقارنة الشامل ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
+        <p>مقارنة سريعة وشاملة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية:</p>
+        
+        <div style="overflow-x: auto;">
+            <table class="comparison-table">
+                <thead>
+                    <tr><th>المعيار</th><th>🔷 SimpleX</th><th>🟣 Session</th><th>🟠 Signal</th><th>🟢 Briar</th><th>🔴 Cwtch</th><th>📘 Element</th><th>💬 XMPP</th><th>🧅 OnionShare</th><th>✈️ Telegram</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>الغرض الأساسي</strong></td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مشاركة ملفات + محادثة</td><td>مراسلة</td></tr>
+                    <tr><td><strong>نموذج الشبكة</strong></td><td>لامركزي (خوادم SMP)</td><td>لامركزي (شبكة Oxen)</td><td>مركزي (خوادم Signal)</td><td>ند للند (P2P) عبر Tor/Bluetooth</td><td>ند للند (P2P) عبر Tor v3</td><td>فيدرالي (خوادم Matrix)</td><td>فيدرالي (خوادم XMPP)</td><td>ند للند (P2P) عبر Tor</td><td>مركزي (خوادم Telegram)</td></tr>
+                    <tr><td><strong>تشفير E2EE</strong></td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ (اختياري)</td><td>✅ (اختياري مع OMEMO)</td><td>✅ كامل</td><td>🟡 جزئي (المحادثات السرية فقط)</td></tr>
+                    <tr><td><strong>Perfect Forward Secrecy</strong></td><td>✅</td><td>❌ (محذوفة)</td><td>✅</td><td>✅</td><td>✅</td><td>❌ ضعيف</td><td>✅</td><td>✅</td><td>🟡 جزئي</td></tr>
+                    <tr><td><strong>مقاومة البيانات الوصفية</strong></td><td>🟡 جيد (مع Tor)</td><td>🟡 جيد</td><td>🔴 ضعيف</td><td>🟢 ممتاز</td><td>🟢 ممتاز</td><td>🔴 ضعيف</td><td>🔴 ضعيف</td><td>🟢 ممتاز (Tor)</td><td>🔴 ضعيف</td></tr>
+                    <tr><td><strong>مفتوح المصدر</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>🟡 العميل فقط</td></tr>
+                    <tr><td><strong>يتطلب رقم هاتف</strong></td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td></tr>
+                    <tr><td><strong>يتطلب اتصالاً متزامناً</strong></td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (صندوق بريد)</td><td>✅ (للمحادثات الخاصة)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم مؤقت - جهازك)</td><td>❌ (خادم وسيط)</td></tr>
+                    <tr><td><strong>حدود حجم الملفات</strong></td><td>غير محدد</td><td>غير محدد</td><td>100MB</td><td>غير محدد</td><td>غير محدد</td><td>حسب الخادم</td><td>حسب الخادم</td><td>✅ غير محدود</td><td>2GB</td></tr>
+                    <tr><td><strong>يعمل بدون إنترنت</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ (Bluetooth/Wi-Fi)</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td><strong>يدعم iOS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌ (Android فقط)</td><td>❌ (Android/Linux فقط)</td><td>✅</td><td>✅</td><td>❌ (Desktop فقط)</td><td>✅</td></tr>
+                    <tr><td><strong>المحادثة المجهولة</strong></td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>✅ (بدون حسابات)</td><td>❌</td></tr>
+                    <tr><td><strong>استضافة موقع .onion</strong></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
+                    <tr><td><strong>التوصية الأمنية</strong></td><td>⭐ ممتاز للاستخدام العام</td><td>⚠️ يحذر منه الخبراء</td><td>🟡 للاستخدام العادي</td><td>⭐ مثالي للبيئات القمعية</td><td>⭐ ممتاز للـ Desktop/Android</td><td>⚠️ بحذر (للمجتمعات)</td><td>⚠️ بحذر (للمحترفين)</td><td>⭐ للمشاركة الآمنة</td><td>❌ غير موصى به</td></tr>
+                </tbody>
+            </table>
         </div>
-        <div class="note">
-            <i class="fas fa-info-circle"></i> 
-            <strong>ما هي التطبيقات المحمولة؟</strong><br>
-            هذه السكريبتات تسمح بتشغيل تطبيقات سطح المكتب بشكل <strong>محمول بالكامل</strong>، حيث يتم حفظ جميع بيانات التطبيق داخل مجلد بجانب السكريبت (وليس في <code>/home/user</code>). هذا يوفر طبقة إضافية من العزل والخصوصية.
+        
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-star-of-life"></i>
+            <strong>💡 توصية الخبراء:</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li>• <strong>للخصوصية القصوى على Android مع إمكانية العمل بدون إنترنت:</strong> اختر <strong>Briar</strong>.</li>
+                <li>• <strong>للاستخدام على أجهزة سطح المكتب (Windows/Linux) مع أعلى حماية للبيانات الوصفية:</strong> اختر <strong>Cwtch</strong>.</li>
+                <li>• <strong>للاستخدام اليومي السهل مع معرفات مؤقتة وعبر Tor (يعمل بكفاءة في Whonix):</strong> اختر <strong>SimpleX</strong>.</li>
+                <li>• <strong>للمشاركة الآمنة للملفات الكبيرة أو استقبال المستندات من مصادر:</strong> اختر <strong>OnionShare</strong>.</li>
+                <li>• <strong>للاستخدام الشخصي غير الحساس:</strong> Signal كافٍ.</li>
+                <li>• <strong>تجنب Session</strong> بسبب إزالته لخاصية PFS وارتباطه بجدل أخلاقي.</li>
+                <li>• <strong>تجنب Telegram و WhatsApp</strong> في بيئات تتطلب خصوصية عالية.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==================== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix (البوابة + محطة العمل) ==================== -->
+    <div class="card" style="border-right: 6px solid #66ccff;">
+        <div class="card-header" style="color: #88aaff;">
+            <i class="fas fa-shield-virus"></i> 🧅 تشغيل تطبيقات Tor داخل Whonix (الحل الكامل: البوابة + محطة العمل)
+        </div>
+        <p><strong>المشكلة:</strong> تطبيقات مثل Cwtch و OnionShare قد تحتوي على Tor مدمج. في Whonix، هذا يسبب مشكلة "تكديس Tor" (Tor-over-Tor) وقد يتم حظر الاتصال. <strong>الحل الصحيح</strong> يتطلب إعدادات في <strong>كل من البوابة ومحطة العمل</strong>، مع الانتباه لمشكلة الملفات المضغوطة (<code>.gz</code>) التي قد تعطل الخدمة.</p>
+        
+        <h4>🛠️ الطريقة الأولى: استخدام torsocks (للتطبيقات التي تدعم SOCKS) - مثالية لـ SimpleX</h4>
+        <p>SimpleX يعمل بشكل ممتاز مع هذا الحل، وهو الخيار الموصى به لتشغيله في Whonix. <strong>لا يتطلب أي إعدادات إضافية في البوابة أو محطة العمل</strong> - فقط استخدم <code>torsocks -i</code>:</p>
+        <pre class="code-block" style="direction: ltr; text-align: left;"># تشغيل أي تطبيق عبر Tor الخاص بـ Whonix
+torsocks ./application.AppImage
+
+# لعزل الدائرة (Isolate Circuit) ومنع الربط بين الجلسات
+torsocks -i ./application.AppImage</pre>
+        
+        <h4>🛠️ الطريقة الثانية: إضافة استثناء لـ Onion Grater مع فتح المنافذ (للتطبيقات التي تحتاج منافذ مفتوحة مثل OnionShare و Cwtch)</h4>
+        <p><strong>يتطلب إعدادات في كل من البوابة ومحطة العمل:</strong></p>
+        
+        <h5>🔹 في Whonix-Gateway (البوابة):</h5>
+        <pre class="code-block" style="direction: ltr; text-align: left;"># افتح الطرفية كـ root ونفّذ
+sudo onion-grater-add 40_onionshare   # لـ OnionShare
+sudo onion-grater-add 40_cwtch        # لـ Cwtch
+
+# ⚠️ خطوة حرجة: تأكد من فك ضغط الملف إذا كان مضغوطاً
+sudo gunzip /usr/local/etc/onion-grater-merger.d/40_onionshare.yml.gz
+sudo gunzip /usr/local/etc/onion-grater-merger.d/40_cwtch.yml.gz
+
+# للتحقق
+ls /usr/local/etc/onion-grater-merger.d/  # يجب أن ترى الملفات بدون .gz</pre>
+
+        <h5>🔹 في Whonix-Workstation (محطة العمل):</h5>
+        <pre class="code-block" style="direction: ltr; text-align: left;"># فتح المنافذ المطلوبة في جدار الحماية
+sudo mkdir -p /usr/local/etc/whonix_firewall.d
+
+# لـ OnionShare (المنافذ 17600-17659)
+echo 'EXTERNAL_OPEN_PORTS+=" $(seq 17600 17659) "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf
+
+# لـ Cwtch (المنافذ 15000-15378)
+echo 'EXTERNAL_OPEN_PORTS+=" $(seq 15000 15378) "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf
+
+# إعادة تحميل جدار الحماية
+sudo whonix_firewall</pre>
+
+        <div class="note-critical" style="margin-top: 15px;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ تذكير هام:</strong> إذا كان ملف <code>.yml</code> مضغوطاً بصيغة <code>.gz</code>، <strong>لن يتمكن onion-grater من قراءته</strong> وسيفشل الاتصال. فك الضغط يدوياً باستخدام <code>gunzip</code> هو الحل المضمون.
         </div>
 
-        <!-- SimpleX Chat Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (الموصى به)</div>
-            <p>SimpleX Chat هو تطوير مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية.</p>
-            <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex-chat.sh</button>
-            <pre class="code-block" id="simplex-script">#!/bin/bash
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-check-circle"></i>
+            <strong>✅ التحقق من أن التطبيق يعبر عبر Tor:</strong>
+            <code>torsocks curl https://check.torproject.org/api/ip</code>
+            <p>يجب أن تظهر رسالة <code>{"IsTor":true</code>.</p>
+        </div>
+
+        <div class="note" style="margin-top: 15px; background: #1a2a3a;">
+            <i class="fas fa-lightbulb"></i>
+            <strong>💡 ملخص سريع للإعدادات المطلوبة حسب التطبيق:</strong>
+            <table class="comparison-table" style="margin-top: 10px;">
+                <thead>
+                    <tr><th>التطبيق</th><th>إعدادات البوابة (Gateway)</th><th>إعدادات محطة العمل (Workstation)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>SimpleX Chat</strong></td><td>❌ لا يحتاج</td><td><code>torsocks -i ./simplex.AppImage</code></td></tr>
+                    <tr><td><strong>Cwtch</strong></td><td><code>sudo onion-grater-add 40_cwtch</code></td><td>فتح المنافذ 15000-15378 + متغيرات البيئة</td></tr>
+                    <tr><td><strong>OnionShare</strong></td><td><code>sudo onion-grater-add 40_onionshare</code> + فك الضغط</td><td>فتح المنافذ 17600-17659</td></tr>
+                    <tr><td><strong>Signal/Session</strong></td><td>❌ لا يحتاج</td><td><code>torsocks</code> (قد لا يعمل Signal)</td></tr>
+                    <tr><td><strong>Element/Gajim</strong></td><td>❌ لا يحتاج</td><td>يعمل عبر Tor النظام تلقائياً</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== SimpleX Chat Card ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (الموصى به للعامة - يعمل بكفاءة في Whonix)</div>
+        <p>SimpleX Chat هو تطوير مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية. <strong>تم اختباره ويعمل بشكل ممتاز في Whonix</strong> دون الحاجة لأي إعدادات إضافية في البوابة - فقط استخدم <code>torsocks -i</code>.</p>
+        <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex-chat.sh</button>
+        <pre class="code-block" id="simplex-script">#!/bin/bash
 set -euo pipefail
 
 # Portable Simplex Chat Runner
@@ -4443,46 +4560,35 @@ if ! ls "${SCRIPT_DIR}"/simplex*.AppImage 1>/dev/null 2>&1; then
     echo "✅ تم التحميل"
 fi
 
-# تحديد مسار AppImage باستخدام wildcard
 APPIMAGE_PATH=$(ls "${SCRIPT_DIR}"/simplex*.AppImage 2>/dev/null | head -1)
+[[ -z "${APPIMAGE_PATH}" ]] && { echo "❌ خطأ: لم يتم العثور على ملف AppImage"; exit 1; }
 
-if [[ -z "${APPIMAGE_PATH}" ]]; then
-    echo "❌ خطأ: لم يتم العثور على ملف AppImage"
-    exit 1
-fi
-
-# إنشاء المجلد المحمول
 mkdir -p "${PORTABLE_DIR}"
-
-# جعل الملف قابل للتنفيذ
 chmod +x "${APPIMAGE_PATH}"
 
-# تعيين المتغيرات للوضع المحمول
 export XDG_CONFIG_HOME="${PORTABLE_DIR}/.config"
 export XDG_DATA_HOME="${PORTABLE_DIR}/.local/share"
 export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
 export HOME="${PORTABLE_DIR}"
 
-echo "🚀 جاري تشغيل SimpleX..."
+echo "🚀 جاري تشغيل SimpleX عبر Tor..."
 exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
+    </div>
+
+    <!-- ==================== Signal Card ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (التثبيت الرسمي + نسخة محمولة)</div>
+        
+        <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
+            <i class="fas fa-globe"></i> 
+            <strong>⚠️ تنبيه هام: يجب فتح الشبكة مؤقتاً في القالب</strong><br>
+            لتثبيت Signal من المستودع الرسمي، يجب السماح للقالب بالاتصال بالإنترنت مؤقتاً. بعد التثبيت، أعد إغلاق الشبكة للحفاظ على الأمان.
         </div>
 
-         <!-- Signal Card -->
-        <div class="card">
-            <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (التثبيت الرسمي + نسخة محمولة)</div>
-            
-            <!-- تنبيه فتح الشبكة -->
-            <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
-                <i class="fas fa-globe"></i> 
-                <strong>⚠️ تنبيه هام: يجب فتح الشبكة مؤقتاً في القالب</strong><br>
-                لتثبيت Signal من المستودع الرسمي، يجب السماح للقالب بالاتصال بالإنترنت مؤقتاً. بعد التثبيت، أعد إغلاق الشبكة للحفاظ على الأمان.
-            </div>
-
-            <!-- تثبيت Signal في القالب -->
-            <div class="section-title"><i class="fas fa-download"></i> تثبيت Signal في قالب Whonix</div>
-            <p>قم بتنفيذ الأوامر التالية في <strong>قالب Whonix Workstation</strong> (مع فتح الشبكة مؤقتاً):</p>
-            <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
-            <pre class="code-block" id="signal-install"># 1. تثبيت مفتاح التوقيع الرسمي
+        <div class="section-title"><i class="fas fa-download"></i> تثبيت Signal في قالب Whonix</div>
+        <p>قم بتنفيذ الأوامر التالية في <strong>قالب Whonix Workstation</strong> (مع فتح الشبكة مؤقتاً):</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
+        <pre class="code-block" id="signal-install"># 1. تثبيت مفتاح التوقيع الرسمي
 wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
 cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
 
@@ -4492,67 +4598,46 @@ cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sou
 
 # 3. تحديث قاعدة البيانات وتثبيت Signal
 sudo apt update && sudo apt install signal-desktop</pre>
-            <p>✅ بعد التثبيت، أعد إغلاق الشبكة في القالب وأعد تشغيل Whonix Workstation AppVM.</p>
+        <p>✅ بعد التثبيت، أعد إغلاق الشبكة في القالب وأعد تشغيل Whonix Workstation AppVM.</p>
 
-            <!-- ملاحظة هامة -->
-            <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
-                <i class="fas fa-info-circle"></i> 
-                <strong>📱 ملاحظة هامة:</strong> لاستخدام Signal Desktop، يجب أولاً تثبيت Signal على هاتفك ومسح رمز QR للمزامنة. التطبيق لا يعمل بشكل مستقل بدون هاتف.
-            </div>
+        <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
+            <i class="fas fa-info-circle"></i> 
+            <strong>📱 ملاحظة هامة:</strong> لاستخدام Signal Desktop، يجب أولاً تثبيت Signal على هاتفك ومسح رمز QR للمزامنة. التطبيق لا يعمل بشكل مستقل بدون هاتف.
+        </div>
 
-            <!-- سكربت التشغيل المحمول -->
-            <div class="section-title"><i class="fas fa-usb"></i> سكربت Signal المحمول (للـ AppVM)</div>
-            <p>بعد تثبيت Signal في القالب، استخدم هذا السكربت في <strong>Whonix Workstation AppVM</strong> لجعل البيانات محمولة على فلاشة USB:</p>
-            <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
-            <pre class="code-block" id="signal-portable">#!/bin/bash
-# ===================================================================
-# سكربت تشغيل Signal المحمول (التثبيت الرسمي)
-# ===================================================================
-
+        <div class="section-title"><i class="fas fa-usb"></i> سكربت Signal المحمول</div>
+        <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
+        <pre class="code-block" id="signal-portable">#!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
 mkdir -p "$PORTABLE_DIR"
 
-# فحص وجود Signal
 if ! command -v signal-desktop &> /dev/null; then
     echo "❌ Signal غير مثبت في القالب"
     exit 1
 fi
 
-# تشغيل Signal مع توجيه مجلد البيانات
 signal-desktop --user-data-dir="$PORTABLE_DIR" &
-
 echo "🚀 Signal يعمل - البيانات: $PORTABLE_DIR"</pre>
-            
-            <!-- هيكل المجلدات -->
-            <p>📁 <strong>هيكل المجلدات على الفلاشة:</strong></p>
-            <pre class="code-block">USB/
-├── run-signal-portable.sh
-└── signal-data/
-    ├── IndexedDB/
-    ├── Local Storage/
-    └── Session Storage/</pre>
-            
-            <!-- تعليمات التشغيل -->
-            <p>💡 <strong>للتشغيل:</strong> اجعل السكربت قابلاً للتنفيذ مرة واحدة: <code>chmod +x run-signal-portable.sh</code>، ثم انقر عليه نقراً مزدوجاً واختر "تشغيل".</p>
-            
-            <!-- تذكير أمني -->
-            <div class="note" style="margin-top: 15px; background: #3a1a1a;">
-                <i class="fas fa-shield-alt"></i> 
-                <strong>🛡️ تذكير أمني لـ Whonix (قد لا يعمل):</strong><br>
-                Signal يحتاج للاتصال بالإنترنت. لتوجيهه عبر Tor، يمكنك تجربة:<br>
-                <code>torsocks signal-desktop --user-data-dir="$PORTABLE_DIR"</code><br><br>
-                <strong>⚠️ تحذير:</strong> Signal قد لا يعمل بشكل صحيح عبر Tor في Whonix. بعض المستخدمين أبلغوا عن مشاكل في الاتصال والمزامنة. إذا فشل الاتصال، فكر في استخدام بديل مثل <strong>SimpleX Chat</strong> أو <strong>Session</strong> المصممين للعمل بشكل أفضل مع الشبكات المجهولة.
-            </div>
+        
+        <div class="note" style="margin-top: 15px; background: #3a1a1a;">
+            <i class="fas fa-shield-alt"></i> 
+            <strong>🛡️ تذكير أمني:</strong> Signal قد لا يعمل بشكل صحيح عبر Tor في Whonix. إذا فشل الاتصال، استخدم <strong>SimpleX Chat</strong> كبديل.
         </div>
+    </div>
 
-        <!-- Session Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-key"></i> Session (موصى به)</div>
-            <p>Session هو تطبيق مراسلة لامركزي مبني على شبكة Oxen، مع إخفاء كامل للهوية.</p>
-            <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> نسخ run-session.sh</button>
-            <pre class="code-block" id="session-script">#!/bin/bash
-# تحميل أحدث إصدار من Session إذا لم يكن موجوداً
+    <!-- ==================== Session Card ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-key"></i> Session (⚠️ يُستخدم بحذر)</div>
+        <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
+            <i class="fas fa-sync-alt"></i> 
+            <strong>🔄 تحديث ديسمبر 2025:</strong> Protocol V2 أعاد <strong>Perfect Forward Secrecy (PFS)</strong> وأضاف <strong>تشفيراً مقاوماً للحوسبة الكمومية</strong>، مما عالج أكبر ثغرة أمنية سابقة.<br>
+            <strong>⚠️ تحفظات مستمرة:</strong> جدل حول التمويل بالعملة الرقمية (SESH)، والبروتوكول الجديد لا يزال قيد الإثبات أمام المجتمع الأمني.<br>
+            <strong>💡 SimpleX Chat يبقى البديل الأكثر استقراراً وموثوقية.</strong>
+        </div>
+        <p>لا يتطلب إعدادات إضافية - يعمل مباشرة عبر شبكة Oxen.</p>
+        <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> نسخ run-session.sh</button>
+        <pre class="code-block" id="session-script">#!/bin/bash
 if ! ls [sS]ession*.AppImage 1>/dev/null 2>&1; then
     wget -c https://getsession.org/linux -O Session.AppImage
 fi
@@ -4564,824 +4649,292 @@ chmod +x "$APPIMAGE" 2>/dev/null
 [ ! -d "Session.AppImage.home" ] && "./$APPIMAGE" --appimage-portable-home
 [ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
 exec "./$APPIMAGE" "$@"</pre>
-        </div>
-    
-            <!-- Matrix Info Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-info-circle"></i> ما هو Matrix؟</div>
-            <p><strong>Matrix</strong> هو بروتوكول مفتوح ولامركزي للتواصل الفوري يعتمد على نموذج "الخادم-الخادم" (Federation). هذا يعني أنك تستطيع التواصل مع أي شخص على أي خادم آخر، تماماً مثل البريد الإلكتروني. يوفر البروتوكول تشفيراً قوياً من طرف إلى طرف عبر <strong>Olm/Megolm</strong>، ولا يتطلب رقم هاتف للتسجيل.</p>
-            <p>🔒 <strong>الخصوصية:</strong> محتوى الرسائل مشفر بالكامل. ومع ذلك، فإن حماية <strong>البيانات الوصفية</strong> (مثل أسماء الغرف وقوائم الأعضاء) تعتبر ضعيفة نوعاً ما، حيث تكون مرئية لمسؤولي الخادم. اختر خادماً موثوقاً مثل <code>chat.privacytools.io</code> أو <code>matrix.systemli.org</code>.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (ند للند مقاوم للبيانات الوصفية) - الموصى به لسطح المكتب</div>
+        <p><strong>Cwtch</strong> (يُنطق /kʊtʃ/) هو بروتوكول مراسلة <strong>لامركزي ومقاوم للبيانات الوصفية (Metadata)</strong>، مبني على شبكة <strong>Tor v3 Onion Services</strong>. تم تطويره بواسطة منظمة <strong>Open Privacy Research Society</strong> (كندا).</p>
+        
+        <div class="note" style="background: #1a2a3a; border-right-color: #4caf50;">
+            <i class="fas fa-check-circle"></i> <strong>المميزات:</strong>
+            <ul><li>🔒 ند للند (P2P حقيقي) - اتصال مباشر دون خوادم وسيطة</li><li>🧅 Tor مدمج - إخفاء تام لعنوان IP</li><li>🎭 هويات متعددة (Profiles) - شخصيات معزولة تماماً</li><li>📦 محمول بالكامل - يعمل من مجلد واحد (USB)</li><li>🔐 Perfect Forward Secrecy (PFS)</li><li>🛡️ مقاوم للبيانات الوصفية</li></ul>
         </div>
 
-        <!-- Element Installation Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-download"></i> تثبيت Element Desktop (العميل الرسمي)</div>
-            <p><strong>Element</strong> هو عميل Matrix الرسمي والأكثر شيوعاً. لتثبيته بشكل دائم على قالب Whonix Workstation (Template)، قم بتنفيذ الأوامر التالية في الطرفية : #ملاحظة لا بد من اعطاء القالب النت مؤقتا </p>
-            <button class="btn-copy-all" onclick="copyScript('element-install-script')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
-            <pre class="code-block" id="element-install-script"># تثبيت الاعتماديات الأساسية
-sudo apt install -y wget apt-transport-https
+        <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #ffaa33;">
+            <i class="fas fa-exclamation-triangle"></i> <strong>القيود:</strong>
+            <ul><li>🐢 يتطلب اتصالاً متزامناً (الطرفان معاً) للمحادثات الخاصة</li><li>📱 غير متوفر على iOS (Android و Desktop فقط)</li><li>🔧 يتطلب إعدادات خاصة على Whonix/Qubes و Tails</li><li>📊 قاعدة مستخدمين صغيرة</li></ul>
+        </div>
+        
+        <!-- ============ هيكل التثبيت الرسمي ============ -->
+        <h3><i class="fas fa-folder-tree"></i> 📁 هيكل التثبيت الرسمي (من المستودع)</h3>
+        <p>عند تحميل Cwtch من الموقع الرسمي، يحتوي المجلد على سكريبتات تثبيت متعددة لكل منصة:</p>
+        <pre class="code-block" style="direction: ltr; text-align: left;">cwtch/
+├── cwtch                    # الملف التنفيذي الرئيسي
+├── libcwtch.so              # المكتبة الأساسية
+├── Tor/                     # Tor مدمج للتطبيق
+├── install.sh               # تثبيت عام للمجلد ~/.local/lib/
+├── install-home.sh          # تثبيت منزلي خاص
+├── install-sys.sh           # تثبيت على مستوى النظام
+├── install-tails.sh         # إعداد خاص لـ Tails OS
+├── install-whonix.sh        # إعداد خاص لـ Whonix
+└── cwtch-whonix.yml         # ملف إعداد onion-grater لـ Whonix</pre>
 
-# إضافة مفتاح GPG الرسمي لمستودع Element
+        <!-- ============ حل Whonix الرسمي ============ -->
+        <h3><i class="fas fa-cog"></i> 🔧 تشغيل Cwtch على Whonix - الحل الرسمي (البوابة + محطة العمل)</h3>
+        <p>الطريقة التالية موثقة رسمياً من فريق Cwtch وتستخدم متغيرات البيئة المعتمدة:</p>
+        <ul style="margin-right: 20px;">
+            <li><code> قم بتشغيل هذا السكربت إن كنت تستخدم whonix ws ./install-whonix .</code>
+    </div>
+
+    <!-- ==================== Matrix/Element Cards ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-info-circle"></i> ما هو Matrix؟</div>
+        <p><strong>Matrix</strong> هو بروتوكول مفتوح ولامركزي للتواصل الفوري يعتمد على نموذج "الخادم-الخادم" (Federation). يوفر تشفيراً قوياً من طرف إلى طرف عبر <strong>Olm/Megolm</strong>، ولا يتطلب رقم هاتف للتسجيل.</p>
+        <p>🔒 <strong>الخصوصية:</strong> محتوى الرسائل مشفر بالكامل. حماية <strong>البيانات الوصفية</strong> ضعيفة نوعاً ما. اختر خادماً موثوقاً مثل <code>matrix.systemli.org</code>.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><i class="fas fa-download"></i> تثبيت Element Desktop (العميل الرسمي)</div>
+        <p>لا يتطلب Element إعدادات إضافية في البوابة - يعمل مباشرة عبر Tor النظام في Whonix.</p>
+        <button class="btn-copy-all" onclick="copyScript('element-install-script')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
+        <pre class="code-block" id="element-install-script">sudo apt install -y wget apt-transport-https
 sudo wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
-
-# إضافة مستودع Element الرسمي إلى قائمة المصادر
 echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main" | sudo tee /etc/apt/sources.list.d/element-io.list
+sudo apt update && sudo apt install element-desktop -y</pre>
+    </div>
 
-# تحديث قائمة الحزم وتثبيت Element
-sudo apt update
-sudo apt install element-desktop -y</pre>
-            <p>✅ بعد التثبيت، سيظهر Element في قائمة التطبيقات. أعد تشغيل Whonix Workstation AppVM ليصبح التطبيق جاهزاً للاستخدام.</p>
-        </div>
-
-        <!-- Element Portable Script Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-usb"></i> Element - نسخة محمولة على فلاشة USB</div>
-            <p>هذا السكربت يجعل Element محمولاً بحيث يحفظ جميع الإعدادات والمحادثات ومفاتيح التشفير داخل مجلد <code>Element-Data</code> على الفلاشة. عند نقله إلى أي جهاز Whonix آخر (بشرط تثبيت Element عليه)، ستعمل إعداداتك فوراً.</p>
-            <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> نسخ run-element-portable.sh</button>
-            <pre class="code-block" id="element-script">#!/bin/bash
-# ===================================================================
-# سكربت تشغيل Element Desktop محمول (متوافق مع التثبيت الرسمي)
-# ===================================================================
+    <div class="card">
+        <div class="card-header"><i class="fas fa-usb"></i> Element - نسخة محمولة</div>
+        <p>هذا السكربت يجعل Element محمولاً بحيث يحفظ جميع الإعدادات والمحادثات ومفاتيح التشفير داخل مجلد <code>Element-Data</code> على الفلاشة.</p>
+        <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> نسخ run-element-portable.sh</button>
+        <pre class="code-block" id="element-script">#!/bin/bash
 set -euo pipefail
-
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DATA_DIR="${SCRIPT_DIR}/Element-Data"
 mkdir -p "${PORTABLE_DATA_DIR}"
 
 if ! command -v element-desktop &> /dev/null; then
-    echo "❌ Element غير مثبت. استخدم الأوامر الرسمية لتثبيته."
+    echo "❌ Element غير مثبت"
     exit 1
 fi
 
-echo "🚀 تشغيل Element Desktop مع بيانات محمولة..."
-echo "📂 مجلد البيانات: ${PORTABLE_DATA_DIR}"
-
-# وسيط البروكسي لـ Whonix (اختياري)
 element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &</pre>
-            <p>📁 <strong>هيكل المجلدات على الفلاشة:</strong></p>
-            <pre class="code-block">USB/
-├── run-element-portable.sh
-└── Element-Data/
-    ├── IndexedDB/          (الرسائل ومفاتيح التشفير)
-    ├── config.json         (الإعدادات)
-    └── logs/               (سجلات التشغيل)</pre>
-            <p>💡 <strong>للتشغيل:</strong> اجعل السكربت قابلاً للتنفيذ مرة واحدة: <code>chmod +x run-element-portable.sh</code>، ثم انقر عليه نقراً مزدوجاً واختر "تشغيل".</p>
-        </div>
+    </div>
+
+    <!-- ==================== XMPP/Gajim Cards ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-info-circle"></i> ما هو XMPP؟</div>
+        <p><strong>XMPP</strong> هو بروتوكول مفتوح ولامركزي للمراسلة الفورية. يدعم تشفيراً قوياً من طرف إلى طرف عبر <strong>OMEMO</strong>، ولا يتطلب رقم هاتف للتسجيل. اختر خادماً موثوقاً مثل <code>conversations.im</code>.</p>
+    </div>
     
-                <!-- XMPP Info Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-info-circle"></i> ما هو XMPP؟</div>
-            <p><strong>XMPP</strong> (Extensible Messaging and Presence Protocol) هو بروتوكول مفتوح ولامركزي للمراسلة الفورية. على عكس التطبيقات المركزية (مثل واتساب أو تيليجرام)، يتيح لك XMPP اختيار الخادم الذي تثق به، أو حتى استضافة خادمك الخاص. يدعم البروتوكول تشفيراً قوياً من طرف إلى طرف عبر <strong>OMEMO</strong>، ولا يتطلب رقم هاتف للتسجيل.</p>
-            <p>🔒 <strong>الخصوصية:</strong> محتوى الرسائل مشفر بالكامل. البيانات الوصفية (مثل قائمة جهات الاتصال) تكون مرئية للخادم، لذا اختر خادماً موثوقاً مثل <code>conversations.im</code> أو <code>yax.im</code>.</p>
-        </div>
-        
-            <!-- Gajim Installation Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-download"></i> تثبيت Gajim على Whonix Workstation</div>
-            <p>Gajim هو عميل XMPP قوي ومفتوح المصدر. لتثبيته على قالب Whonix Workstation:</p>
-            <pre class="code-block">sudo apt update
-sudo apt install gajim torsocks -y</pre>
-            <p>✅ بعد التثبيت، سيظهر Gajim في قائمة التطبيقات. <code>torsocks</code> يضمن توجيه الاتصال عبر شبكة Tor.</p>
-        </div>
+    <div class="card">
+        <div class="card-header"><i class="fas fa-download"></i> تثبيت Gajim على Whonix Workstation</div>
+        <p>لا يتطلب Gajim إعدادات إضافية في البوابة - يعمل مباشرة عبر Tor النظام.</p>
+        <pre class="code-block">sudo apt update && sudo apt install gajim torsocks -y</pre>
+    </div>
 
-        <!-- Gajim Portable Card -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-usb"></i> Gajim - نسخة محمولة على فلاشة USB</div>
-            <p>هذا السكربت يجعل Gajim محمولاً بحيث يحفظ جميع الإعدادات والمحادثات داخل مجلد <code>gajim-data</code> على الفلاشة. عند نقله إلى أي جهاز Whonix آخر (بشرط تثبيت Gajim عليه)، ستعمل إعداداتك فورا #ملاحظة السكريت لا يجعله محمولا بالكامل لأن التطبيق مربوط بمدير كلمة المرور فيعمل محمولا في نفس النظام</p>
-            <button class="btn-copy-all" onclick="copyScript('gajim-script')"><i class="fas fa-copy"></i> نسخ run-gajim-portable.sh</button>
-            <pre class="code-block" id="gajim-script">#!/bin/bash
-# سكربت تشغيل Gajim المحمول
-
+    <div class="card">
+        <div class="card-header"><i class="fas fa-usb"></i> Gajim - نسخة محمولة (⚠️ داخل نفس النظام فقط)</div>
+        <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <strong>⚠️ قيود التحميل:</strong> Gajim <strong>لا يمكن جعله محمولاً بالكامل عبر أنظمة مختلفة</strong> بسبب اعتماده على <strong>gnome-keyring</strong> (مدير كلمات مرور جنوم) لإدارة مفاتيح التشفير والشهادات. هذا يعني أن التطبيق مربوط بحساب المستخدم في النظام الحالي. السكريبت أدناه يسمح بحفظ <strong>الإعدادات والمحادثات</strong> في مجلد محمول على USB، لكنه سيعمل فقط <strong>داخل نفس النظام/المستخدم</strong> الذي تم إعداده عليه. للنقل بين أنظمة Whonix مختلفة، قد تحتاج لإعادة إعداد الحسابات والمفاتيح.
+        </div>
+        <button class="btn-copy-all" onclick="copyScript('gajim-script')"><i class="fas fa-copy"></i> نسخ run-gajim-portable.sh</button>
+        <pre class="code-block" id="gajim-script">#!/bin/bash
+# ===================================================================
+# Gajim Portable - يحفظ الإعدادات والمحادثات محمولاً
+# ⚠️ يبقى مربوطاً بـ gnome-keyring الخاص بالنظام الحالي
+# ===================================================================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/gajim-data"
 mkdir -p "$PORTABLE_DIR"
 
-# تعطيل مدير كلمات المرور (حل رسمي)
+# تعطيل مدير كلمات المرور (لتجنب أخطاء keyring)
 CONFIG_FILE="${PORTABLE_DIR}/config"
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "[global]" > "$CONFIG_FILE"
     echo "use_keyring = False" >> "$CONFIG_FILE"
 fi
 
-# فحص وجود Gajim
 if ! command -v gajim &> /dev/null; then
     echo "❌ Gajim غير مثبت: sudo apt install gajim"
     exit 1
 fi
 
-# تشغيل Gajim
- gajim -c "$PORTABLE_DIR" &
+gajim -c "$PORTABLE_DIR" &
 echo "🚀 Gajim يعمل - البيانات: $PORTABLE_DIR"</pre>
-            <p>📁 <strong>هيكل المجلدات على الفلاشة:</strong></p>
-            <pre class="code-block">USB/
-├── run-gajim-portable.sh
-└── gajim-data/
-    ├── config/
-    ├── data/
-    └── logs/</pre>
-            <p>💡 <strong>للتشغيل:</strong> اجعل السكربت قابلاً للتنفيذ مرة واحدة: <code>chmod +x run-gajim-portable.sh</code>، ثم انقر عليه نقراً مزدوجاً واختر "تشغيل".</p>
+    </div>
+
+    <!-- ==================== Telegram Card ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fab fa-telegram"></i> Telegram (⚠️ غير آمن)</div>
+        <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <strong>⚠️ تحذير أمني خطير:</strong> تليجرام <strong>ليس آمناً</strong> في بيئات الخصوصية العالية. نوصي بشدة باستخدام <strong>SimpleX Chat</strong> بدلاً منه.
         </div>
-        
-        <!-- Telegram Card مع تحذير أمني -->
-        <div class="card">
-            <div class="card-header"><i class="fab fa-telegram"></i> Telegram (⚠️ غير آمن)</div>
-            <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
-                <i class="fas fa-exclamation-triangle"></i> 
-                <strong>⚠️ تحذير أمني خطير:</strong> تليجرام <strong>ليس آمناً بالكامل</strong> في بيئات الخصوصية العالية مثل Whonix أو Qubes للأسباب التالية:
-                <ul style="margin-top: 10px; margin-right: 20px;">
-                    <li>• التشفير ليس افتراضياً (يجب تفعيل "المحادثات السرية" يدوياً)</li>
-                    <li>• التخزين السحابي الافتراضي يخزن رسائلك على خوادمهم</li>
-                    <li>• يتطلب رقم هاتف (يربط هويتك الحقيقية)</li>
-                    <li>• البروتوكول ليس مفتوح المصدر بالكامل (جانب الخادم مغلق)</li>
-                    <li>• مقر الشركة في دول تخضع لاتفاقيات استخباراتية</li>
-                </ul>
-                <strong>نوصي بشدة باستخدام SimpleX Chat أو Session بدلاً من Telegram.</strong>
-            </div>
-            <p>هذا السكريبت يجعل تليجرام محمولاً (جميع البيانات داخل مجلد <code>data/</code>)، لكنه لا يحل المشاكل الأمنية الجوهرية للتطبيق نفسه.</p>
-            <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> نسخ run-telegram.sh</button>
-            <pre class="code-block" id="telegram-script">#!/bin/bash
+        <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> نسخ run-telegram.sh</button>
+        <pre class="code-block" id="telegram-script">#!/bin/bash
 cd "$(dirname "$0")"
 
-# تحميل Telegram إذا لم يكن موجوداً
-if [[ ! -d "Telegram" ]] && [[ ! -f "Telegram/Telegram" ]]; then
-    echo "📥 جاري تحميل Telegram Desktop..."
-    
-    # تحميل الملف
+if [[ ! -f "./Telegram/Telegram" ]]; then
+    echo "📥 جاري تحميل Telegram..."
     wget -c "https://telegram.org/dl/desktop/linux" -O telegram.tar.xz
-    
-    # استخراج الملف
-    echo "📦 جاري استخراج الملفات..."
     tar -xf telegram.tar.xz
-    
-    # تنظيف
     rm telegram.tar.xz
-    echo "✅ تم تثبيت Telegram"
 fi
 
-mkdir -p data/tdata
-mkdir -p data/downloads
-mkdir -p data/user_data
-mkdir -p data/temp
-mkdir -p data/cache
+mkdir -p data/tdata data/downloads data/user_data data/temp data/cache
 
 export XDG_DATA_HOME="$PWD/data"
 export XDG_CONFIG_HOME="$PWD/data"
-export TELEGRAM_TEMP_DIR="$PWD/data/temp"
 export XDG_CACHE_HOME="$PWD/data/cache"
 
-export QT_STYLE_OVERRIDE=""
-export QT_QPA_PLATFORM="xcb"
-export DBUS_SESSION_BUS_ADDRESS=""
-export NO_AT_BRIDGE=1
-export QT_LOGGING_RULES="*.debug=false"
+exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
+    </div>
 
-# التحقق من وجود ملف Telegram
-if [[ ! -f "./Telegram/Telegram" ]]; then
-    echo "❌ خطأ: لم يتم العثور على Telegram"
-    exit 1
-fi
-
-exec torsocks -i ./Telegram/Telegram \
-    -workdir "$PWD/data" \
-    --disable-gpu-compositioning \
-    --disable-gpu-sandbox \
-    --disable-features=Vulkan \
-    --enable-features=UseOzonePlatform \
-    --ozone-platform=wayland \
-    --no-sandbox \
-    -- "$@"</pre>
-            <div class="note" style="margin-top: 15px; background: #3a2a2a;"><i class="fas fa-skull-crosswalk"></i> <strong>توصية أمنية:</strong> إذا اضطررت لاستخدام Telegram لأسباب تقنية، استخدم "المحادثات السرية" فقط (وهي غير متاحة في الإصدار السحابي الافتراضي). الأفضل التبديل إلى SimpleX Chat أو Session فوراً.</div>
+    <!-- ==================== OnionShare Card ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-onion"></i> 🧅 OnionShare (مشاركة آمنة ومجهولة للملفات)</div>
+        
+        <p><strong>OnionShare</strong> أداة مفتوحة المصدر من <strong>Freedom of the Press Foundation</strong> تسمح بمشاركة الملفات أو استقبالها بشكل آمن ومجهول عبر شبكة Tor. الملفات تنتقل <strong>مباشرة من جهازك إلى جهاز المستلم</strong> دون المرور عبر أي خادم وسيط. <strong>يدعم أيضاً استضافة المواقع والمحادثة المجهولة.</strong></p>
+        
+        <div class="note" style="background: #1a3a2a; border-right-color: #4caf50;">
+            <i class="fas fa-check-circle"></i>
+            <strong>✅ لماذا OnionShare آمن؟</strong>
+            <ul><li>🔒 لا يوجد خادم وسيط - جهازك هو الخادم</li><li>🧅 شبكة Tor - اتصال مشفر عبر 3 طبقات</li><li>🎛️ تحكم كامل - الرابط يعمل فقط طالما التطبيق مفتوح</li><li>📁 لا حدود للحجم - يمكن مشاركة ملفات كبيرة جداً</li><li>💬 يدعم المحادثة المجهولة (Anonymous Chat) - بدون حسابات ولا سجلات</li><li>🌐 يدعم استضافة مواقع <code>.onion</code> مؤقتة</li></ul>
         </div>
 
-        <!-- Folder Structure Section -->
-        <div class="card" style="margin-top: 25px;">
-            <div class="card-header"><i class="fas fa-folder-tree"></i> هيكل المجلدات (Folder Structure) للتطبيقات المحمولة</div>
-            <p>لتنظيم أفضل وعزل كامل للبيانات، يوصى باتباع الهيكل التالي داخل AppVM الخاص بك. هذا الهيكل يضمن فصل كل تطبيق ببياناته المستقلة ويسهل عملية النقل أو النسخ الاحتياطي.</p>
-    
-            <pre class="code-block" style="direction: ltr; text-align: left; background-color: #1e1e2f; color: #f8f8f2;">
-~/PortableApps/
-├── SimpleXChat/
-│   ├── run-simplex-chat.sh      # السكريبت الرئيسي
-│   ├── simplex-chat.AppImage     # ملف التطبيق
-│   └── simplex-chat-data/        # بيانات المستخدم (تنشأ تلقائياً)
-│       ├── .config/
-│       ├── .local/
-│       └── .cache/
-├── Signal/                        (اختياري - نسخة تجريبية)
-│   ├── run-signal.sh
-│   ├── Signal.AppImage
-│   └── signal-data/               # بيانات Signal (تنشأ تلقائياً)
-│       ├── .config/
-│       ├── .local/
-│       └── .cache/
-├── Session/
-│   ├── run-session.sh
-│   ├── Session.AppImage
-│   ├── Session.AppImage.home/     # البيانات المحمولة (تنشأ تلقائياً)
-│   └── Session.AppImage.config/   # الإعدادات المحمولة (تنشأ تلقائياً)
-├── Telegram/                       (⚠️ غير آمن، استخدم بحذر شديد)
-│   ├── run-telegram.sh
-│   ├── Telegram
-│   │   └── Telegram               # الملف الثنائي للتطبيق
-│   └── data/                      # بيانات التطبيق (تنشأ يدوياً)
-│       ├── tdata/                 # بيانات الحساب والجلسات
-│       ├── downloads/             # الملفات التي تم تحميلها
-│       ├── user_data/             # بيانات المستخدم العامة
-│       ├── temp/                  # الملفات المؤقتة
-│       └── cache/                 # ملفات الكاش
-└── README.md                       # (اختياري) ملف تعليمات لتوثيق الإعدادات
-            </pre>
-            <div class="note" style="margin-top: 15px;">
-                <i class="fas fa-info-circle"></i> 
-                <strong>ملاحظات هامة حول الهيكل المقترح:</strong>
-                <ul style="margin-top: 10px;">
-                    <li>✅ المجلد الرئيسي <code>~/PortableApps/</code> يمكن وضعه في أي مكان، لكن يفضل أن يكون داخل AppVM المخصص للتعامل مع هذه الأدوات.</li>
-                    <li>✅ السكريبتات مصممة لإنشاء مجلدات البيانات (<code>*-data</code> أو <code>*.home</code>) تلقائياً بجانبها، مما يحقق العزل الكامل.</li>
-                    <li>✅ هذا التنظيم يسمح لك بنسخ مجلد أي تطبيق بالكامل إلى جهاز آخر أو VM آخر مع الاحتفاظ بجميع الإعدادات والبيانات.</li>
-                    <li>⚠️ بالنسبة لتطبيق <strong>Telegram</strong>، الهيكل معروض للتوضيح فقط، ولكن نكرر التحذير بعدم استخدامه في بيئات تتطلب خصوصية عالية.</li>
-                </ul>
+        <h3><i class="fas fa-download"></i> 📥 وضع الاستقبال (Receive Files) - للصحفيين</h3>
+        <ol><li>افتح OnionShare واختر <strong>"Receive Files"</strong></li><li>اختر مجلداً لحفظ الملفات المستلمة</li><li>يولد التطبيق رابط <code>.onion</code></li><li>أرسل الرابط للمصدر (عبر Signal أو أي وسيلة آمنة)</li></ol>
+
+        <h3><i class="fas fa-comments"></i> 💬 وضع المحادثة المجهولة</h3>
+        <ol><li>اختر تبويب <strong>"Chat"</strong> وانقر على <strong>"Start chat server"</strong></li><li>أرسل العنوان والمفتاح للمشاركين</li><li>بمجرد إغلاق OnionShare، <strong>تختفي غرفة المحادثة بالكامل</strong> ولا يبقى أي سجل</li></ol>
+
+        <h3><i class="fas fa-cog"></i> 🔧 تشغيل OnionShare على Whonix (البوابة + محطة العمل)</h3>
+        
+        <h4>🔹 الخطوة 1: في Whonix-Gateway (البوابة)</h4>
+        <pre class="code-block"># افتح الطرفية كـ root ونفّذ
+sudo onion-grater-add 40_onionshare
+
+# ⚠️ خطوة حرجة: تأكد من فك ضغط الملف إذا كان مضغوطاً
+sudo gunzip /usr/local/etc/onion-grater-merger.d/40_onionshare.yml.gz
+
+# للتحقق من نجاح العملية
+ls /usr/local/etc/onion-grater-merger.d/  # يجب أن ترى 40_onionshare.yml بدون .gz</pre>
+
+        <h4>🔹 الخطوة 2: في Whonix-Workstation (محطة العمل)</h4>
+        <pre class="code-block"># افتح المنافذ المطلوبة في جدار الحماية
+sudo mkdir -p /usr/local/etc/whonix_firewall.d
+echo 'EXTERNAL_OPEN_PORTS+=" $(seq 17600 17659) "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf
+sudo whonix_firewall
+
+# شغّل OnionShare
+onionshare</pre>
+
+        <h3><i class="fas fa-balance-scale"></i> 📊 OnionShare vs Signal vs التخزين السحابي</h3>
+        <table class="comparison-table">
+            <thead><tr><th>المعيار</th><th>🧅 OnionShare</th><th>📱 Signal</th><th>☁️ Google Drive</th></tr></thead>
+            <tbody>
+                <tr><td><strong>مكان تخزين الملف</strong></td><td>✅ جهازك فقط</td><td>🟡 خوادم Signal (مؤقتاً)</td><td>❌ خوادم جوجل</td></tr>
+                <tr><td><strong>حجم الملفات</strong></td><td>✅ غير محدود</td><td>🟡 100MB</td><td>✅ كبير جداً</td></tr>
+                <tr><td><strong>تسجيل البيانات</strong></td><td>✅ لا يوجد</td><td>🟡 الحد الأدنى</td><td>❌ يسجل كل شيء</td></tr>
+                <tr><td><strong>المحادثة المجهولة</strong></td><td>✅ مدعومة</td><td>🟡 مراسلة فقط</td><td>❌ غير مدعومة</td></tr>
+                <tr><td><strong>التوصية للصحافة</strong></td><td>⭐ مثالي للملفات الكبيرة</td><td>⭐ مثالي للمراسلة</td><td>❌ غير آمن</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==================== إزالة البيانات الوصفية ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-eraser"></i> 🧹 إزالة البيانات الوصفية (Metadata) - قبل المشاركة</div>
+        <p>حتى مع أقوى تطبيقات المراسلة، الصور والمستندات تحمل بيانات خفية تكشف عنك (GPS، نوع الكاميرا، اسم المؤلف، تاريخ الإنشاء).</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
+            <div style="text-align: center;">
+                <i class="fas fa-image" style="font-size: 2em;"></i>
+                <h4>ExifTool</h4>
+                <code onclick="copyText(this)">exiftool -all= image.jpg</code>
+                <p style="font-size: 0.9em;">الأقوى - يدعم جميع الصيغ</p>
             </div>
-        </div>
-
-        <div class="note" style="margin-top: 20px;">
-            <i class="fas fa-folder-tree"></i> 
-            <strong>كيفية استخدام السكريبتات:</strong>
-            <ul style="margin-right: 20px; margin-top: 10px;">
-                <li>1. أنشئ مجلداً في AppVM (مثل <code>~/PortableApps/</code>)</li>
-                <li>2. ضع ملف AppImage داخل هذا المجلد</li>
-                <li>3. ضع السكريبت المناسب بجانب ملف التطبيق</li>
-                <li>4. اجعل السكريبت قابلاً للتنفيذ: <code>chmod +x run-*.sh</code></li>
-                <li>5. شغّل السكريبت: <code>./run-simplex-chat.sh</code> أو <code>./run-signal.sh</code> أو <code>./run-session.sh</code></li>
-            </ul>
+            <div style="text-align: center;">
+                <i class="fas fa-shield"></i>
+                <h4>mat2</h4>
+                <code onclick="copyText(this)">mat2 document.pdf</code>
+                <p style="font-size: 0.9em;">مدمج في Whonix/Tails</p>
+            </div>
+            <div style="text-align: center;">
+                <i class="fas fa-dragon"></i>
+                <h4>Dangerzone</h4>
+                <code onclick="copyText(this)">dangerzone-cli file.pdf</code>
+                <p style="font-size: 0.9em;">للملفات المشبوهة - يحولها لصور آمنة</p>
+            </div>
         </div>
         
-<!-- ==================== OnionShare Card ==================== -->
-<div class="card">
-    <div class="card-header"><i class="fas fa-onion"></i> 🧅 OnionShare (مشاركة آمنة ومجهولة للملفات)</div>
-    
-    <p><strong>OnionShare</strong> أداة مفتوحة المصدر من <strong>Freedom of the Press Foundation</strong> تسمح بمشاركة الملفات أو استقبالها بشكل آمن ومجهول عبر شبكة Tor. الملفات لا تمر عبر أي خادم وسيط - تنتقل <strong>مباشرة من جهازك إلى جهاز المستلم</strong>. <strong>يدعم أيضاً استضافة المواقع والمحادثة المجهولة.</strong> </p>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a2a; border-right-color: #4caf50;">
+        <div class="note"><i class="fas fa-info-circle"></i> <strong>تثبيت سريع:</strong> <code>sudo apt install mat2 exiftool</code></div>
+    </div>
+
+    <!-- ==================== هيكل الملفات الموحد ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-folder-tree"></i> 📁 هيكل الملفات الموحد (للتشغيل من فلاشة USB)</div>
+        <pre class="code-block" style="direction: ltr; text-align: left;">USB/
+├── PortableApps/
+│   ├── SimpleXChat/
+│   │   ├── run-simplex-chat.sh
+│   │   ├── simplex-desktop-x86_64.AppImage
+│   │   └── simplex-chat-data/
+│   ├── Cwtch/
+│   │   ├── run-cwtch.sh
+│   │   ├── cwtch
+│   │   ├── libcwtch.so
+│   │   ├── Tor/
+│   │   └── cwtch-data/
+│   ├── Signal/
+│   │   ├── run-signal-portable.sh
+│   │   └── signal-data/
+│   ├── Session/
+│   │   ├── run-session.sh
+│   │   ├── Session.AppImage
+│   │   ├── Session.AppImage.home/
+│   │   └── Session.AppImage.config/
+│   ├── Element/
+│   │   ├── run-element-portable.sh
+│   │   └── Element-Data/
+│   ├── Gajim/                         ⚠️ محمول داخل نفس النظام فقط
+│   │   ├── run-gajim-portable.sh
+│   │   └── gajim-data/
+│   └── Telegram/                      ⚠️ غير آمن
+│       ├── run-telegram.sh
+│       ├── Telegram/Telegram
+│       └── data/
+└── README.md</pre>
+    </div>
+
+    <!-- ==================== torsocks الكامل ==================== -->
+    <div class="card" style="border-right: 6px solid #4caf50;">
+        <div class="card-header" style="color: #88ff88;"><i class="fas fa-socks"></i> 🧦 torsocks - تشغيل أي تطبيق عبر Tor</div>
+        <p><strong>torsocks</strong> يفرض على أي تطبيق استخدام شبكة Tor، حتى لو كان لا يدعم الـ Proxy. <strong>لا يتطلب أي إعدادات في البوابة.</strong></p>
+        
+        <h4>🟢 الاستخدام الأساسي:</h4>
+        <pre class="code-block">torsocks ./application.AppImage</pre>
+        
+        <h4>🛡️ عزل الدائرة (يمنع ربط الجلسات):</h4>
+        <pre class="code-block">torsocks -i ./application.AppImage</pre>
+        
+        <h4>✅ التحقق من أن التطبيق يعبر Tor:</h4>
+        <pre class="code-block">torsocks curl https://check.torproject.org/api/ip</pre>
+        
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-lightbulb"></i>
+            <strong>💡 الفرق بين torsocks و torsocks -i:</strong>
+            <ul><li><code>torsocks</code>: يشارك الدائرة مع تطبيقات أخرى - قد يُربط نشاطك</li>
+            <li><code>torsocks -i</code>: يفتح دائرة جديدة لكل أمر - يمنع الربط تماماً</li>
+            <li><strong>للتطبيقات الحساسة، استخدم دائماً <code>-i</code></strong></li></ul>
+        </div>
+    </div>
+
+    <div class="note" style="margin-top: 20px;">
         <i class="fas fa-check-circle"></i>
-        <strong>✅ لماذا OnionShare آمن؟</strong>
-        <ul style="margin-top: 10px; margin-right: 20px;">
-            <li>🔒 <strong>لا يوجد خادم وسيط:</strong> الملفات لا تُرفع إلى "السحابة". جهازك هو الخادم.</li>
-            <li>🧅 <strong>شبكة Tor:</strong> الاتصال مشفر عبر 3 طبقات، مما يخفي هويتك وهوية المستلم.</li>
-            <li>🎛️ <strong>تحكم كامل:</strong> الرابط يعمل فقط طالما التطبيق مفتوح. أغلقه = مات الرابط.</li>
-            <li>📁 <strong>لا حدود للحجم:</strong> الملفات الكبيرة جدًا (عدة غيغابايت) يمكن مشاركتها (حسب مساحة جهازك).</li>
-            <li>🔐 <strong>مفتوح المصدر:</strong> الكود متاح للتدقيق من قبل خبراء الأمن.</li>
-        </ul>
-    </div>
-
-    <h3><i class="fas fa-download"></i> 📥 وضع الاستقبال (Receive Files) - للصحفيين</h3>
-    <p>الوضع المثالي لاستقبال المستندات من المصادر بشكل مجهول:</p>
-    <ol style="margin-right: 20px;">
-        <li>افتح OnionShare واختر <strong>"Receive Files"</strong></li>
-        <li>اختر مجلدًا لحفظ الملفات المستلمة</li>
-        <li>يولد التطبيق رابط <code>.onion</code></li>
-        <li>أرسل الرابط للمصدر (عبر Signal أو أي وسيلة آمنة)</li>
-        <li>عندما يرفع المصدر الملف، يُحفظ تلقائيًا في المجلد الذي اخترته</li>
-        <li><strong>الملف يبقى على جهازك</strong> حتى تحذفه يدويًا</li>
-    </ol>
-    <div class="note-critical" style="margin-top: 10px;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ مهم:</strong> الرابط يعمل فقط طالما OnionShare مفتوح وجهازك متصل بالإنترنت. إذا أغلقت التطبيق أو انقطع اتصالك، يصبح الرابط غير صالح.
-    </div>
-
-    <h3><i class="fas fa-upload"></i> 📤 وضع المشاركة (Share Files)</h3>
-    <p>لمشاركة ملف مع شخص آخر بشكل آمن:</p>
-    <ol style="margin-right: 20px;">
-        <li>افتح OnionShare واختر <strong>"Share Files"</strong></li>
-        <li>اختر الملف(ات) التي تريد مشاركتها</li>
-        <li>يولد التطبيق رابط <code>.onion</code></li>
-        <li>أرسل الرابط للمستلم</li>
-        <li>عندما يفتح المستلم الرابط، تنتقل نسخة من الملف مباشرة من جهازك إلى جهازه</li>
-        <li><strong>الملف الأصلي يبقى على جهازك</strong></li>
-    </ol>
-
-    <h3><i class="fas fa-comments"></i> 💬 وضع المحادثة المجهولة (Anonymous Chat)</h3>
-    <p>يتيح OnionShare أيضاً إنشاء غرف محادثة آمنة ومؤقتة لا تتطلب أي حساب و**لا تترك أي أثر** للرسائل على الأجهزة أو الخوادم: </p>
-    <ol style="margin-right: 20px;">
-        <li>افتح OnionShare واختر تبويب <strong>"Chat"</strong> (أو "Start Chat Server").</li>
-        <li>انقر على <strong>"Start chat server"</strong> – سيتم توليد عنوان <code>.onion</code> ومفتاح خاص.</li>
-        <li>انسخ العنوان والمفتاح وأرسلهما إلى المشاركين عبر قناة آمنة (مثل Signal).</li>
-        <li>يفتح المشاركون الرابط في <strong>Tor Browser</strong> (مع تفعيل JavaScript على الوضع "Standard" أو "Safer"). </li>
-        <li>بعد الدخول، يُمنح كل مشارك **اسماً عشوائياً**، ويمكنه بدء المحادثة.</li>
-        <li>بمجرد إغلاق OnionShare، **تختفي غرفة المحادثة بالكامل** ولا يبقى أي سجل للمراسلات.</li>
-    </ol>
-    <div class="note" style="margin-top: 10px; background: #1a2a4a; border-right-color: #4488ff;">
-        <i class="fas fa-shield-alt"></i>
-        <strong>🛡️ لماذا المحادثة آمنة؟</strong>
-        <ul style="margin-top: 5px;">
-            <li>🔐 <strong>تشفير من طرف إلى طرف (E2EE):</strong> لا يمكن لأحد التنصت على المحادثة.</li>
-            <li>🕵️ <strong>لا سجلات (No Logs):</strong> لا تخزن OnionShare أي رسائل على الخادم أو جهازك بعد الإغلاق. </li>
-            <li>🎭 <strong>هوية مجهولة:</strong> لا يتطلب أسماء مستخدمين أو بريد إلكتروني أو رقم هاتف.</li>
-        </ul>
-    </div>
-
-    <h3><i class="fas fa-clock"></i> ⏱️ التحكم في صلاحية الرابط</h3>
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>الطريقة</th>
-                <th>كيفية الاستخدام</th>
-                <th>متى تستخدمها؟</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>التوقف بعد أول تحميل</strong></td>
-                <td>اترك خيار "Stop sharing after files have been sent" مفعلًا (افتراضي)</td>
-                <td>عند المشاركة مع شخص واحد فقط</td>
-            </tr>
-            <tr>
-                <td><strong>التحكم اليدوي</strong></td>
-                <td>أبقِ التطبيق مفتوحًا حتى ينتهي الجميع، ثم أغلقه</td>
-                <td>عند المشاركة مع عدة أشخاص موثوقين</td>
-            </tr>
-            <tr>
-                <td><strong>حفظ التبويبات (Save Tabs)</strong></td>
-                <td>انقر على أيقونة الدبوس البنفسجي (Purple Thumbtack) في شريط التبويب</td>
-                <td>لحفظ إعدادات الخدمة واستئنافها لاحقاً بنفس عنوان <code>.onion</code> بعد إعادة التشغيل </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3><i class="fas fa-download"></i> 📦 التثبيت حسب المنصة</h3>
-    
-    <p><strong>في Whonix / Qubes OS (الموصى به):</strong> يتطلب إعداداً بسيطاً ليعمل بأمان كامل عبر البوابة. <strong>انتبه:</strong> الملف المضغوط <code>40_onionshare.yml.gz</code> يسبب فشل خدمة onion-grater. </p>
-    <ol style="margin-right: 20px;">
-        <li><strong>في sys-whonix (البوابة):</strong> شغّل الطرفية بصلاحيات الجذر من dom0:
-            <pre class="code-block" style="direction: ltr; text-align: left;">qvm-run -u root sys-whonix qterminal</pre>
-    
-            ثم داخل sys-whonix نفذ:
-            <pre class="code-block" style="direction: ltr; text-align: left;">sudo onion-grater-add 40_onionshare</pre>
-        </li>
-        <li><strong>تأكد من فك ضغط الملف (خطوة حرجة):</strong> إذا وجدت الملف مضغوطاً، قم بفكه:
-            <pre class="code-block" style="direction: ltr; text-align: left;">sudo gunzip /usr/local/etc/onion-grater-merger.d/40_onionshare.yml.gz</pre>
-            <small>💡 للتحقق: <code>ls /usr/local/etc/onion-grater-merger.d/</code> يجب أن ترى <code>40_onionshare.yml</code> (بدون <code>.gz</code>)</small>
-        </li>
-        <li><strong>في قالب whonix-workstation:</strong>
-            <pre class="code-block" style="direction: ltr; text-align: left;">sudo apt update
-sudo apt full-upgrade
-sudo apt install onionshare</pre>
-        </li>
-        <li><strong>في anon-whonix (AppVM):</strong> أضف إلى جدار الحماية:
-            <pre class="code-block" style="direction: ltr; text-align: left;">sudo mkdir -p /usr/local/etc/whonix_firewall.d
-echo 'EXTERNAL_OPEN_PORTS+=" $(seq 17600 17659) "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf
-sudo whonix_firewall</pre>
-        </li>
-        <li>شغّل OnionShare من طرفية anon-whonix، وفي إعدادات الشبكة اختر <strong>"Connect using socket file"</strong>: 
-            <pre class="code-block" style="direction: ltr; text-align: left;">onionshare</pre>
-        </li>
-    </ol>
-    <p>💡 <strong>للمبتدئين:</strong> هذا الإعداد يضمن أن OnionShare يتصل بشبكة Tor بشكل آمن عبر البوابة دون تسريب لعنوان IP.</p>
-
-    <p><strong>في Tails OS:</strong> <strong>مثبت مسبقًا.</strong> تجده في: <code>Applications → Internet → OnionShare</code></p>
-
-    <p><strong>في Linux (Debian/Ubuntu):</strong></p>
-    <pre class="code-block" style="direction: ltr; text-align: left;">sudo apt update
-sudo apt install onionshare</pre>
-
-    <h3><i class="fas fa-balance-scale"></i> 📊 مقارنة: OnionShare vs Signal vs التخزين السحابي</h3>
-    <div style="overflow-x: auto;">
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>المعيار</th>
-                    <th>🧅 OnionShare</th>
-                    <th>📱 Signal</th>
-                    <th>☁️ Google Drive</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>مكان تخزين الملف</strong></td>
-                    <td><span style="color:#4caf50;">✅ جهازك فقط</span></td>
-                    <td><span style="color:#ffaa33;">🟡 خوادم Signal (مؤقتًا)</span></td>
-                    <td><span style="color:#ff4444;">❌ خوادم جوجل</span></td>
-                </tr>
-                <tr>
-                    <td><strong>حجم الملفات</strong></td>
-                    <td><span style="color:#4caf50;">✅ غير محدود</span></td>
-                    <td><span style="color:#ffaa33;">🟡 100MB</span></td>
-                    <td><span style="color:#4caf50;">✅ كبير جدًا</span></td>
-                </tr>
-                <tr>
-                    <td><strong>تسجيل البيانات (Logs)</strong></td>
-                    <td><span style="color:#4caf50;">✅ لا يوجد</span></td>
-                    <td><span style="color:#ffaa33;">🟡 الحد الأدنى</span></td>
-                    <td><span style="color:#ff4444;">❌ يسجل كل شيء</span></td>
-                </tr>
-                <tr>
-                    <td><strong>متطلبات المستلم</strong></td>
-                    <td>متصفح Tor فقط</td>
-                    <td>رقم هاتف + تطبيق Signal</td>
-                    <td>حساب جوجل</td>
-                </tr>
-                <tr>
-                    <td><strong>التشفير</strong></td>
-                    <td><span style="color:#4caf50;">✅ E2EE + 3 طبقات Tor</span></td>
-                    <td><span style="color:#4caf50;">✅ E2EE</span></td>
-                    <td><span style="color:#ffaa33;">🟡 فقط بينك وبين جوجل</span></td>
-                </tr>
-                <tr>
-                    <td><strong>المحادثة المجهولة</strong></td>
-                    <td><span style="color:#4caf50;">✅ مدعومة (بدون حسابات)</span></td>
-                    <td><span style="color:#ffaa33;">🟡 مراسلة فقط</span></td>
-                    <td><span style="color:#ff4444;">❌ غير مدعومة</span></td>
-                </tr>
-                <tr>
-                    <td><strong>التوصية للصحافة</strong></td>
-                    <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ مثالي للملفات الكبيرة</span></td>
-                    <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ مثالي للمراسلة</span></td>
-                    <td><span style="background:#ff4444; padding:5px 12px; border-radius:20px; color:white;">❌ غير آمن</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3><i class="fas fa-bug"></i> 🔧 استكشاف الأخطاء</h3>
-    <div style="overflow-x: auto;">
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>المشكلة</th>
-                    <th>الحل</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>OnionShare لا يتصل بـ Tor في Whonix</td>
-                    <td>تأكد من تنفيذ <code>sudo onion-grater-add 40_onionshare</code> في sys-whonix، وفك ضغط الملف إذا كان مضغوطاً (<code>.gz</code>).</td>
-                </tr>
-                <tr>
-                    <td>خطأ "Tor over Tor"</td>
-                    <td>لا تستخدم نسخة AppImage في Whonix متصل بالإنترنت. استخدم التثبيت من المستودعات بدلاً من ذلك.</td>
-                </tr>
-                <tr>
-                    <td>الرابط لا يعمل للمستلم</td>
-                    <td>تأكد من بقاء التطبيق مفتوحًا ومن اتصالك بالإنترنت</td>
-                </tr>
-                <tr>
-                    <td>الملفات لا تُستقبل في Whonix</td>
-                    <td>تأكد من فتح المنافذ 17600-17659 في جدار حماية Whonix وأعد تحميله بـ <code>sudo whonix_firewall</code></td>
-                </tr>
-                <tr>
-                    <td>التطبيق لا يظهر في قائمة Whonix بعد التثبيت</td>
-                    <td>أعد تشغيل قالب whonix-workstation و AppVM المبنية عليه</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="note" style="margin-top: 20px; background: #1a3a3a; border-right-color: #66ccff;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 متى تستخدم OnionShare؟</strong>
-        <ul style="margin-top: 10px; margin-right: 20px;">
-            <li>📁 عندما تريد استقبال ملفات <strong>كبيرة الحجم</strong> (قواعد بيانات، مستندات ضخمة) من مصدر.</li>
-            <li>🎭 عندما لا تريد أن يعرف المصدر <strong>رقم هاتفك</strong> أو أي معلومات تعريفية عنك.</li>
-            <li>🛡️ عندما تريد <strong>تحكمًا كاملاً</strong> في عملية النقل (أنت الخادم).</li>
-            <li>🌐 عندما تكون في منطقة ذات رقابة عالية وتحتاج لتجاوز الحجب (عبر Tor).</li>
-        </ul>
-    </div>
-
-    <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #4488ff;">
-        <i class="fas fa-shield-alt"></i>
-        <strong>🛡️ نصيحة أمنية:</strong> للحصول على أقصى درجات الأمان، استخدم OnionShare من داخل <strong>Tails OS</strong> أو <strong>Qubes OS</strong> (قالب Whonix). هذا يضمن أن كل اتصالاتك تمر عبر Tor ولا تترك أي أثر على جهازك.
-    </div>
-</div>
-
-<!-- ==================== بطاقة: إزالة البيانات الوصفية ==================== -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-eraser"></i> 🧹 إزالة البيانات الوصفية (Metadata) - قبل المشاركة</div>
-    <p>حتى مع أقوى تطبيقات المراسلة، الصور والمستندات تحمل بيانات خفية تكشف عنك.</p>
-    
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
-        <div style="text-align: center;">
-            <i class="fas fa-image" style="font-size: 2em;"></i>
-            <h4>ExifTool</h4>
-            <code onclick="copyText(this)">exiftool -all= image.jpg</code>
-            <p style="font-size: 0.9em; margin-top: 5px;">الأقوى - يدعم جميع الصيغ</p>
-        </div>
-        <div style="text-align: center;">
-            <i class="fas fa-shield"></i>
-            <h4>mat2</h4>
-            <code onclick="copyText(this)">mat2 document.pdf</code>
-            <p style="font-size: 0.9em; margin-top: 5px;">مدمج في Whonix/Tails</p>
-        </div>
-        <div style="text-align: center;">
-            <i class="fas fa-dragon"></i>
-            <h4>Dangerzone</h4>
-            <code onclick="copyText(this)">dangerzone-cli file.pdf</code>
-            <p style="font-size: 0.9em; margin-top: 5px;">للملفات المشبوهة - يحولها لصور آمنة</p>
-        </div>
-    </div>
-    
-    <div class="note" style="margin-top: 10px;">
-        <i class="fas fa-info-circle"></i> 
-        <strong>تثبيت سريع في Kicksecure:</strong>
-        <code onclick="copyText(this)">sudo apt install mat2 exiftool</code>
-    </div>
-</div>
-
-        <!-- ==================== جدول مقارنة تطبيقات المراسلة ==================== -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-balance-scale"></i> 📊 مقارنة أمنية شاملة لتطبيقات المراسلة</div>
-    <p>مقارنة سريعة لأهم تطبيقات المراسلة من حيث الأمان والخصوصية:</p>
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>التطبيق</th>
-                <th>تشفير E2EE</th>
-                <th>Perfect Forward Secrecy</th>
-                <th>مفتوح المصدر</th>
-                <th>يتطلب رقم هاتف</th>
-                <th>حماية البيانات الوصفية</th>
-                <th>التوصية</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>SimpleX Chat</strong></td>
-                <td><span style="color:#4caf50;">✅ كامل</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#4caf50;">✅ ممتاز</span></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ موصى به</span></td>
-            </tr>
-            <tr>
-                <td><strong>Session</strong></td>
-                <td><span style="color:#4caf50;">✅ كامل</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#ffaa33;">🟡 جيد</span></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ موصى به</span></td>
-            </tr>
-            <tr>
-                <td><strong>Signal</strong></td>
-                <td><span style="color:#4caf50;">✅ كامل</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#ff4d4d;">✅ مطلوب</span></td>
-                <td><span style="color:#ffaa33;">🟡 متوسط</span></td>
-                <td><span style="background:#ffaa33; padding:5px 12px; border-radius:20px; color:black;">⚠️ يحتاج رقم وهمي</span></td>
-            </tr>
-            <tr>
-                <td><strong>Briar</strong></td>
-                <td><span style="color:#4caf50;">✅ كامل</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#4caf50;">✅ ممتاز (عبر Tor)</span></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ ممتاز (Android/Linux)</span></td>
-            </tr>
-            <tr>
-                <td><strong>Element/Matrix</strong></td>
-                <td><span style="color:#4caf50;">✅ (اختياري)</span></td>
-                <td><span style="color:#ff4d4d;">❌ ضعيف</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#ff4d4d;">❌ ضعيف</span></td>
-                <td><span style="background:#ffaa33; padding:5px 12px; border-radius:20px; color:black;">⚠️ بحذر</span></td>
-            </tr>
-            <tr>
-                <td><strong>XMPP (مع OMEMO)</strong></td>
-                <td><span style="color:#4caf50;">✅ (اختياري)</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#ff4d4d;">❌ ضعيف</span></td>
-                <td><span style="background:#ffaa33; padding:5px 12px; border-radius:20px; color:black;">⚠️ بحذر</span></td>
-            </tr>
-            <tr>
-                <td><strong>Telegram</strong></td>
-                <td><span style="color:#ffaa33;">🟡 جزئي</span><br><small>(المحادثات السرية فقط)</small></td>
-                <td><span style="color:#ffaa33;">🟡 جزئي</span></td>
-                <td><span style="color:#ffaa33;">🟡 العميل فقط</span></td>
-                <td><span style="color:#ff4d4d;">✅ مطلوب</span></td>
-                <td><span style="color:#ff4d4d;">❌ ضعيف</span></td>
-                <td><span style="background:#ff4d4d; padding:5px 12px; border-radius:20px; color:white;">❌ غير موصى به</span></td>
-            </tr>
-            <tr>
-                <td><strong>WhatsApp</strong></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#ff4d4d;">❌ لا</span></td>
-                <td><span style="color:#ff4d4d;">✅ مطلوب</span></td>
-                <td><span style="color:#ff4d4d;">❌ ضعيف</span></td>
-                <td><span style="background:#ff4d4d; padding:5px 12px; border-radius:20px; color:white;">❌ تجسس</span></td>
-            </tr>
-            <tr>
-                <td><strong>OnionShare</strong></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">✅</span></td>
-                <td><span style="color:#4caf50;">❌ لا</span></td>
-                <td><span style="color:#4caf50;">✅ ممتاز (Tor)</span></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ للمشاركة الآمنة</span></td>
-            </tr>
-        </tbody>
-    </table>
-    
-<!-- ==================== حزمة torsocks كاملة ==================== -->
-
-<!-- 1. بطاقة: ما هو torsocks؟ -->
-<div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
-    <div class="card-header" style="color: #88ff88;">
-        <i class="fas fa-socks"></i> 🧦 ما هو torsocks؟
-    </div>
-    <p><strong>torsocks</strong> هو أداة (wrapper) تجبر أي تطبيق على استخدام شبكة Tor، حتى لو كان التطبيق لا يدعم إعدادات Proxy.</p>
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-        <p><strong>🔧 كيف يعمل؟</strong></p>
-        <pre style="direction: ltr; text-align: left; margin: 0; background: #151525; padding: 10px;">التطبيق ─→ torsocks ─→ SOCKS Proxy (Tor) ─→ الإنترنت</pre>
-        <p style="margin-top: 10px;">torsocks يعترض جميع اتصالات الشبكة من التطبيق ويعيد توجيهها عبر Tor.</p>
-    </div>
-    <div class="note" style="background: #1a3a3a;">
-        <i class="fas fa-check-circle"></i>
-        <strong>✅ مزايا torsocks:</strong>
-        <ul style="margin-right: 20px;">
-            <li>يعمل مع <strong>أي تطبيق</strong> (حتى لو لم يدعم Proxy)</li>
-            <li>يوفر <strong>Stream Isolation تلقائي</strong> (دائرة Tor جديدة كل مرة)</li>
-            <li>لا يحتاج إعدادات معقدة - أمر واحد فقط</li>
-            <li>مثبت مسبقاً في Whonix Workstation</li>
-        </ul>
-    </div>
-</div>
-
-<!-- 2. بطاقة: كيفية استخدام torsocks -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #66ccff;">
-    <div class="card-header" style="color: #88aaff;">
-        <i class="fas fa-terminal"></i> 💻 كيفية استخدام torsocks مع التطبيقات المحمولة
-    </div>
-    <h4>🟢 الطريقة الأساسية:</h4>
-    <code onclick="copyText(this)" style="display: block; margin: 10px 0;">torsocks /path/to/application</code>
-    <h4>📱 أمثلة عملية:</h4>
-    <table class="comparison-table">
-        <thead><tr><th>التطبيق</th><th>الأمر</th></tr></thead>
-        <tbody>
-            <tr><td><strong>SimpleX Chat</strong></td><td><code onclick="copyText(this)">torsocks ./simplex-desktop-x86_64.AppImage</code></td></tr>
-            <tr><td><strong>Signal Desktop</strong></td><td><code onclick="copyText(this)">torsocks ./Signal.AppImage</code></td></tr>
-            <tr><td><strong>Firefox</strong></td><td><code onclick="copyText(this)">torsocks firefox</code></td></tr>
-            <tr><td><strong>curl</strong></td><td><code onclick="copyText(this)">torsocks curl https://check.torproject.org</code></td></tr>
-            <tr><td><strong>wget</strong></td><td><code onclick="copyText(this)">torsocks wget https://example.com/file.zip</code></td></tr>
-        </tbody>
-    </table>
-    <div class="note" style="margin-top: 15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 ملاحظة:</strong> تأكد من أن التطبيق قابل للتنفيذ: <code>chmod +x application.AppImage</code>
-    </div>
-</div>
-
-<!-- 3. بطاقة: الفرق بين torsocks الافتراضي و torsocks -i (عزل الدوائر) -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ffaa00;">
-    <div class="card-header" style="color: #ffcc88;">
-        <i class="fas fa-random"></i> ⚡ الفرق بين <code>torsocks</code> الافتراضي و <code>torsocks -i</code>
-    </div>
-    <p>الفرق الجوهري بين الأمرين يتعلق بـ <strong>عزل الدوائر (Stream Isolation)</strong>، وهو ما يحدد ما إذا كان بإمكان الخادم ربط محادثاتك ببعضها أم لا.</p>
-    
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0;">
-        <!-- العمود الأيسر: الوضع الافتراضي -->
-        <div style="flex: 1; min-width: 250px; background: #1e2a3a; padding: 20px; border-radius: 15px; border: 1px solid #3a5a7a;">
-            <h3 style="color: #88aaff; margin-top: 0; text-align: center;">🐢 <code>torsocks ./app</code></h3>
-            <p style="text-align: center; opacity: 0.9;">الوضع الافتراضي</p>
-            <hr style="border-color: #3a5a7a;">
-            <ul style="list-style-type: none; padding-right: 0;">
-                <li style="margin-bottom: 12px;">✅ <strong>يخفي عنوان IP الحقيقي</strong></li>
-                <li style="margin-bottom: 12px;">🔄 <strong>يشارك الدائرة:</strong> يستخدم أي دائرة Tor نشطة حالياً</li>
-                <li style="margin-bottom: 12px;">⏱️ <strong>مدة الدائرة:</strong> ~10 دقائق للدائرة الواحدة</li>
-                <li style="margin-bottom: 12px;">🔗 <strong>الربط بين الجلسات:</strong> سهل (جميع المحادثات تخرج من نفس IP)</li>
-                <li style="margin-bottom: 12px;">⚡ <strong>السرعة:</strong> أسرع (لا يحتاج بناء دائرة جديدة)</li>
-            </ul>
-            <div style="background: #152535; padding: 10px; border-radius: 10px; margin-top: 15px;">
-                <p style="margin: 0; font-size: 0.9em;"><strong>📋 متى تستخدمه؟</strong><br>تصفح عادي، تحميل ملفات، مهام لا تحتاج منع الربط.</p>
-            </div>
-        </div>
-
-        <!-- العمود الأيمن: وضع العزل -i -->
-        <div style="flex: 1; min-width: 250px; background: #2a1e2a; padding: 20px; border-radius: 15px; border: 1px solid #aa66cc;">
-            <h3 style="color: #cc88ff; margin-top: 0; text-align: center;">🛡️ <code>torsocks -i ./app</code></h3>
-            <p style="text-align: center; opacity: 0.9;">وضع العزل التلقائي</p>
-            <hr style="border-color: #aa66cc;">
-            <ul style="list-style-type: none; padding-right: 0;">
-                <li style="margin-bottom: 12px;">✅ <strong>يخفي عنوان IP الحقيقي</strong></li>
-                <li style="margin-bottom: 12px;">🆕 <strong>دائرة جديدة:</strong> يفتح دائرة Tor جديدة <strong>حصرياً</strong> لهذا الأمر</li>
-                <li style="margin-bottom: 12px;">🔐 <strong>آلية العزل:</strong> بيانات مصادقة فريدة (PID + الوقت)</li>
-                <li style="margin-bottom: 12px;">🚫 <strong>الربط بين الجلسات:</strong> شبه مستحيل (كل جلسة IP مختلف)</li>
-                <li style="margin-bottom: 12px;">🐢 <strong>السرعة:</strong> أبطأ قليلاً (بناء دائرة جديدة كل مرة)</li>
-            </ul>
-            <div style="background: #251525; padding: 10px; border-radius: 10px; margin-top: 15px;">
-                <p style="margin: 0; font-size: 0.9em;"><strong>📋 متى تستخدمه؟</strong><br>محادثات SimpleX الحساسة، أي نشاط يحتاج منع الربط بين الجلسات.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- شرح تقني موسع -->
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin-top: 15px;">
-        <h4 style="color: #88ccff; margin-top: 0;"><i class="fas fa-microchip"></i> 🧠 شرح تقني: كيف يعمل العزل مع <code>-i</code>؟</h4>
-        <p>عند استخدام <code>torsocks -i</code>، تقوم الأداة تلقائياً بـ:</p>
-        <ol style="margin-right: 20px;">
-            <li><strong>توليد اسم مستخدم فريد:</strong> مكون من <code>PID</code> (رقم العملية) و<code>Unix Timestamp</code> (الوقت الحالي).</li>
-            <li><strong>إرسال بيانات المصادقة</strong> إلى خادم Tor (SOCKS5).</li>
-            <li>خادم Tor يرى بيانات مصادقة <strong>جديدة وفريدة</strong>، فيضطر لفتح <strong>دائرة جديدة تماماً</strong> لهذا الاتصال.</li>
-        </ol>
-        <p style="margin-bottom: 0;">نتيجة لذلك، حتى لو فتحت 10 محادثات في نفس الثانية، ستحصل كل واحدة على دائرة Tor مستقلة وعنوان IP خروج مختلف، مما يجعل ربطها ببعضها <strong>مستحيلاً عملياً</strong>.</p>
-    </div>
-
-    <!-- مقارنة احتمالية التصادم -->
-    <div class="note" style="margin-top: 15px; background: #2a2a1a;">
-        <i class="fas fa-dice"></i>
-        <strong>🎲 احتمالية تكرار المعرف الفريد:</strong>
-        <p style="margin: 10px 0 0 0;">في الوضع الافتراضي، لا يوجد عزل أصلاً (يتم استخدام نفس الدائرة لمدة 10 دقائق). أما مع <code>-i</code>، فاحتمالية تصادم المعرف الفريد (نفس PID + نفس الثانية) هي <strong>شبه معدومة عملياً</strong>، مما يجعل هذا الخيار الأكثر ضماناً لعزل المحادثات.</p>
-    </div>
-
-    <!-- توصية نهائية -->
-    <div style="background: linear-gradient(135deg, #1a3a2a 0%, #1a2a3a 100%); padding: 20px; border-radius: 15px; margin-top: 20px; border: 1px solid #4caf50;">
-        <p style="margin: 0; text-align: center; font-size: 1.1em;">
-            <i class="fas fa-star" style="color: gold;"></i> 
-            <strong>الخلاصة:</strong> للتطبيقات الحساسة مثل <strong>SimpleX</strong>، استخدم دائماً:
-            <code style="display: inline-block; margin: 0 10px; background: #0a1a0a; padding: 5px 15px; border-radius: 20px; font-size: 1.2em;" onclick="copyText(this)">torsocks -i ./simplex-desktop-x86_64.AppImage</code>
-            <i class="fas fa-star" style="color: gold;"></i>
-        </p>
-        <p style="margin: 15px 0 0 0; text-align: center; opacity: 0.8;">هذا يضمن أقصى درجات العزل ويمنع ربط محادثاتك ببعضها البعض.</p>
-    </div>
-</div>
-
-<!-- دالة نسخ النص (اختياري) -->
-<script>
-    function copyText(element) {
-        const text = element.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            // تأثير بصري اختياري
-            element.style.backgroundColor = '#2a5a2a';
-            setTimeout(() => element.style.backgroundColor = '', 200);
-        });
-    }
-</script>
-
-<!-- 3. بطاقة: سكريبتات مخصصة -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ff9800;">
-    <div class="card-header" style="color: #ffaa33;">
-        <i class="fas fa-file-code"></i> 📜 إنشاء سكريبتات مخصصة للتشغيل السريع
-    </div>
-    <p>لتجنب كتابة الأمر كاملاً كل مرة، أنشئ سكريبتاً صغيراً:</p>
-    <h4>🛠️ مثال: <code>run-simplex.sh</code></h4>
-    <pre style="direction: ltr; text-align: left; font-size: 0.85em; padding: 15px;">#!/bin/bash
-cd "$(dirname "$0")"
-echo "🚀 تشغيل SimpleX Chat مع torsocks..."
-torsocks ./simplex-desktop-x86_64.AppImage</pre>
-    <p>اجعله قابلاً للتنفيذ:</p>
-    <code onclick="copyText(this)">chmod +x run-simplex.sh</code>
-    <p>الآن شغله بنقرة واحدة:</p>
-    <code onclick="copyText(this)">./run-simplex.sh</code>
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 فكرة:</strong> ضع السكريبت في مجلد <code>~/PortableApps/SimpleXChat/</code> بجانب ملف AppImage.
-    </div>
-</div>
-
-<!-- 4. بطاقة: torsocks vs SocksPort -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header">
-        <i class="fas fa-balance-scale"></i>
-        <h3>⚖️ torsocks vs SocksPort - متى تستخدم كل منهما؟</h3>
-    </div>
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>المعيار</th>
-                <th>torsocks</th>
-                <th>SocksPort ثابت</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td><strong>يدعم جميع التطبيقات</strong></td><td>✅ نعم</td><td>❌ فقط التي تدعم SOCKS</td></tr>
-            <tr><td><strong>Stream Isolation</strong></td><td>✅ دائرة جديدة كل مرة</td><td>🟡 ثابت لنفس المنفذ</td></tr>
-            <tr><td><strong>سهولة الإعداد</strong></td><td>✅ أمر واحد</td><td>🟡 يحتاج تهيئة</td></tr>
-            <tr><td><strong>IP خروج ثابت</strong></td><td>❌ يتغير كل مرة</td><td>✅ ثابت</td></tr>
-            <tr><td><strong>الأفضل لـ</strong></td><td>جلسات مؤقتة، تطبيقات حساسة</td><td>بريد إلكتروني، حسابات دائمة</td></tr>
-        </tbody>
-    </table>
-    <div class="note-critical" style="margin-top: 15px;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ تنبيه:</strong> بعض التطبيقات قد لا تعمل مع <code>torsocks</code> (مثل تطبيقات UDP). استخدم SocksPort في هذه الحالة.
-    </div>
-</div>
-
-    <div class="note" style="margin-top:15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 شرح المصطلحات:</strong>
-        <ul style="margin-top:10px;">
-            <li><strong>E2EE (End-to-End Encryption):</strong> التشفير من الطرف إلى الطرف - أنت والمستلم فقط من يمكنه قراءة الرسائل.</li>
-            <li><strong>Perfect Forward Secrecy (PFS):</strong> يضمن أن اختراق مفتاح الجلسة الحالية لا يكشف الرسائل السابقة.</li>
-            <li><strong>حماية البيانات الوصفية (Metadata Protection):</strong> من يعرف من تتواصل معه، متى، وكم المدة.</li>
-        </ul>
-    </div>
-    <div class="note" style="margin-top:10px; background:#1a3a3a;">
-        <i class="fas fa-star"></i>
-        <strong>💡 توصية:</strong> للخصوصية القصوى، استخدم <strong>SimpleX Chat</strong> أو <strong>Briar</strong>. للاستخدام اليومي مع سهولة، <strong>Element/Matrix</strong> خيار ممتاز. تجنب Telegram و WhatsApp للأنشطة الحساسة.
+        <strong>✅ خلاصة التبويب:</strong> جميع السكريبتات جاهزة للنسخ والاستخدام. الهيكل المقترح يضمن عزل البيانات وقابلية النقل. انتبه بشكل خاص لإعدادات البوابة ومحطة العمل مع Cwtch و OnionShare، وتذكر فك ضغط ملفات <code>.gz</code> في البوابة.
     </div>
 </div>
     </div>
