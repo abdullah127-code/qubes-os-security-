@@ -4422,49 +4422,45 @@ free -h</pre>
         هذه السكريبتات تسمح بتشغيل تطبيقات سطح المكتب بشكل <strong>محمول بالكامل</strong>، حيث يتم حفظ جميع بيانات التطبيق داخل مجلد بجانب السكريبت (وليس في <code>/home/user</code>). هذا يوفر طبقة إضافية من العزل والخصوصية، ويمكن نقلها بسهولة على فلاشة USB.
     </div>
 
-    <!-- ==================== 📊 جدول المقارنة الشامل ==================== -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
-        <p>مقارنة سريعة وشاملة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية:</p>
-        
-        <div style="overflow-x: auto;">
-            <table class="comparison-table">
-                <thead>
-                    <tr><th>المعيار</th><th>🔷 SimpleX</th><th>🟣 Session</th><th>🟠 Signal</th><th>🟢 Briar</th><th>🔴 Cwtch</th><th>📘 Element</th><th>💬 XMPP</th><th>🧅 OnionShare</th><th>✈️ Telegram</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><strong>الغرض الأساسي</strong></td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مشاركة ملفات + محادثة</td><td>مراسلة</td></tr>
-                    <tr><td><strong>نموذج الشبكة</strong></td><td>لامركزي (خوادم SMP)</td><td>لامركزي (شبكة Oxen)</td><td>مركزي (خوادم Signal)</td><td>ند للند (P2P) عبر Tor/Bluetooth</td><td>ند للند (P2P) عبر Tor v3</td><td>فيدرالي (خوادم Matrix)</td><td>فيدرالي (خوادم XMPP)</td><td>ند للند (P2P) عبر Tor</td><td>مركزي (خوادم Telegram)</td></tr>
-                    <tr><td><strong>تشفير E2EE</strong></td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ (اختياري)</td><td>✅ (اختياري مع OMEMO)</td><td>✅ كامل</td><td>🟡 جزئي (المحادثات السرية فقط)</td></tr>
-                    <tr><td><strong>Perfect Forward Secrecy</strong></td><td>✅</td><td>❌ (محذوفة)</td><td>✅</td><td>✅</td><td>✅</td><td>❌ ضعيف</td><td>✅</td><td>✅</td><td>🟡 جزئي</td></tr>
-                    <tr><td><strong>مقاومة البيانات الوصفية</strong></td><td>🟡 جيد (مع Tor)</td><td>🟡 جيد</td><td>🔴 ضعيف</td><td>🟢 ممتاز</td><td>🟢 ممتاز</td><td>🔴 ضعيف</td><td>🔴 ضعيف</td><td>🟢 ممتاز (Tor)</td><td>🔴 ضعيف</td></tr>
-                    <tr><td><strong>مفتوح المصدر</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>🟡 العميل فقط</td></tr>
-                    <tr><td><strong>يتطلب رقم هاتف</strong></td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td></tr>
-                    <tr><td><strong>يتطلب اتصالاً متزامناً</strong></td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (صندوق بريد)</td><td>✅ (للمحادثات الخاصة)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم مؤقت - جهازك)</td><td>❌ (خادم وسيط)</td></tr>
-                    <tr><td><strong>حدود حجم الملفات</strong></td><td>غير محدد</td><td>غير محدد</td><td>100MB</td><td>غير محدد</td><td>غير محدد</td><td>حسب الخادم</td><td>حسب الخادم</td><td>✅ غير محدود</td><td>2GB</td></tr>
-                    <tr><td><strong>يعمل بدون إنترنت</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ (Bluetooth/Wi-Fi)</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                    <tr><td><strong>يدعم iOS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌ (Android فقط)</td><td>❌ (Android/Linux فقط)</td><td>✅</td><td>✅</td><td>❌ (Desktop فقط)</td><td>✅</td></tr>
-                    <tr><td><strong>المحادثة المجهولة</strong></td><td>✅</td><td>✅</td><td>❌</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td><td>✅ (بدون حسابات)</td><td>❌</td></tr>
-                    <tr><td><strong>استضافة موقع .onion</strong></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
-                    <tr><td><strong>التوصية الأمنية</strong></td><td>⭐ ممتاز للاستخدام العام</td><td>⚠️ يحذر منه الخبراء</td><td>🟡 للاستخدام العادي</td><td>⭐ مثالي للبيئات القمعية</td><td>⭐ ممتاز للـ Desktop/Android</td><td>⚠️ بحذر (للمجتمعات)</td><td>⚠️ بحذر (للمحترفين)</td><td>⭐ للمشاركة الآمنة</td><td>❌ غير موصى به</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-star-of-life"></i>
-            <strong>💡 توصية الخبراء:</strong>
-            <ul style="margin-right: 20px; margin-top: 8px;">
-                <li>• <strong>للخصوصية القصوى على Android مع إمكانية العمل بدون إنترنت:</strong> اختر <strong>Briar</strong>.</li>
-                <li>• <strong>للاستخدام على أجهزة سطح المكتب (Windows/Linux) مع أعلى حماية للبيانات الوصفية:</strong> اختر <strong>Cwtch</strong>.</li>
-                <li>• <strong>للاستخدام اليومي السهل مع معرفات مؤقتة وعبر Tor (يعمل بكفاءة في Whonix):</strong> اختر <strong>SimpleX</strong>.</li>
-                <li>• <strong>للمشاركة الآمنة للملفات الكبيرة أو استقبال المستندات من مصادر:</strong> اختر <strong>OnionShare</strong>.</li>
-                <li>• <strong>للاستخدام الشخصي غير الحساس:</strong> Signal كافٍ.</li>
-                <li>• <strong>تجنب Session</strong> بسبب إزالته لخاصية PFS وارتباطه بجدل أخلاقي.</li>
-                <li>• <strong>تجنب Telegram و WhatsApp</strong> في بيئات تتطلب خصوصية عالية.</li>
-            </ul>
-        </div>
+<!-- ==================== 📊 جدول المقارنة الشامل ==================== -->
+<div class="card">
+    <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
+    <p>مقارنة دقيقة ومحدثة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية، بناءً على أحدث المعلومات حتى أبريل 2026:</p>
+    
+    <div style="overflow-x: auto;">
+        <table class="comparison-table">
+            <thead>
+                <tr><th>المعيار</th><th>🔷 SimpleX</th><th>🟣 Session</th><th>🟠 Signal</th><th>🟢 Briar</th><th>🔴 Cwtch</th><th>📘 Element (Matrix)</th><th>💬 XMPP</th><th>🧅 OnionShare</th><th>✈️ Telegram</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>الغرض الأساسي</strong></td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مشاركة ملفات + محادثة</td><td>مراسلة</td></tr>
+                <tr><td><strong>نموذج الشبكة</strong></td><td>لامركزي (خوادم SMP) [citation:1]</td><td>لامركزي (شبكة Oxen) [citation:3]</td><td>مركزي (خوادم Signal)</td><td>ند للند (P2P) عبر Tor/Bluetooth [citation:1]</td><td>ند للند (P2P) للثنائيات + خوادم للمجموعات عبر Tor v3</td><td>فيدرالي (خوادم Matrix)</td><td>فيدرالي (خوادم XMPP)</td><td>ند للند (P2P) عبر Tor (جهازك هو الخادم)</td><td>مركزي (خوادم Telegram)</td></tr>
+                <tr><td><strong>تشفير E2EE</strong></td><td>✅ كامل</td><td>✅ كامل [citation:3]</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ (اختياري)</td><td>✅ (اختياري مع OMEMO)</td><td>✅ كامل</td><td>🟡 جزئي (المحادثات السرية فقط)</td></tr>
+                <tr><td><strong>Perfect Forward Secrecy</strong></td><td>✅ [citation:7]</td><td>✅ (تمت استعادته في Dec 2025) [citation:3][citation:6]</td><td>✅</td><td>✅</td><td>✅</td><td>❌ ضعيف</td><td>✅</td><td>✅</td><td>🟡 جزئي</td></tr>
+                <tr><td><strong>مقاومة البيانات الوصفية</strong></td><td>🟢 ممتاز (معرفات مؤقتة لكل محادثة) [citation:1]</td><td>🟡 جيد</td><td>🔴 ضعيف (يطلب رقم هاتف)</td><td>🟢 ممتاز</td><td>🟢 ممتاز (للثنائيات) / 🟡 متوسط (للمجموعات - تجريبي)</td><td>🔴 ضعيف</td><td>🔴 ضعيف</td><td>🟢 ممتاز (عبر Tor)</td><td>🔴 ضعيف جداً</td></tr>
+                <tr><td><strong>مفتوح المصدر</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>🟡 العميل فقط</td></tr>
+                <tr><td><strong>يتطلب رقم هاتف</strong></td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td></tr>
+                <tr><td><strong>يتطلب اتصالاً متزامناً</strong></td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (صندوق بريد)</td><td>✅ (للمحادثات الثنائية الخاصة)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم مؤقت - جهازك)</td><td>❌ (خادم وسيط)</td></tr>
+                <tr><td><strong>حدود حجم الملفات</strong></td><td>غير محدد</td><td>غير محدد</td><td>100MB</td><td>غير محدد</td><td>غير محدد</td><td>حسب الخادم</td><td>حسب الخادم</td><td>✅ غير محدود</td><td>2GB</td></tr>
+                <tr><td><strong>يعمل بدون إنترنت (شبكة محلية)</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ (Bluetooth/Wi-Fi)</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                <tr><td><strong>يدعم iOS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌ (Android فقط)</td><td>❌ (Android/Linux فقط)</td><td>✅</td><td>✅</td><td>❌ (Desktop فقط)</td><td>✅</td></tr>
+                <tr><td><strong>التوصية الأمنية</strong></td><td>⭐ الخيار الأمثل للمراسلة المجهولة</td><td>⚠️ تقدم كبير، لكنه لا يزال تحت المراقبة</td><td>🟡 معيار جيد للاستخدام العادي [citation:7]</td><td>⭐ مثالي للبيئات القمعية والعمل دون إنترنت</td><td>⭐ ممتاز للخصوصية القصوى على Desktop/Android</td><td>⚠️ بحذر (للمجتمعات التي تتحكم في الخادم)</td><td>⚠️ بحذر (للمحترفين الذين يتحكمون بالخادم)</td><td>⭐ للمشاركة الآمنة والمجهولة للملفات</td><td>❌ غير موصى به لأي غرض خاص</td></tr>
+            </tbody>
+        </table>
     </div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-star-of-life"></i>
+        <strong>💡 توصية الخبراء النهائية:</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li>• <strong>لأقصى درجات الخصوصية وإخفاء الهوية:</strong> <strong>SimpleX Chat</strong> هو الخيار الأمثل لعدم اعتماده على معرفات ثابتة [citation:1].</li>
+            <li>• <strong>للعمل في البيئات القمعية أو دون إنترنت:</strong> <strong>Briar</strong> هو الخيار الوحيد الذي يعمل بشكل موثوق.</li>
+            <li>• <strong>لحماية البيانات الوصفية على سطح المكتب:</strong> <strong>Cwtch</strong> يقدم نموذجاً ممتازاً للمحادثات الثنائية.</li>
+            <li>• <strong>للمشاركة الآمنة للملفات الكبيرة أو استقبالها:</strong> <strong>OnionShare</strong> هو الأداة المثالية.</li>
+            <li>• <strong>للاستخدام اليومي السهل والموثوق:</strong> <strong>Signal</strong> يظل المعيار الذهبي للسهولة والأمان [citation:7].</li>
+        </ul>
+    </div>
+</div>
 
     <!-- ==================== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix (البوابة + محطة العمل) ==================== -->
     <div class="card" style="border-right: 6px solid #66ccff;">
