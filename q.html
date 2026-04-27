@@ -793,98 +793,13 @@ body.light-mode .card-badge {
                                 <li>✅ <strong>للتطبيق  التلقائي:</strong> استخدم السكربت المساعد في تبويب 11 (الخيار رقم 1)</li>
             </ul>
         </div>
-    </div> <!-- هذا يغلق الـ card الأخير -->
-</div> <!-- هذا يغلق الـ security-section الأب -->
-<!-- ==================== نهاية تبويب 0 ==================== -->
+    </div>
+</div>
 
 <!-- ==================== تبويب 1: الشبكة (الطبقات السفلية) ==================== -->
 <div class="tab-pane" id="tab1">
     <div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
         <i class="fas fa-info-circle"></i> <strong>نطاق هذا التبويب:</strong> الطبقات السفلية للشبكة (<code>sys-net</code>، العزل الفيزيائي، وما يراه كل طرف). أما إعدادات Tor والبوابات ففي <strong>تبويب 2</strong>.
-    </div>
-
-    <!-- ==================== رسم بياني للتدفق ==================== -->
-    <div class="card" style="background: var(--code-bg);">
-        <div class="card-header"><i class="fas fa-project-diagram"></i> 🏗️ رسم بياني: تدفق الاتصال في الإعدادين</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            
-            <!-- الإعداد العادي -->
-            <div style="background: #2a1a1a; padding: 18px; border-radius: 20px; border: 2px solid #ff4444;">
-                <div style="text-align: center; color: #ff6666; font-weight: bold; margin-bottom: 15px; font-size: 1.1em;">
-                    ❌ الإعداد العادي (WiFi مباشر)
-                </div>
-                <div style="text-align: center; font-family: monospace; direction: ltr; font-size: 0.8em; line-height: 2;">
-                    <div style="color: #ffd966;">📡 مزود الإنترنت (WE/Starlink)</div>
-                    <div style="color: #aaa;">│</div>
-                    <div style="color: #aaa;">▼</div>
-                    <div style="background: #3a2a2a; padding: 6px 10px; border-radius: 10px; display: inline-block; color: #ffaa33;">🏪 الموزع الوسيط (راوتر المحل)</div>
-                    <div style="color: #aaa;">│ 📶 يبث WiFi - الجميع متصل مباشرة</div>
-                    <div style="color: #aaa;">├────────────┬────────────┐</div>
-                    <div style="color: #aaa;">▼            ▼            ▼</div>
-                    <div style="display: flex; justify-content: center; gap: 8px;">
-                        <span style="background: #ff4444; padding: 4px 10px; border-radius: 8px; color: white;">💻 جهاز Qubes</span>
-                        <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار ١</span>
-                        <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار ٢</span>
-                    </div>
-                    <div style="color: #ff6666; margin-top: 8px; font-size: 0.9em;">⚠️ الكل على نفس الشبكة!</div>
-                    <div style="color: #ff8888; font-size: 0.75em;">الموزع والجيران يرون جهاز Qubes مباشرة</div>
-                    <div style="margin-top: 10px; border-top: 1px dashed #ff4444; padding-top: 8px;">
-                        <div style="color: #aaa;">│</div>
-                        <div style="color: #aaa;">│ البيانات تذهب مباشرة من جهاز Qubes</div>
-                        <div style="color: #aaa;">│ عبر الموزع ← إلى مزود الإنترنت</div>
-                        <div style="color: #aaa;">│ ثم إلى الموقع النهائي</div>
-                        <div style="color: #aaa;">▼</div>
-                        <div style="background: #1a3a3a; padding: 4px 10px; border-radius: 8px; display: inline-block; color: #66ccff;">🌐 الموقع النهائي</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- الإعداد المفضل -->
-            <div style="background: #1a2a1a; padding: 18px; border-radius: 20px; border: 2px solid #4caf50;">
-                <div style="text-align: center; color: #88ff88; font-weight: bold; margin-bottom: 15px; font-size: 1.1em;">
-                    ✅ الإعداد المفضل (WISP + Ethernet)
-                </div>
-                <div style="text-align: center; font-family: monospace; direction: ltr; font-size: 0.8em; line-height: 2;">
-                    <div style="color: #ffd966;">📡 مزود الإنترنت (WE/Starlink)</div>
-                    <div style="color: #aaa;">│</div>
-                    <div style="color: #aaa;">▼</div>
-                    <div style="background: #3a2a2a; padding: 6px 10px; border-radius: 10px; display: inline-block; color: #ffaa33;">🏪 الموزع الوسيط (راوتر المحل)</div>
-                    <div style="color: #aaa;">│ 📶 يبث WiFi</div>
-                    <div style="color: #aaa;">├────────────┬────────────┐</div>
-                    <div style="color: #aaa;">▼            ▼            ▼</div>
-                    <div style="display: flex; justify-content: center; gap: 8px;">
-                        <span style="background: #ff9800; padding: 4px 10px; border-radius: 8px; color: white;">📶 راوتر WISP</span>
-                        <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار ١</span>
-                        <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار ٢</span>
-                    </div>
-                    <div style="color: #aaa;">│</div>
-                    <div style="color: #aaa;">│ 🔌 كابل Ethernet (شبكة داخلية معزولة)</div>
-                    <div style="color: #aaa;">▼</div>
-                    <div style="background: #4caf50; padding: 4px 10px; border-radius: 8px; display: inline-block; color: white;">💻 جهاز Qubes</div>
-                    <div style="color: #88ff88; margin-top: 8px; font-size: 0.9em;">✅ جهاز Qubes مخفي تماماً!</div>
-                    <div style="color: #88ff88; font-size: 0.75em;">الكل يرى راوتراً فقط — لا أحد يرى ما خلفه</div>
-                    <div style="margin-top: 10px; border-top: 1px dashed #4caf50; padding-top: 8px;">
-                        <div style="color: #aaa;">│</div>
-                        <div style="color: #aaa;">│ البيانات تذهب من جهاز Qubes</div>
-                        <div style="color: #aaa;">│ ← عبر Ethernet إلى راوتر WISP</div>
-                        <div style="color: #aaa;">│ ← عبر WiFi إلى الموزع الوسيط</div>
-                        <div style="color: #aaa;">│ ← إلى مزود الإنترنت</div>
-                        <div style="color: #aaa;">│ ← ثم إلى الموقع النهائي</div>
-                        <div style="color: #aaa;">▼</div>
-                        <div style="background: #1a3a3a; padding: 4px 10px; border-radius: 8px; display: inline-block; color: #66ccff;">🌐 الموقع النهائي</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
-            <i class="fas fa-lightbulb"></i> <strong>💡 شرح الرسم:</strong>
-            <ul style="margin-right: 20px; margin-top: 8px;">
-                <li><strong>يساراً (❌):</strong> في الإعداد العادي، جهاز Qubes متصل مباشرة بنفس شبكة WiFi التي يستخدمها الجيران. البيانات تمر من جهاز Qubes ← الموزع ← مزود الإنترنت ← الموقع النهائي. لكن جهاز Qubes مكشوف للجميع على الشبكة المحلية.</li>
-                <li><strong>يميناً (✅):</strong> في الإعداد المفضل، راوتر WISP يتصل بالشبكة الخارجية، لكن جهاز Qubes خلفه متصل عبر كابل Ethernet فقط. شبكة داخلية معزولة تماماً. البيانات تمر من جهاز Qubes ← راوتر WISP ← الموزع ← مزود الإنترنت ← الموقع النهائي، لكن لا أحد يرى جهاز Qubes نفسه.</li>
-                <li><strong>النتيجة:</strong> المزود الرسمي يرى الموزع فقط. الموزع والجيران يرون راوتراً فقط. جهاز Qubes غير مرئي لأي طرف على الشبكة المحلية.</li>
-            </ul>
-        </div>
     </div>
 
     <!-- ==================== القسم 1: الحل الموصى به وشرحه ==================== -->
@@ -900,104 +815,183 @@ body.light-mode .card-badge {
         
         <div class="note" style="background:#1a3a3a; margin-bottom:15px;">
             <i class="fas fa-lightbulb"></i> <strong>💡 الفكرة الأساسية:</strong>
-            <ul>
-                <li>🔹 الراوتر يلتقط الإنترنت من شبكة الموزع الوسيط <strong>لاسلكياً</strong> (لا مفر من هذا)</li>
-                <li>🔹 لكنه <strong>لا يبث أي إشارة WiFi داخلية</strong> في منزلك</li>
-                <li>🔹 جهاز Qubes متصل به عبر <strong>كابل Ethernet فقط</strong></li>
-                <li>🔹 <strong>النتيجة:</strong> جهاز Qubes غير موجود على أي شبكة لاسلكية، والآخرون لا يرون إلا راوتراً عادياً متصلاً بالشبكة</li>
+            <ul style="margin-right:20px;">
+                <li>الراوتر يلتقط الإنترنت من شبكة الموزع الوسيط <strong>لاسلكياً</strong></li>
+                <li>لكنه <strong>لا يبث أي إشارة WiFi داخلية</strong> في منزلك</li>
+                <li>جهاز Qubes متصل به عبر <strong>كابل Ethernet فقط</strong></li>
+                <li><strong>النتيجة:</strong> جهاز Qubes غير موجود على أي شبكة لاسلكية، والآخرون لا يرون إلا راوتراً عادياً</li>
             </ul>
         </div>
 
-        <!-- WISP vs Repeater -->
-        <h4>📊 WISP vs Repeater (مقارنة حاسمة)</h4>
-        <div style="overflow-x: auto;">
-            <table class="comparison-table">
-                <thead><th>المعيار</th><th>Repeater (لا تفعله)</th><th>WISP + Ethernet فقط (افعله)</th></thead>
-                <tbody>
-                    <tr><td>شبكة فرعية خاصة</td><td>🔴 لا (أجهزتك على شبكة الموزع مباشرة)</td><td>🟢 نعم (شبكة سلكية خاصة ومعزولة)</td></tr>
-                    <tr><td>جدار ناري</td><td>🔴 لا يوجد</td><td>🟢 نعم (الراوتر يعمل كجدار ناري)</td></tr>
-                    <tr><td>ما يراه الموزع الوسيط</td><td>🔴 جهاز Qubes مباشرة (MAC حقيقي)</td><td>🟡 راوتر واحد فقط (MAC قابل للتغيير)</td></tr>
-                    <tr><td>ما يراه الجيران على نفس الشبكة</td><td>🔴 جهاز Qubes (يمكن مسحه واختراقه)</td><td>🟡 راوتر واحد فقط (لا يرون ما خلفه)</td></tr>
-                    <tr><td>هل جهاز Qubes موجود على شبكة لاسلكية؟</td><td>🔴 نعم (مكشوف للجميع)</td><td>🟢 <strong>لا نهائياً</strong> (اتصال سلكي فقط)</td></tr>
-                    <tr><td>هل يمكن اختراق جهاز Qubes عبر WiFi؟</td><td>🔴 نعم (ثغرات سائق الواي فاي)</td><td>🟢 لا (الجهاز غير متصل لاسلكياً)</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- خطوات الإعداد -->
-        <h4>🔧 خطوات الإعداد (للإخفاء التام)</h4>
+        <!-- خطوات الإعداد (مختصرة) -->
+        <h4>🔧 خطوات الإعداد</h4>
         <ol style="margin-right:20px;">
             <li>اشتر راوتر صغير يدعم <strong>وضع WISP</strong> (مثل GL.iNet أو TP-Link)</li>
-            <li>كوّن الراوتر:
-                <ul>
-                    <li>وضع الاتصال: <strong>WISP / Client Mode</strong></li>
-                    <li>اتصل بشبكة الموزع الوسيط كعميل عادي</li>
-                    <li>فعّل <strong>MAC Randomization</strong> أو <strong>MAC Clone</strong> على الراوتر (لتغيير عنوان MAC الظاهر)</li>
-                </ul>
-            </li>
-            <li><strong>عطّل البث اللاسلكي للشبكة الداخلية:</strong>
-                <ul>
-                    <li>اذهب إلى إعدادات الواي فاي الداخلي (Internal WiFi / LAN WiFi)</li>
-                    <li><strong>عطّل بث الشبكة اللاسلكية</strong> (Disable Wireless / Turn off WiFi)</li>
-                    <li>أو ببساطة: لا تقم بتكوين أي شبكة WiFi داخلية من الأساس</li>
-                </ul>
-            </li>
-            <li>وصل الراوتر بجهاز Qubes عبر <strong>كابل Ethernet</strong></li>
-            <li>في Qubes، <code>sys-net</code> سيرى اتصال Ethernet عادي (<code>eth0</code>)</li>
+            <li>كوّن الراوتر على وضع <strong>WISP</strong>، واتصل بشبكة الموزع، مع تفعيل <strong>MAC Randomization</strong></li>
+            <li><strong>عطّل البث اللاسلكي الداخلي</strong> تماماً</li>
+            <li>وصل الراوتر بجهاز Qubes عبر <strong>كابل Ethernet</strong> — سيظهر في Qubes كـ <code>eth0</code></li>
         </ol>
         
-        <div class="note-critical" style="margin-top:10px;">
-            <i class="fas fa-sync-alt"></i> <strong>تحديثات الراوتر:</strong> أي ثغرة في الراوتر قد تسمح باختراقه، لكن جهاز Qubes نفسه يبقى آمناً لأن الاتصال بينه وبين الراوتر سلكي وليس لاسلكي.
-        </div>
-        
         <div class="note" style="margin-top:10px; background:#2a4a6a;">
-            <i class="fas fa-check-circle"></i> <strong>✅ النتيجة النهائية:</strong>
-            <ul>
-                <li>🔹 <strong>الموزع الوسيط:</strong> يرى راوتراً واحداً متصلاً فقط (لا يعرف عدد أو نوع الأجهزة خلفه)</li>
-                <li>🔹 <strong>الجيران على نفس الشبكة:</strong> يرون راوتراً واحداً فقط (لا يستطيعون رؤية جهاز Qubes)</li>
-                <li>🔹 <strong>أي شخص حولك:</strong> لا يرى أي إشارة WiFi تصدر من منزلك</li>
-                <li>🔹 <strong>جهاز Qubes:</strong> غير موجود على أي شبكة لاسلكية، وآمن تماماً من هجمات WiFi</li>
-            </ul>
+            <i class="fas fa-check-circle"></i> <strong>✅ النتيجة النهائية:</strong> الموزع والجيران يرون راوتراً واحداً فقط. جهاز Qubes غير مرئي لأي طرف على الشبكة المحلية.
         </div>
     </div>
 
-    <!-- ==================== القسم 2: المقارنات - لماذا هذا الحل هو الأفضل؟ ==================== -->
+<!-- ==================== القسم 2: الرسم البياني ==================== -->
+<div class="section-title">
+    <i class="fas fa-project-diagram"></i>
+    <h2>🏗️ رسم بياني: تدفق الاتصال في الإعدادين</h2>
+</div>
+
+<div class="card" style="background: var(--code-bg);">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        
+        <!-- الإعداد العادي -->
+        <div style="background: #2a1a1a; padding: 18px; border-radius: 20px; border: 2px solid #ff4444;">
+            <div style="text-align: center; color: #ff6666; font-weight: bold; margin-bottom: 15px;">
+                ❌ الإعداد العادي (WiFi مباشر)
+            </div>
+            <div style="text-align: center; font-family: monospace; direction: ltr; font-size: 0.8em; line-height: 2;">
+                <!-- الشبكة المحلية -->
+                <div style="color: #ffd966;">📡 مزود الإنترنت</div>
+                <div style="color: #aaa;">│</div>
+                <div style="background: #3a2a2a; padding: 6px 10px; border-radius: 10px; display: inline-block; color: #ffaa33;">🏪 الموزع الوسيط</div>
+                <div style="color: #aaa;">├────────────┬────────────┐</div>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                    <span style="background: #ff4444; padding: 4px 10px; border-radius: 8px; color: white;">💻 Qubes</span>
+                    <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار</span>
+                </div>
+                <div style="color: #ff6666; margin-top: 8px;">⚠️ Qubes مكشوف للجميع</div>
+                
+                <!-- مسار البيانات -->
+                <div style="margin-top: 15px; border-top: 1px dashed #ff4444; padding-top: 10px;">
+                    <div style="color: #ff8888; font-weight: bold; margin-bottom: 8px;">🔄 مسار البيانات:</div>
+                    <div style="background: #ff4444; padding: 3px 8px; border-radius: 6px; display: inline-block; color: white;">💻 Qubes</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #ffaa33; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">🏪 موزع</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #ffd966; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">📡 مزود</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #66ccff; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">🌐 الموقع</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الإعداد المفضل -->
+        <div style="background: #1a2a1a; padding: 18px; border-radius: 20px; border: 2px solid #4caf50;">
+            <div style="text-align: center; color: #88ff88; font-weight: bold; margin-bottom: 15px;">
+                ✅ الإعداد المفضل (WISP + Ethernet)
+            </div>
+            <div style="text-align: center; font-family: monospace; direction: ltr; font-size: 0.8em; line-height: 2;">
+                <!-- الشبكة المحلية -->
+                <div style="color: #ffd966;">📡 مزود الإنترنت</div>
+                <div style="color: #aaa;">│</div>
+                <div style="background: #3a2a2a; padding: 6px 10px; border-radius: 10px; display: inline-block; color: #ffaa33;">🏪 الموزع الوسيط</div>
+                <div style="color: #aaa;">├────────────┬────────────┐</div>
+                <div style="display: flex; justify-content: center; gap: 8px;">
+                    <span style="background: #ff9800; padding: 4px 10px; border-radius: 8px; color: white;">📶 راوتر WISP</span>
+                    <span style="background: #4a4a4a; padding: 4px 10px; border-radius: 8px; color: #ccc;">👤 جار</span>
+                </div>
+                <div style="color: #aaa;">│ 🔌 Ethernet</div>
+                <div style="background: #4caf50; padding: 4px 10px; border-radius: 8px; display: inline-block; color: white;">💻 Qubes</div>
+                <div style="color: #88ff88; margin-top: 8px;">✅ Qubes مخفي تماماً</div>
+                
+                <!-- مسار البيانات -->
+                <div style="margin-top: 15px; border-top: 1px dashed #4caf50; padding-top: 10px;">
+                    <div style="color: #88ff88; font-weight: bold; margin-bottom: 8px;">🔄 مسار البيانات:</div>
+                    <div style="background: #4caf50; padding: 3px 8px; border-radius: 6px; display: inline-block; color: white;">💻 Qubes</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #ff9800; padding: 3px 8px; border-radius: 6px; display: inline-block; color: white;">📶 راوتر</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #ffaa33; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">🏪 موزع</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #ffd966; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">📡 مزود</div>
+                    <div style="color: #aaa;">│</div>
+                    <div style="color: #aaa;">▼</div>
+                    <div style="background: #66ccff; padding: 3px 8px; border-radius: 6px; display: inline-block; color: #000;">🌐 الموقع</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
+        <i class="fas fa-lightbulb"></i> <strong>💡 شرح الرسم:</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li><strong>أعلى:</strong> من يراك على الشبكة المحلية؟ في الإعداد العادي، Qubes مكشوف للموزع والجيران. في الإعداد المفضل، الراوتر يعزل Qubes تماماً — لا أحد يرى ما خلفه.</li>
+            <li><strong>أسفل (المسار المنقط):</strong> كيف تسير البيانات فعلياً؟ في كلا الإعدادين، البيانات تمر عبر كل المحطات: Qubes ← راوتر ← موزع ← مزود ← موقع. Qubes لا يتصل بالموقع مباشرة أبداً.</li>
+        </ul>
+    </div>
+</div>
+
+    <!-- ==================== القسم 3: بنية الشبكة في Qubes ==================== -->
+    <div class="section-title">
+        <i class="fas fa-cubes"></i>
+        <h2>🧱 بنية الشبكة داخل Qubes: sys-net و sys-firewall</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><i class="fas fa-project-diagram"></i> 🧱 لماذا يوجد جداران؟</div>
+        
+        <p>في Qubes، <strong>لا أحد يتصل بالإنترنت مباشرة</strong> إلا <code>sys-net</code>. ثم يأتي <code>sys-firewall</code> كوسيط إجباري لجميع الأجهزة الأخرى.</p>
+
+        <div style="background: #0a1a2a; padding: 20px; border-radius: 20px; margin: 20px 0; text-align: center; font-family: monospace; direction: ltr; font-size: 0.85em; line-height: 2.2;">
+            <div style="color: #66ccff;">🌐 الإنترنت / راوتر WISP</div>
+            <div style="color: #aaa;">│ eth0 (واجهة فيزيائية)</div>
+            <div style="background: #ff4444; padding: 8px 15px; border-radius: 12px; display: inline-block; color: white; font-weight: bold;">🧱 sys-net</div>
+            <div style="color: #ff8888; font-size: 0.75em;">غير موثوق — متصل بالعالم الخارجي</div>
+            <div style="color: #aaa;">│ vif (واجهة افتراضية)</div>
+            <div style="background: #ff9800; padding: 8px 15px; border-radius: 12px; display: inline-block; color: white; font-weight: bold;">🧱 sys-firewall</div>
+            <div style="color: #ffcc88; font-size: 0.75em;">موثوق — جدار ناري داخلي للجميع</div>
+            <div style="color: #aaa;">├──────────────┬──────────────┐</div>
+            <div style="display: flex; justify-content: center; gap: 12px;">
+                <span style="background: #7b1fa2; padding: 5px 12px; border-radius: 8px; color: white;">🧅 sys-whonix</span>
+                <span style="background: #1565c0; padding: 5px 12px; border-radius: 8px; color: white;">📦 أي Qube</span>
+            </div>
+        </div>
+
+        <div class="note-critical">
+            <i class="fas fa-skull-crossbones"></i> <strong>⚠️ خطأ شائع قاتل:</strong> لا تقم أبداً بتوصيل أي Qube مباشرة بـ <code>sys-net</code>. الإعداد الصحيح: <code>التطبيق ← sys-firewall ← sys-net ← الإنترنت</code>.
+        </div>
+    </div>
+
+    <!-- ==================== القسم 4: المقارنات ==================== -->
     <div class="section-title">
         <i class="fas fa-balance-scale"></i>
-        <h2>📊 لماذا هذا الحل هو الأفضل؟ (المقارنات)</h2>
+        <h2>📊 جداول المقارنات</h2>
     </div>
 
-    <!-- 2أ. من يرى ماذا؟ (الجدول المصحح) -->
+    <!-- 4أ. من يرى ماذا؟ -->
     <div class="card">
         <div class="card-header"><i class="fas fa-eye"></i> 👁️ من يرى ماذا في كل إعداد؟</div>
         <div style="overflow-x: auto;">
             <table class="comparison-table">
-                <thead><th>الطرف</th><th>الإعداد العادي (WiFi مباشر)</th><th>إعداد WISP + Ethernet فقط</th></thead>
+                <thead><th>الطرف</th><th>الإعداد العادي (WiFi مباشر)</th><th>إعداد WISP + Ethernet</th></thead>
                 <tbody>
                     <tr>
-                        <td><strong>الموزع الوسيط (بقالة/مقهى)</strong></td>
-                        <td>🔴 يرى جهاز Qubes مباشرة (MAC حقيقي، بصمة TCP/IP، نوع الجهاز، حجم البيانات، أوقات الاتصال)</td>
-                        <td>🟡 يرى راوتراً واحداً متصلاً (يعرف أنه راوتر، يرى حجم البيانات وتوقيت الاتصال، لكنه لا يعرف عدد أو نوع الأجهزة خلفه)</td>
+                        <td><strong>الموزع الوسيط</strong></td>
+                        <td>🔴 يرى جهاز Qubes مباشرة (MAC، بصمة TCP/IP، أوقات الاتصال)</td>
+                        <td>🟡 يرى راوتراً واحداً فقط (لا يعرف عدد أو نوع الأجهزة خلفه)</td>
                     </tr>
                     <tr>
-                        <td><strong>جيرانك (المتصلون بنفس شبكة الواي فاي)</strong></td>
-                        <td>🔴 يرون جهاز Qubes مباشرة على الشبكة (يمكنهم مسحه، رؤية نوعه، ومحاولة اختراقه)</td>
-                        <td>🟡 يرون راوتراً واحداً متصلاً بالشبكة (لكنهم لا يستطيعون رؤية جهاز Qubes أو أي جهاز آخر خلف الراوتر)</td>
+                        <td><strong>الجيران على نفس الشبكة</strong></td>
+                        <td>🔴 يرون جهاز Qubes (يمكنهم مسحه ومحاولة اختراقه)</td>
+                        <td>🟢 لا يرون إلا راوتراً واحداً (لا يستطيعون رؤية ما خلفه)</td>
                     </tr>
                     <tr>
-                        <td><strong>أي شخص حولك (غير متصل بالشبكة)</strong></td>
-                        <td>🟡 يمكنه رؤية أن جهازك يبث إشارات WiFi حتى بدون اتصال</td>
-                        <td>🟢 <strong>لا يرى شيئاً</strong> (الراوتر لا يبث شبكة داخلية، وجهاز Qubes لا يبث أي إشارة)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>المزود الرسمي (Starlink/WE)</strong></td>
-                        <td>🟢 يرى الموزع الوسيط فقط (لا يعرف بوجودك أصلاً، أنت مخفي خلف الموزع)</td>
-                        <td>🟢 يرى الموزع الوسيط فقط (لا يعرف بوجودك، نفس الشيء تماماً)</td>
+                        <td><strong>المزود الرسمي</strong></td>
+                        <td>🟢 يرى الموزع الوسيط فقط (لا يراك)</td>
+                        <td>🟢 يرى الموزع الوسيط فقط (لا يراك)</td>
                     </tr>
                     <tr>
                         <td><strong>الموقع النهائي (بدون Tor)</strong></td>
-                        <td>🔴 يرى IP المزود الرسمي (يمر عبر الموزع ← المزود ← الموقع)</td>
-                        <td>🔴 يرى IP المزود الرسمي (يمر عبر راوتر WISP ← الموزع ← المزود ← الموقع)</td>
+                        <td>🔴 يرى IP المزود الرسمي</td>
+                        <td>🔴 يرى IP المزود الرسمي</td>
                     </tr>
                     <tr>
                         <td><strong>الموقع النهائي (مع Tor)</strong></td>
@@ -1008,187 +1002,105 @@ body.light-mode .card-badge {
             </table>
         </div>
         <div class="note" style="margin-top:10px; background:#1a3a3a;">
-            <i class="fas fa-info-circle"></i> <strong>ملاحظة هامة حول مسار البيانات:</strong> في كلا الإعدادين، مسار البيانات الفعلي هو: جهاز Qubes ← الموزع الوسيط ← مزود الإنترنت ← الموقع النهائي. الفرق الحقيقي في الحماية يظهر على مستوى الشبكة المحلية (الموزع الوسيط والجيران) — ففي إعداد WISP، جهاز Qubes غير مرئي لهم لأنه خلف راوتر معزول.
+            <i class="fas fa-info-circle"></i> <strong>ملاحظة:</strong> الفرق الحقيقي يظهر على مستوى الشبكة المحلية فقط. المزود الرسمي والموقع النهائي لا يريان فرقاً بين الإعدادين.
         </div>
     </div>
 
-    <!-- 2ب. موزع وسيط vs شركة رسمية vs الإعداد المفضل -->
+    <!-- 4ب. مقارنة شاملة -->
     <div class="card">
-        <div class="card-header"><i class="fas fa-balance-scale"></i> 📊 مقارنة ثلاثية: موزع وسيط (عادي) vs شركة رسمية vs موزع وسيط (مع WISP)</div>
+        <div class="card-header"><i class="fas fa-table"></i> 📊 مقارنة شاملة: الإعدادات المختلفة</div>
         <div style="overflow-x: auto;">
             <table class="comparison-table">
                 <thead>
-                    <tr>
-                        <th>المعيار</th>
-                        <th>🔴 موزع وسيط - إعداد عادي (WiFi مباشر)</th>
-                        <th>🟡 شركة رسمية (اتصال مباشر)</th>
-                        <th>🟢 موزع وسيط - إعداد مفضل (WISP + Ethernet)</th>
-                    </tr>
+                    <tr><th>المعيار</th><th>🔴 موزع + WiFi مباشر</th><th>🟡 شركة رسمية</th><th>🟢 موزع + WISP + Ethernet</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>من يتحكم بالشبكة المحلية؟</strong></td>
-                        <td>🔴 الموزع + جميع الجيران المتصلين</td>
-                        <td>🟢 أنت وحدك</td>
-                        <td>🟢 أنت وحدك (الراوتر يعزل شبكتك)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>خطر ثغرات سائق الواي فاي</strong></td>
-                        <td>🔴 خطر كبير (جهازك مكشوف مباشرة)</td>
-                        <td>🟢 لا خطر (اتصال سلكي)</td>
-                        <td>🟢 لا خطر (جهاز Qubes متصل سلكياً)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>عدد الأشخاص الذين يرون جهاز Qubes</strong></td>
-                        <td>🔴 الموزع + كل الجيران على الشبكة</td>
-                        <td>🟢 لا أحد</td>
-                        <td>🟢 لا أحد (الكل يرى راوتراً فقط)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>هل يمكن تمييز جهاز Qubes؟</strong></td>
-                        <td>🔴 نعم (نظام نادر يلفت الانتباه)</td>
-                        <td>🟢 غير مرئي للآخرين</td>
-                        <td>🟢 غير مرئي (الراوتر يخفيه تماماً)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ما يراه المزود الرسمي؟</strong></td>
-                        <td>🟢 الموزع الوسيط فقط (لا يراك)</td>
-                        <td>🔴 يراك أنت مباشرة</td>
-                        <td>🟢 الموزع الوسيط فقط (لا يراك)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>ما يراه الموقع النهائي؟</strong></td>
-                        <td>🔴 IP المزود الرسمي</td>
-                        <td>🔴 IP المزود الرسمي (الخاص بك)</td>
-                        <td>🔴 IP المزود الرسمي (نفسه في الحالتين)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>مسار البيانات الكامل</strong></td>
-                        <td>الجهاز ← الموزع ← المزود ← الموقع</td>
-                        <td>الجهاز ← المزود ← الموقع</td>
-                        <td>الجهاز ← الراوتر ← الموزع ← المزود ← الموقع</td>
-                    </tr>
-                    <tr>
-                        <td><strong>هل تحتاج راوتر WISP؟</strong></td>
-                        <td>✅ نعم (ضروري للحماية)</td>
-                        <td>❌ لا (لكنه احتياطي جيد)</td>
-                        <td>✅ نعم (هو الأساس)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>التكلفة الإضافية</strong></td>
-                        <td>لا شيء (لكنك مكشوف)</td>
-                        <td>لا شيء</td>
-                        <td>🟡 راوتر صغير (~30-50 دولار)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>مستوى الحماية الكلي</strong></td>
-                        <td>🔴 ضعيف جداً</td>
-                        <td>🟡 متوسط (المزود يراك)</td>
-                        <td>🟢 <strong>ممتاز (الأفضل)</strong></td>
-                    </tr>
+                    <tr><td>جهاز Qubes ظاهر للغير؟</td><td>🔴 الموزع + الجيران</td><td>🟢 لا أحد</td><td>🟢 لا أحد</td></tr>
+                    <tr><td>خطر ثغرات سائق الواي فاي</td><td>🔴 كبير</td><td>🟢 لا يوجد</td><td>🟢 لا يوجد</td></tr>
+                    <tr><td>ما يراه المزود الرسمي</td><td>🟢 الموزع فقط</td><td>🔴 أنت مباشرة</td><td>🟢 الموزع فقط</td></tr>
+                    <tr><td>اختراق الراوتر = خطر داخل جهازك؟</td><td>—</td><td>—</td><td>🟢 لا (خارجي)</td></tr>
+                    <tr><td>التكلفة</td><td>لا شيء</td><td>لا شيء</td><td>🟡 ~30-50$</td></tr>
+                    <tr><td><strong>مستوى الحماية</strong></td><td>🔴 ضعيف</td><td>🟡 متوسط</td><td>🟢 <strong>ممتاز</strong></td></tr>
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- ==================== القسم 5: سيناريو اختراق sys-net ==================== -->
+    <div class="section-title">
+        <i class="fas fa-theater-masks"></i>
+        <h2>⚠️ سيناريو: ماذا لو تم اختراق sys-net؟</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><i class="fas fa-mask"></i> 🎭 أسوأ الاحتمالات: مخترق يتحكم في الراوتر</div>
         
-        <div class="note" style="margin-top:15px; background:#1a3a3a;">
-            <i class="fas fa-star"></i> <strong>💡 الخلاصة:</strong>
-            <ul style="margin-right:20px;">
-                <li>🔴 <strong>موزع وسيط + WiFi مباشر:</strong> الأسوأ — جهازك مكشوف للموزع ولجميع الجيران على الشبكة المحلية.</li>
-                <li>🟡 <strong>شركة رسمية مباشرة:</strong> أفضل من الموزع على مستوى الشبكة المحلية، لكن المزود الرسمي يراك أنت شخصياً.</li>
-                <li>🟢 <strong>موزع وسيط + WISP + Ethernet:</strong> <strong>الأفضل على الإطلاق</strong> — المزود الرسمي لا يراك (يرى الموزع فقط)، والموزع والجيران لا يرون جهاز Qubes (يرون راوتراً فقط). أنت مخفي على مستوى الشبكة المحلية، لكن الموقع النهائي لا يزال يرى IP المزود الرسمي (إلا إذا استخدمت Tor).</li>
-            </ul>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0;">
+            <div style="background: #2a1a1a; padding: 15px; border-radius: 15px; border: 2px solid #ff4444;">
+                <div style="color: #ff6666; font-weight: bold; margin-bottom: 10px;">✅ ما يستطيع فعله:</div>
+                <ul style="color: #ff8888; margin-right: 20px; font-size: 0.9em;">
+                    <li>رؤية حركة المرور (لكنها مشفرة عبر Tor)</li>
+                    <li>قطع الاتصال أو حجب مواقع</li>
+                    <li>محاولة مهاجمة sys-firewall (يحتاج ثغرة Xen نادرة)</li>
+                </ul>
+            </div>
+            <div style="background: #1a2a1a; padding: 15px; border-radius: 15px; border: 2px solid #4caf50;">
+                <div style="color: #88ff88; font-weight: bold; margin-bottom: 10px;">❌ ما لا يستطيع فعله:</div>
+                <ul style="color: #88ff88; margin-right: 20px; font-size: 0.9em;">
+                    <li>الوصول إلى dom0 أو واجهة المستخدم</li>
+                    <li>رؤية شاشتك أو تسجيل لوحة المفاتيح</li>
+                    <li>الوصول إلى باقي الأجهزة الافتراضية</li>
+                    <li>معرفة أنك تستخدم Qubes (في إعداد WISP)</li>
+                    <li>فك تشفير حركة Tor</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="note" style="background:#1a3a3a;">
+            <i class="fas fa-shield-alt"></i> <strong>🛡️ الخلاصة:</strong> حتى في أسوأ سيناريو، يبقى الضرر <strong>محدوداً داخل sys-net</strong>. باقي النظام يبقى آمناً بفضل عزل Qubes.
         </div>
     </div>
 
-    <!-- 2ج. اختراق الراوتر vs اختراق sys-net -->
+    <!-- ==================== القسم 6: خطط الطوارئ ==================== -->
+    <div class="section-title">
+        <i class="fas fa-life-ring"></i>
+        <h2>🔄 خطط الطوارئ: إذا لم يتوفر Ethernet أو راوتر WISP</h2>
+    </div>
+
     <div class="card">
-        <div class="card-header"><i class="fas fa-skull-crosswalk"></i> ⚠️ مقارنة الضرر: اختراق الراوتر vs اختراق sys-net</div>
+        <div class="card-header"><i class="fas fa-list-ol"></i> 📋 خطط الاتصال بالإنترنت (من الأفضل للأسوأ)</div>
         
         <div style="overflow-x: auto;">
             <table class="comparison-table">
-                <thead><th>الخطر</th><th>اختراق الراوتر (WISP)</th><th>اختراق sys-net (إعداد عادي)</th></thead>
+                <thead><tr><th>#</th><th>الخطة</th><th>الأمان</th><th>متى تستخدم؟</th></tr></thead>
                 <tbody>
-                    <tr><td>رؤية حركة المرور</td><td>✅ نعم (لكنها مشفرة عبر Tor)</td><td>✅ نعم (مشفرة أيضاً)</td></tr>
-                    <tr><td>التلاعب بحركة المرور</td><td>✅ نعم</td><td>✅ نعم</td></tr>
-                    <tr><td>الوصول إلى باقي VMs</td><td>❌ لا (الراوتر خارج جهازك)</td><td>🟡 نادر لكن ممكن (يحتاج ثغرة Xen)</td></tr>
-                    <tr><td>الوصول إلى dom0</td><td>❌ لا</td><td>🔴 نادر جداً لكنه ممكن</td></tr>
-                    <tr><td>التعرف على نظام Qubes</td><td>❌ لا (الراوتر لا يعرف)</td><td>✅ نعم</td></tr>
-                    <tr><td>هل الخطر داخل جهازك؟</td><td>❌ لا (خارجي بالكامل)</td><td>✅ نعم (داخلي)</td></tr>
+                    <tr><td>🟢 A</td><td><strong>WISP + Ethernet</strong></td><td>⭐⭐⭐⭐⭐</td><td>الإعداد اليومي الدائم</td></tr>
+                    <tr><td>🟢 B</td><td><strong>WISP + VPN على الراوتر + Ethernet</strong></td><td>⭐⭐⭐⭐⭐</td><td>حماية إضافية من الموزع (VPN قبل وصول البيانات لـ Qubes)</td></tr>
+                    <tr><td>🟡 C</td><td><strong>WISP + WiFi داخلي مشفر (WPA3)</strong></td><td>⭐⭐⭐</td><td>إذا تعذر الكابل مؤقتاً</td></tr>
+                    <tr><td>🟡 D</td><td><strong>USB Tethering من هاتف أندرويد</strong></td><td>⭐⭐⭐</td><td>السفر، لا يتوفر راوتر WISP</td></tr>
+                    <tr><td>🟠 E</td><td><strong>WiFi مباشر + MAC عشوائي + جدار ناري</strong></td><td>⭐⭐</td><td>طوارئ فقط، آخر خيار</td></tr>
+                    <tr><td>🔴 F</td><td><strong>WiFi مباشر عادي</strong></td><td>⭐</td><td>لا تستخدمه أبداً</td></tr>
                 </tbody>
             </table>
         </div>
-        
-        <div class="note" style="margin-top:10px; background:#1a3a3a;">
-            <i class="fas fa-info-circle"></i> <strong>الخلاصة:</strong> اختراق الراوتر يبقى <strong>خارج جهازك</strong> ولا يهدد نظام Qubes نفسه. اختراق sys-net هو <strong>داخل جهازك</strong>، وهو أخطر بكثير لأنه قد يكون نقطة انطلاق لمهاجمة باقي النظام.
-        </div>
-    </div>
 
-    <!-- ==================== القسم 3: شرح المشكلة والتهديدات ==================== -->
-    <div class="section-title">
-        <i class="fas fa-triangle-exclamation"></i>
-        <h2>⚠️ شرح المشكلة: من هم الأطراف وماذا يرون؟</h2>
-    </div>
-
-    <!-- 3أ. الموزع الوسيط -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-store"></i> 🏪 الطرف الأول: الموزع الوسيط (صاحب البقالة/المقهى)</div>
-        <p>شخص عادي يشتري إنترنت من مزود رسمي (مثل WE أو Starlink)، ويعيد بثه عبر راوتر WiFi يغطي منطقة سكنية. <strong>أنت في بيتك</strong>، تلتقط الإشارة من منزلك، لست جالساً في المحل.</p>
-        
         <div class="note" style="background:#2a4a6a; margin-top:10px;">
-            <i class="fas fa-ticket-alt"></i> <strong>الكروت الملصقة:</strong> في الوضع الطبيعي، صاحب البقالة لا يعرف رقم الكرت، ولا يمكنه ربطه باسمك أو جهازك. <strong>لكن انتبه:</strong> في سياق تحقيق جنائي رسمي، يمكن تتبع مكان وتوقيت شراء الكرت (كاميرات المحل)، لذا تظل هذه الطريقة توفر الخصوصية من الموزع والجيران، وليس بالضرورة من جهة سيادية عالية الإمكانيات.
-        </div>
-        
-        <div class="note-critical" style="margin-top:10px;">
-            <i class="fas fa-exclamation-triangle"></i> <strong>الخطر الحقيقي (وأنت في بيتك):</strong>
-            <ul>
-                <li>🔴 <strong>استغلال ثغرات سائق الواي فاي</strong> لاختراق <code>sys-net</code> (في الإعداد العادي)</li>
-                <li>🔴 <strong>معرفة أوقات اتصالك</strong> (نمط حياتك اليومي)</li>
-                <li>🔴 <strong>حجب أو إبطاء خدمات معينة</strong> (مثل Tor أو VPN)</li>
-                <li>🔴 <strong>تمييز جهازك</strong> (Qubes نظام نادر يلفت الانتباه فوراً)</li>
-                <li>🔴 <strong>الجيران على نفس الشبكة</strong> يمكنهم أيضاً رؤية جهازك ومحاولة اختراقه</li>
+            <i class="fas fa-info-circle"></i> <strong>شرح سريع للخطط البديلة:</strong>
+            <ul style="margin-right:20px;">
+                <li><strong>الخطة B:</strong> راوتر WISP يشغل VPN (WireGuard) — الموزع لا يرى حتى البيانات المشفرة العادية، يرى فقط اتصال VPN واحد.</li>
+                <li><strong>الخطة D:</strong> هاتف أندرويد متصل بشبكة الموزع ← كابل USB لـ Qubes ← يظهر كـ <code>usb0</code>. أفضل من WiFi مباشر لكن الهاتف نفسه قد يكون مخترقاً.</li>
             </ul>
         </div>
     </div>
 
-    <!-- 3ب. المزود الرسمي -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-satellite-dish"></i> 🛰️ الطرف الثاني: المزود الرسمي (Starlink / WE / اتصالات)</div>
-        <div class="note" style="background:#1a3a3a;">
-            <i class="fas fa-eye"></i> <strong>ماذا يرى؟</strong>
-            <ul>
-                <li>🔹 <strong>لا يراك على الإطلاق.</strong> المشترك الرسمي هو الموزع الوسيط، وأنت مخفي تماماً خلفه.</li>
-                <li>🔹 يرى فقط عنوان IP العام للموزع الوسيط</li>
-                <li>🔹 يرى إجمالي استهلاك البيانات للموزع (بما فيها بياناتك المندمجة مع بيانات الآخرين)</li>
-                <li>🔹 يرى أن هناك حركة مرور مشفرة (لكن لا يعرف أنها تخصك أنت تحديداً)</li>
-                <li>🔹 <strong>لا فرق</strong> بين الإعداد العادي و WISP من منظوره - في كلا الحالتين لا يراك</li>
-            </ul>
-        </div>
-        <div class="note" style="margin-top:10px; background:#1a3a3a;">
-            <i class="fas fa-lightbulb"></i> <strong>خلاصة:</strong> المزود الرسمي ليس له أي تأثير على خصوصيتك في هذا السيناريو. لا يراك ولا يعرف بوجودك. تركيزك الكامل يجب أن يكون على الموزع الوسيط والجيران.
-        </div>
-    </div>
-    
-    <!-- 3ج. الموقع النهائي -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-globe"></i> 🌐 الطرف الثالث: الموقع النهائي (الذي تزوره)</div>
-        <div class="note" style="background:#1a3a3a;">
-            <i class="fas fa-eye"></i> <strong>ماذا يرى؟</strong>
-            <ul>
-                <li>🔹 <strong>بدون Tor:</strong> يرى عنوان IP الخاص بمزود الإنترنت الرسمي (نفس IP الذي يراه من الموزع الوسيط). مسار البيانات: جهازك ← الموزع ← المزود ← الموقع.</li>
-                <li>🔹 <strong>مع Tor:</strong> يرى عنوان IP الخاص بعقدة خروج Tor فقط. لا يعرف شيئاً عنك أو عن مزود الإنترنت الخاص بك.</li>
-                <li>🔹 <strong>لا فرق</strong> بين الإعداد العادي و WISP من منظور الموقع النهائي — في كلا الحالتين يرى IP المزود (بدون Tor) أو IP عقدة Tor (مع Tor).</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ==================== القسم 4: إعدادات إضافية للشبكة ==================== -->
+    <!-- ==================== القسم 7: إعدادات إضافية وتحذيرات ==================== -->
     <div class="section-title">
         <i class="fas fa-cog"></i>
-        <h2>⚙️ إعدادات إضافية للشبكة</h2>
+        <h2>⚙️ إعدادات إضافية وتحذيرات</h2>
     </div>
 
     <div class="card">
-        <div class="card-header"><i class="fas fa-shield-alt"></i> طبقات حماية إضافية</div>
+        <div class="card-header"><i class="fas fa-shield-alt"></i> 🔒 طبقات حماية إضافية</div>
         
         <h4>🔄 إخفاء عنوان MAC (في sys-net)</h4>
         <pre style="direction: ltr;"># /usr/lib/NetworkManager/conf.d/31-randomize-mac.conf
@@ -1196,23 +1108,18 @@ body.light-mode .card-badge {
 ethernet.cloned-mac-address=random
 wifi.cloned-mac-address=random
 wifi.scan-rand-mac-address=yes</pre>
-        <p class="note" style="margin-top:5px;"><i class="fas fa-info-circle"></i> في إعداد WISP + Ethernet، هذا الإجراء احتياطي إضافي فقط، لأن الراوتر هو من يتعامل مع الشبكة الخارجية وليس جهاز Qubes مباشرة.</p>
+        <p class="note" style="margin-top:5px;"><i class="fas fa-info-circle"></i> في إعداد WISP + Ethernet، هذا احتياطي إضافي فقط — الراوتر هو من يتعامل مع الشبكة الخارجية.</p>
 
         <h4>🚫 تعطيل IPv6 (لمنع التسرب)</h4>
         <code class="warning" onclick="copyText(this)">qvm-prefs sys-net kernelopts "ipv6.disable=1"</code>
-        <!-- تعطيل IPv6 في sys-firewall غير ضروري غالباً لكنه احتياطي لا بأس به -->
         <code class="warning" onclick="copyText(this)">qvm-prefs sys-firewall kernelopts "ipv6.disable=1"</code>
-    </div>
 
-    <!-- ==================== القسم 5: تحذيرات التسريبات ==================== -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-triangle-exclamation"></i> ⚠️ تحذيرات: التسريبات الأساسية</div>
-        
+        <h4 style="margin-top: 20px;">⚠️ تحذيرات التسريبات الأساسية</h4>
         <div class="note-critical">
-            <strong>🔴 WebRTC (تسريب IP):</strong> يمكنه نظرياً تسريب عنوان IP الحقيقي حتى مع استخدام Tor إذا كنت تستخدم متصفحاً عادياً غير مُعدّل داخل Whonix. <strong>الحل الأكيد:</strong> استخدم متصفح Tor المُدمج والمُعدّل مسبقاً داخل Whonix، وتجنب المتصفحات الأخرى لتصفح المواقع الحساسة. للتأكد: <code>about:config → media.peerconnection.enabled = false</code>.
+            <strong>🔴 WebRTC:</strong> قد يسرب IP الحقيقي حتى مع Tor. <strong>الحل:</strong> استخدم متصفح Tor المدمج داخل Whonix. <code>about:config → media.peerconnection.enabled = false</code>
         </div>
         <div class="note-critical">
-            <strong>🔴 DNS Leak:</strong> تأكد أن <code>sys-whonix</code> هو الـ netvm الوحيد لجهاز التصفح.
+            <strong>🔴 DNS Leak:</strong> تأكد أن <code>sys-whonix</code> هو netvm الوحيد لجهاز التصفح.
         </div>
         <div class="note">
             <strong>✅ أدوات الاختبار:</strong>
@@ -1226,20 +1133,18 @@ wifi.scan-rand-mac-address=yes</pre>
     <div class="note" style="background:#1a3a3a;">
         <i class="fas fa-star-of-life"></i> <strong>📚 خلاصة تبويب الشبكة:</strong>
         <ul style="margin-right:20px;">
-            <li>🔹 <strong>الحل الموصى به:</strong> راوتر WISP + <strong>Ethernet فقط</strong> + تعطيل البث اللاسلكي الداخلي.</li>
-            <li>🔹 <strong>عدوك الحقيقي:</strong> الموزع الوسيط والجيران على نفس الشبكة المحلية.</li>
-            <li>🔹 <strong>المزود الرسمي:</strong> لا يراك أصلاً — أنت مخفي تماماً خلف الموزع الوسيط. يرى فقط الموزع.</li>
-            <li>🔹 <strong>الموقع النهائي:</strong> بدون Tor يرى IP المزود الرسمي. مع Tor يرى IP عقدة خروج Tor فقط. لا يرى فرقاً بين الإعداد العادي و WISP.</li>
-            <li>🔹 <strong>مسار البيانات الصحيح:</strong> جهاز Qubes ← راوتر WISP ← الموزع الوسيط ← مزود الإنترنت ← الموقع النهائي. البيانات لا "تعود" إلى المزود، بل تمر عبره مرة واحدة في كل اتجاه.</li>
-            <li>🔹 <strong>النتيجة:</strong> جهاز Qubes غير موجود على أي شبكة لاسلكية. الآخرون على الشبكة المحلية يرون راوتراً واحداً فقط.</li>
-            <li>🔹 <strong>الفرق الجوهري:</strong> اختراق الراوتر = خطر خارج جهازك. اختراق sys-net = خطر داخل جهازك.</li>
-            <li>🔹 <strong>الكروت الملصقة:</strong> لا يمكن ربطها بجهازك في الوضع الطبيعي، لكن في سياق تحقيق جنائي رسمي قد يكون ذلك ممكناً عبر تتبع زمان ومكان الشراء.</li>
-            <li>🔹 <strong>الجيران:</strong> في إعداد WISP، يرون راوتراً فقط ولا يستطيعون الوصول لجهاز Qubes.</li>
+            <li><strong>الحل الموصى به:</strong> راوتر WISP + Ethernet فقط + تعطيل البث اللاسلكي الداخلي.</li>
+            <li><strong>بنية Qubes:</strong> sys-net (غير موثوق) ← sys-firewall (موثوق) ← باقي الأجهزة. لا تتجاوز sys-firewall أبداً.</li>
+            <li><strong>عدوك الحقيقي:</strong> الموزع الوسيط والجيران على الشبكة المحلية — وليس المزود الرسمي.</li>
+            <li><strong>مسار البيانات:</strong> Qubes ← راوتر WISP ← موزع ← مزود إنترنت ← موقع نهائي. البيانات تمر مرة واحدة في كل اتجاه.</li>
+            <li><strong>سيناريو الاختراق:</strong> حتى لو تم اختراق sys-net، لا يستطيع المهاجم الوصول لـ dom0 أو باقي الأجهزة إلا بثغرة Xen نادرة.</li>
+            <li><strong>خطط الطوارئ:</strong> Ethernet (🟢) → USB Tethering (🟡) → WiFi داخلي مشفر (🟡) → WiFi مباشر مع حماية (🟠) → WiFi عادي (🔴).</li>
+            <li><strong>طبقة VPN إضافية:</strong> يمكن تشغيل VPN على راوتر WISP نفسه لحماية البيانات حتى قبل وصولها لـ Qubes.</li>
+            <li><strong>الكروت الملصقة:</strong> توفر خصوصية من الموزع والجيران، لكن في تحقيق جنائي رسمي قد تُتَتبع عبر كاميرات المحل.</li>
         </ul>
         <p style="margin-top:10px;"><strong>🔗 للمرحلة التالية:</strong> توجه إلى <strong>تبويب 2</strong> لإعداد Tor والبوابات وأنواع الاتصال المشفر.</p>
     </div>
 </div>
-    
 <!-- ==================== تبويب 2: بوابات Whonix (النسخة النهائية المحدثة) ==================== -->
 <div class="tab-pane" id="tab2">
     <div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
