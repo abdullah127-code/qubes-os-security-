@@ -4410,6 +4410,8 @@ free -h</pre>
     </div>
 </div>
 <!-- ==================== نهاية تبويب 9 ==================== -->
+
+
 <!-- ==================== تبويب 10: التطبيقات المحمولة (النسخة الكاملة والموحدة) ==================== -->
 <div class="tab-pane" id="tab10">
     <div class="section-title">
@@ -4422,47 +4424,48 @@ free -h</pre>
         هذه السكريبتات تسمح بتشغيل تطبيقات سطح المكتب بشكل <strong>محمول بالكامل</strong>، حيث يتم حفظ جميع بيانات التطبيق داخل مجلد بجانب السكريبت (وليس في <code>/home/user</code>). هذا يوفر طبقة إضافية من العزل والخصوصية، ويمكن نقلها بسهولة على فلاشة USB.
     </div>
 
-<!-- ==================== 📊 جدول المقارنة الشامل ==================== -->
-<div class="card">
-    <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
-    <p>مقارنة دقيقة ومحدثة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية، بناءً على أحدث المعلومات حتى أبريل 2026:</p>
-    
-    <div style="overflow-x: auto;">
-        <table class="comparison-table">
-            <thead>
-                <tr><th>المعيار</th><th>🔷 SimpleX</th><th>🟣 Session</th><th>🟠 Signal</th><th>🟢 Briar</th><th>🔴 Cwtch</th><th>📘 Element (Matrix)</th><th>💬 XMPP</th><th>🧅 OnionShare</th><th>✈️ Telegram</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><strong>الغرض الأساسي</strong></td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مشاركة ملفات + محادثة</td><td>مراسلة</td></tr>
-                <tr><td><strong>نموذج الشبكة</strong></td><td>لامركزي (خوادم SMP) [citation:1]</td><td>لامركزي (شبكة Oxen) [citation:3]</td><td>مركزي (خوادم Signal)</td><td>ند للند (P2P) عبر Tor/Bluetooth [citation:1]</td><td>ند للند (P2P) للثنائيات + خوادم للمجموعات عبر Tor v3</td><td>فيدرالي (خوادم Matrix)</td><td>فيدرالي (خوادم XMPP)</td><td>ند للند (P2P) عبر Tor (جهازك هو الخادم)</td><td>مركزي (خوادم Telegram)</td></tr>
-                <tr><td><strong>تشفير E2EE</strong></td><td>✅ كامل</td><td>✅ كامل [citation:3]</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ (اختياري)</td><td>✅ (اختياري مع OMEMO)</td><td>✅ كامل</td><td>🟡 جزئي (المحادثات السرية فقط)</td></tr>
-                <tr><td><strong>Perfect Forward Secrecy</strong></td><td>✅ [citation:7]</td><td>✅ (تمت استعادته في Dec 2025) [citation:3][citation:6]</td><td>✅</td><td>✅</td><td>✅</td><td>❌ ضعيف</td><td>✅</td><td>✅</td><td>🟡 جزئي</td></tr>
-                <tr><td><strong>مقاومة البيانات الوصفية</strong></td><td>🟢 ممتاز (معرفات مؤقتة لكل محادثة) [citation:1]</td><td>🟡 جيد</td><td>🔴 ضعيف (يطلب رقم هاتف)</td><td>🟢 ممتاز</td><td>🟢 ممتاز (للثنائيات) / 🟡 متوسط (للمجموعات - تجريبي)</td><td>🔴 ضعيف</td><td>🔴 ضعيف</td><td>🟢 ممتاز (عبر Tor)</td><td>🔴 ضعيف جداً</td></tr>
-                <tr><td><strong>مفتوح المصدر</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>🟡 العميل فقط</td></tr>
-                <tr><td><strong>يتطلب رقم هاتف</strong></td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td></tr>
-                <tr><td><strong>يتطلب اتصالاً متزامناً</strong></td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (صندوق بريد)</td><td>✅ (للمحادثات الثنائية الخاصة)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم مؤقت - جهازك)</td><td>❌ (خادم وسيط)</td></tr>
-                <tr><td><strong>حدود حجم الملفات</strong></td><td>غير محدد</td><td>غير محدد</td><td>100MB</td><td>غير محدد</td><td>غير محدد</td><td>حسب الخادم</td><td>حسب الخادم</td><td>✅ غير محدود</td><td>2GB</td></tr>
-                <tr><td><strong>يعمل بدون إنترنت (شبكة محلية)</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ (Bluetooth/Wi-Fi)</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-                <tr><td><strong>يدعم iOS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌ (Android فقط)</td><td>❌ (Android/Linux فقط)</td><td>✅</td><td>✅</td><td>❌ (Desktop فقط)</td><td>✅</td></tr>
-                <tr><td><strong>التوصية الأمنية</strong></td><td>⭐ الخيار الأمثل للمراسلة المجهولة</td><td>⚠️ تقدم كبير، لكنه لا يزال تحت المراقبة</td><td>🟡 معيار جيد للاستخدام العادي [citation:7]</td><td>⭐ مثالي للبيئات القمعية والعمل دون إنترنت</td><td>⭐ ممتاز للخصوصية القصوى على Desktop/Android</td><td>⚠️ بحذر (للمجتمعات التي تتحكم في الخادم)</td><td>⚠️ بحذر (للمحترفين الذين يتحكمون بالخادم)</td><td>⭐ للمشاركة الآمنة والمجهولة للملفات</td><td>❌ غير موصى به لأي غرض خاص</td></tr>
-            </tbody>
-        </table>
+    <!-- ==================== 📊 جدول المقارنة الشامل ==================== -->
+    <div class="card">
+        <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
+        <p>مقارنة دقيقة ومحدثة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية، بناءً على أحدث المعلومات حتى أبريل 2026:</p>
+        
+        <div style="overflow-x: auto;">
+            <table class="comparison-table">
+                <thead>
+                    <tr><th>المعيار</th><th>🔷 SimpleX</th><th>🟣 Session</th><th>🟠 Signal</th><th>🟢 Briar</th><th>🔴 Cwtch</th><th>📘 Element</th><th>💬 XMPP</th><th>🧅 OnionShare</th><th>✈️ Telegram</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>الغرض الأساسي</strong></td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مراسلة</td><td>مشاركة ملفات + محادثة</td><td>مراسلة</td></tr>
+                    <tr><td><strong>نموذج الشبكة</strong></td><td>لامركزي (خوادم SMP)</td><td>لامركزي (شبكة Oxen)</td><td>مركزي (خوادم Signal)</td><td>ند للند (P2P) عبر Tor/Bluetooth</td><td>ند للند (P2P) للثنائيات + خوادم للمجموعات عبر Tor v3</td><td>فيدرالي (خوادم Matrix)</td><td>فيدرالي (خوادم XMPP)</td><td>ند للند (P2P) عبر Tor (جهازك هو الخادم)</td><td>مركزي (خوادم Telegram)</td></tr>
+                    <tr><td><strong>تشفير E2EE</strong></td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ كامل</td><td>✅ (اختياري)</td><td>✅ (اختياري مع OMEMO)</td><td>✅ كامل</td><td>🟡 جزئي (المحادثات السرية فقط)</td></tr>
+                    <tr><td><strong>Perfect Forward Secrecy</strong></td><td>✅</td><td>✅ (تمت استعادته في Dec 2025)</td><td>✅</td><td>✅</td><td>✅</td><td>❌ ضعيف</td><td>✅</td><td>✅</td><td>🟡 جزئي</td></tr>
+                    <tr><td><strong>الإنكار الآمن (Plausible Deniability)</strong></td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅ يدعمه بشكل كامل</td><td>❌</td><td>❌</td><td>🟡 مؤقت (تختفي المحادثة)</td><td>❌</td></tr>
+                    <tr><td><strong>مقاومة البيانات الوصفية</strong></td><td>🟢 ممتاز (معرفات مؤقتة لكل محادثة)</td><td>🟡 جيد</td><td>🔴 ضعيف (يطلب رقم هاتف)</td><td>🟢 ممتاز</td><td>🟢 ممتاز (للثنائيات) / 🟡 متوسط (للمجموعات - تجريبي)</td><td>🔴 ضعيف</td><td>🔴 ضعيف</td><td>🟢 ممتاز (عبر Tor)</td><td>🔴 ضعيف جداً</td></tr>
+                    <tr><td><strong>مفتوح المصدر</strong></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>🟡 العميل فقط</td></tr>
+                    <tr><td><strong>يتطلب رقم هاتف</strong></td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>❌ لا</td><td>✅ مطلوب</td></tr>
+                    <tr><td><strong>يتطلب اتصالاً متزامناً</strong></td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (صندوق بريد)</td><td>✅ (للمحادثات الثنائية الخاصة)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم وسيط)</td><td>❌ (خادم مؤقت - جهازك)</td><td>❌ (خادم وسيط)</td></tr>
+                    <tr><td><strong>حدود حجم الملفات</strong></td><td>غير محدد</td><td>غير محدد</td><td>100MB</td><td>غير محدد</td><td>غير محدد</td><td>حسب الخادم</td><td>حسب الخادم</td><td>✅ غير محدود</td><td>2GB</td></tr>
+                    <tr><td><strong>يعمل بدون إنترنت (شبكة محلية)</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ (Bluetooth/Wi-Fi)</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td><strong>يدعم iOS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌ (Android فقط)</td><td>❌ (Android/Linux فقط)</td><td>✅</td><td>✅</td><td>❌ (Desktop فقط)</td><td>✅</td></tr>
+                    <tr><td><strong>التوصية الأمنية</strong></td><td>⭐ الخيار الأمثل للمراسلة المجهولة</td><td>⚠️ تقدم كبير، لكنه لا يزال تحت المراقبة</td><td>🟡 معيار جيد للاستخدام العادي</td><td>⭐ مثالي للبيئات القمعية والعمل دون إنترنت</td><td>⭐ ممتاز للخصوصية القصوى مع إنكار آمن</td><td>⚠️ بحذر (للمجتمعات التي تتحكم في الخادم)</td><td>⚠️ بحذر (للمحترفين الذين يتحكمون بالخادم)</td><td>⭐ للمشاركة الآمنة والمجهولة للملفات</td><td>❌ غير موصى به لأي غرض خاص</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-star-of-life"></i>
+            <strong>💡 توصية الخبراء النهائية:</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li>• <strong>لأقصى درجات الخصوصية وإخفاء الهوية:</strong> <strong>SimpleX Chat</strong> هو الخيار الأمثل لعدم اعتماده على معرفات ثابتة.</li>
+                <li>• <strong>للعمل في البيئات القمعية أو دون إنترنت:</strong> <strong>Briar</strong> هو الخيار الوحيد الذي يعمل بشكل موثوق.</li>
+                <li>• <strong>لحماية البيانات الوصفية مع ميزة الإنكار الآمن:</strong> <strong>Cwtch</strong> يوفر قدرة فريدة على إنكار المحادثة بعد حدوثها.</li>
+                <li>• <strong>للمشاركة الآمنة للملفات الكبيرة أو استقبالها:</strong> <strong>OnionShare</strong> هو الأداة المثالية.</li>
+                <li>• <strong>للاستخدام اليومي السهل والموثوق:</strong> <strong>Signal</strong> يظل المعيار الذهبي للسهولة والأمان.</li>
+            </ul>
+        </div>
     </div>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-star-of-life"></i>
-        <strong>💡 توصية الخبراء النهائية:</strong>
-        <ul style="margin-right: 20px; margin-top: 8px;">
-            <li>• <strong>لأقصى درجات الخصوصية وإخفاء الهوية:</strong> <strong>SimpleX Chat</strong> هو الخيار الأمثل لعدم اعتماده على معرفات ثابتة [citation:1].</li>
-            <li>• <strong>للعمل في البيئات القمعية أو دون إنترنت:</strong> <strong>Briar</strong> هو الخيار الوحيد الذي يعمل بشكل موثوق.</li>
-            <li>• <strong>لحماية البيانات الوصفية على سطح المكتب:</strong> <strong>Cwtch</strong> يقدم نموذجاً ممتازاً للمحادثات الثنائية.</li>
-            <li>• <strong>للمشاركة الآمنة للملفات الكبيرة أو استقبالها:</strong> <strong>OnionShare</strong> هو الأداة المثالية.</li>
-            <li>• <strong>للاستخدام اليومي السهل والموثوق:</strong> <strong>Signal</strong> يظل المعيار الذهبي للسهولة والأمان [citation:7].</li>
-        </ul>
-    </div>
-</div>
 
-    <!-- ==================== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix (البوابة + محطة العمل) ==================== -->
+    <!-- ==================== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix ==================== -->
     <div class="card" style="border-right: 6px solid #66ccff;">
         <div class="card-header" style="color: #88aaff;">
             <i class="fas fa-shield-virus"></i> 🧅 تشغيل تطبيقات Tor داخل Whonix (الحل الكامل: البوابة + محطة العمل)
@@ -4470,7 +4473,7 @@ free -h</pre>
         <p><strong>المشكلة:</strong> تطبيقات مثل Cwtch و OnionShare قد تحتوي على Tor مدمج. في Whonix، هذا يسبب مشكلة "تكديس Tor" (Tor-over-Tor) وقد يتم حظر الاتصال. <strong>الحل الصحيح</strong> يتطلب إعدادات في <strong>كل من البوابة ومحطة العمل</strong>، مع الانتباه لمشكلة الملفات المضغوطة (<code>.gz</code>) التي قد تعطل الخدمة.</p>
         
         <h4>🛠️ الطريقة الأولى: استخدام torsocks (للتطبيقات التي تدعم SOCKS) - مثالية لـ SimpleX</h4>
-        <p>SimpleX يعمل بشكل ممتاز مع هذا الحل، وهو الخيار الموصى به لتشغيله في Whonix. <strong>لا يتطلب أي إعدادات إضافية في البوابة أو محطة العمل</strong> - فقط استخدم <code>torsocks -i</code>:</p>
+        <p>SimpleX يعمل بشكل ممتاز مع هذا الحل. <strong>لا يتطلب أي إعدادات إضافية في البوابة أو محطة العمل</strong> - فقط استخدم <code>torsocks -i</code>:</p>
         <pre class="code-block" style="direction: ltr; text-align: left;"># تشغيل أي تطبيق عبر Tor الخاص بـ Whonix
 torsocks ./application.AppImage
 
@@ -4526,7 +4529,7 @@ sudo whonix_firewall</pre>
                 </thead>
                 <tbody>
                     <tr><td><strong>SimpleX Chat</strong></td><td>❌ لا يحتاج</td><td><code>torsocks -i ./simplex.AppImage</code></td></tr>
-                    <tr><td><strong>Cwtch</strong></td><td><code>sudo onion-grater-add 40_cwtch</code></td><td>فتح المنافذ 15000-15378 + متغيرات البيئة</td></tr>
+                    <tr><td><strong>Cwtch</strong></td><td><code>sudo onion-grater-add 40_cwtch</code></td><td>فتح المنافذ 15000-15378 + السكريبت المحمول</td></tr>
                     <tr><td><strong>OnionShare</strong></td><td><code>sudo onion-grater-add 40_onionshare</code> + فك الضغط</td><td>فتح المنافذ 17600-17659</td></tr>
                     <tr><td><strong>Signal/Session</strong></td><td>❌ لا يحتاج</td><td><code>torsocks</code> (قد لا يعمل Signal)</td></tr>
                     <tr><td><strong>Element/Gajim</strong></td><td>❌ لا يحتاج</td><td>يعمل عبر Tor النظام تلقائياً</td></tr>
@@ -4646,6 +4649,7 @@ chmod +x "$APPIMAGE" 2>/dev/null
 [ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
 exec "./$APPIMAGE" "$@"</pre>
     </div>
+
     <!-- ==================== Cwtch Card ==================== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (ند للند مقاوم للبيانات الوصفية) - الموصى به لسطح المكتب</div>
@@ -4653,7 +4657,15 @@ exec "./$APPIMAGE" "$@"</pre>
         
         <div class="note" style="background: #1a2a3a; border-right-color: #4caf50;">
             <i class="fas fa-check-circle"></i> <strong>المميزات:</strong>
-            <ul><li>🔒 ند للند (P2P حقيقي) - اتصال مباشر دون خوادم وسيطة</li><li>🧅 Tor مدمج - إخفاء تام لعنوان IP</li><li>🎭 هويات متعددة (Profiles) - شخصيات معزولة تماماً</li><li>📦 محمول بالكامل - يعمل من مجلد واحد (USB)</li><li>🔐 Perfect Forward Secrecy (PFS)</li><li>🛡️ مقاوم للبيانات الوصفية</li></ul>
+            <ul>
+                <li>🔒 ند للند (P2P حقيقي) - اتصال مباشر دون خوادم وسيطة</li>
+                <li>🧅 Tor مدمج - إخفاء تام لعنوان IP</li>
+                <li>🎭 هويات متعددة (Profiles) - شخصيات معزولة تماماً</li>
+                <li>📦 محمول بالكامل - يعمل من مجلد واحد (USB)</li>
+                <li>🔐 Perfect Forward Secrecy (PFS)</li>
+                <li>🛡️ مقاوم للبيانات الوصفية</li>
+                <li>🚫 <strong>الإنكار الآمن (Plausible Deniability):</strong> يتيح بروتوكول المصادقة في Cwtch <strong>إنكار حدوث المحادثة تماماً بعد إغلاقها</strong>. يمكن لأي طرف <strong>تزوير سجلات المحادثة</strong> بالكامل، مما يجعل من المستحيل إثبات أن المحادثة "الحقيقية" قد حدثت. هذا يجعله الخيار الوحيد الذي يوفر هذه الحماية بين تطبيقات المراسلة.</li>
+            </ul>
         </div>
 
         <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #ffaa33;">
@@ -4678,7 +4690,7 @@ exec "./$APPIMAGE" "$@"</pre>
 
         <!-- ============ سكربت التشغيل المحمول ============ -->
         <h3><i class="fas fa-usb"></i> 💾 سكربت Cwtch المحمول (Portable)</h3>
-        <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whoniz وتشغيلها عند الحاجة:</p>
+        <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whonix وتشغيلها عند الحاجة:</p>
         <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
         <pre class="code-block" id="cwtch-portable-script">#!/bin/sh
 SCRIPT=$(realpath "$0")
@@ -4725,6 +4737,7 @@ exec env LD_LIBRARY_PATH=./lib/ CWTCH_HOME="${SCRIPTPATH}/cwtch-data" ./lib/cwtc
             <li><strong>Linux (Portable):</strong> ملف <code>cwtch-*.tar.gz</code> يحتوي على جميع سكريبتات التثبيت أعلاه</li>
         </ul>
     </div>
+
     <!-- ==================== Matrix/Element Cards ==================== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-info-circle"></i> ما هو Matrix؟</div>
@@ -4744,7 +4757,7 @@ sudo apt update && sudo apt install element-desktop -y</pre>
 
     <div class="card">
         <div class="card-header"><i class="fas fa-usb"></i> Element - نسخة محمولة</div>
-        <p>هذا السكربت يجعل Element محمولاً بحيث يحفظ جميع الإعدادات والمحادثات ومفاتيح التشفير داخل مجلد <code>Element-Data</code> على الفلاشة.</p>
+        <p>هذا السكريبت يجعل Element محمولاً بحيث يحفظ جميع الإعدادات والمحادثات ومفاتيح التشفير داخل مجلد <code>Element-Data</code> على الفلاشة.</p>
         <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> نسخ run-element-portable.sh</button>
         <pre class="code-block" id="element-script">#!/bin/bash
 set -euo pipefail
@@ -4776,19 +4789,14 @@ element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &</pre>
         <div class="card-header"><i class="fas fa-usb"></i> Gajim - نسخة محمولة (⚠️ داخل نفس النظام فقط)</div>
         <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
             <i class="fas fa-exclamation-triangle"></i> 
-            <strong>⚠️ قيود التحميل:</strong> Gajim <strong>لا يمكن جعله محمولاً بالكامل عبر أنظمة مختلفة</strong> بسبب اعتماده على <strong>gnome-keyring</strong> (مدير كلمات مرور جنوم) لإدارة مفاتيح التشفير والشهادات. هذا يعني أن التطبيق مربوط بحساب المستخدم في النظام الحالي. السكريبت أدناه يسمح بحفظ <strong>الإعدادات والمحادثات</strong> في مجلد محمول على USB، لكنه سيعمل فقط <strong>داخل نفس النظام/المستخدم</strong> الذي تم إعداده عليه. للنقل بين أنظمة Whonix مختلفة، قد تحتاج لإعادة إعداد الحسابات والمفاتيح.
+            <strong>⚠️ قيود التحميل:</strong> Gajim <strong>لا يمكن جعله محمولاً بالكامل عبر أنظمة مختلفة</strong> بسبب اعتماده على <strong>gnome-keyring</strong> (مدير كلمات مرور جنوم) لإدارة مفاتيح التشفير والشهادات. السكريبت أدناه يسمح بحفظ <strong>الإعدادات والمحادثات</strong> في مجلد محمول على USB، لكنه سيعمل فقط <strong>داخل نفس النظام/المستخدم</strong>.
         </div>
         <button class="btn-copy-all" onclick="copyScript('gajim-script')"><i class="fas fa-copy"></i> نسخ run-gajim-portable.sh</button>
         <pre class="code-block" id="gajim-script">#!/bin/bash
-# ===================================================================
-# Gajim Portable - يحفظ الإعدادات والمحادثات محمولاً
-# ⚠️ يبقى مربوطاً بـ gnome-keyring الخاص بالنظام الحالي
-# ===================================================================
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/gajim-data"
 mkdir -p "$PORTABLE_DIR"
 
-# تعطيل مدير كلمات المرور (لتجنب أخطاء keyring)
 CONFIG_FILE="${PORTABLE_DIR}/config"
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "[global]" > "$CONFIG_FILE"
@@ -4796,12 +4804,11 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 if ! command -v gajim &> /dev/null; then
-    echo "❌ Gajim غير مثبت: sudo apt install gajim"
+    echo "❌ Gajim غير مثبت"
     exit 1
 fi
 
-gajim -c "$PORTABLE_DIR" &
-echo "🚀 Gajim يعمل - البيانات: $PORTABLE_DIR"</pre>
+gajim -c "$PORTABLE_DIR" &</pre>
     </div>
 
     <!-- ==================== Telegram Card ==================== -->
@@ -4922,9 +4929,8 @@ onionshare</pre>
 │   │   ├── simplex-desktop-x86_64.AppImage
 │   │   └── simplex-chat-data/
 │   ├── Cwtch/
-│   │   ├── run-cwtch.sh
-│   │   ├── cwtch
-│   │   ├── libcwtch.so
+│   │   ├── run-cwtch-portable.sh
+│   │   ├── lib/cwtch
 │   │   ├── Tor/
 │   │   └── cwtch-data/
 │   ├── Signal/
@@ -4976,7 +4982,6 @@ onionshare</pre>
         <strong>✅ خلاصة التبويب:</strong> جميع السكريبتات جاهزة للنسخ والاستخدام. الهيكل المقترح يضمن عزل البيانات وقابلية النقل. انتبه بشكل خاص لإعدادات البوابة ومحطة العمل مع Cwtch و OnionShare، وتذكر فك ضغط ملفات <code>.gz</code> في البوابة.
     </div>
 </div>
-    </div>
 
         <!-- ==================== 11 auto-script ==================== -->
     <div class="tab-pane" id="tab11">
