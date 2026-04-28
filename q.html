@@ -4646,7 +4646,7 @@ chmod +x "$APPIMAGE" 2>/dev/null
 [ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
 exec "./$APPIMAGE" "$@"</pre>
     </div>
-
+    <!-- ==================== Cwtch Card ==================== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (ند للند مقاوم للبيانات الوصفية) - الموصى به لسطح المكتب</div>
         <p><strong>Cwtch</strong> (يُنطق /kʊtʃ/) هو بروتوكول مراسلة <strong>لامركزي ومقاوم للبيانات الوصفية (Metadata)</strong>، مبني على شبكة <strong>Tor v3 Onion Services</strong>. تم تطويره بواسطة منظمة <strong>Open Privacy Research Society</strong> (كندا).</p>
@@ -4658,30 +4658,73 @@ exec "./$APPIMAGE" "$@"</pre>
 
         <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #ffaa33;">
             <i class="fas fa-exclamation-triangle"></i> <strong>القيود:</strong>
-            <ul><li>🐢 يتطلب اتصالاً متزامناً (الطرفان معاً) للمحادثات الخاصة</li><li>📱 غير متوفر على iOS (Android و Desktop فقط)</li><li>🔧 يتطلب إعدادات خاصة على Whonix/Qubes و Tails</li><li>📊 قاعدة مستخدمين صغيرة</li></ul>
+            <ul><li>🐢 يتطلب اتصالاً متزامناً (الطرفان معاً) للمحادثات الخاصة</li><li>📱 غير متوفر على iOS (Android و Desktop فقط)</li><li>🔧 يتطلب إعدادات خاصة على Whonix/Qubes</li><li>📊 قاعدة مستخدمين صغيرة: ~5,000+ تحميل على Android، وغير معروف على Desktop (تحميل مباشر)</li></ul>
         </div>
-        
+
         <!-- ============ هيكل التثبيت الرسمي ============ -->
         <h3><i class="fas fa-folder-tree"></i> 📁 هيكل التثبيت الرسمي (من المستودع)</h3>
-        <p>عند تحميل Cwtch من الموقع الرسمي، يحتوي المجلد على سكريبتات تثبيت متعددة لكل منصة:</p>
+        <p>عند تحميل Cwtch من الموقع الرسمي، يحتوي المجلد على سكريبتات التثبيت التالية:</p>
         <pre class="code-block" style="direction: ltr; text-align: left;">cwtch/
-├── cwtch                    # الملف التنفيذي الرئيسي
-├── libcwtch.so              # المكتبة الأساسية
+├── cwtch                    # سكريبت التشغيل (يشير لـ ./lib/cwtch)
+├── lib/                     # مجلد المكتبات
+│   ├── cwtch                # الملف التنفيذي الرئيسي
+│   └── libcwtch.so          # المكتبة الأساسية
 ├── Tor/                     # Tor مدمج للتطبيق
 ├── install.sh               # تثبيت عام للمجلد ~/.local/lib/
 ├── install-home.sh          # تثبيت منزلي خاص
 ├── install-sys.sh           # تثبيت على مستوى النظام
-├── install-tails.sh         # إعداد خاص لـ Tails OS
 ├── install-whonix.sh        # إعداد خاص لـ Whonix
 └── cwtch-whonix.yml         # ملف إعداد onion-grater لـ Whonix</pre>
 
-        <!-- ============ حل Whonix الرسمي ============ -->
-        <h3><i class="fas fa-cog"></i> 🔧 تشغيل Cwtch على Whonix - الحل الرسمي (البوابة + محطة العمل)</h3>
-        <p>الطريقة التالية موثقة رسمياً من فريق Cwtch وتستخدم متغيرات البيئة المعتمدة:</p>
-        <ul style="margin-right: 20px;">
-            <li><code> قم بتشغيل هذا السكربت إن كنت تستخدم whonix ws ./install-whonix .</code>
-    </div>
+        <!-- ============ سكربت التشغيل المحمول ============ -->
+        <h3><i class="fas fa-usb"></i> 💾 سكربت Cwtch المحمول (Portable)</h3>
+        <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whoniz وتشغيلها عند الحاجة:</p>
+        <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
+        <pre class="code-block" id="cwtch-portable-script">#!/bin/sh
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+cd $SCRIPTPATH
 
+# التحقق من وجود install-whonix.sh وتشغيله فقط إذا كنا في Whonix
+if [ -f "${SCRIPTPATH}/install-whonix.sh" ] && [ -f "/usr/share/whonix/marker" ]; then
+    if ! grep -q "15000" /usr/local/etc/whonix_firewall.d/50_user.conf 2>/dev/null; then
+        echo "🔧 جاري ضبط إعدادات Whonix..."
+        sudo sh "${SCRIPTPATH}/install-whonix.sh"
+    fi
+    export CWTCH_TAILS=true
+    export CWTCH_RESTRICT_PORTS=true
+    export CWTCH_BIND_EXTERNAL_WHONIX=true
+fi
+
+# تشغيل Cwtch المحمول
+export CWTCH_HOME="${SCRIPTPATH}/cwtch-data"
+
+exec env LD_LIBRARY_PATH=./lib/ CWTCH_HOME="${SCRIPTPATH}/cwtch-data" ./lib/cwtch</pre>
+        <p>📁 <strong>هيكل المجلدات بعد التشغيل:</strong></p>
+        <pre class="code-block">cwtch/
+├── run-cwtch-portable.sh    # ⬅️ استخدم هذا للتشغيل المحمول
+├── lib/
+│   └── cwtch                # الملف التنفيذي
+├── Tor/                     # Tor مدمج
+└── cwtch-data/              # 🆕 بيانات محمولة (تنشأ تلقائياً)</pre>
+
+        <!-- ============ ملاحظة هامة حول Whonix ============ -->
+        <div class="note" style="margin-top: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ تذكير هام لمستخدمي Whonix:</strong>
+            <p>بعد تشغيل السكريبت، لا تنس تنفيذ الأمر التالي في <strong>Whonix-Gateway (البوابة)</strong>:</p>
+            <pre class="code-block">sudo onion-grater-add 40_cwtch</pre>
+            <p>بدون هذا الأمر في البوابة، لن يتمكن Cwtch من الاتصال بشبكة Tor.</p>
+        </div>
+
+        <!-- ============ روابط التحميل ============ -->
+        <h3><i class="fas fa-download"></i> 📥 روابط التحميل</h3>
+        <ul>
+            <li><strong>Desktop:</strong> <a href="https://docs.cwtch.im/download" target="_blank">docs.cwtch.im/download</a></li>
+            <li><strong>Android:</strong> <a href="https://play.google.com/store/apps/details?id=im.cwtch.flwtch" target="_blank">Google Play</a></li>
+            <li><strong>Linux (Portable):</strong> ملف <code>cwtch-*.tar.gz</code> يحتوي على جميع سكريبتات التثبيت أعلاه</li>
+        </ul>
+    </div>
     <!-- ==================== Matrix/Element Cards ==================== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-info-circle"></i> ما هو Matrix؟</div>
