@@ -4693,25 +4693,30 @@ exec "./$APPIMAGE" "$@"</pre>
         <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whonix وتشغيلها عند الحاجة:</p>
         <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
         <pre class="code-block" id="cwtch-portable-script">#!/bin/sh
+# ===================================================================
+# سكريبت تشغيل Cwtch المحمول لـ Whonix داخل Qubes
+# مطابق لما يفعله install-whonix.sh مع التشغيل المحمول
+# ===================================================================
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 
-# التحقق من وجود install-whonix.sh وتشغيله فقط إذا كنا في Whonix
+# تشغيل install-whonix.sh تلقائياً إذا لزم الأمر
 if [ -f "${SCRIPTPATH}/install-whonix.sh" ] && [ -f "/usr/share/whonix/marker" ]; then
     if ! grep -q "15000" /usr/local/etc/whonix_firewall.d/50_user.conf 2>/dev/null; then
         echo "🔧 جاري ضبط إعدادات Whonix..."
         sudo sh "${SCRIPTPATH}/install-whonix.sh"
     fi
-    export CWTCH_TAILS=true
-    export CWTCH_RESTRICT_PORTS=true
-    export CWTCH_BIND_EXTERNAL_WHONIX=true
 fi
 
-# تشغيل Cwtch المحمول
+# تشغيل Cwtch
 export CWTCH_HOME="${SCRIPTPATH}/cwtch-data"
-
-exec env LD_LIBRARY_PATH=./lib/ CWTCH_HOME="${SCRIPTPATH}/cwtch-data" ./lib/cwtch</pre>
+exec env LD_LIBRARY_PATH="./lib/:./lib/Tor" \
+    CWTCH_HOME="${SCRIPTPATH}/cwtch-data" \
+    CWTCH_TAILS=true \
+    CWTCH_RESTRICT_PORTS=true \
+    CWTCH_BIND_EXTERNAL_WHONIX=true \
+    ./lib/cwtch</pre>
         <p>📁 <strong>هيكل المجلدات بعد التشغيل:</strong></p>
         <pre class="code-block">cwtch/
 ├── run-cwtch-portable.sh    # ⬅️ استخدم هذا للتشغيل المحمول
