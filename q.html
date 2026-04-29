@@ -1151,7 +1151,7 @@ wifi.scan-rand-mac-address=yes</pre>
         <i class="fas fa-user-secret"></i> <strong>إصدار Whonix:</strong> تستخدم هذه الأوامر الإصدار 18. إذا كنت تستخدم إصداراً أحدث، عدّل اسم القالب.
     </div>
 
-<!-- ==================== الرسم البياني: البنية الكاملة ==================== -->
+<!-- ==================== الرسم البياني: البنية الكاملة (مُحسَّن) ==================== -->
 <div style="background: var(--code-bg); border-radius: 24px; padding: 20px; text-align: center; font-family: monospace; font-size: 0.85em; direction: ltr; overflow-x: auto;">
     
     <!-- ==================== الهوية الأولى ==================== -->
@@ -1171,31 +1171,31 @@ wifi.scan-rand-mac-address=yes</pre>
             <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
         </div>
         
-        <!-- سطر Tor Network - 3 عقد -->
+        <!-- سطر التشفير الكامل (محدث مع HTTPS) -->
         <div style="margin: 15px 0; padding: 12px; background: #1a2a1a; border-radius: 20px;">
             <div style="color: #66ccff; font-weight: bold; margin-bottom: 10px; text-align: center;">
-                🌐 شبكة Tor (Tor Network)
+                🌐 شبكة Tor + التشفير الكامل
             </div>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px;">
                 <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
                     🚪 <strong>العقدة 1</strong><br>
-                    <small>حارس الدخول<br>Entry Guard</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الخارجية</div>
+                    <small>حارس الدخول</small>
+                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الخارجية (Tor)</div>
                     <div style="color: #aaa; font-size: 0.65em;">تعرف هوية المستخدم فقط</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
                 <div style="background: #2a3a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
                     🔄 <strong>العقدة 2</strong><br>
-                    <small>عقدة وسطى<br>Middle Relay</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الوسطى</div>
+                    <small>عقدة وسطى</small>
+                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الوسطى (Tor)</div>
                     <div style="color: #aaa; font-size: 0.65em;">لا تعرف المصدر ولا الوجهة</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
                 <div style="background: #2a2a3a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
                     🚪 <strong>العقدة 3</strong><br>
-                    <small>عقدة خروج<br>Exit Node</small>
-                    <div style="color: #ff4444; font-size: 0.7em;">🔓 تفك الطبقة الأخيرة</div>
-                    <div style="color: #ff4444; font-size: 0.65em;">ترى الوجهة والمحتوى</div>
+                    <small>عقدة خروج</small>
+                    <div style="color: #ff4444; font-size: 0.7em;">🔓 تفك الطبقة الأخيرة (Tor)</div>
+                    <div style="color: #ff4444; font-size: 0.65em;">ترى الوجهة فقط (المحتوى مشفر)</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
                 <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">
@@ -1205,63 +1205,39 @@ wifi.scan-rand-mac-address=yes</pre>
             </div>
         </div>
         
-        <!-- شرح التشفير الصحيح -->
-        <div style="font-size: 0.75em; color: #aaa; text-align: center;">
-            🔒 Gateway A ينشئ دائرة مشفرة: يغلف الرسالة بثلاث طبقات تشفير متتالية (مفاتيح متناظرة مع: الدخول، الوسط، الخروج) ← 🔒 جدار الناري يمررها كما هي ← 🔓 Entry Guard يفك طبقته فيكشف تعليمات التوجيه والرسالة المشفرة بطبقتين ← 🔓 Middle Relay يفك طبقته فيكشف تعليمات التوجيه والرسالة المشفرة بطبقة واحدة ← 🔓 Exit Node يفك الطبقة الأخيرة ويكشف الرسالة الأصلية للإنترنت
+        <!-- شرح التشفير الصحيح (محدث ليشمل HTTPS) -->
+        <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
+            <strong>🔒🔒 مسار التشفير الكامل (HTTPS + Tor):</strong><br>
+            📱 محطة العمل: تشفر البيانات بـ <span style="color: #66ccff;">TLS/HTTPS</span> (طبقة 1) ← 🔐 Gateway A: تضيف <span style="color: #ffaa33;">3 طبقات Tor</span> (الطبقات 2، 3، 4) ← 🔥 جدار الحماية: يمررها كما هي ← 🔓 Entry Guard: يفك الطبقة الخارجية لـ Tor ← 🔓 Middle Relay: يفك الطبقة الوسطى لـ Tor ← 🔓 Exit Node: تفك الطبقة الأخيرة لـ Tor وتكشف عن بيانات <span style="color: #66ccff;">TLS المشفرة</span> للموقع النهائي.
         </div>
+    </div>
     
+<!-- ==================== الهوية الثانية ==================== -->
+<div style="background: #1a3a3a; padding: 15px; border-radius: 20px;">
+    <div style="color: #6666ff; font-weight: bold; margin-bottom: 15px; text-align: center;">
+        🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
+    </div>
     
-    <!-- ==================== الهوية الثانية ==================== -->
-    <div style="background: #1a3a3a; padding: 15px; border-radius: 20px;">
-        <div style="color: #6666ff; font-weight: bold; margin-bottom: 15px; text-align: center;">
-            🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
-        </div>
-        
-        <!-- مسار البيانات داخل Qubes -->
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px;">
-            <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-B<br><small>Workstation</small></div>
-            <div style="color: #4caf50;">→</div>
-            <div style="background: #4a2a2a; padding: 8px 12px; border-radius: 12px;">🔐 sys-whonix-B<br><small>Gateway B</small></div>
-            <div style="color: #4caf50;">→</div>
-            <div style="background: #6666ff; padding: 8px 12px; border-radius: 12px;">🔥 sys-firewall-B<br><small>جدار ناري B</small></div>
-            <div style="color: #4caf50;">→</div>
-            <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
-        </div>
-        
-        <!-- سطر Tor Network - 3 عقد -->
-        <div style="margin: 15px 0; padding: 12px; background: #1a2a1a; border-radius: 20px;">
-            <div style="color: #66ccff; font-weight: bold; margin-bottom: 10px; text-align: center;">
-                🌐 شبكة Tor (Tor Network)
-            </div>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px;">
-                <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🚪 <strong>العقدة 1</strong><br>
-                    <small>حارس دخول مختلف</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الخارجية</div>
-                </div>
-                <div style="color: #4caf50;">→</div>
-                <div style="background: #2a3a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🔄 <strong>العقدة 2</strong><br>
-                    <small>عقدة وسطى</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الوسطى</div>
-                </div>
-                <div style="color: #4caf50;">→</div>
-                <div style="background: #2a2a3a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🚪 <strong>العقدة 3</strong><br>
-                    <small>عقدة خروج</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الأخيرة</div>
-                </div>
-                <div style="color: #4caf50;">→</div>
-                <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">
-                    🌐 <strong>الإنترنت</strong>
-                </div>
-            </div>
-        </div>
-        
-        <!-- شرح التشفير الصحيح -->
-        <div style="font-size: 0.75em; color: #aaa; text-align: center;">
-            🔒 Gateway B ينشئ دائرة مشفرة: يغلف الرسالة بثلاث طبقات تشفير متتالية (مفاتيح متناظرة مع: الدخول، الوسط، الخروج) ← 🔒 جدار الناري يمررها كما هي ← 🔓 Entry Guard يفك طبقته فيكشف تعليمات التوجيه والرسالة المشفرة بطبقتين ← 🔓 Middle Relay يفك طبقته فيكشف تعليمات التوجيه والرسالة المشفرة بطبقة واحدة ← 🔓 Exit Node يفك الطبقة الأخيرة ويكشف الرسالة الأصلية للإنترنت
-        </div>
+    <!-- مسار البيانات داخل Qubes + Tor Network -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 15px;">
+        <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-B<br><small>Workstation</small></div>
+        <div style="color: #4caf50;">→</div>
+        <div style="background: #4a2a2a; padding: 8px 12px; border-radius: 12px;">🔐 sys-whonix-B<br><small>Gateway B</small></div>
+        <div style="color: #4caf50;">→</div>
+        <div style="background: #6666ff; padding: 8px 12px; border-radius: 12px;">🔥 sys-firewall-B<br><small>جدار ناري B</small></div>
+        <div style="color: #4caf50;">→</div>
+        <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
+        <div style="color: #4caf50;">→</div>
+        <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px;">🚪 عقد Tor الثلاث</div>
+        <div style="color: #4caf50;">→</div>
+        <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 الإنترنت</div>
+    </div>
+    
+    <!-- شرح مختصر -->
+    <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 12px;">
+        🔒🔒 نفس آلية الهوية الأولى: تشفير TLS من محطة العمل → Gateway B يضيف 3 طبقات Tor → تفكيك متسلسل عبر عقد Tor الثلاث (بدائرة مستقلة تمامًا عن الهوية A).
+    </div>
+</div>
     
     <!-- ==================== ملخص الميزات ==================== -->
     <div style="margin-top: 20px; padding: 12px; background: #0a1a2a; border-radius: 15px; text-align: center;">
@@ -1269,39 +1245,23 @@ wifi.scan-rand-mac-address=yes</pre>
             <div><span style="color: #66ccff;">🔐</span> كل Gateway لها Bridges مختلفة</div>
             <div><span style="color: #66ccff;">🕐</span> SDWDate يخفي التوقيت (مدمج في Whonix)</div>
             <div><span style="color: #66ccff;">🔥</span> جداران ناريان منفصلان (يمرران البيانات كما هي)</div>
-            <div><span style="color: #66ccff;">🔒→🔓</span> 3 طبقات تشفير ← تفك في 3 عقد Tor</div>
+            <div><span style="color: #66ccff;">🔒→🔓</span> 4 طبقات تشفير: 1 TLS + 3 Tor</div>
         </div>
     </div>
 </div>
-                <!-- شرح التشفير الصحيح -->
-                <div style="font-size: 0.75em; color: #aaa; text-align: center;">
-                    🔒 Gateway B يطبق 3 طبقات تشفير → 🔒 جدار الناري يمرر كما هو → 🔓 Entry Guard يفك الطبقة الخارجية → 🔓 Middle Relay يفك الطبقة الوسطى → 🔓 Exit Node يفك الطبقة الأخيرة
-                </div>
-            </div>
-            
-            <!-- ==================== ملخص الميزات ==================== -->
-            <div style="margin-top: 20px; padding: 12px; background: #0a1a2a; border-radius: 15px; text-align: center;">
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-size: 0.8em;">
-                    <div><span style="color: #66ccff;">🔐</span> كل Gateway له Bridges مختلفة</div>
-                    <div><span style="color: #66ccff;">🕐</span> SDWDate يخفي التوقيت (مدمج في Whonix)</div>
-                    <div><span style="color: #66ccff;">🔥</span> جداران ناريان منفصلان (يمرران البيانات كما هي)</div>
-                    <div><span style="color: #66ccff;">🔒→🔓</span> 3 طبقات تشفير → تفك في 3 عقد Tor</div>
-                </div>
-            </div>
-        </div>
-        
+
 <div class="note" style="margin-top: 15px;">
     <i class="fas fa-info-circle"></i>
-    <strong>🔐 كيف يعمل التشفير الطبقي في Tor بشكل صحيح:</strong>
+    <strong>🔐 كيف يعمل التشفير الطبقي بشكل صحيح (مع HTTPS):</strong>
     <ul style="margin-right:20px; margin-top:10px;">
-        <li><strong>الخطوة 1 (داخل Gateway):</strong> العميل (الـ Gateway) يقوم <strong>بتشفير</strong> الرسالة الأصلية ثلاث مرات متتالية. يبدأ بالتشفير بمفتاح عقدة الخروج، ثم بمفتاح العقدة الوسطى، وأخيراً بمفتاح عقدة الدخول. هذا يغلف الرسالة بثلاث طبقات مثل "البصلة" [citation:6].</li>
-        <li><strong>الخطوة 2 (عند عقدة الدخول):</strong> عقدة الدخول <strong>تفك تشفير</strong> طبقتها (الطبقة الخارجية) لتكشف عن رسالة لا تزال مشفرة بطبقتين، وتعرف فقط أنها يجب أن ترسلها إلى العقدة الوسطى.</li>
-        <li><strong>الخطوة 3 (عند العقدة الوسطى):</strong> العقدة الوسطى <strong>تفك تشفير</strong> طبقتها لتكشف عن رسالة مشفرة بطبقة واحدة، وتعرف فقط أنها يجب أن ترسلها إلى عقدة الخروج.</li>
-        <li><strong>الخطوة 4 (عند عقدة الخروج):</strong> عقدة الخروج <strong>تفك تشفير</strong> الطبقة الأخيرة لتكشف عن الرسالة الأصلية ووجهتها النهائية، فتقوم بتوجيهها إلى الخادم المطلوب.</li>
+        <li><strong>الخطوة 0 (في محطة العمل):</strong> المتصفح في <code>anon-work</code> يقوم أولاً بتشفير البيانات بطبقة <strong>TLS/HTTPS</strong> قبل إرسالها إلى Gateway Tor [citation:1].</li>
+        <li><strong>الخطوة 1 (داخل Gateway):</strong> Gateway Tor يقوم <strong>بتشفير</strong> البيانات (المشفرة فعلاً بـ TLS) ثلاث مرات متتالية. يبدأ بمفتاح عقدة الخروج، ثم الوسطى، ثم الدخول. هذا يغلفها بأربع طبقات إجمالاً [citation:6].</li>
+        <li><strong>الخطوة 2 (عند عقدة الدخول):</strong> تفك تشفير طبقة Tor الخارجية، وتكشف عن رسالة مشفرة بـ 3 طبقات (1 TLS + 2 Tor).</li>
+        <li><strong>الخطوة 3 (عند العقدة الوسطى):</strong> تفك تشفير طبقة Tor الوسطى، وتكشف عن رسالة مشفرة بـ 2 طبقات (1 TLS + 1 Tor).</li>
+        <li><strong>الخطوة 4 (عند عقدة الخروج):</strong> تفك تشفير طبقة Tor الأخيرة، لتكشف عن رسالة مشفرة بطبقة <strong>TLS/HTTPS</strong> الواحدة التي لا تستطيع فكها، فترسلها للخادم النهائي الذي يمتلك مفتاح TLS.</li>
     </ul>
-    <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> المفاتيح المستخدمة في هذه العملية هي مفاتيح <strong>متناظرة (Symmetric)</strong> يتم الاتفاق عليها مسبقًا مع كل عقدة عبر "مصافحة" (handshake) آمنة. نظام Tor يطور خوارزميات التشفير هذه باستمرار؛ حيث يستبدل حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات [citation:8].</p>
+    <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> بهذا الشكل، حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بتقنية TLS، ولا تستطيع التجسس على المحتوى الفعلي لاتصالك (كلمات المرور، الرسائل، إلخ). يستبدل Tor حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات [citation:8].</p>
 </div>
-
     <!-- ==================== الفرق بين Gateway و Workstation ==================== -->
     <div class="card">
         <div class="card-header">
