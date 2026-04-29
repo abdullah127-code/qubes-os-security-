@@ -1254,13 +1254,13 @@ wifi.scan-rand-mac-address=yes</pre>
     <i class="fas fa-info-circle"></i>
     <strong>🔐 كيف يعمل التشفير الطبقي بشكل صحيح (مع HTTPS):</strong>
     <ul style="margin-right:20px; margin-top:10px;">
-        <li><strong>الخطوة 0 (في محطة العمل):</strong> المتصفح في <code>anon-work</code> يقوم أولاً بتشفير البيانات بطبقة <strong>TLS/HTTPS</strong> قبل إرسالها إلى Gateway Tor [citation:1].</li>
-        <li><strong>الخطوة 1 (داخل Gateway):</strong> Gateway Tor يقوم <strong>بتشفير</strong> البيانات (المشفرة فعلاً بـ TLS) ثلاث مرات متتالية. يبدأ بمفتاح عقدة الخروج، ثم الوسطى، ثم الدخول. هذا يغلفها بأربع طبقات إجمالاً [citation:6].</li>
+        <li><strong>الخطوة 0 (في محطة العمل):</strong> المتصفح في <code>anon-work</code> يقوم أولاً بتشفير البيانات بطبقة <strong>TLS/HTTPS</strong> قبل إرسالها إلى Gateway Tor.</li>
+        <li><strong>الخطوة 1 (داخل Gateway):</strong> Gateway Tor يقوم <strong>بتشفير</strong> البيانات (المشفرة فعلاً بـ TLS) ثلاث مرات متتالية. يبدأ بمفتاح عقدة الخروج، ثم الوسطى، ثم الدخول. هذا يغلفها بأربع طبقات إجمالاً.</li>
         <li><strong>الخطوة 2 (عند عقدة الدخول):</strong> تفك تشفير طبقة Tor الخارجية، وتكشف عن رسالة مشفرة بـ 3 طبقات (1 TLS + 2 Tor).</li>
         <li><strong>الخطوة 3 (عند العقدة الوسطى):</strong> تفك تشفير طبقة Tor الوسطى، وتكشف عن رسالة مشفرة بـ 2 طبقات (1 TLS + 1 Tor).</li>
         <li><strong>الخطوة 4 (عند عقدة الخروج):</strong> تفك تشفير طبقة Tor الأخيرة، لتكشف عن رسالة مشفرة بطبقة <strong>TLS/HTTPS</strong> الواحدة التي لا تستطيع فكها، فترسلها للخادم النهائي الذي يمتلك مفتاح TLS.</li>
     </ul>
-    <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> بهذا الشكل، حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بتقنية TLS، ولا تستطيع التجسس على المحتوى الفعلي لاتصالك (كلمات المرور، الرسائل، إلخ). يستبدل Tor حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات [citation:8].</p>
+    <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> بهذا الشكل، حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بتقنية TLS، ولا تستطيع التجسس على المحتوى الفعلي لاتصالك (كلمات المرور، الرسائل، إلخ). يستبدل Tor حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات.</p>
 </div>
     <!-- ==================== الفرق بين Gateway و Workstation ==================== -->
     <div class="card">
@@ -4157,14 +4157,6 @@ free -h</pre>
         <strong>💡 تذكير:</strong> بعد تطبيق أي إعدادات داخل قالب Kicksecure، تأكد من <strong>إيقاف القالب وإعادة تشغيله</strong>:
         <code onclick="copyText(this)">qvm-shutdown --wait kicksecure-18 && qvm-start kicksecure-18</code>
     </div>
-
-    <!-- ==================== تذكير ==================== -->
-    <div class="note" style="margin-top: 20px; background: #1a3a3a;">
-        <i class="fas fa-sync-alt"></i> 
-        <strong>💡 تذكير:</strong> بعد تطبيق أي إعدادات داخل قالب Kicksecure، تأكد من <strong>إيقاف القالب وإعادة تشغيله</strong>:
-        <code onclick="copyText(this)">qvm-shutdown --wait kicksecure-18 && qvm-start kicksecure-18</code>
-    </div>
-
 </div>
 
 <!-- ==================== تبويب 9: Live Script ==================== -->
