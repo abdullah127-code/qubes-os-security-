@@ -5110,15 +5110,28 @@ sudo apt install signal-desktop -y</pre>
         <pre class="code-block" id="signal-portable">#!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
+
 mkdir -p "$PORTABLE_DIR"
 
 if ! command -v signal-desktop &> /dev/null; then
-    echo "❌ Signal غير مثبت في القالب"
+    echo "❌ Signal غير مثبت"
     exit 1
 fi
 
-signal-desktop --user-data-dir="$PORTABLE_DIR" &
-echo "🚀 Signal يعمل - البيانات: $PORTABLE_DIR"</pre>
+# تشغيل Signal
+signal-desktop --user-data-dir="$PORTABLE_DIR" --password-store="basic" &
+SIGNAL_PID=$!
+
+echo "🚀 Signal يعمل"
+echo "📁 البيانات: $PORTABLE_DIR"
+
+# انتظر حتى تختفي نافذة Signal (حل بديل)
+while pgrep -P $SIGNAL_PID > /dev/null 2>&1 || kill -0 $SIGNAL_PID 2>/dev/null; do
+    sleep 1
+done
+
+echo "✅ تم إغلاق Signal"
+exit 0</pre>
         
         <div class="note" style="margin-top: 15px; background: #3a1a1a;">
             <i class="fas fa-shield-alt"></i> 
