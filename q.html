@@ -5083,16 +5083,21 @@ element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &</pre>
         <div class="section-title"><i class="fas fa-download"></i> تثبيت Signal في قالب Whonix</div>
         <p>قم بتنفيذ الأوامر التالية في <strong>قالب Whonix Workstation</strong> (مع فتح الشبكة مؤقتاً):</p>
         <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
-        <pre class="code-block" id="signal-install"># 1. تثبيت مفتاح التوقيع الرسمي
-wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+        <pre class="code-block" id="signal-install"># 0. تثبيت المتطلبات الأساسية
+sudo apt update > /dev/null 2>&1
+sudo apt install wget gnupg -y > /dev/null 2>&1
+
+# 1. تثبيت مفتاح التوقيع الرسمي
+wget -O- https://updates.signal.org/desktop/apt/keys.asc 2> /dev/null | gpg --dearmor > signal-desktop-keyring.gpg
 cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
 
 # 2. إضافة المستودع الرسمي إلى قائمة المصادر
-wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources
+wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources 2> /dev/null
 cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sources > /dev/null
 
 # 3. تحديث قاعدة البيانات وتثبيت Signal
-sudo apt update && sudo apt install signal-desktop</pre>
+sudo apt update > /dev/null 2>&1
+sudo apt install signal-desktop -y</pre>
         <p>✅ بعد التثبيت، أعد إغلاق الشبكة في القالب وأعد تشغيل Whonix Workstation AppVM.</p>
 
         <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
