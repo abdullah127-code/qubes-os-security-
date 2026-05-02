@@ -4681,20 +4681,19 @@ torsocks curl https://check.torproject.org/api/ip</pre>
         </div>
     </div>
 
-    <!-- ==================== SimpleX Chat Card ==================== -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (⭐ الموصى به رسمياً - الأعلى أماناً ومجهولية)</div>
-        <p>SimpleX Chat هو تطوير مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية. <strong>تم اختباره ويعمل بشكل ممتاز في Whonix</strong> دون الحاجة لأي إعدادات إضافية في البوابة - فقط استخدم <code>torsocks -i</code>.</p>
-        <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex-chat.sh</button>
-        <pre class="code-block" id="simplex-script">#!/bin/bash
-set -euo pipefail
+<!-- ==================== SimpleX Chat Card ==================== -->
+<div class="card">
+    <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (⭐ الموصى به رسمياً - الأعلى أماناً ومجهولية)</div>
+    <p>SimpleX Chat هو تطبيق مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية. <strong>تم اختباره ويعمل بشكل ممتاز في Whonix و Qubes OS</strong> دون الحاجة لإعدادات معقدة.</p>
 
-# Portable Simplex Chat Runner
+    <!-- السكربت الأساسي: تشغيل مباشر -->
+    <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex.sh</button>
+    <pre class="code-block" id="simplex-script">#!/bin/bash
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/simplex-chat-data"
 
-# تحميل SimpleX إذا لم يكن موجوداً
 if ! ls "${SCRIPT_DIR}"/simplex*.AppImage 1>/dev/null 2>&1; then
     echo "📥 جاري تحميل SimpleX..."
     wget -c "https://github.com/simplex-chat/simplex-chat/releases/latest/download/simplex-desktop-x86_64.AppImage" \
@@ -4713,9 +4712,126 @@ export XDG_DATA_HOME="${PORTABLE_DIR}/.local/share"
 export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
 export HOME="${PORTABLE_DIR}"
 
-echo "🚀 جاري تشغيل SimpleX عبر Tor..."
+echo "🚀 جاري تشغيل SimpleX Chat..."
+exec "${APPIMAGE_PATH}" "$@"</pre>
+
+    <!-- السكربت البديل: torsocks -i -->
+    <button class="btn-copy-all" onclick="copyScript('simplex-torsocks-script')"><i class="fas fa-copy"></i> نسخ run-simplex-torsocks.sh</button>
+    <pre class="code-block" id="simplex-torsocks-script">#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PORTABLE_DIR="${SCRIPT_DIR}/simplex-chat-data"
+
+if ! command -v torsocks &> /dev/null; then
+    echo "📥 جاري تثبيت torsocks..."
+    sudo apt update && sudo apt install -y torsocks
+    echo "✅ تم التثبيت"
+fi
+
+if ! ls "${SCRIPT_DIR}"/simplex*.AppImage 1>/dev/null 2>&1; then
+    echo "📥 جاري تحميل SimpleX..."
+    wget -c "https://github.com/simplex-chat/simplex-chat/releases/latest/download/simplex-desktop-x86_64.AppImage" \
+         -O "${SCRIPT_DIR}/simplex-desktop-x86_64.AppImage"
+    echo "✅ تم التحميل"
+fi
+
+APPIMAGE_PATH=$(ls "${SCRIPT_DIR}"/simplex*.AppImage 2>/dev/null | head -1)
+[[ -z "${APPIMAGE_PATH}" ]] && { echo "❌ خطأ: لم يتم العثور على ملف AppImage"; exit 1; }
+
+mkdir -p "${PORTABLE_DIR}"
+chmod +x "${APPIMAGE_PATH}"
+
+export XDG_CONFIG_HOME="${PORTABLE_DIR}/.config"
+export XDG_DATA_HOME="${PORTABLE_DIR}/.local/share"
+export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
+export HOME="${PORTABLE_DIR}"
+
+echo "🚀 جاري التشغيل عبر torsocks -i..."
 exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
+
+    <!-- إعدادات موصى بها داخل التطبيق -->
+    <div style="background: #1e2a3a; border: 1px solid #2a3a4a; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
+        <strong>⚙️ إعدادات Tor الموصى بها داخل تطبيق SimpleX:</strong><br>
+        • الإعدادات ← Network & Servers<br>
+        • ☑ <strong>Use SOCKS proxy</strong> (127.0.0.1:9050)<br>
+        • ☑ <strong>Use .onion hosts</strong> (يظهر بعد تفعيل SOCKS)
     </div>
+
+    <!-- خيارات Use .onion hosts -->
+    <div style="background: #1e2a3a; border: 1px solid #2a3a4a; border-radius: 6px; padding: 12px 15px; margin-top: 0.8rem; font-size: 0.9em;">
+        <strong>🧅 خيارات Use .onion hosts:</strong><br>
+        • <strong>No:</strong> لا يستخدم عناوين .onion أبداً<br>
+        • <strong>When Available (موصى به):</strong> يستخدم .onion إذا كان متاحاً، وإلا يستخدم العناوين العادية<br>
+        • <strong>Required (خصوصية قصوى):</strong> يفرض استخدام .onion فقط، ولن يتصل بالخوادم العادية
+    </div>
+
+    <!-- تحذيرات وتنبيهات -->
+    <div style="background: #2a2a2a; border-left: 3px solid #ff9800; padding: 10px 15px; margin-top: 0.8rem; border-radius: 4px; font-size: 0.85em;">
+        <strong>⚠️ تنبيهات هامة:</strong>
+        <ul style="margin: 5px 0 0 0; padding-left: 18px;">
+            <li><strong>خيار .onion hosts مخفي بدون SOCKS:</strong> حالياً، خيار <code>Use .onion hosts</code> لا يظهر في واجهة SimpleX إلا بعد تفعيل <code>Use SOCKS proxy</code>. هناك طلب مجتمعي لإتاحة هذا الخيار بشكل مستقل لمستخدمي Whonix، لأن Whonix يمرر كل الاتصالات عبر Tor على مستوى النظام.</li>
+            <li><strong>حسب تصريح فريق SimpleX:</strong> بشكل افتراضي، يمكن لخوادم المراسلة ملاحظة عناوين IP الخاصة بالمستخدمين. تُستخدم عناوين .onion فقط عندما يستخدم المستخدمون Tor مع تفعيل SOCKS proxy.</li>
+            <li><strong>TransPort بدون SOCKS:</strong> جميع التطبيقات غير المضبوطة تتشارك نفس دائرة Tor، مما قد يؤدي إلى ارتباط الهويات الرقمية.</li>
+            <li><strong>torsocks -i:</strong> يعمل بشكل موثوق على <strong>Qubes OS</strong> (الذي يستخدم X11 عبر طبقة GUI الافتراضية). قد يسبب أعطالاً على أنظمة Wayland مثل Whonix المستقل بسبب تداخله مع استدعاءات النظام المحلية.</li>
+        </ul>
+    </div>
+
+    <!-- جدول مقارنة -->
+    <h4 style="margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 0.9rem;">📊 طرق تشغيل SimpleX في Whonix / Qubes OS</h4>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: #1e1e2e; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+            <thead>
+                <tr>
+                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">الجانب</th>
+                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">الوكيل الشفاف (TransPort)</th>
+                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">SOCKS Proxy</th>
+                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;"><code>torsocks -i</code></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>آلية الاتصال</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">يمرر Whonix كل الاتصالات عبر Tor تلقائياً</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">يتصل التطبيق مباشرة بمنفذ SOCKS (127.0.0.1:9050)</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">يختطف torsocks الاتصالات ويعيد توجيهها عبر Tor</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>إخفاء IP</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ مضمون</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ مضمون</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ مضمون</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>عزل الدوائر</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">⚠️ غير معزول</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ معزول</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ معزول (IsolatePID)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>.onion hosts</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">❌ الخيار مخفي</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ يظهر ويعمل</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">❌ الخيار مخفي</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>الاستقرار على Qubes OS</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ ممتاز (X11)</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ ممتاز (X11)</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ ممتاز (X11)</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>الاستقرار على Whonix مستقل</strong></td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ ممتاز (Wayland)</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ ممتاز (Wayland)</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">⚠️ متذبذب (Wayland)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p><strong>💡 الخلاصة:</strong> تشغيل SimpleX مع تفعيل SOCKS Proxy من داخل الإعدادات هو الخيار الأمثل لجميع البيئات. على Qubes OS تحديداً، جميع الطرق مستقرة بسبب استخدام X11 عبر طبقة GUI الافتراضية.</p>
+</div>
 
     <!-- ==================== Cwtch Card ==================== -->
     <div class="card">
