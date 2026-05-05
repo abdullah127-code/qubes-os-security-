@@ -494,13 +494,13 @@ body.light-mode .card-badge {
                         <th style="text-align: center;">يطبق على</th>
                     </thead>
                     <tbody>
-                        <!-- dom0 فقط -->
-                        <tr style="background: #2a2a1a;">
+                        <!-- Xen (للجميع) -->
+                        <tr style="background: #1a3a1a;">
                             <td>1</td>
                             <td><code onclick="copyText(this)">xen_scrub_pages=1</code></td>
                             <td>يمسح الذاكرة قبل إعادة استخدامها بين VMs</td>
                             <td>يمنع تسرب البيانات من VM إلى آخر</td>
-                            <td><span class="badge badge-warning">🖥️ Xen</span></td>
+                            <td><span class="badge badge-info">🔄 Xen (للجميع)</span></td>
                         </tr>
                         <!-- مشتركة -->
                         <tr style="background: #1a3a1a;">
@@ -5268,7 +5268,7 @@ setup_kernel_opts_vms() {
     echo "=========================================="
 
     # VMs لا ترث معلمات GRUB من dom0، لذا يجب تعيينها بشكل منفصل
-    NEW_OPTS="init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+    NEW_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
 
     echo "📋 سيتم إضافة هذه المعلمات لجميع VMs:"
     echo "   $NEW_OPTS"
@@ -5636,7 +5636,7 @@ R='\033[0;31m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
 
 echo -e "${G}🔧 إنشاء VM في RAM pool...${N}"
 
@@ -5697,7 +5697,7 @@ R='\033[0;31m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
 
 echo -e "${G}🔧 إنشاء VM في RAM pool...${N}"
 
@@ -5762,7 +5762,7 @@ B='\033[0;34m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
 
 echo -e "${G}🔧 إنشاء أجهزة VM في RAM pool...${N}"
 
