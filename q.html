@@ -2625,7 +2625,6 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 </div>
-<!-- ==================== نهاية تبويب 3 ==================== -->
 
 <!-- ==================== تبويب 4: مصفوفة التهديدات ==================== -->
 <div class="tab-pane" id="tab4">
@@ -2711,16 +2710,22 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-        <!-- 3. نقاط وصول وهمية -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">🔴 شبكة</div>
-            <div class="threat-icon"><i class="fas fa-wifi"></i></div>
-            <div class="threat-title">نقاط وصول وهمية</div>
-            <p>جهاز صغير (Wi-Fi Pineapple) ينتحل شخصية شبكة شرعية ويجبر جهازك على الاتصال به للتنصت.</p>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: WISP + Ethernet (تبويب 1) - راوتر يتعامل مع WiFi الخارجية
-            </div>
-        </div>
+<!-- 3. نقاط وصول وهمية -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">🔴 شبكة</div>
+    <div class="threat-icon"><i class="fas fa-wifi"></i></div>
+    <div class="threat-title">نقاط وصول وهمية</div>
+    <p>جهاز صغير (Wi-Fi Pineapple) ينتحل شخصية شبكة شرعية ويجبر جهازك على الاتصال به للتنصت على حركة المرور.</p>
+    <p><strong>طبقات الحماية:</strong></p>
+    <ul style="margin-right: 20px; font-size: 0.9em;">
+        <li>✅ <strong>WISP + Ethernet:</strong> يخفي جهاز Qubes عن الشبكة المحلية - الراوتر هو ما يظهر للشبكة وليس جهازك.</li>
+        <li>✅ <strong>sys-whonix + Tor:</strong> حتى لو تنصت المهاجم على حركة المرور، البيانات مشفرة بـ 3 طبقات Tor + TLS. المهاجم يرى فقط اتصالاً مشفراً لا يمكن فك تشفيره.</li>
+    </ul>
+    <p style="color: #ffaa33; font-size: 0.85em;"><strong>📌 ملاحظة:</strong> WISP + Ethernet يحمي من كشف جهازك. Tor (عبر sys-whonix) يحمي بياناتك من التنصت.</p>
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> الحل: WISP + Ethernet (تبويب 1) + sys-whonix (تبويب 2)
+    </div>
+</div>
 
         <!-- 4. مسح Wi-Fi/Bluetooth -->
         <div class="threat-card">
@@ -2799,28 +2804,41 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-        <!-- 11. Cold Boot -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">🔴 فيزيائي</div>
-            <div class="threat-icon"><i class="fas fa-snowflake"></i></div>
-            <div class="threat-title">الإقلاع البارد (Cold Boot)</div>
-            <p>الخصم يبرد ذاكرة RAM لاستخراج مفاتيح التشفير بعد إطفاء الجهاز بدقائق.</p>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: RAM-VM + مفاتيح زائلة (أدناه)
-            </div>
-        </div>
+<!-- 11. Cold Boot -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">🔴 فيزيائي</div>
+    <div class="threat-icon"><i class="fas fa-snowflake"></i></div>
+    <div class="threat-title">الإقلاع البارد (Cold Boot)</div>
+    <p>الخصم يبرد ذاكرة RAM (هواء مضغوط، نيتروجين سائل) لاستخراج مفاتيح التشفير وكلمات المرور بعد إطفاء الجهاز بدقائق.</p>
+    <p style="color: #ffaa33; font-size: 0.85em;"><strong>📌 ملاحظة:</strong> هذا الهجوم غير عملي خارج المختبر. يحتاج وصولاً فيزيائياً فورياً للجهاز ومعدات تبريد متخصصة.</p>
+    <p><strong>ما يحمي:</strong></p>
+    <ul style="margin-right: 20px; font-size: 0.9em;">
+        <li>✅ <strong>BusKill / Dead Man's Switch:</strong> <code>luksSuspend</code> يمسح مفاتيح LUKS من RAM + <code>luksErase</code> يدمر رأس التشفير - ثم يغلق النظام.</li>
+        <li>✅ <strong>Shutdown كامل + RAM-Wipe:</strong> Dracut RAM-Wipe يمسح الذاكرة عند الإطفاء العادي (مستخدم في Live Mode - تبويب 9).</li>
+        <li>✅ <strong>DDR5 RAM:</strong> أسرع في فقدان البيانات بعد انقطاع التيار.</li>
+    </ul>
+    <p style="margin-top: 10px;"><strong>ما لا يحمي:</strong></p>
+    <ul style="margin-right: 20px; font-size: 0.9em; color: #ff8888;">
+        <li>❌ <strong>Ephemeral VM:</strong> مفتاح التشفير في RAM أثناء الجلسة.</li>
+        <li>❌ <strong>RAM-VM:</strong> كل بيانات الجلسة في RAM - هدف مباشر.</li>
+    </ul>
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> الحل: BusKill (<code>luksSuspend</code>) أو Shutdown كامل + RAM-Wipe
+    </div>
+</div>
 
-        <!-- 12. BadUSB -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">🔴 فيزيائي</div>
-            <div class="threat-icon"><i class="fas fa-usb"></i></div>
-            <div class="threat-title">BadUSB / Rubber Ducky</div>
-            <p>فلاشة USB تنتحل شخصية لوحة مفاتيح وتنفذ أوامر خبيثة بصلاحيات root.</p>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: USB Kill Switch (تبويب 7)
-            </div>
-        </div>
-
+<!-- 12. BadUSB -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">🔴 فيزيائي</div>
+    <div class="threat-icon"><i class="fas fa-usb"></i></div>
+    <div class="threat-title">BadUSB / Rubber Ducky</div>
+    <p>فلاشة USB تنتحل شخصية لوحة مفاتيح وتنفذ أوامر خبيثة بصلاحيات root.</p>
+    <p><strong>الحماية الأساسية (موجودة افتراضياً):</strong> Qubes يعزل أجهزة USB تلقائياً في <code>sys-usb</code> (VM منفصل عن dom0). هذا يمنع أي جهاز USB ضار من الوصول المباشر لـ dom0.</p>
+    <p><strong>للإقلاع من USB:</strong> إذا كنت تقلع من هارد خارجي، فإن <code>sys-usb</code> قد لا يعمل بشكل كامل. في هذه الحالة، ثبّت <code>usbguard</code> في dom0.</p>
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> الحل: sys-usb (افتراضي) + usbguard (للإقلاع من USB) - راجع تبويب 7
+    </div>
+</div>
         <!-- 13. ثغرات المعالج -->
         <div class="threat-card">
             <div class="card-badge badge-critical">🔴 معالج</div>
@@ -2893,8 +2911,14 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-icon"><i class="fas fa-trash-alt"></i></div>
             <div class="threat-title">استعادة المحذوفات</div>
             <p>حذف الملفات لا يمسحها فعلياً. على HDD يمكن استعادتها بسهولة.</p>
+            <p><strong>ما يحمي:</strong></p>
+            <ul style="margin-right: 20px; font-size: 0.9em;">
+                <li>✅ <strong>Ephemeral VM:</strong> تشفير زائل على القرص (يُورّث من قالب DVM) ← يحمي من Forensic Analysis</li>
+                <li>✅ <strong>RAM-VM:</strong> VM بالكامل في RAM ← حماية إضافية من Cold Boot أيضاً</li>
+                <li>✅ تشفير كامل للقرص</li>
+            </ul>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + RAM-VM (أدناه)
+                <i class="fas fa-check-circle"></i> الحل: Ephemeral VM (للـ Forensic) + RAM-VM (للـ Cold Boot) - أدناه
             </div>
         </div>
 
@@ -3109,30 +3133,48 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     <!-- ==================== كيف تحل بنية Qubes المتقدمة التهديدات ==================== -->
     <div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
         <div class="card-header" style="color: #88ff88;">
-            <i class="fas fa-shield-virus"></i> 🛡️ حلول Qubes المتقدمة: RAM-VM و Live Mode
+            <i class="fas fa-shield-virus"></i> 🛡️ حلول Qubes المتقدمة: Ephemeral VM + RAM-VM + Live Mode
         </div>
-        <p><strong>تنبيه:</strong> هذه هي <strong>الدفاعات العملية الوحيدة</strong> المتاحة حالياً في Qubes OS ضد التهديدات التي تستهدف القرص الصلب (التحليل الجنائي) والنظام المضيف (dom0).</p>
+        <p><strong>تنبيه:</strong> هذه هي <strong>الدفاعات العملية الوحيدة</strong> المتاحة حالياً في Qubes OS ضد التهديدات التي تستهدف القرص الصلب (التحليل الجنائي) والنظام المضيف (dom0). <strong>انتبه للفرق بين Ephemeral VM و RAM-VM - فالأولى تشفير زائل على القرص (يُورّث من قالب DVM)، والثانية VM بالكامل في RAM عبر tmpfs (لا علاقة له بالوراثة).</strong></p>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
             
-            <!-- RAM-VM (التشفير الزائل عبر الوراثة) -->
-            <div style="background: #1a2a3a; padding: 18px; border-radius: 20px; border: 2px solid #66ccff;">
-                <div style="text-align: center; color: #66ccff; font-weight: bold; margin-bottom: 15px;">
-                    🧠 RAM-VM (الوراثة من قالب DVM)
+            <!-- Ephemeral VM (التشفير الزائل عبر الوراثة) -->
+            <div style="background: #1a2a3a; padding: 18px; border-radius: 20px; border: 2px solid #ffaa33;">
+                <div style="text-align: center; color: #ffaa33; font-weight: bold; margin-bottom: 15px;">
+                    🧠 Ephemeral VM (وراثة من DVM)
                 </div>
-                <p><strong>الآلية:</strong> 1) إعدادات النواة <code>init_on_free=1 init_on_alloc=1</code> لمسح الذاكرة. 2) سكريبت <code>rc.local</code> يحول مجلدات <code>/home</code> و <code>/rw</code> إلى ذاكرة RAM مؤقتة. 3) تعيين <code>root rw False</code> على <strong>قالب الجهاز المستهلك (DVM Template)</strong> لتشفير المجلدات بمفتاح زائل.</p>
+                <p><strong>الآلية:</strong> تعيين <code>root rw False</code> على <strong>قالب DVM</strong> ← الأجهزة المشتقة <strong>ترث تلقائياً</strong> خاصية التشفير الزائل على القرص.</p>
                 <p><strong>أمر التفعيل:</strong></p>
                 <code onclick="copyText(this)" style="font-size: 0.75em;">qvm-volume config DVM_TEMPLATE:root rw False</code>
-                <p style="margin-top: 10px;"><strong>🧬 لماذا هو فعال؟</strong> عند تعيين <code>root rw False</code> على <strong>قالب الأجهزة المستهلكة</strong> (مثل <code>ephemeral-dvm</code>)، فإن جميع الأجهزة المشتقة منه <strong>ترث تلقائياً</strong> خاصية التشفير الزائل. هذا يوفر حماية كاملة ضد التحليل الجنائي للقرص الصلب لجميع الأجهزة المستهلكة دون الحاجة لإعداد كل واحد على حدة.</p>
-                <p><strong>يحل هذه التهديدات:</strong></p>
+                <p style="margin-top: 10px;"><strong>📌 الوراثة:</strong> خاصية <code>root rw False</code> تُورّث من قالب DVM إلى الأجهزة المستهلكة المشتقة منه.</p>
+                <p><strong>يحل:</strong></p>
                 <ul style="margin-right: 20px; font-size: 0.9em;">
-                    <li>❄️ <strong>Cold Boot:</strong> البيانات مشفرة بمفتاح مختفٍ.</li>
-                    <li>🗑️ <strong>استعادة المحذوفات:</strong> لا أثر على القرص.</li>
-                    <li>💾 <strong>تحليل SSD:</strong> لا يتفاعل مع الـ SSD.</li>
-                    <li>📋 <strong>تسريب النوع 3:</strong> سجلات المستخدم تختفي عند الإغلاق.</li>
+                    <li>🗑️ Forensic Analysis: لا يمكن استعادة البيانات بعد الإغلاق</li>
+                    <li>📋 تسريب النوع 3: سجلات المستخدم تختفي</li>
                 </ul>
                 <div class="note" style="margin-top: 10px; font-size: 0.8em; background: #1a3a3a;">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> القنوات الخفية التعاونية (النوع 1). البرمجيات الخبيثة المتقدمة يمكنها التخابر عبر CPU cache.
+                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من Cold Boot</strong> (البيانات على القرص).
+                </div>
+            </div>
+            
+            <!-- RAM-VM (الذاكرة المؤقتة) -->
+            <div style="background: #1a2a3a; padding: 18px; border-radius: 20px; border: 2px solid #66ccff;">
+                <div style="text-align: center; color: #66ccff; font-weight: bold; margin-bottom: 15px;">
+                    🧠 RAM-VM (tmpfs)
+                </div>
+                <p><strong>الآلية:</strong> VM بالكامل في RAM عبر RAM pool + tmpfs. <strong>لا علاقة له بالوراثة من قالب DVM.</strong></p>
+                <p><strong>أمر التفعيل:</strong></p>
+                <code onclick="copyText(this)" style="font-size: 0.75em;">qvm-create -P ram_pool -t TEMPLATE VMNAME</code>
+                <p style="margin-top: 10px;"><strong>📌 لا وراثة:</strong> RAM-VM تقنية مختلفة تماماً عن Ephemeral. تحتاج لإنشاء VM جديد في كل مرة.</p>
+                <p><strong>يحل:</strong></p>
+                <ul style="margin-right: 20px; font-size: 0.9em;">
+                    <li>❄️ Cold Boot: لا بيانات على القرص</li>
+                    <li>🗑️ Forensic Analysis: لا أثر على الإطلاق</li>
+                    <li>💾 تحليل SSD: لا يتفاعل مع القرص</li>
+                </ul>
+                <div class="note" style="margin-top: 10px; font-size: 0.8em; background: #1a3a3a;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> القنوات الخفية التعاونية (النوع 1).
                 </div>
             </div>
             
@@ -3141,24 +3183,24 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <div style="text-align: center; color: #88ff88; font-weight: bold; margin-bottom: 15px;">
                     ⚡ Live Mode (OverlayFS)
                 </div>
-                <p><strong>الآلية:</strong> dom0 يُركب للقراءة فقط. كل التغييرات على dom0 تُكتب في RAM وتختفي عند الإغلاق.</p>
+                <p><strong>الآلية:</strong> dom0 يُركب للقراءة فقط. كل التغييرات على dom0 تُكتب في RAM وتختفي عند الإغلاق. <strong>لا علاقة له بالوراثة من قالب DVM.</strong></p>
                 <p><strong>أمر التفعيل:</strong> إضافة <code>rootovl</code> إلى <code>GRUB_CMDLINE_LINUX</code> في <code>/etc/default/grub</code>.</p>
-                <p style="margin-top: 10px;"><strong>يحل هذه التهديدات:</strong></p>
+                <p style="margin-top: 10px;"><strong>📌 لا وراثة:</strong> Live Mode يخص dom0 فقط ولا علاقة له بقوالب DVM.</p>
+                <p><strong>يحل:</strong></p>
                 <ul style="margin-right: 20px; font-size: 0.9em;">
-                    <li>🚪 <strong>Evil Maid:</strong> لا يمكن زرع برمجيات خبيثة دائمة في dom0.</li>
-                    <li>🧠 <strong>اختراق dom0:</strong> النظام يعود نظيفاً كل مرة بعد الإقلاع.</li>
-                    <li>🤖 <strong>Intel ME/AMD PSP:</strong> يحد من قدرتها على زرع rootkits مستمرة.</li>
-                    <li>📋 <strong>سجلات dom0:</strong> كل السجلات والبيانات المؤقتة تختفي.</li>
+                    <li>🚪 Evil Maid: لا برمجيات خبيثة دائمة في dom0</li>
+                    <li>🧠 اختراق dom0: النظام يعود نظيفاً كل مرة</li>
+                    <li>🤖 Intel ME/AMD PSP: يحد من قدرتها على زرع rootkits</li>
                 </ul>
                 <div class="note" style="margin-top: 10px; font-size: 0.8em; background: #1a3a3a;">
-                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> خصم يمتلك root على dom0 المخترق ويصل للقرص الأصلي أثناء الجلسة.
+                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> خصم يمتلك root على dom0 المخترق ويصل للقرص الأصلي.
                 </div>
             </div>
         </div>
 
         <div class="note" style="margin-top: 15px; background: #1a3a3a;">
             <i class="fas fa-lightbulb"></i>
-            <strong>💡 الخلاصة:</strong> RAM-VM (عبر توريث إعدادات قالب DVM) يحمي <strong>بيانات المستخدم</strong> من التحليل الجنائي للقرص. Live Mode (عبر rootovl في GRUB) يحمي <strong>النظام المضيف نفسه</strong> من العبث وهجمات الاستمرارية. معاً، يشكلان درعاً كاملاً ضد هجمات الاستمرارية (Persistence Attacks) والكشف الجنائي (Forensics). لكنهما لا يحميان من القنوات الخفية التعاونية (Cooperative Covert Channels) التي تمثل حدود العزل في Qubes.
+            <strong>💡 الخلاصة:</strong> <strong>Ephemeral VM</strong> (عبر توريث <code>root rw False</code> من قالب DVM) يحمي من <strong>التحليل الجنائي للقرص</strong> (Forensic Analysis). <strong>RAM-VM</strong> (عبر RAM pool، لا علاقة له بالوراثة) يحمي من <strong>Cold Boot</strong> لأنه لا يترك أثراً على القرص. <strong>Live Mode</strong> (عبر <code>rootovl</code> في GRUB، لا علاقة له بالوراثة) يحمي <strong>النظام المضيف نفسه</strong> من العبث وهجمات الاستمرارية. معاً، يشكلان درعاً كاملاً ضد هجمات الاستمرارية (Persistence Attacks) والكشف الجنائي (Forensics). لكنهما لا يحميان من القنوات الخفية التعاونية (Cooperative Covert Channels) التي تمثل حدود العزل في Qubes.
         </div>
     </div>
 
@@ -3181,7 +3223,6 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <div class="card-header"><i class="fas fa-clipboard-list"></i> 📋 ملخص: كيف يحميك هذا الدليل من كل تهديد؟</div>
         
         <table style="width: 100%; border-collapse: collapse; background: transparent; margin: 10px 0;">
-            <!-- الصف 1: الحماية التقنية -->
             <tr style="border-bottom: 1px solid var(--border-color);">
                 <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); width: 110px; vertical-align: top;">
                     <i class="fas fa-shield-alt"></i> 🛡️ تقني
@@ -3198,7 +3239,6 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                     <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">📶 WiFi → WISP+Ethernet (تبويب 1)</span>
                 </td>
             </tr>
-            <!-- الصف 2: الحماية السلوكية (OPSEC) -->
             <tr style="border-bottom: 1px solid var(--border-color);">
                 <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
                     <i class="fas fa-user-secret"></i> 🧠 سلوكي
@@ -3213,7 +3253,6 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                     <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">✍️ كتابة → تغيير الأسلوب</span>
                 </td>
             </tr>
-            <!-- الصف 3: خطط الطوارئ -->
             <tr style="border-bottom: 1px solid var(--border-color);">
                 <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
                     <i class="fas fa-skull-crossbones"></i> 🚨 طوارئ
@@ -3222,12 +3261,11 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                     <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔥 احترقت → خطة الحذف والهروب</span>
                     <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔍 تلاعب → خطة المغادرة الفورية</span>
                     <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">💀 تدمير → BusKill</span>
-                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧹 تنظيف → RAM-VM (توريث DVM)</span>
-                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">💾 زائل → Live Mode (OverlayFS)</span>
-                    <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">⚡ حي → rootovl في GRUB</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧹 Forensic → Ephemeral VM (وراثة DVM)</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">❄️ Cold Boot → RAM-VM (tmpfs)</span>
+                    <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">⚡ مضيف → Live Mode (rootovl)</span>
                 </td>
             </tr>
-            <!-- الصف 4: التمويل المجهول -->
             <tr>
                 <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
                     <i class="fas fa-coins"></i> 💰 تمويل
@@ -3250,6 +3288,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     </div>
 </div>
+
     <!-- ==================== تبويب 5: Amnesic Tmpfs ==================== -->
 <div class="tab-pane" id="tab5">
     <div class="card">
