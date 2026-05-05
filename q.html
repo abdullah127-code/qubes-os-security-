@@ -5593,6 +5593,7 @@ net.ipv4.icmp_ignore_bogus_error_responses = 1
 
 # -------------------- حماية النواة والذاكرة --------------------
 kernel.kexec_load_disabled = 1
+kernel.io_uring_disabled = 2
 kernel.unprivileged_bpf_disabled = 1
 net.core.bpf_jit_harden = 2
 
@@ -5607,6 +5608,7 @@ kernel.dmesg_restrict = 1
 kernel.kptr_restrict = 2
 kernel.perf_event_paranoid = 3
 kernel.sysrq = 0
+kernel.printk = 3 3 3 3
 vm.mmap_rnd_bits = 32
 vm.mmap_rnd_compat_bits = 16
 EOF'"
