@@ -2793,37 +2793,25 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-        <!-- 10. Evil Maid -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">🔴 فيزيائي</div>
-            <div class="threat-icon"><i class="fas fa-door-open"></i></div>
-            <div class="threat-title">هجوم الخادمة الشريرة</div>
-            <p>شخص يصل لجهازك في غيابك ويزرع Keylogger فيزيائي أو ينسخ القرص الصلب.</p>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + Live Mode (OverlayFS) - أدناه
-            </div>
-        </div>
+<!-- 10. Evil Maid -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">🔴 فيزيائي</div>
+    <div class="threat-icon"><i class="fas fa-door-open"></i></div>
+    <div class="threat-title">هجوم الخادمة الشريرة</div>
+    <p>شخص يصل لجهازك في غيابك ويزرع Keylogger فيزيائي أو ينسخ القرص الصلب.</p>
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> الحل: Live Mode (OverlayFS) + AEM. راجع <a href="#" onclick="document.querySelector('[data-tab=\'tab7\']').click(); return false;" style="color: #66ccff;">تبويب 7</a> للتفاصيل.
+    </div>
+</div>
 
 <!-- 11. Cold Boot -->
 <div class="threat-card">
     <div class="card-badge badge-critical">🔴 فيزيائي</div>
     <div class="threat-icon"><i class="fas fa-snowflake"></i></div>
     <div class="threat-title">الإقلاع البارد (Cold Boot)</div>
-    <p>الخصم يبرد ذاكرة RAM (هواء مضغوط، نيتروجين سائل) لاستخراج مفاتيح التشفير وكلمات المرور بعد إطفاء الجهاز بدقائق.</p>
-    <p style="color: #ffaa33; font-size: 0.85em;"><strong>📌 ملاحظة:</strong> هذا الهجوم غير عملي خارج المختبر. يحتاج وصولاً فيزيائياً فورياً للجهاز ومعدات تبريد متخصصة.</p>
-    <p><strong>ما يحمي:</strong></p>
-    <ul style="margin-right: 20px; font-size: 0.9em;">
-        <li>✅ <strong>BusKill / Dead Man's Switch:</strong> <code>luksSuspend</code> يمسح مفاتيح LUKS من RAM + <code>luksErase</code> يدمر رأس التشفير - ثم يغلق النظام.</li>
-        <li>✅ <strong>Shutdown كامل + RAM-Wipe:</strong> Dracut RAM-Wipe يمسح الذاكرة عند الإطفاء العادي (مستخدم في Live Mode - تبويب 9).</li>
-        <li>✅ <strong>DDR5 RAM:</strong> أسرع في فقدان البيانات بعد انقطاع التيار.</li>
-    </ul>
-    <p style="margin-top: 10px;"><strong>ما لا يحمي:</strong></p>
-    <ul style="margin-right: 20px; font-size: 0.9em; color: #ff8888;">
-        <li>❌ <strong>Ephemeral VM:</strong> مفتاح التشفير في RAM أثناء الجلسة.</li>
-        <li>❌ <strong>RAM-VM:</strong> كل بيانات الجلسة في RAM - هدف مباشر.</li>
-    </ul>
+    <p>الخصم يبرد ذاكرة RAM لاستخراج مفاتيح التشفير بعد إطفاء الجهاز بدقائق. هذا الهجوم غير عملي خارج المختبر.</p>
     <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: BusKill (<code>luksSuspend</code>) أو Shutdown كامل + RAM-Wipe
+        <i class="fas fa-check-circle"></i> الحل: BusKill (luksSuspend) أو Shutdown كامل + RAM-Wipe. راجع <a href="#" onclick="document.querySelector('[data-tab=\'tab7\']').click(); return false;" style="color: #66ccff;">تبويب 7</a> للتفاصيل.
     </div>
 </div>
 
@@ -2833,10 +2821,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     <div class="threat-icon"><i class="fas fa-usb"></i></div>
     <div class="threat-title">BadUSB / Rubber Ducky</div>
     <p>فلاشة USB تنتحل شخصية لوحة مفاتيح وتنفذ أوامر خبيثة بصلاحيات root.</p>
-    <p><strong>الحماية الأساسية (موجودة افتراضياً):</strong> Qubes يعزل أجهزة USB تلقائياً في <code>sys-usb</code> (VM منفصل عن dom0). هذا يمنع أي جهاز USB ضار من الوصول المباشر لـ dom0.</p>
-    <p><strong>للإقلاع من USB:</strong> إذا كنت تقلع من هارد خارجي، فإن <code>sys-usb</code> قد لا يعمل بشكل كامل. في هذه الحالة، ثبّت <code>usbguard</code> في dom0.</p>
     <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: sys-usb (افتراضي) + usbguard (للإقلاع من USB) - راجع تبويب 7
+        <i class="fas fa-check-circle"></i> الحل: sys-usb (افتراضي) + usbguard (للإقلاع من USB). راجع <a href="#" onclick="document.querySelector('[data-tab=\'tab7\']').click(); return false;" style="color: #66ccff;">تبويب 7</a> للتفاصيل.
     </div>
 </div>
         <!-- 13. ثغرات المعالج -->
@@ -2905,22 +2891,16 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-        <!-- 19. استعادة الملفات المحذوفة -->
-        <div class="threat-card">
-            <div class="card-badge badge-warning">🟡 تخزين</div>
-            <div class="threat-icon"><i class="fas fa-trash-alt"></i></div>
-            <div class="threat-title">استعادة المحذوفات</div>
-            <p>حذف الملفات لا يمسحها فعلياً. على HDD يمكن استعادتها بسهولة.</p>
-            <p><strong>ما يحمي:</strong></p>
-            <ul style="margin-right: 20px; font-size: 0.9em;">
-                <li>✅ <strong>Ephemeral VM:</strong> تشفير زائل على القرص (يُورّث من قالب DVM) ← يحمي من Forensic Analysis</li>
-                <li>✅ <strong>RAM-VM:</strong> VM بالكامل في RAM ← حماية إضافية من Cold Boot أيضاً</li>
-                <li>✅ تشفير كامل للقرص</li>
-            </ul>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: Ephemeral VM (للـ Forensic) + RAM-VM (للـ Cold Boot) - أدناه
-            </div>
-        </div>
+<!-- 19. استعادة الملفات المحذوفة -->
+<div class="threat-card">
+    <div class="card-badge badge-warning">🟡 تخزين</div>
+    <div class="threat-icon"><i class="fas fa-trash-alt"></i></div>
+    <div class="threat-title">استعادة المحذوفات</div>
+    <p>حذف الملفات لا يمسحها فعلياً. على HDD يمكن استعادتها بسهولة. على SSD، TRIM و Garbage Collection تجعل الاستعادة أصعب لكنها ليست مستحيلة.</p>
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> الحل: Ephemeral VM (تشفير زائل) + RAM-VM (حماية قصوى). راجع <a href="#" onclick="document.querySelector('[data-tab=\'tab3\']').click(); return false;" style="color: #66ccff;">تبويب 3 (التخزين الآمن)</a> للتفاصيل.
+    </div>
+</div>
 
         <!-- 20. تحليل أسلوب الكتابة -->
         <div class="threat-card">
@@ -3534,62 +3514,72 @@ free -h</pre>
             </div>
         </div>
 
-        <!-- 7. Evil Maid + Cold Boot -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">🔴 فيزيائي</div>
-            <div class="threat-icon"><i class="fas fa-door-open"></i></div>
-            <div class="threat-title">هجمات Evil Maid و Cold Boot</div>
-            
-            <p><strong>① Evil Maid (الخادمة الشريرة):</strong></p>
-            <p>شخص يصل لجهازك في غيابك (فندق، مكتب، حدود) ويقوم بـ: تثبيت Keylogger، استنساخ القرص، تعديل BIOS أو Bootloader، تثبيت برمجيات على مستوى Firmware.</p>
-            <p><strong>الحماية:</strong> كلمة مرور BIOS + Secure Boot + Anti Evil Maid (AEM - Intel CPUs) + Live Mode (OverlayFS) + طلاء أظافر على البراغي.</p>
-            
-            <p><strong>② Cold Boot (الإقلاع البارد):</strong></p>
-            <p>المهاجم يبرد RAM (هواء مضغوط، نيتروجين) لاستخراج مفاتيح التشفير بعد إطفاء الجهاز بدقائق.</p>
-            <p><strong>الحماية:</strong> Shutdown كامل (وليس Sleep) + RAM-VM بمفاتيح زائلة + انتظر 30-60 ثانية بعد الإطفاء + Hibernate بدلاً من Sleep (غير مدعوم في Qubes).</p>
-            
-            <p><strong>③ مقارنة الأوضاع:</strong></p>
-            <table class="comparison-table" style="font-size: 0.8em; margin: 10px 0;">
-                <thead><tr><th>الوضع</th><th>RAM</th><th>السرعة</th><th>Cold Boot</th><th>Evil Maid</th></tr></thead>
-                <tbody>
-                    <tr><td>Sleep</td><td>🔴 نشطة</td><td>🟢 ثواني</td><td>❌</td><td>❌</td></tr>
-                    <tr><td>Hibernate</td><td>🟢 تفرغ</td><td>🟡 ١٠-٣٠ث</td><td>✅</td><td>🟡 جزئي</td></tr>
-                    <tr><td>Shutdown</td><td>🟢 تفريغ</td><td>🔴 ٣٠-٦٠+ث</td><td>✅</td><td>✅</td></tr>
-                </tbody>
-            </table>
-            
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> أدوات إضافية: <strong>qubes-canary</strong> (Canary Tokens في /boot)، <strong>tpm-qubes</strong> (TPM للتحقق من /boot)، <strong>Heads firmware</strong> (بديل BIOS مفتوح).
-            </div>
-        </div>
+<!-- 7. Evil Maid + Cold Boot -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">🔴 فيزيائي</div>
+    <div class="threat-icon"><i class="fas fa-door-open"></i></div>
+    <div class="threat-title">هجمات Evil Maid و Cold Boot</div>
+    
+    <p><strong>① Evil Maid (الخادمة الشريرة):</strong></p>
+    <p>شخص يصل لجهازك في غيابك (فندق، مكتب، حدود) ويقوم بـ: تثبيت Keylogger، استنساخ القرص، تعديل BIOS أو Bootloader، تثبيت برمجيات على مستوى Firmware.</p>
+    <p><strong>الحماية:</strong> كلمة مرور BIOS + Secure Boot + Anti Evil Maid (AEM - Intel CPUs) + <strong>Live Mode (OverlayFS)</strong> - dom0 في RAM، النظام يعود نظيفاً كل مرة، لا يمكن زرع برمجيات دائمة + طلاء أظافر على البراغي.</p>
+    
+    <p><strong>② Cold Boot (الإقلاع البارد):</strong></p>
+    <p>المهاجم يبرد RAM (هواء مضغوط، نيتروجين سائل) لاستخراج مفاتيح التشفير بعد إطفاء الجهاز بدقائق. <strong>هذا الهجوم غير عملي خارج المختبر.</strong></p>
+    <p><strong>ما يحمي:</strong></p>
+    <ul style="margin-right: 20px; font-size: 0.9em;">
+        <li>✅ <strong>BusKill / Dead Man's Switch:</strong> <code>luksSuspend</code> يمسح مفاتيح LUKS من RAM + <code>luksErase</code> يدمر رأس التشفير - ثم يغلق النظام.</li>
+        <li>✅ <strong>Shutdown كامل + RAM-Wipe:</strong> Dracut RAM-Wipe يمسح الذاكرة عند الإطفاء العادي.</li>
+        <li>✅ <strong>DDR5 RAM:</strong> أسرع في فقدان البيانات بعد انقطاع التيار.</li>
+    </ul>
+    <p><strong>ما لا يحمي:</strong></p>
+    <ul style="margin-right: 20px; font-size: 0.9em; color: #ff8888;">
+        <li>❌ <strong>Ephemeral VM:</strong> مفتاح التشفير في RAM أثناء الجلسة.</li>
+        <li>❌ <strong>RAM-VM:</strong> كل بيانات الجلسة في RAM - هدف مباشر.</li>
+    </ul>
+    
+    <p><strong>③ مقارنة الأوضاع:</strong></p>
+    <table class="comparison-table" style="font-size: 0.8em; margin: 10px 0;">
+        <thead><tr><th>الوضع</th><th>RAM</th><th>السرعة</th><th>Cold Boot</th><th>Evil Maid</th></tr></thead>
+        <tbody>
+            <tr><td>Sleep</td><td>🔴 نشطة</td><td>🟢 ثواني</td><td>❌</td><td>❌</td></tr>
+            <tr><td>Hibernate</td><td>🟢 تفرغ</td><td>🟡 ١٠-٣٠ث</td><td>✅</td><td>🟡 جزئي</td></tr>
+            <tr><td>Shutdown</td><td>🟢 تفريغ</td><td>🔴 ٣٠-٦٠+ث</td><td>✅</td><td>✅</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> أدوات إضافية: <strong>qubes-canary</strong> (Canary Tokens في /boot)، <strong>tpm-qubes</strong> (TPM للتحقق من /boot)، <strong>Heads firmware</strong> (بديل BIOS مفتوح). راجع <a href="#" onclick="document.querySelector('[data-tab=\'tab4\']').click(); return false;" style="color: #66ccff;">تبويب 4</a> لجميع التهديدات.
+    </div>
+</div>
 
-        <!-- 8. أدوات التدمير -->
-        <div class="threat-card">
-            <div class="card-badge badge-critical">💀 تدمير</div>
-            <div class="threat-icon"><i class="fas fa-skull-crossbones"></i></div>
-            <div class="threat-title">أدوات التدمير</div>
-            
-            <p><strong>① BusKill (كابل التدمير):</strong> كابل USB مغناطيسي - عند فصله: يمسح رأس LUKS + يعلق مفاتيح RAM + يطفئ VMs. الموقع: buskill.in</p>
-            <p><strong>② USB Kill Switch (بديل مجاني):</strong> سكريبت مجتمعي يراقب USB غير المعروف ويطفئ النظام فوراً.</p>
-            <p><strong>③ Dead Man's Switch (مؤقت التدمير):</strong> مؤقت من الإقلاع - إذا لم تلغِه، يتم التدمير تلقائياً. للحماية من الاعتقال. يمكن إلغاؤه قبل المهلة.</p>
-            <p><strong>④ Emergency Wipe (مسح يدوي):</strong> مسح أول 2GB من القرص. تدمير شامل يدوي للحالات القصوى.</p>
-            <p><strong>⑤ RAM-Wipe:</strong> دمج مسح الذاكرة مع التدمير - حماية من Cold Boot حتى بعد التدمير.</p>
-            
-            <table class="comparison-table" style="font-size: 0.75em; margin: 10px 0;">
-                <thead><tr><th>المعيار</th><th>BusKill</th><th>DD Wipe</th><th>Dead Man's</th></tr></thead>
-                <tbody>
-                    <tr><td>الهدف</td><td>رأس LUKS</td><td>أول 2GB</td><td>أول 2GB</td></tr>
-                    <tr><td>السرعة</td><td>🟢 2-5ث</td><td>🟡 10-30ث</td><td>🟡 10-30ث</td></tr>
-                    <tr><td>آلية التشغيل</td><td>فوري (فصل)</td><td>يدوي</td><td>مؤجل</td></tr>
-                    <tr><td>الإلغاء</td><td>❌</td><td>❌</td><td>✅</td></tr>
-                    <tr><td>الأفضل لـ</td><td>سرقة</td><td>تدمير شامل</td><td>اعتقال</td></tr>
-                </tbody>
-            </table>
-            
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> السكريبتات متوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> - اختر <strong>8) أدوات التدمير</strong>.
-            </div>
-        </div>
+<!-- 8. أدوات التدمير -->
+<div class="threat-card">
+    <div class="card-badge badge-critical">💀 تدمير</div>
+    <div class="threat-icon"><i class="fas fa-skull-crossbones"></i></div>
+    <div class="threat-title">أدوات التدمير</div>
+    
+    <p><strong>① BusKill (تدمير فوري باختصار):</strong> سكريبت يتم تشغيله باختصار لوحة مفاتيح - ينفذ <code>luksErase</code> (مسح رأس LUKS) + <code>luksSuspend</code> (مسح المفاتيح من RAM) + إطفاء جميع VMs. لا يحتاج أي جهاز خارجي.</p>
+    <p><strong>② Dead Man's Switch (تدمير مؤجل):</strong> نفس آلية BusKill (<code>luksErase</code> + <code>luksSuspend</code>) لكن بمؤقت زمني - إذا لم تلغِه خلال المهلة، يتم التدمير تلقائياً. للحماية من الاعتقال.</p>
+    <p><strong>③ USB Kill Switch (بديل مجاني):</strong> سكريبت يراقب أجهزة USB - عند اكتشاف جهاز غير معروف يشغّل التدمير فوراً.</p>
+    <p><strong>④ Emergency Wipe (مسح يدوي شامل):</strong> مسح أول 2GB من القرص بـ <code>dd</code> - تدمير شامل للحالات القصوى.</p>
+    
+    <table class="comparison-table" style="font-size: 0.75em; margin: 10px 0;">
+        <thead><tr><th>المعيار</th><th>BusKill</th><th>Dead Man's</th><th>DD Wipe</th></tr></thead>
+        <tbody>
+            <tr><td>الآلية</td><td>luksErase + luksSuspend</td><td>luksErase + luksSuspend</td><td>dd (كتابة عشوائية)</td></tr>
+            <tr><td>التشغيل</td><td>اختصار لوحة مفاتيح</td><td>مؤجل (مؤقت)</td><td>يدوي</td></tr>
+            <tr><td>السرعة</td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟡 10-30 ثانية</td></tr>
+            <tr><td>الإلغاء</td><td>❌</td><td>✅ قبل المهلة</td><td>❌</td></tr>
+            <tr><td>يحمي من Cold Boot؟</td><td>✅ luksSuspend</td><td>✅ luksSuspend</td><td>❌</td></tr>
+            <tr><td>الأفضل لـ</td><td>سرعة الاستجابة</td><td>اعتقال / إكراه</td><td>تدمير شامل</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="mitigation-badge">
+        <i class="fas fa-check-circle"></i> السكريبتات متوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> - اختر <strong>8) أدوات التدمير</strong>.
+    </div>
+</div>
 
         <!-- 9. خطة الطوارئ -->
         <div class="threat-card">
