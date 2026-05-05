@@ -1150,6 +1150,29 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
+    <!-- ==================== لماذا Whonix Workstation؟ ==================== -->
+    <div class="card" style="margin-top: 25px; border-right: 6px solid #ff9800;">
+        <div class="card-header" style="color: #ffaa33;">
+            <i class="fas fa-hard-hat"></i> 🛡️ لماذا Whonix Workstation؟ ليس مجرد توجيه مرور
+        </div>
+        <p><strong>من وثائق Whonix و Privacy Guides:</strong> Whonix-Workstation ليست مجرد آلة افتراضية عادية، بل هو نظام تشغيل مُصلب (Hardened OS) يعتمد على توزيعة <strong>Kicksecure</strong> الأمنية. هذا يوفر طبقات حماية إضافية تتجاوز بكثير مجرد تمرير البيانات عبر Tor.</p>
+        
+        <p>إذا تم اختراق المتصفح أو أي تطبيق، فإن المهاجم لن يتمكن من معرفة عنوان IP الحقيقي، ولكن <strong>يمكنه الوصول إلى كل البيانات داخل الجهاز</strong>. هنا يأتي دور التصليب الداخلي للمساعدة في منع أو إعاقة هذا الاختراق من البداية.</p>
+
+        <ul>
+            <li><strong>عزل التدفق (Stream Isolation):</strong> كل تطبيق يحصل على دائرة Tor خاصة به، مما يمنع ربط هوياتك المختلفة.</li>
+            <li><strong>مكافحة بصمة لوحة المفاتيح (Keystroke Anonymization):</strong> بفضل أداة <code>kloak</code>، يتم تشويش أسلوب كتابتك لمنع التعرف عليك من خلال إيقاع الكتابة.</li>
+            <li><strong>تشفير الذاكرة المؤقتة (Encrypted Swap):</strong> حتى البيانات التي تخرج مؤقتاً إلى القرص تبقى مشفرة بالكامل.</li>
+            <li><strong>مُخصص ذاكرة مُصلب (Hardened Memory Allocator):</strong> يحمي من استغلال ثغرات الذاكرة المعقدة.</li>
+            <li><strong>حماية النواة (Kernel Hardening):</strong> يتم تطبيق إعدادات <code>sysctl</code> المتقدمة بشكل افتراضي. ويمكن تعزيزها لاحقاً عبر تثبيت <code>hardened-kernel</code> الذي يعيد بناء النواة برموز عشوائية لتصعيب استغلال الثغرات.</li>
+        </ul>
+
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-check-circle"></i>
+            <strong>نتيجة هذه التحصينات:</strong> Whonix-Workstation يُعتبر بيئة عالية الأمان بحد ذاته. حتى لو تم اختراقه، فإن تحصيناته الداخلية تجعل مهمة استمرار واستغلال هذا الاختراق أصعب بكثير. يوصى دائمًا باستنساخه بشكل دوري والعمل على نسخ نظيفة لتقليل أثر أي اختراق محتمل.
+        </div>
+    </div>
+
     <!-- ==================== المشكلة: Entry Guards ==================== -->
     <div class="card">
         <div class="card-header">
