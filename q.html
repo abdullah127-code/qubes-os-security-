@@ -2669,7 +2669,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     </div>
 
-    <!-- ========== شبكة بطاقات التهديدات (29 بطاقة) ========== -->
+    <!-- ========== شبكة بطاقات التهديدات (37 بطاقة) ========== -->
     <div class="threat-grid">
         
         <!-- 1. تسريب DNS و SNI -->
@@ -2683,38 +2683,33 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-<!-- ==================== هجمات التوقيت (Timing Attacks) - شرح كامل ==================== -->
-<div class="threat-card">
-    <div class="card-badge badge-warning">🟡 تحليل</div>
-    <div class="threat-icon"><i class="fas fa-chart-line"></i></div>
-    <div class="threat-title">هجمات التوقيت (Timing Attacks)</div>
-    
-    <p><strong>ما هي؟</strong> الخصم يراقب <strong>توقيت</strong> حزم البيانات الداخلة والخارجة من شبكة Tor، ويطابق الأنماط الزمنية ليكتشف أن <strong>المصدر والوجهة هما نفس الشخص</strong>.</p>
-    
-    <div style="background: #1a2a3a; padding: 12px; border-radius: 12px; margin: 10px 0;">
-        <p style="font-weight: bold; color: #ffaa33;">🎯 كيف يعمل؟</p>
-        <ol style="margin-right: 20px; font-size: 0.9em;">
-            <li>الخصم يراقب اتصالك بالإنترنت (ISP، نقطة WiFi)</li>
-            <li>الخصم يراقب خادم الوجهة (موقع ويب، خدمة)</li>
-            <li>يحلل توقيت إرسال واستقبال الحزم</li>
-            <li>إذا تطابقت الأنماط الزمنية ← يعرف أنك أنت من يتصل بالموقع</li>
-        </ol>
-    </div>
-    
-    <p><strong>📖 مثال حقيقي:</strong> في 2013، ألقت FBI القبض على طالب في هارفارد هدد بتفجير. قاموا بمراقبة شبكة الجامعة ورأوا أن <strong>توقيت</strong> اتصاله بشبكة Tor <strong>يطابق تماماً</strong> توقيت إرسال رسالة التهديد.</p>
-    
-    <p><strong>🛡️ كيف تحمي نفسك؟</strong></p>
-    <ul style="margin-right: 20px; margin-bottom: 10px;">
-        <li>✅ استخدم <strong>Whonix</strong> - كل حركة المرور تمر عبر Tor (لا تسريب)</li>
-        <li>✅ استخدم <strong>بوابات متعددة</strong> - هويات منفصلة بدوائر Tor مختلفة</li>
-        <li>✅ <strong>لا تتصل بنفس الـ WiFi</strong> الذي تستخدمه لهويتك الحقيقية</li>
-        <li>✅ <strong>تجنب الأنشطة في أوقات متطابقة</strong> بين هويتك الحقيقية والمجهولة</li>
-    </ul>
-    
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: Whonix + بوابات متعددة (تبويب 2)
-    </div>
-</div>
+        <!-- 2. هجمات التوقيت (Timing Attacks) -->
+        <div class="threat-card">
+            <div class="card-badge badge-warning">🟡 تحليل</div>
+            <div class="threat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="threat-title">هجمات التوقيت (Timing Attacks)</div>
+            <p><strong>ما هي؟</strong> الخصم يراقب <strong>توقيت</strong> حزم البيانات الداخلة والخارجة من شبكة Tor، ويطابق الأنماط الزمنية ليكتشف أن <strong>المصدر والوجهة هما نفس الشخص</strong>.</p>
+            <div style="background: #1a2a3a; padding: 12px; border-radius: 12px; margin: 10px 0;">
+                <p style="font-weight: bold; color: #ffaa33;">🎯 كيف يعمل؟</p>
+                <ol style="margin-right: 20px; font-size: 0.9em;">
+                    <li>الخصم يراقب اتصالك بالإنترنت (ISP، نقطة WiFi)</li>
+                    <li>الخصم يراقب خادم الوجهة (موقع ويب، خدمة)</li>
+                    <li>يحلل توقيت إرسال واستقبال الحزم</li>
+                    <li>إذا تطابقت الأنماط الزمنية ← يعرف أنك أنت من يتصل بالموقع</li>
+                </ol>
+            </div>
+            <p><strong>📖 مثال حقيقي:</strong> في 2013، ألقت FBI القبض على طالب في هارفارد هدد بتفجير. قاموا بمراقبة شبكة الجامعة ورأوا أن <strong>توقيت</strong> اتصاله بشبكة Tor <strong>يطابق تماماً</strong> توقيت إرسال رسالة التهديد.</p>
+            <p><strong>🛡️ كيف تحمي نفسك؟</strong></p>
+            <ul style="margin-right: 20px; margin-bottom: 10px;">
+                <li>✅ استخدم <strong>Whonix</strong> - كل حركة المرور تمر عبر Tor (لا تسريب)</li>
+                <li>✅ استخدم <strong>بوابات متعددة</strong> - هويات منفصلة بدوائر Tor مختلفة</li>
+                <li>✅ <strong>لا تتصل بنفس الـ WiFi</strong> الذي تستخدمه لهويتك الحقيقية</li>
+                <li>✅ <strong>تجنب الأنشطة في أوقات متطابقة</strong> بين هويتك الحقيقية والمجهولة</li>
+            </ul>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: Whonix + بوابات متعددة (تبويب 2)
+            </div>
+        </div>
 
         <!-- 3. نقاط وصول وهمية -->
         <div class="threat-card">
@@ -2723,7 +2718,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">نقاط وصول وهمية</div>
             <p>جهاز صغير (Wi-Fi Pineapple) ينتحل شخصية شبكة شرعية ويجبر جهازك على الاتصال به للتنصت.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: VPN → Tor + تجنب الشبكات المفتوحة
+                <i class="fas fa-check-circle"></i> الحل: WISP + Ethernet (تبويب 1) - راوتر يتعامل مع WiFi الخارجية
             </div>
         </div>
 
@@ -2767,7 +2762,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">بصمة المتصفح</div>
             <p>المواقع تجمع معلومات عن جهازك: الخطوط، دقة الشاشة، اللغة. هذه البصمة فريدة بنسبة 99%.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: Kicksecure (تبويب 8)
+                <i class="fas fa-check-circle"></i> الحل: Kicksecure (تبويب 2 - Whonix Workstation)
             </div>
         </div>
 
@@ -2776,13 +2771,13 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="card-badge badge-warning">🟡 متصفح</div>
             <div class="threat-icon"><i class="fas fa-video"></i></div>
             <div class="threat-title">تسريب WebRTC</div>
-            <p>حتى مع VPN أو Tor، يمكن للمواقع استخدام WebRTC لمعرفة عنوان IP الحقيقي لجهازك.</p>
+            <p>حتى مع Tor، يمكن للمواقع استخدام WebRTC لمعرفة عنوان IP الحقيقي لجهازك.</p>
             <div class="mitigation-badge">
                 <i class="fas fa-check-circle"></i> الحل: تعطيل WebRTC في المتصفح (تبويب 1)
             </div>
         </div>
 
-        <!-- 9. هجمات القنوات الجانبية -->
+        <!-- 9. القنوات الجانبية للمتصفح -->
         <div class="threat-card">
             <div class="card-badge badge-critical">🔴 متصفح</div>
             <div class="threat-icon"><i class="fas fa-window-maximize"></i></div>
@@ -2800,7 +2795,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">هجوم الخادمة الشريرة</div>
             <p>شخص يصل لجهازك في غيابك ويزرع Keylogger فيزيائي أو ينسخ القرص الصلب.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + BIOS Password (تبويب 7)
+                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + Live Mode (OverlayFS) - أدناه
             </div>
         </div>
 
@@ -2811,7 +2806,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">الإقلاع البارد (Cold Boot)</div>
             <p>الخصم يبرد ذاكرة RAM لاستخراج مفاتيح التشفير بعد إطفاء الجهاز بدقائق.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: Hibernate + انتظار 60 ثانية (تبويب 7)
+                <i class="fas fa-check-circle"></i> الحل: RAM-VM + مفاتيح زائلة (أدناه)
             </div>
         </div>
 
@@ -2844,7 +2839,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">Intel ME / AMD PSP</div>
             <p>شريحة إدارة مخفية داخل المعالج تعمل حتى عند إطفاء الجهاز بصلاحيات كاملة.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: معالجات AMD + تعطيل IME
+                <i class="fas fa-check-circle"></i> الحل: معالجات AMD + Live Mode يحد من ضررها
             </div>
         </div>
 
@@ -2866,7 +2861,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">Metadata / EXIF</div>
             <p>الصور تحمل إحداثيات GPS، نوع الكاميرا، تاريخ الالتقاط، واسم المؤلف.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: ExifTool / mat2 (تبويب 10)
+                <i class="fas fa-check-circle"></i> الحل: ExifTool / mat2 (تبويب 3)
             </div>
         </div>
 
@@ -2899,7 +2894,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">استعادة المحذوفات</div>
             <p>حذف الملفات لا يمسحها فعلياً. على HDD يمكن استعادتها بسهولة.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + RAM Pool (تبويب 3 و6)
+                <i class="fas fa-check-circle"></i> الحل: تشفير كامل + RAM-VM (أدناه)
             </div>
         </div>
 
@@ -2998,7 +2993,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">No-Log Policies كاذبة</div>
             <p>خدمات VPN تدعي عدم الاحتفاظ بالسجلات لكنها تضطر للتسجيل بصمت بأمر قضائي.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: VPN → Tor
+                <i class="fas fa-check-circle"></i> الحل: لا تثق بأي مزود - استخدم Tor
             </div>
         </div>
 
@@ -3013,71 +3008,166 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
 
-    <!-- 30. القاعدة الأولى لنادي القتال -->
-<div class="threat-card">
-    <div class="card-badge badge-critical">🔴 OPSEC</div>
-    <div class="threat-icon"><i class="fas fa-comment-slash"></i></div>
-    <div class="threat-title">القاعدة الأولى: لا تتحدث عن النادي</div>
-    <p>أكبر عدو لك هو فمك. لا تخبر أحداً – حتى أقرب الناس إليك – عن أنشطتك الحساسة أو عن استخدامك لهذا الدليل.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: الصمت التام. "الشفاه المرتخية تغرق السفن."
-    </div>
-</div>
+        <!-- 30. القاعدة الأولى لنادي القتال -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 OPSEC</div>
+            <div class="threat-icon"><i class="fas fa-comment-slash"></i></div>
+            <div class="threat-title">القاعدة الأولى: لا تتحدث عن النادي</div>
+            <p>أكبر عدو لك هو فمك. لا تخبر أحداً – حتى أقرب الناس إليك – عن أنشطتك الحساسة أو عن استخدامك لهذا الدليل.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: الصمت التام. "الشفاه المرتخية تغرق السفن."
+            </div>
+        </div>
 
-<!-- 31. أسلوب الحياة الطبيعي -->
-<div class="threat-card">
-    <div class="card-badge badge-warning">🟡 OPSEC</div>
-    <div class="threat-icon"><i class="fas fa-user-check"></i></div>
-    <div class="threat-title">كن طبيعياً (Don't Be Weird)</div>
-    <p>إذا اختفيت تماماً من العالم الرقمي، أو قضيت كل وقتك على Tor، أو لم يكن لديك أي حسابات اجتماعية – فأنت تلفت الانتباه.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: حافظ على حياة رقمية "عادية" موازية لأنشطتك الحساسة.
-    </div>
-</div>
+        <!-- 31. أسلوب الحياة الطبيعي -->
+        <div class="threat-card">
+            <div class="card-badge badge-warning">🟡 OPSEC</div>
+            <div class="threat-icon"><i class="fas fa-user-check"></i></div>
+            <div class="threat-title">كن طبيعياً (Don't Be Weird)</div>
+            <p>إذا اختفيت تماماً من العالم الرقمي، أو قضيت كل وقتك على Tor، أو لم يكن لديك أي حسابات اجتماعية – فأنت تلفت الانتباه.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: حافظ على حياة رقمية "عادية" موازية لأنشطتك الحساسة.
+            </div>
+        </div>
 
-<!-- 32. فصل الهويات تماماً -->
-<div class="threat-card">
-    <div class="card-badge badge-critical">🔴 OPSEC</div>
-    <div class="threat-icon"><i class="fas fa-cut"></i></div>
-    <div class="threat-title">لا تخلط أبداً</div>
-    <p>أكبر أخطاء OPSEC تحدث عندما يستخدم الشخص نفس البريد الإلكتروني، أو نفس طريقة الكتابة، أو يفتح رابطاً حساساً من جهازه الشخصي.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: عزل تام. كل هوية لها جهازها وبريدها وأسلوبها.
-    </div>
-</div>
+        <!-- 32. فصل الهويات تماماً -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 OPSEC</div>
+            <div class="threat-icon"><i class="fas fa-cut"></i></div>
+            <div class="threat-title">لا تخلط أبداً</div>
+            <p>أكبر أخطاء OPSEC تحدث عندما يستخدم الشخص نفس البريد الإلكتروني، أو نفس طريقة الكتابة، أو يفتح رابطاً حساساً من جهازه الشخصي.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: عزل تام. كل هوية لها جهازها وبريدها وأسلوبها.
+            </div>
+        </div>
 
-<!-- 33. التحدث مع الشرطة -->
-<div class="threat-card">
-    <div class="card-badge badge-critical">🔴 قانوني</div>
-    <div class="threat-icon"><i class="fas fa-gavel"></i></div>
-    <div class="threat-title">لا تتحدث مع الشرطة</div>
-    <p>في معظم البلدان (خاصة الولايات المتحدة)، أي شيء تقوله للشرطة يمكن استخدامه ضدك. حتى لو كنت بريئاً، قد تقول شيئاً يورطك.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: "أريد محامياً. سألتزم الصمت."
-    </div>
-</div>
+        <!-- 33. التحدث مع الشرطة -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 قانوني</div>
+            <div class="threat-icon"><i class="fas fa-gavel"></i></div>
+            <div class="threat-title">لا تتحدث مع الشرطة</div>
+            <p>في معظم البلدان (خاصة الولايات المتحدة)، أي شيء تقوله للشرطة يمكن استخدامه ضدك. حتى لو كنت بريئاً، قد تقول شيئاً يورطك.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: "أريد محامياً. سألتزم الصمت."
+            </div>
+        </div>
 
-<!-- 34. احتفظ بمحامٍ -->
-<div class="threat-card">
-    <div class="card-badge badge-info">🔵 OPSEC</div>
-    <div class="threat-icon"><i class="fas fa-user-tie"></i></div>
-    <div class="threat-title">رقم المحامي دائماً معك</div>
-    <p>في حالة الطوارئ، آخر شيء تريد القلق بشأنه هو البحث عن رقم محامٍ. احفظ رقم محامٍ موثوق في ذاكرتك أو في مكان آمن.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: احفظ الرقم عن ظهر قلب. لا تخزنه في الهاتف.
-    </div>
-</div>
+        <!-- 34. احتفظ بمحامٍ -->
+        <div class="threat-card">
+            <div class="card-badge badge-info">🔵 OPSEC</div>
+            <div class="threat-icon"><i class="fas fa-user-tie"></i></div>
+            <div class="threat-title">رقم المحامي دائماً معك</div>
+            <p>في حالة الطوارئ، آخر شيء تريد القلق بشأنه هو البحث عن رقم محامٍ. احفظ رقم محامٍ موثوق في ذاكرتك أو في مكان آمن.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: احفظ الرقم عن ظهر قلب. لا تخزنه في الهاتف.
+            </div>
+        </div>
 
-<!-- 35. لا تثق بالتطبيقات "الآمنة" تجارياً -->
-<div class="threat-card">
-    <div class="card-badge badge-critical">🔴 OPSEC</div>
-    <div class="threat-icon"><i class="fas fa-mobile-alt"></i></div>
-    <div class="threat-title">فخاخ الهواتف المشفرة</div>
-    <p>قضايا مثل AN0M وEncroChat وSky ECC أثبتت أن الأجهزة "فائقة الأمان" التي تباع للمجرمين غالباً ما تكون فخاخاً تديرها وكالات الاستخبارات.</p>
-    <div class="mitigation-badge">
-        <i class="fas fa-check-circle"></i> الحل: لا تشترِ "حلولاً سحرية". افعلها بنفسك.
+        <!-- 35. لا تثق بالتطبيقات "الآمنة" تجارياً -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 OPSEC</div>
+            <div class="threat-icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="threat-title">فخاخ الهواتف المشفرة</div>
+            <p>قضايا مثل AN0M وEncroChat وSky ECC أثبتت أن الأجهزة "فائقة الأمان" التي تباع للمجرمين غالباً ما تكون فخاخاً تديرها وكالات الاستخبارات.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: لا تشترِ "حلولاً سحرية". افعلها بنفسك.
+            </div>
+        </div>
+
+        <!-- 36. أنواع تسريب البيانات الثلاثة -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 متقدم</div>
+            <div class="threat-icon"><i class="fas fa-ghost"></i></div>
+            <div class="threat-title">تسريب البيانات بأنواعه الثلاثة (Data Leaks)</div>
+            <p><strong>من توثيق Qubes الرسمي:</strong> هناك 3 أنواع من تسريب البيانات:</p>
+            <ul style="margin-right: 20px; font-size: 0.9em;">
+                <li><strong>النوع 1 (Intentional):</strong> برمجيات خبيثة تنشئ قنوات خفية تعاونية. ❌ لا حل عملي كامل.</li>
+                <li><strong>النوع 2 (Intentional Sniffing):</strong> تخمين مواد المفاتيح عبر القنوات الجانبية. ✅ الحل: إيقاف VMs الأخرى.</li>
+                <li><strong>النوع 3 (Unintentional):</strong> برمجيات غير خبيثة تسرب البيانات. ✅ الحل: جدار الحماية + NetVM فارغ.</li>
+            </ul>
+            <div class="note-critical" style="margin-top:10px; font-size: 0.85em;">
+                <i class="fas fa-exclamation-triangle"></i> <strong>تصحيح من توثيق Qubes:</strong> إيقاف VMs الأخرى <strong>لا يحمي من النوع 1</strong>. البرمجيات الخبيثة تخزن البيانات وتنتظر عودة VMs المتصلة بالشبكة.
+            </div>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: النوع 1 يمثل حدود نموذج العزل في Qubes.
+            </div>
+        </div>
+
+        <!-- 37. القنوات الخفية التعاونية -->
+        <div class="threat-card">
+            <div class="card-badge badge-critical">🔴 متقدم</div>
+            <div class="threat-icon"><i class="fas fa-ghost"></i></div>
+            <div class="threat-title">القنوات الخفية التعاونية (Cooperative Covert Channels)</div>
+            <p>أخطر تهديد على Qubes. برمجيات خبيثة في VM معزول وأخرى في VM متصل بالشبكة تتواصل عبر CPU cache. جدار الحماية لا يمنع هذا. توثيق Qubes يؤكد عدم وجود حلول عملية كاملة لهذا الهجوم.</p>
+            <div class="mitigation-badge">
+                <i class="fas fa-check-circle"></i> الحل: لا يوجد حل تقني كامل. هذه حدود نموذج العزل.
+            </div>
+        </div>
+
+    </div><!-- نهاية شبكة البطاقات -->
+
+    <!-- ==================== كيف تحل بنية Qubes المتقدمة التهديدات ==================== -->
+    <div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
+        <div class="card-header" style="color: #88ff88;">
+            <i class="fas fa-shield-virus"></i> 🛡️ حلول Qubes المتقدمة: RAM-VM و Live Mode (حسب سكريبت live.sh)
+        </div>
+        <p><strong>تنبيه:</strong> هذه هي <strong>الدفاعات العملية الوحيدة</strong> المتاحة حالياً في Qubes OS ضد التهديدات التي تستهدف القرص الصلب (التحليل الجنائي) والنظام المضيف (dom0). يعمل هذا السكريبت على تحويل نظامك إلى "حصن فاقد للذاكرة" عبر خطوتين رئيسيتين.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+            
+            <!-- RAM-VM (التشفير الزائل عبر الوراثة) -->
+            <div style="background: #1a2a3a; padding: 18px; border-radius: 20px; border: 2px solid #66ccff;">
+                <div style="text-align: center; color: #66ccff; font-weight: bold; margin-bottom: 15px;">
+                    🧠 RAM-VM (الوراثة من قالب DVM)
+                </div>
+                <p><strong>الآلية:</strong> 1) إعدادات النواة <code>init_on_free=1 init_on_alloc=1</code> لمسح الذاكرة. 2) سكريبت <code>rc.local</code> يحول مجلدات <code>/home</code> و <code>/rw</code> إلى ذاكرة RAM مؤقتة. 3) تعيين <code>root rw False</code> على <strong>قالب الجهاز المستهلك (DVM Template)</strong> لتشفير المجلدات بمفتاح زائل.</p>
+                <p><strong>أمر التفعيل:</strong></p>
+                <code onclick="copyText(this)" style="font-size: 0.75em;">qvm-volume config DVM_TEMPLATE:root rw False</code>
+                <p style="margin-top: 10px;"><strong>🧬 لماذا هو فعال؟</strong> عند تعيين <code>root rw False</code> على <strong>قالب الأجهزة المستهلكة</strong> (مثل <code>ephemeral-dvm</code>)، فإن جميع الأجهزة المشتقة منه <strong>ترث تلقائياً</strong> خاصية التشفير الزائل. هذا يوفر حماية كاملة ضد التحليل الجنائي للقرص الصلب لجميع الأجهزة المستهلكة دون الحاجة لإعداد كل واحد على حدة.</p>
+                <p><strong>يحل هذه التهديدات:</strong></p>
+                <ul style="margin-right: 20px; font-size: 0.9em;">
+                    <li>❄️ <strong>Cold Boot:</strong> البيانات مشفرة بمفتاح مختفٍ.</li>
+                    <li>🗑️ <strong>استعادة المحذوفات:</strong> لا أثر على القرص.</li>
+                    <li>💾 <strong>تحليل SSD:</strong> لا يتفاعل مع الـ SSD.</li>
+                    <li>📋 <strong>تسريب النوع 3:</strong> سجلات المستخدم تختفي عند الإغلاق.</li>
+                </ul>
+                <div class="note" style="margin-top: 10px; font-size: 0.8em; background: #1a3a3a;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> القنوات الخفية التعاونية (النوع 1). البرمجيات الخبيثة المتقدمة يمكنها التخابر عبر CPU cache.
+                </div>
+            </div>
+            
+            <!-- Live Mode (OverlayFS عبر GRUB) -->
+            <div style="background: #1a2a3a; padding: 18px; border-radius: 20px; border: 2px solid #4caf50;">
+                <div style="text-align: center; color: #88ff88; font-weight: bold; margin-bottom: 15px;">
+                    ⚡ Live Mode (OverlayFS)
+                </div>
+                <p><strong>الآلية:</strong> dom0 يُركب للقراءة فقط. كل التغييرات على dom0 تُكتب في RAM وتختفي عند الإغلاق.</p>
+                <p><strong>أمر التفعيل:</strong> إضافة <code>rootovl</code> إلى <code>GRUB_CMDLINE_LINUX</code> في <code>/etc/default/grub</code>.</p>
+                <p style="margin-top: 10px;"><strong>يحل هذه التهديدات:</strong></p>
+                <ul style="margin-right: 20px; font-size: 0.9em;">
+                    <li>🚪 <strong>Evil Maid:</strong> لا يمكن زرع برمجيات خبيثة دائمة في dom0.</li>
+                    <li>🧠 <strong>اختراق dom0:</strong> النظام يعود نظيفاً كل مرة بعد الإقلاع.</li>
+                    <li>🤖 <strong>Intel ME/AMD PSP:</strong> يحد من قدرتها على زرع rootkits مستمرة.</li>
+                    <li>📋 <strong>سجلات dom0:</strong> كل السجلات والبيانات المؤقتة تختفي.</li>
+                </ul>
+                <div class="note" style="margin-top: 10px; font-size: 0.8em; background: #1a3a3a;">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>لا يحمي من:</strong> خصم يمتلك root على dom0 المخترق ويصل للقرص الأصلي أثناء الجلسة.
+                </div>
+            </div>
+        </div>
+
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-lightbulb"></i>
+            <strong>💡 الخلاصة:</strong> RAM-VM (عبر توريث إعدادات قالب DVM) يحمي <strong>بيانات المستخدم</strong> من التحليل الجنائي للقرص. Live Mode (عبر rootovl في GRUB) يحمي <strong>النظام المضيف نفسه</strong> من العبث وهجمات الاستمرارية. معاً، يشكلان درعاً كاملاً ضد هجمات الاستمرارية (Persistence Attacks) والكشف الجنائي (Forensics). لكنهما لا يحميان من القنوات الخفية التعاونية (Cooperative Covert Channels) التي تمثل حدود العزل في Qubes.
+        </div>
     </div>
-</div>
+
+    <!-- ========== اقتباس من مطور Qubes ========== -->
+    <div class="quote" style="margin-top: 25px;">
+        <i class="fas fa-quote-right"></i>
+        "Qubes تطمح للحفاظ على حالة حيث المهاجم الذي يتحكم بالشبكة، ويملك root في أحد VMs، ويستطيع استغلال بطاقة الشبكة، ويستطيع استنساخ القرص - لا يزال غير قادر على السيطرة على dom0 أو رؤية البيانات في VMs الأخرى غير المخترقة."
+        <br>— Jean-Philippe Ouellet، مطور Qubes سابق
+    </div>
 
     <!-- ========== اقتباس ختامي ========== -->
     <div class="quote">
@@ -3086,684 +3176,82 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
     
 
-<!-- ========== ملخص سريع (تنسيق جدول - مع أرقام التبويبات) ========== -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-clipboard-list"></i> 📋 ملخص: كيف يحميك هذا الدليل من كل تهديد؟</div>
-    
-    <table style="width: 100%; border-collapse: collapse; background: transparent; margin: 10px 0;">
-        <!-- الصف 1: الحماية التقنية -->
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); width: 110px; vertical-align: top;">
-                <i class="fas fa-shield-alt"></i> 🛡️ تقني
-            </td>
-            <td style="padding: 12px 8px;">
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 شبكة → sys-whonix (تبويب 2)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 تتبع → Kicksecure (تبويب 8)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 فيزيائي → تشفير+BIOS (تبويب 7)</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔵 بيانات → ExifTool (تبويب 10)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 Tor → بوابات متعددة (تبويب 2)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 معالج → معلمات النواة (تبويب 0)</span>
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 مالي → Monero حصراً</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧅 IP → Whonix Gateway (تبويب 2)</span>
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">📶 WiFi → WISP+Ethernet (تبويب 1)</span>
-            </td>
-        </tr>
-        <!-- الصف 2: الحماية السلوكية (OPSEC) -->
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
-                <i class="fas fa-user-secret"></i> 🧠 سلوكي
-            </td>
-            <td style="padding: 12px 8px;">
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 كلام → الصمت التام (تبويب 4)</span>
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 نمط حياة → كن طبيعياً (تبويب 4)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 خلط → عزل تام للهويات (تبويب 4)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 قانوني → لا تتحدث مع الشرطة (تبويب 4)</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔵 طوارئ → احفظ رقم محامٍ (تبويب 4)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 فخاخ → لا حلول جاهزة (تبويب 4)</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">✍️ كتابة → تغيير الأسلوب (تبويب 4)</span>
-            </td>
-        </tr>
-        <!-- الصف 3: خطط الطوارئ -->
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
-                <i class="fas fa-skull-crossbones"></i> 🚨 طوارئ
-            </td>
-            <td style="padding: 12px 8px;">
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔥 احترقت → خطة الحذف والهروب (تبويب 7)</span>
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔍 تلاعب → خطة المغادرة الفورية (تبويب 7)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">💀 تدمير → BusKill (تبويب 7)</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧹 تنظيف → RAM Pool (تبويب 6)</span>
-                <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">💾 زائل → Amnesic Tmpfs (تبويب 5)</span>
-                <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">⚡ حي → Live Mode (تبويب 9)</span>
-            </td>
-        </tr>
-        <!-- الصف 4: التمويل المجهول -->
-        <tr>
-            <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
-                <i class="fas fa-coins"></i> 💰 تمويل
-            </td>
-            <td style="padding: 12px 8px;">
-                <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">💵 نقداً → Mullvad / iVPN (تبويب 2)</span>
-                <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">🪙 Monero → Njalla / 1984.is (تبويب 2)</span>
-                <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔄 تبديل → sideshift.ai / bisq (تبويب 2)</span>
-                <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">❌ تجنب → Bitcoin/Ethereum</span>
-            </td>
-        </tr>
-    </table>
-    
-    <!-- فاصل -->
-    <hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--border-color);">
-    
-    <!-- تذكير نهائي -->
-    <div style="text-align: center; padding: 12px; background: #1a3a3a; border-radius: 20px; border-right: 4px solid #ffd966;">
-        <i class="fas fa-star-of-life" style="color: #ffd966;"></i>
-        <strong style="color: var(--text-color);">💡 تذكر:</strong> 
-        <span style="color: var(--text-color);">هذا الدليل يحميك من الخصوم متوسطي الموارد. "ثق ولكن تحقق."</span>
-    </div>
-</div>
-    </div>
-</div>
-
-    <!-- ==================== تبويب 5: Amnesic Tmpfs ==================== -->
-<div class="tab-pane" id="tab5">
-    <div class="card">
-        <div class="card-header"><i class="fas fa-memory"></i> Amnesic Tmpfs</div>
-        <p>تقنية tmpfs تجعل المجلدات الحساسة تختفي بعد إعادة التشغيل.</p>
+    <!-- ========== ملخص سريع (تنسيق جدول - مع أرقام التبويبات) ========== -->
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-header"><i class="fas fa-clipboard-list"></i> 📋 ملخص: كيف يحميك هذا الدليل من كل تهديد؟</div>
         
-        <div class="note-success" style="margin: 20px 0;">
-            <i class="fas fa-check-circle"></i>
-            <strong>⚡ هذه السكريبتات متوفرة في السكريبت المساعد:</strong>
-            <p style="margin-top: 10px;">
-                لتطبيق هذه الإعدادات تلقائياً، انتقل إلى 
-                <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11 (السكريبت المساعد)</a> 
-                وقم بتشغيل <code>auto-script.sh</code>.
-            </p>
-            <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 10px;">chmod +x auto-script.sh && ./auto-script.sh</code>
-            <p style="margin-top: 10px;">اختر: <strong>6) إنشاء سكريبت Amnesic Tmpfs</strong></p>
-        </div>
-    </div>
-</div>
-
-    <!-- ==================== تبويب 6: RAM Pool ==================== -->
-    <div class="tab-pane" id="tab6">
-<div class="card">
-    <div class="card-header"><i class="fas fa-microchip"></i> RAM Pool (التخزين في الذاكرة) - الإنكار التام</div>
-    <p><strong>فكرة من Hitchhiker's Guide:</strong> مثل Tails، لكن داخل Qubes. الأجهزة التي تعمل في RAM تختفي تماماً عند الإغلاق.</p>
-    
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-        <i class="fas fa-skull"></i> <strong>سيناريو الاستخدام:</strong>
-        <p>تعمل على مستند حساس جداً. فجأة، تسمع طرقاً على الباب. تضغط على إيقاف التشغيل. بعد 60 ثانية، حتى لو صودر الجهاز، لا توجد أي طريقة لاستعادة ما كنت تعمل عليه. "لا بيانات = لا جريمة".</p>
-    </div>
-    
-    <p>هذه التقنية تسمح بإنشاء pool من نوع <code>file</code> على نظام ملفات <code>tmpfs</code>، ثم إنشاء AppVMs على هذا pool بحيث تكون ملفات الكيوب في الذاكرة.</p>
-    
-    <div class="note ram-note">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span style="color: #ffaa33;">⚠️ تنبيه: بعد إعادة التشغيل، يختفي كل شيء (بما في ذلك بيانات الأجهزة نفسها). استخدم سكريبت التهيئة التلقائية إذا كنت تريد بيئة دائمة.</span>
-    </div>
-</div>
-
-        <div class="section-title">
-            <i class="fas fa-tools"></i>
-            <h2>📌 الإعداد الأساسي</h2>
-        </div>
-
-        <div class="card">
-            <div class="card-header"><i class="fas fa-arrow-up"></i> رفع حجم ذاكرة dom0</div>
-            <div class="note-critical" style="margin-top: 0; margin-bottom: 20px;">
-                <i class="fas fa-exclamation-triangle"></i> 
-                <strong>هام:</strong> بشكل افتراضي، يخصص Qubes OS حد أقصى 4 جيجابايت فقط لنظام dom0. في سيناريوهات الـ Live Mode أو عند تشغيل عدة قوالب في RAM pool، قد تحتاج لزيادة هذا الحد.
-            </div>
-            <table class="comparison-table">
-                <thead> <th>النوع</th><th>الأمر</th><th>ملاحظات</th> </thead>
-                <tbody> <tr><td>تغيير دائم (تعديل GRUB)</td><td><code class="dynamic-path" onclick="copyText(this)">sudo nano /etc/default/grub</code><br><code class="dynamic-path" onclick="copyText(this)">sudo grub2-mkconfig -o /boot/grub2/grub.cfg</code></td><td>ابحث عن السطر <code>GRUB_CMDLINE_XEN_DEFAULT</code> وغيّر قيمة <code>dom0_mem</code>، مثال: <code>dom0_mem=max:8192M</code></td> </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- ========== إشارة للسكربت المساعد - المحتوى الرئيسي ========== -->
-        <div class="card" style="background: linear-gradient(145deg, #1a2a2a, #0f1a1a); border: 2px solid #4caf50;">
-            <div class="card-header" style="color: #4caf50;">
-                <i class="fas fa-terminal"></i> 🚀 جميع سكريبتات RAM Pool متوفرة في السكريبت المساعد
-            </div>
-            
-            <p style="font-size: 1.1em; margin-bottom: 20px;">
-                <strong>لتجنب التكرار، جميع السكريبتات الكاملة متوفرة في</strong> 
-                <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff; text-decoration: underline; font-weight: bold;">تبويب 11 (السكريبت المساعد)</a>
-            </p>
-            
-            <div class="note-success" style="margin: 15px 0;">
-                <i class="fas fa-check-circle"></i>
-                <strong>⚡ للتطبيق التلقائي:</strong>
-                <code class="dynamic-path" onclick="copyText(this)" style="margin: 10px 0; display: block;">chmod +x auto-script.sh && ./auto-script.sh</code>
-                <p>ثم اختر: <strong>5) إنشاء سكريبتات RAM Pool</strong></p>
-            </div>
-            
-            <hr style="border-color: #4a4a72; margin: 20px 0;">
-            
-            <h3><i class="fas fa-list"></i> 📋 السكريبتات التي سيتم إنشاؤها على سطح المكتب:</h3>
-            <ul style="margin-right: 20px; line-height: 2; font-size: 1.05em;">
-                <li>✅ <code>setup-ram-pool.sh</code> – ينشئ RAM pool في الذاكرة</li>
-                <li>✅ <code>create-ram-vm.sh</code> – ينشئ جهازاً واحداً <span style="color: #4caf50;">(مع معلمات النواة الكاملة)</span></li>
-                <li>✅ <code>create-multi-ram-vm.sh</code> – ينشئ عدة أجهزة مع اختيار البوابات <span style="color: #4caf50;">(مع معلمات النواة الكاملة + إمكانية الحفظ)</span></li>
-                <li>✅ <code>cleanup-ram-pool.sh</code> – يحذف جميع الأجهزة ويفرغ RAM pool</li>
-                <li>✅ <code>ram-pool-status.sh</code> – يعرض حالة RAM pool</li>
-            </ul>
-            
-            <div class="note" style="margin-top: 20px; background: #1a3a3a;">
-                <i class="fas fa-folder-open"></i>
-                <strong>📂 مكان السكريبتات بعد التشغيل:</strong>
-                <code style="direction: ltr; display: block; margin-top: 10px;">/home/user/Desktop/ram-pool-scripts/</code>
-            </div>
-        </div>
-
-        <!-- ========== تنظيف يدوي ========== -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-trash-alt"></i> تنظيف يدوي (تفريغ RAM pool)</div>
-            <p>لحذف جميع الأجهزة وتفريغ RAM pool يدوياً:</p>
-            <button class="btn-copy-all" onclick="copyScript('cleanup-script')"><i class="fas fa-copy"></i> نسخ سكريبت التنظيف</button>
-            <pre class="code-block" id="cleanup-script">#!/bin/bash
-RAM_POOL_PATH="$HOME/ram_pool"
-POOL_NAME="ram_pool"
-
-echo "🧹 تنظيف RAM Pool..."
-
-# حذف الأجهزة
-for vm in $(qvm-ls --raw-list 2>/dev/null | grep -E "whonix-work-ram|ram-"); do
-    echo "  حذف: $vm"
-    qvm-kill "$vm" 2>/dev/null
-    qvm-remove --force "$vm" 2>/dev/null
-done
-
-# حذف pool
-qvm-pool remove "$POOL_NAME" 2>/dev/null
-
-# إلغاء التثبيت
-mount | grep -q "$RAM_POOL_PATH" && sudo umount "$RAM_POOL_PATH" 2>/dev/null
-
-# حذف المجلد
-[ -d "$RAM_POOL_PATH" ] && sudo rm -rf "$RAM_POOL_PATH"
-
-echo "✅ تم التنظيف"
-free -h</pre>
-        </div>
-
-        <!-- ========== استكشاف الأخطاء ========== -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-question-circle"></i> استكشاف الأخطاء الشائعة</div>
-            <table class="comparison-table">
-                <thead> <th>المشكلة</th><th>السبب</th><th>الحل</th> </thead>
-                <tbody>
-                    <tr><td><code>qvm-create</code> يفشل مع "No space left"</td><td>RAM pool ممتلئ أو حجمه صغير</td><td><code>df -h /home/$USER/ram_pool</code> ثم <code>sudo mount -o remount,size=8G /home/$USER/ram_pool</code></td></tr>
-                    <tr><td>البيانات لا تختفي بعد إعادة التشغيل (لـ AppVM)</td><td>الـ pool غير مثبت على tmpfs</td><td>تأكد من أن <code>mount | grep ram_pool</code> يظهر tmpfs</td></tr>
-                    <tr><td>معلمات النواة لم تُطبق</td><td>لم يتم استخدام السكريبت المعدل</td><td>تأكد من استخدام الإصدار المحدث من السكريبت المساعد (يحتوي على KERNEL_OPTS)</td></tr>
-                    <tr><td><code>ephemeral_volatile</code> لا يعمل</td><td>الخاصية تحتاج إلى إعادة تشغيل الـ pool أو إعادة إنشاء VM</td><td>بعد تفعيل الخاصية، أنشئ VM جديد؛ VM القديمة لا تتأثر</td></tr>
-                </tbody>
-            </table>
-        </div>    
-    </div>
-    
-    <!-- ==================== تبويب 7: الأمان المتقدم ==================== -->
-    <div class="tab-pane" id="tab7">
-        <div class="security-section">
-            <div class="security-header">
-                <i class="fas fa-shield-virus"></i>
-                <h2>🔒 الأمان المتقدم</h2>
-                <p>راجع هذه الإجراءات بانتظام - الأمان عملية مستمرة وليس إعداد لمرة واحدة</p>
-            </div>
-
-            <div class="alerts-grid">
-                <div class="alert-card critical">
-                    <div class="alert-icon"><i class="fas fa-skull-crosswalk"></i></div>
-                    <div class="alert-content">
-                        <h3>🔴 هجمات BadUSB</h3>
-                        <p>لا تثق بأي USB غير معروف. يمكن برمجة أي USB ليصبح لوحة مفاتيح وتنفيذ أوامر.</p>
-                        <div class="alert-solution">
-                            <strong>الحل:</strong>
-                            <code class="dynamic-path" onclick="copyText(this)">sudo qubes-dom0-update usbguard</code>
-                            <code class="dynamic-path" onclick="copyText(this)">sudo systemctl enable usbguard</code>
-                            <p>تذكر تهيئة usbguard بعد التثبيت: <code>sudo usbguard generate-policy > /etc/usbguard/rules.conf</code></p>
-                        </div>
-                    </div>
-                </div>
-                
-
-                <div class="alert-card warning">
-                    <div class="alert-icon"><i class="fas fa-globe"></i></div>
-                    <div class="alert-content">
-                        <h3>🟡 VPN + Tor معاً</h3>
-                        <p>Tor وحده ليس كافياً. استخدم VPN موثوق قبل Tor للتشويش على مزود الخدمة.</p>
-                        <div class="alert-solution">
-                            <strong>الإعداد:</strong>
-                            <code class="dynamic-path" onclick="copyText(this)">sys-net → sys-vpn → sys-whonix → anon-whonix</code>
-                            <p>أنشئ كيوب VPN (مثل sys-vpn) واجعله netvm لـ sys-whonix.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="alert-card success">
-                    <div class="alert-icon"><i class="fas fa-sync-alt"></i></div>
-                    <div class="alert-content">
-                        <h3>🟢 التحديثات الأمنية</h3>
-                        <p>التحديثات تسد ثغرات خطيرة. طبقها فور ظهورها ولو يومياً.</p>
-                        <div class="alert-solution">
-                            <strong>الأمر:</strong>
-                            <code class="dynamic-path" onclick="copyText(this)">sudo qubes-dom0-update</code>
-                            <code class="dynamic-path" onclick="copyText(this)">sudo apt update &amp;&amp; sudo apt upgrade # في القوالب</code>
-                        </div>
-                    </div>
-                </div>
-                <div class="alert-card info">
-                    <div class="alert-icon"><i class="fas fa-database"></i></div>
-                    <div class="alert-content">
-                        <h3>🔵 النسخ الاحتياطي المشفر</h3>
-                        <p>قرصك قد يتعطل أو يُسرق. النسخ الاحتياطي خارج الجهاز ضرورة.</p>
-                        <div class="alert-solution">
-                            <strong>الأمر:</strong>
-                            <code class="dynamic-path" onclick="copyText(this)">qubes-backup --encrypt --passphrase-file /path/to/key /mnt/backup</code>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========== تحذير: لا تستخدم التشغيل المزدوج (Dual Boot) ========== -->
-            <div class="note-critical" style="margin-top: 25px;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>⚠️ تحذير: لا تستخدم التشغيل المزدوج (Dual Boot)</strong>
-                
-                <p style="margin-top: 15px;"><strong>الخطر الرئيسي:</strong> أي نظام آخر (مثل Windows) يمكنه تعديل <code>/boot</code> غير المشفر وتثبيت Bootkit أو استبدال النواة بملف ضار، لأن قسم الإقلاع غير محمي بالتشفير.</p>
-
-                <p><strong>📖 ماذا تقول المصادر الرسمية؟</strong></p>
-                
-                <div class="note" style="margin-top: 10px; background: #2a2a4a;">
-                    <p><strong>من وثائق Qubes الرسمية:</strong></p>
-                    <p>"إحدى المشاكل هي أنه عند التشغيل المزدوج أو المتعدد، حتى لو كنت تستخدم التشفير في تثبيت Qubes، فإن <strong>/boot يبقى غير محمي</strong> ويمكن تعديله بشكل ضار بواسطة نظام التشغيل الآخر، مما قد يؤدي إلى اختراق Qubes نفسه."</p>
-                </div>
-
-                <div class="note" style="margin-top: 10px; background: #2a2a4a;">
-                    <p><strong>من وثائق Kicksecure:</strong></p>
-                    <p>"يجب على مستخدمي Kicksecure و Kicksecure-Qubes <strong>تجنب إعدادات التشغيل المزدوج أو المتعدد</strong>. نظام التشغيل الآخر مثل Microsoft Windows يمكنه تعديل قسم /boot غير المحمي أو الـ Firmware لاختراق Qubes أو نظام التشغيل المضيف."</p>
-                </div>
-
-                <div class="note" style="margin-top: 10px; background: #2a2a4a;">
-                    <p><strong>من منتدى Qubes:</strong></p>
-                    <p>"Bootkit يمكنه تثبيت نفسه <strong>دون أن يفعل المستخدم أي شيء خاطئ</strong>. دون أن يعلم المستخدم أنه حدث."</p>
-                </div>
-
-                <p style="margin-top: 15px;"><strong>✅ الحل الآمن (مثلك):</strong></p>
-                <ul style="margin-right: 20px;">
-                    <li>• استخدم <strong>هاردًا خارجيًا منفصلاً</strong> لـ Qubes</li>
-                    <li>• <strong>افصله ماديًا</strong> عند استخدام أي نظام آخر</li>
-                    <li>• لا تترك الهارد موصولاً أثناء تشغيل Windows</li>
-                </ul>
-
-                <div class="note" style="margin-top: 10px; background: #1a3a3a;">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>💡 خلاصة:</strong> Windows لا يستطيع فك تشفير LUKS أو قراءة نظام الملفات ext4، لكنه يستطيع <strong>تعديل قطاعات /boot مباشرة</strong> (استبدال النواة، تثبيت Bootkit) لأن هذه القطاعات غير مشفرة. الهارد الخارجي المنفصل هو الحماية الوحيدة من هذا الخطر، لأنك تستطيع فصله ماديًا عند استخدام أي نظام آخر.
-                </div>
-            </div>
-
-            <!-- ========== تحذير خطر USB على dom0 ========== -->
-            <div class="note-critical" style="margin-top: 25px;">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>⚠️ خطر USB على dom0: ليس مجرد "تمرير"</strong>
-                <p style="margin-top: 10px;">حتى لو كنت "تمرر" USB إلى VM آخر، فإن dom0 يضطر إلى:</p>
-                <ul style="margin-right: 20px; margin-top: 10px;">
-                    <li>🔴 تشغيل سوائق USB بالكامل (USB stack)</li>
-                    <li>🔴 قراءة Vendor/Product IDs والتكوينات</li>
-                    <li>🔴 قراءة جدول الأقسام (لأجهزة التخزين)</li>
-                    <li>🔴 تحميل وحدات kernel (modules) للتعامل مع الجهاز</li>
-                </ul>
-                <p style="margin-top: 15px;"><strong>ماذا يمكن أن يفعل جهاز USB ضار؟</strong></p>
-                <ul style="margin-right: 20px;">
-                    <li>• انتحال شخصية لوحة مفاتيح (Rubber Ducky) وتنفيذ أوامر بصلاحيات root</li>
-                    <li>• استغلال ثغرات في سوائق USB (buffer overflows, use-after-free)</li>
-                    <li>• هجمات DMA (Direct Memory Access) عبر Thunderbolt/USB-C</li>
-                    <li>• انتحال هوية جهاز موثوق (spoofing) لخداع المستخدم</li>
-                </ul>
-                <p style="margin-top: 15px;"><strong>🛡️ ماذا يعني هذا لحالتك (الإقلاع من هارد خارجي عبر USB)؟</strong></p>
-                <ul style="margin-right: 20px;">
-                    <li>✅ <strong>الهارد الخارجي الذي يقلع منه النظام يعتبر موثوقًا</strong> – أنت من صنعته وتتحكم به</li>
-                    <li>⚠️ <strong>أي جهاز USB آخر (فلاشات، كاميرات، إلخ) يشكل خطرًا على dom0</strong></li>
-                    <li>🔴 <strong>لا يمكن تحقيق عزل USB كامل مع الإقلاع من USB</strong> – هذه قيادة أساسية للنظام</li>
-                </ul>
-                <p style="margin-top: 15px;"><strong>✅ التوصيات العملية:</strong></p>
-                <ul style="margin-right: 20px;">
-                    <li>• <strong>ثق فقط بالهارد الخارجي</strong> الذي يقلع منه النظام</li>
-                    <li>• <strong>لا توصل أي جهاز USB غير موثوق به تمامًا</strong> (فلاشات عشوائية، أجهزة غير معروفة المصدر)</li>
-                    <li>• إذا اضطررت لتوصيل أجهزة غير موثوقة، استخدم <strong>وحدتي تحكم USB منفصلتين</strong> (إن أمكن)</li>
-                    <li>• يمكنك التحقق من وجود وحدتي تحكم: <code>lspci | grep USB</code></li>
-                </ul>
-                <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>📌 ملاحظة:</strong> التحذير الذي يظهر عند الإقلاع <code>"USB in dom0 is not restricted"</code> هو تذكير أمني طبيعي لمستخدمي الإقلاع من USB، وليس خطأ يمنع النظام من العمل.
-                </div>
-                <div class="note" style="margin-top: 10px; background: #2a4a6a;">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>💡 بديل آمن (إن أمكن):</strong>
-                    <p>إذا كان لديك وحدتا تحكم USB منفصلتان، يمكنك تخصيص واحدة للهارد الخارجي (تبقى في dom0) والأخرى لـ sys-usvm. تحقق عبر <code>lspci | grep USB</code> – إذا ظهر سطران، فأنت محظوظ!</p>
-                </div>
-            </div>
-
-            <div class="security-tips">
-                <div class="section-title">
-                    <i class="fas fa-lightbulb"></i>
-                    <h2>💡 نصائح أمنية إضافية</h2>
-                </div>
-                <div class="tips-grid">
-                    <div class="tip"><i class="fas fa-key"></i> استخدم كلمات مرور قوية وفريدة لكل خدمة</div>
-                    <div class="tip"><i class="fas fa-sync"></i> قم بتحديث النظام أسبوعياً على الأقل</div>
-                    <div class="tip"><i class="fas fa-usb"></i> عزل أجهزة USB في sys-usb منفصل (إن أمكن)</div>
-                    <div class="tip"><i class="fas fa-microchip"></i> فعّل معلمات النواة المحسنة (init_on_free, init_on_alloc)</div>
-                    <div class="tip"><i class="fas fa-database"></i> استخدم LUKS2 مع تكامل (integrity) للبيانات الحساسة</div>
-                    <div class="tip"><i class="fas fa-memory"></i> جرب RAM pool للتشغيل المؤقت (Live Mode)</div>
-                </div>
-            </div>
-        
-        <!-- ==================== تحذيرات Evil Maid و Cold Boot ==================== -->
-<div class="card" style="margin-top: 40px; border-right: 8px solid #ffaa33;">
-    <div class="card-header" style="color:#ffaa33;">
-        <i class="fas fa-door-open"></i> 🏨 هجمات Evil Maid و Cold Boot
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <!-- Evil Maid Attack -->
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <h4 style="color:#ff4d4d;"><i class="fas fa-user-secret"></i> Evil Maid Attack (هجوم الخادمة الشريرة)</h4>
-            <p><strong>ما هو؟</strong> هجوم فيزيائي حيث يتمكن المهاجم من الوصول إلى جهازك أثناء غيابك (في فندق، مكتب، حدود) ويقوم بـ:</p>
-            <ul style="margin-right:20px; margin-top:10px;">
-                <li>• تثبيت keylogger فيزيائي أو برمجي</li>
-                <li>• استنساخ القرص الصلب للتحليل لاحقاً</li>
-                <li>• تعديل BIOS/UEFI أو bootloader</li>
-                <li>• تثبيت برمجيات خبيثة على مستوى firmware</li>
-            </ul>
-            <p><strong>🛡️ الحماية:</strong></p>
-            <ul style="margin-right:20px;">
-                <li>• <strong>كلمة مرور BIOS/UEFI</strong> - تمنع تغيير إعدادات الإقلاع</li>
-                <li>• <strong>Secure Boot</strong> - يمنع تشغيل أنظمة غير موقعة</li>
-                <li>• <strong>الحماية من العبث (Tamper Protection)</strong> - استخدم طلاء الأظافر اللامع على البراغي</li>
-                <li>• <strong>Anti Evil Maid (AEM)</strong> - متوفر في Qubes OS (Intel CPUs فقط)</li>
-                <li>• <strong>التشفير الكامل للقرص</strong> - يمنع استنساخ البيانات</li>
-            </ul>
-        </div>
-        
-        <!-- Cold Boot Attack -->
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <h4 style="color:#ff4d4d;"><i class="fas fa-snowflake"></i> Cold Boot Attack (هجوم الإقلاع البارد)</h4>
-            <p><strong>ما هو؟</strong> هجوم يستغل بقاء البيانات في ذاكرة RAM لفترة قصيرة بعد إطفاء الجهاز. المهاجم يقوم بـ:</p>
-            <ul style="margin-right:20px; margin-top:10px;">
-                <li>• إعادة تشغيل سريعة للجهاز باستخدام USB خاص</li>
-                <li>• تبريد الذاكرة (باستخدام الهواء المضغوط أو النيتروجين) لإبطاء تلاشي البيانات</li>
-                <li>• استخراج مفاتيح التشفير من الذاكرة</li>
-            </ul>
-            <p><strong>🛡️ الحماية:</strong></p>
-            <ul style="margin-right:20px;">
-                <li>• <strong>استخدم Hibernate بدلاً من Sleep</strong> - Hibernate يفرغ الذاكرة على القرص</li>
-                <li>• <strong>Shutdown كامل دائماً</strong> - لا تترك الجهاز في وضع Sleep</li>
-                <li>• <strong>فعّل خيار "مسح المفاتيح من الذاكرة"</strong> في Veracrypt</li>
-                <li>• <strong>انتظر 30-60 ثانية بعد الإطفاء</strong> قبل ترك الجهاز</li>
-                <li>• <strong>استخدم TPM مع قياس الذاكرة</strong> (Memory Scraping protection)</li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- مقارنة Sleep vs Hibernate vs Shutdown -->
-    <div style="margin-top:20px;">
-        <h4><i class="fas fa-power-off"></i> مقارنة: Sleep vs Hibernate vs Shutdown</h4>
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>الوضع</th>
-                    <th>الذاكرة RAM</th>
-                    <th>سرعة الاستئناف</th>
-                    <th>الحماية من Cold Boot</th>
-                    <th>الحماية من Evil Maid</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Sleep (سكون)</strong></td>
-                    <td><span style="color:#ff4d4d;">🔴 تبقى نشطة</span></td>
-                    <td>🟢 سريع جداً (ثواني)</td>
-                    <td><span style="color:#ff4d4d;">❌ لا توجد حماية</span></td>
-                    <td><span style="color:#ff4d4d;">❌ لا توجد حماية</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Hibernate (إسبات)</strong></td>
-                    <td><span style="color:#4caf50;">🟢 تفرغ على القرص</span></td>
-                    <td>🟡 متوسط (10-30 ثانية)</td>
-                    <td><span style="color:#4caf50;">✅ محمي</span></td>
-                    <td><span style="color:#ffaa33;">🟡 جزئي</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Shutdown (إيقاف كامل)</strong></td>
-                    <td><span style="color:#4caf50;">🟢 تفريغ كامل</span></td>
-                    <td>🔴 بطيء (30-60+ ثانية)</td>
-                    <td><span style="color:#4caf50;">✅ محمي بالكامل</span></td>
-                    <td><span style="color:#4caf50;">✅ محمي (مع كلمة مرور BIOS)</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <!-- إعدادات الحماية في الأنظمة المختلفة -->
-    <div style="margin-top:20px;">
-        <h4><i class="fas fa-cog"></i> كيفية تفعيل الحماية في الأنظمة المختلفة</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-            <div style="background:#1a2a3a; padding:15px; border-radius:15px;">
-                <h5><i class="fab fa-windows"></i> Windows</h5>
-                <p><strong>تفعيل Hibernate:</strong></p>
-                <code onclick="copyText(this)">powercfg /hibernate on</code>
-                <p><strong>تغيير سلوك زر الطاقة:</strong></p>
-                <code onclick="copyText(this)">Control Panel > Power Options > Choose what the power buttons do</code>
-                <p><strong>BitLocker مع PIN:</strong></p>
-                <code onclick="copyText(this)">manage-bde -protectors -add c: -TPMAndPIN</code>
-            </div>
-            <div style="background:#1a2a3a; padding:15px; border-radius:15px;">
-                <h5><i class="fab fa-linux"></i> Linux</h5>
-                <p><strong>تفعيل Hibernate:</strong></p>
-                <code onclick="copyText(this)">sudo systemctl hibernate</code>
-                <p><strong>تعطيل Sleep:</strong></p>
-                <code onclick="copyText(this)">sudo systemctl mask sleep.target suspend.target</code>
-                <p><strong>LUKS - مسح المفاتيح:</strong></p>
-                <code onclick="copyText(this)">cryptsetup luksSuspend /dev/mapper/root</code>
-            </div>
-            <div style="background:#1a2a3a; padding:15px; border-radius:15px;">
-                <h5><i class="fas fa-cube"></i> Qubes OS</h5>
-                <p><strong>Hibernate غير مدعوم</strong> - استخدم Shutdown دائماً</p>
-                <p><strong>Anti Evil Maid:</strong></p>
-                <code onclick="copyText(this)">sudo qubes-dom0-update anti-evil-maid</code>
-                <p><strong>تغيير إعدادات الطاقة:</strong></p>
-                <code onclick="copyText(this)">xfce4-power-manager-settings</code>
-            </div>
-        </div>
-    </div>
-    
-    <!-- نصائح إضافية -->
-    <div class="note" style="margin-top:20px;">
-        <i class="fas fa-shield-virus"></i>
-        <strong>🛡️ نصائح إضافية للحماية من الهجمات الفيزيائية:</strong>
-        <ul style="margin-top:10px;">
-            <li>• <strong>استخدم كلمة مرور BIOS/UEFI قوية</strong> - تمنع تغيير ترتيب الإقلاع.</li>
-            <li>• <strong>فعّل Secure Boot</strong> - يمنع تشغيل أنظمة تشغيل غير موقعة.</li>
-            <li>• <strong>استخدم TPM (Trusted Platform Module)</strong> - يخزن مفاتيح التشفير بشكل آمن.</li>
-            <li>• <strong>لا تترك جهازك أبداً دون مراقبة في الأماكن العامة</strong> - احمله معك دائماً.</li>
-            <li>• <strong>استخدم قفص فاراداي (Faraday Cage) للأجهزة</strong> - يمنع الاتصالات اللاسلكية أثناء النقل.</li>
-            <li>• <strong>تحقق من وجود أجهزة غريبة موصولة</strong> - خاصة في منافذ USB عند العودة لجهازك.</li>
-        </ul>
-    </div>
-    
-    <div class="note-critical" style="margin-top:15px;">
-        <i class="fas fa-skull-crossbones"></i>
-        <strong>⚠️ تذكر:</strong> إذا كنت تواجه خصماً قادراً على تنفيذ هذه الهجمات (حكومات، وكالات استخبارات)، فإن حماية جهازك تتطلب إجراءات أمنية فيزيائية مشددة تتجاوز نطاق هذا الدليل. هذه الإجراءات تحمي من "الفرصة السانحة" والخصوم ذوي الموارد المحدودة.
-    </div>
-</div>
-<!-- ==================== إشارة لأدوات التدمير في السكريبت المساعد ==================== -->
-<div class="card" style="margin-top: 40px; border-right: 8px solid #ffaa33;">
-    <div class="card-header" style="color:#ffaa33;">
-        <i class="fas fa-skull-crossbones"></i> 💀 أدوات التدمير (BusKill + الطوارئ + Dead Man's Switch)
-    </div>
-    
-    <div class="note-success" style="margin: 20px;">
-        <i class="fas fa-check-circle"></i>
-        <strong>⚡ هذه السكريبتات متوفرة في السكريبت المساعد:</strong>
-        <p style="margin-top: 15px;">
-            لتطبيق أدوات التدمير تلقائياً، انتقل إلى 
-            <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11 (السكريبت المساعد)</a> 
-            وقم بتشغيل <code>auto-script.sh</code>.
-        </p>
-        <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 15px;">chmod +x auto-script.sh && ./auto-script.sh</code>
-        <p style="margin-top: 15px;">
-            ثم اختر: <strong>8) 💀 أدوات التدمير (BusKill + الطوارئ)</strong>
-        </p>
-        <hr style="margin: 20px 0; border-color: #ffaa33;">
-        <p><strong>📁 السكريبتات التي سيتم إنشاؤها على سطح المكتب:</strong></p>
-        <ul style="margin-right: 20px; margin-top: 10px;">
-            <li>💀 <code>emergency-wipe.sh</code> - مسح فوري للقرص (DD)</li>
-            <li>⏰ <code>deadman-switch.sh</code> - تدمير مؤجل (Dead Man's Switch)</li>
-            <li>🛡️ <code>buskill-selfdestruct.sh</code> - تدمير ذاتي (مسح رأس LUKS)</li>
-            <li>🔧 <code>uninstall-deadman.sh</code> - إلغاء تثبيت الخدمة</li>
-        </ul>
-    </div>
-
-    <div class="note-critical" style="margin: 20px;">
-        <i class="fas fa-exclamation-triangle"></i> <strong>تحذير شديد:</strong> هذه السكريبتات تقوم بتدمير البيانات بشكل نهائي. استخدم فقط في حالات الطوارئ القصوى.
-    </div>
-
-    <hr style="margin: 30px 0; border-color: #ff4444;">
-
-    <!-- ==================== جدول مقارنة شامل لأدوات التدمير ==================== -->
-    <h3><i class="fas fa-balance-scale"></i> 📊 مقارنة شاملة: أدوات التدمير الثلاثة</h3>
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>المعيار</th>
-                <th>🛡️ BusKill (LUKS)</th>
-                <th>☢️ الطوارئ (DD)</th>
-                <th>⏰ Dead Man's Switch</th>
+        <table style="width: 100%; border-collapse: collapse; background: transparent; margin: 10px 0;">
+            <!-- الصف 1: الحماية التقنية -->
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); width: 110px; vertical-align: top;">
+                    <i class="fas fa-shield-alt"></i> 🛡️ تقني
+                </td>
+                <td style="padding: 12px 8px;">
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 شبكة → sys-whonix (تبويب 2)</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 تتبع → Kicksecure (تبويب 2)</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 فيزيائي → Live Mode + تشفير</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔵 بيانات → ExifTool (تبويب 3)</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 Tor → بوابات متعددة (تبويب 2)</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 معالج → معلمات النواة (تبويب 0)</span>
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 مالي → Monero حصراً</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧅 IP → Whonix Gateway (تبويب 2)</span>
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">📶 WiFi → WISP+Ethernet (تبويب 1)</span>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <tr><td><strong>الهدف</strong></td><td>رأس LUKS فقط (المفاتيح)</td><td>أول 2 جيجابايت من القرص</td><td>أول 2 جيجابايت من القرص</td></tr>
-            <tr><td><strong>الحجم الممسوح</strong></td><td>~16-20 ميجابايت</td><td>2048 ميجابايت (2 جيجابايت)</td><td>2048 ميجابايت (2 جيجابايت)</td></tr>
-            <tr><td><strong>السرعة</strong></td><td>🟢 سريع جداً (2-5 ثوانٍ)</td><td>🟡 أبطأ (10-30 ثانية)</td><td>🟡 أبطأ (10-30 ثانية)</td></tr>
-            <tr><td><strong>ما يمسح</strong></td><td>مفاتيح LUKS فقط</td><td>رأس LUKS + /boot + جدول الأقسام</td><td>رأس LUKS + /boot + جدول الأقسام</td></tr>
-            <tr><td><strong>فعالية على SSD</strong></td><td>✅ ممتازة (تعطيل منطقي)</td><td>⚠️ متوسطة (wear-leveling)</td><td>⚠️ متوسطة (wear-leveling)</td></tr>
-            <tr><td><strong>إيقاف النطاقات</strong></td><td>✅ نعم (qvm-kill --all)</td><td>❌ لا</td><td>❌ لا</td></tr>
-            <tr><td><strong>تعليق مفاتيح RAM</strong></td><td>✅ نعم (luksSuspend)</td><td>❌ لا</td><td>❌ لا</td></tr>
-            <tr><td><strong>آلية التفويج</strong></td><td>فوري (فصل فلاشة)</td><td>يدوي (تشغيل السكريبت)</td><td>مؤجل (مؤقت يبدأ من الإقلاع)</td></tr>
-            <tr><td><strong>إمكانية الإلغاء</strong></td><td>❌ لا (فوري)</td><td>❌ لا (فوري)</td><td>✅ نعم (قبل انتهاء المهلة)</td></tr>
-            <tr><td><strong>الأفضل لـ</strong></td><td>استجابة سريعة، حماية من السرقة</td><td>تدمير شامل يدوي</td><td>حماية من الاعتقال/الإكراه</td></tr>
-        </tbody>
-    </table>
-
-    <div class="note" style="margin-top: 15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 متى تستخدم كل أداة؟</strong>
-        <ul style="margin-right: 20px; margin-top: 10px;">
-            <li><strong>🛡️ BusKill:</strong> عندما تحتاج استجابة فورية لسرقة الجهاز - اربطه بفلاشة وعند فصلها يمسح رأس LUKS فوراً.</li>
-            <li><strong>☢️ الطوارئ (DD):</strong> عندما تريد تدميراً شاملاً يدوياً - يشمل /boot وجدول الأقسام.</li>
-            <li><strong>⏰ Dead Man's Switch:</strong> عندما تخشى الاعتقال أو الإكراه - إذا لم تلغِ المؤقت خلال المهلة، يتم التدمير تلقائياً.</li>
-        </ul>
+            <!-- الصف 2: الحماية السلوكية (OPSEC) -->
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
+                    <i class="fas fa-user-secret"></i> 🧠 سلوكي
+                </td>
+                <td style="padding: 12px 8px;">
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 كلام → الصمت التام</span>
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🟡 نمط حياة → كن طبيعياً</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 خلط → عزل تام للهويات</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 قانوني → لا تتحدث مع الشرطة</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔵 طوارئ → احفظ رقم محامٍ</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔴 فخاخ → لا حلول جاهزة</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">✍️ كتابة → تغيير الأسلوب</span>
+                </td>
+            </tr>
+            <!-- الصف 3: خطط الطوارئ -->
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
+                    <i class="fas fa-skull-crossbones"></i> 🚨 طوارئ
+                </td>
+                <td style="padding: 12px 8px;">
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔥 احترقت → خطة الحذف والهروب</span>
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔍 تلاعب → خطة المغادرة الفورية</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">💀 تدمير → BusKill</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">🧹 تنظيف → RAM-VM (توريث DVM)</span>
+                    <span class="badge-info" style="padding: 5px 12px; margin: 3px; display: inline-block;">💾 زائل → Live Mode (OverlayFS)</span>
+                    <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">⚡ حي → rootovl في GRUB</span>
+                </td>
+            </tr>
+            <!-- الصف 4: التمويل المجهول -->
+            <tr>
+                <td style="padding: 12px 8px; font-weight: bold; color: var(--accent-color); vertical-align: top;">
+                    <i class="fas fa-coins"></i> 💰 تمويل
+                </td>
+                <td style="padding: 12px 8px;">
+                    <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">💵 نقداً → iVPN</span>
+                    <span class="badge-success" style="padding: 5px 12px; margin: 3px; display: inline-block;">🪙 Monero → Mullvad / Njalla</span>
+                    <span class="badge-warning" style="padding: 5px 12px; margin: 3px; display: inline-block;">🔄 تبديل → sideshift.ai / bisq</span>
+                    <span class="badge-critical" style="padding: 5px 12px; margin: 3px; display: inline-block;">❌ تجنب → Bitcoin/Ethereum</span>
+                </td>
+            </tr>
+        </table>
+        
+        <!-- فاصل -->
+        <hr style="margin: 20px 0; border: none; border-top: 1px dashed var(--border-color);">
+        
+        <!-- تذكير نهائي -->
+        <div style="text-align: center; padding: 12px; background: #1a3a3a; border-radius: 20px; border-right: 4px solid #ffd966;">
+            <i class="fas fa-star-of-life" style="color: #ffd966;"></i>
+            <strong>💡 تذكر:</strong> 
+            هذا الدليل يحميك من الخصوم متوسطي الموارد. "ثق ولكن تحقق."
+        </div>
     </div>
 </div>
-<!-- ==================== خطة الطوارئ: إذا احترقت ==================== -->
-<div class="card" style="margin-top: 40px; border-right: 8px solid #ff4444;">
-    <div class="card-header" style="color: #ff8888;">
-        <i class="fas fa-fire"></i> 🔥 خطة الطوارئ: إذا احترقت (Got Burned)
-    </div>
-    <p><strong>من Hitchhiker's Guide:</strong> إذا شعرت أن هويتك انكشفت أو أن جهازك مخترق، هذه هي الخطوات الفورية.</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-        
-        <!-- إذا كان لديك وقت -->
-        <div style="background: #2a2a4a; padding: 20px; border-radius: 20px;">
-            <h4 style="color: #4caf50;"><i class="fas fa-hourglass-half"></i> إذا كان لديك بعض الوقت</h4>
-            <ol style="margin-right: 20px; line-height: 1.8;">
-                <li><strong>لا تفزع.</strong> التنفس العميق أولاً.</li>
-                <li>احذف كل شيء عن تلك الهوية من الإنترنت (حسابات، منشورات، تعليقات).</li>
-                <li>احذف كل شيء عن تلك الهوية من جهازك (ملفات، نسخ احتياطية).</li>
-                <li>إذا كنت تستخدم SIM فيزيائي: دمره وألقه في سلة مهملات بعيدة.</li>
-                <li>إذا كنت تستخدم هاتف حارق: امسحه، دمره، وألقه في مكان بعيد.</li>
-                <li>امسح القرص الصلب للابتوب بشكل آمن (ATA Secure Erase).</li>
-                <li>دمر القرص الصلب فيزيائياً إن أمكن.</li>
-                <li>افعل الشيء نفسه مع النسخ الاحتياطية.</li>
-                <li>احتفظ برقم محامٍ قريب منك.</li>
-                <li>عد إلى حياتك الطبيعية وتظاهر بأن شيئاً لم يكن.</li>
-            </ol>
-        </div>
-        
-        <!-- إذا لم يكن لديك وقت -->
-        <div style="background: #3a1a1a; padding: 20px; border-radius: 20px;">
-            <h4 style="color: #ff6666;"><i class="fas fa-skull-crossbones"></i> إذا لم يكن لديك وقت (طارئ)</h4>
-            <ol style="margin-right: 20px; line-height: 1.8;">
-                <li><strong>لا تفزع.</strong></li>
-                <li>أغلق الجهاز أو افصل التيار الكهربائي <strong>فوراً</strong>.</li>
-                <li>إذا كنت سريعاً كفاية، الذاكرة (RAM) ستتلاشى والبيانات المشفرة تصبح غير قابلة للقراءة.</li>
-                <li>اتصل بمحامٍ إذا استطعت.</li>
-                <li><strong>التزم الصمت.</strong> لا تتحدث مع الشرطة بدون محامٍ (إذا كان قانون بلدك يسمح بذلك).</li>
-                <li>تذكر: في بعض البلدان، قد تجبرك المحكمة على كشف كلمة المرور.</li>
-            </ol>
-        </div>
-    </div>
-    
-    <div class="note-critical" style="margin-top: 20px;">
-        <i class="fas fa-gavel"></i>
-        <strong>⚠️ اعرف حقوقك:</strong> اطلع على قوانين "الإفصاح عن كلمة المرور" (Key Disclosure Laws) في بلدك. 
-        <a href="https://www.gp-digital.org/world-map-of-encryption/" target="_blank" style="color: #66ccff;">خريطة قوانين التشفير حول العالم</a>
-    </div>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 تذكر:</strong> معظم من تم القبض عليهم سقطوا بسبب خطأ بشري (تسريب معلومات عن غير قصد، وليس بسبب اختراق تقني). العامل البشري هو الحلقة الأضعف.
-    </div>
-</div>
-
-<!-- ==================== خطة الطوارئ: اكتشفت تلاعباً ==================== -->
-<div class="card" style="margin-top: 30px; border-right: 8px solid #ffaa33;">
-    <div class="card-header" style="color: #ffaa33;">
-        <i class="fas fa-search"></i> 🔍 خطة الطوارئ: اكتشفت تلاعباً بجهازي أو غرفتي
-    </div>
-    <p><strong>من Hitchhiker's Guide:</strong> ماذا تفعل إذا لاحظت أن جهازك تعرض للعبث (Tampering) أو أن غرفتك تم تفتيشها.</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-        
-        <!-- اكتشفت تلاعباً باللابتوب -->
-        <div style="background: #2a2a4a; padding: 20px; border-radius: 20px;">
-            <h4 style="color: #ffaa33;"><i class="fas fa-laptop"></i> إذا اكتشفت تلاعباً باللابتوب</h4>
-            <ul style="margin-right: 20px; line-height: 1.8;">
-                <li>🔴 <strong>لا تحاول إزالة "الزرع" (Bug).</strong> هذا قد يعرضك لخطر فيزيائي.</li>
-                <li>🔴 <strong>لا تستخدم الجهاز أبداً.</strong> افترض أنه مخترق بالكامل.</li>
-                <li>✅ <strong>أخرج القرص الصلب فقط</strong> (إذا كان مشفراً) واترك اللابتوب.</li>
-                <li>✅ <strong>غادر المكان فوراً</strong> إلى مكان آمن.</li>
-                <li>✅ <strong>لا تعد إلى ذلك المكان</strong> حتى تتأكد من زوال الخطر.</li>
-            </ul>
-        </div>
-        
-        <!-- اكتشفت تفتيش الغرفة -->
-        <div style="background: #2a2a4a; padding: 20px; border-radius: 20px;">
-            <h4 style="color: #ffaa33;"><i class="fas fa-home"></i> إذا اكتشفت تفتيش الغرفة</h4>
-            <ul style="margin-right: 20px; line-height: 1.8;">
-                <li>🔴 <strong>افترض أن كل شيء "مزروع".</strong> الغرفة لم تعد آمنة.</li>
-                <li>🔴 <strong>لا تلمس أي شيء.</strong> قد يكون هناك كاميرات أو مسجلات صوت مخفية.</li>
-                <li>✅ <strong>غادر فوراً</strong> بهدوء وبدون لفت الانتباه.</li>
-                <li>✅ <strong>لا تعد أبداً.</strong> اترك كل ممتلكاتك.</li>
-                <li>✅ <strong>لا تدع خصمك يعرف أنك اكتشفته.</strong> تصرف بشكل طبيعي.</li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="note" style="margin-top: 20px; background: #1a3a3a;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 حيلة بسيطة لكشف التفتيش:</strong> التقط صورة لغرفتك أو مكتبك قبل المغادرة. عند العودة، قارن الصورة بالواقع. أصغر تغيير (ورقة تحركت، كرسي تغير مكانه) يعني أن أحداً كان هنا. أو استخدم خيطاً رفيعاً أو قطعة شمع صغيرة على درج المكتب – إذا انكسرت أو تحركت، تعرف أن أحداً فتحه.
-    </div>
-    
-    <div class="note-critical" style="margin-top: 15px;">
-        <i class="fas fa-skull-crossbones"></i>
-        <strong>⚠️ تذكر:</strong> إذا كان خصمك قادراً على الوصول الفيزيائي لجهازك أو منزلك، فأنت تواجه خصماً متقدماً جداً. الخيار الوحيد الآمن هو <strong>الاختفاء الفوري</strong>.
-    </div>
-</div>
-        </div>
-    </div>
     
 <!-- ==================== تبويب 8: Kicksecure (النسخة النهائية المُنقّحة) ==================== -->
 <div class="tab-pane" id="tab8">
