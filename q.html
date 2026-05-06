@@ -6103,34 +6103,24 @@ EOF
 # ============================================
 live_mode() {
     clear
-    echo "╔═══════════════════════════════════════════════════════════╗"
-    echo "║                    ⚠️ تنبيه مهم ⚠️                         ║"
-    echo "╠═══════════════════════════════════════════════════════════╣"
-    echo "║                                                           ║"
-    echo "║         ﻻ بد أن يكون اسم المستخدم: user                   ║"
-    echo "║                                                           ║"
-    echo "║         هذا السكريبت مصمم للعمل مع المسار:                 ║"
-    echo "║         /home/user/                                       ║"
-    echo "║                                                           ║"
-    echo "║         إذا كان اسم المستخدم مختلفاً،                       ║"
-    echo "║         فلن يعمل السكريبت بشكل صحيح!                       ║"
-    echo "║                                                           ║"
-    echo "╚═══════════════════════════════════════════════════════════╝"
-    echo ""
+    REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
+    
+    info "المستخدم الحقيقي: $REAL_USER"
+    
     warn "هذا السكريبت سيقوم بإنشاء ملف live.sh وتنفيذه بصلاحيات sudo"
     warn "قد يستغرق التنفيذ عدة دقائق"
     warn "🟢 سيتم تثبيت Overlay-Live Mode فقط (بدون Zram)"
     read -p "متابعة؟ (y/n): " confirm
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && return
     
-    LIVE_SCRIPT="/home/user/Desktop/live.sh"
+    LIVE_SCRIPT="/home/$REAL_USER/Desktop/live.sh"
     info "جاري إنشاء $LIVE_SCRIPT ..."
     
     cat > "$LIVE_SCRIPT" << 'EOF'
 #!/bin/bash
 # Qubes Dom0 Live Boot - Overlay Mode Only
 # ⚠️ Make backup before running! Run as root: sudo ./live.sh
-
+REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
 set -e
 
 #BOOT_UUID
@@ -6170,8 +6160,8 @@ Qubes_Root=$(findmnt -n -o SOURCE / 2>/dev/null || echo "/dev/mapper/qubes_dom0-
 echo "=== Qubes Dom0 Live Boot Setup (Overlay Only) ==="
 
 # Disable Dom0 Swap and Add Sysctl Hardening:
-mkdir -p /home/user/.config
-cat > /home/user/.config/swapoff.sh << 'INNER_EOF'
+mkdir -p /home/$REAL_USER/.config
+cat > /home/$REAL_USER/.config/swapoff.sh << 'INNER_EOF'
 #!/bin/bash
 sleep 2
 if findmnt -n -o SOURCE / | grep -qE "(overlay|/dev/zram0)"; then
@@ -6201,16 +6191,16 @@ else
 fi
 INNER_EOF
 
-chmod 755 /home/user/.config/swapoff.sh
-mkdir -p /home/user/.config/autostart/
-cat > /home/user/.config/autostart/swapoff.desktop << 'INNER_EOF'
+chmod 755 /home/$REAL_USER/.config/swapoff.sh
+mkdir -p /home/$REAL_USER/.config/autostart/
+cat > /home/$REAL_USER/.config/autostart/swapoff.desktop << 'INNER_EOF'
 [Desktop Entry]
 Encoding=UTF-8
 Version=0.9.4
 Type=Application
 Name=swapoff
 Comment=
-Exec=/home/user/.config/swapoff.sh
+Exec=/home/$REAL_USER/.config/swapoff.sh
 OnlyShowIn=XFCE;
 RunHook=0
 StartupNotify=false
@@ -6552,8 +6542,8 @@ remount_dir /var/lib/dummy-dependency
 remount_dir /var/cache/anon-base-files
 remount_dir /var/lib/whonix
 
-LOCAL_APP_DIR=\"/home/user/.local/share/applications\"
-USER_HOME=\"/home/user\"
+LOCAL_APP_DIR=\"/home/$REAL_USER/.local/share/applications\"
+USER_HOME=\"/home/$REAL_USER\"
 mkdir -p \$LOCAL_APP_DIR
 
 if [ -r /usr/share/applications/pcmanfm-qt.desktop ]; then
@@ -6563,7 +6553,7 @@ fi
 
 if [ -r /usr/share/applications/qterminal.desktop ]; then
     cp /usr/share/applications/qterminal.desktop \$LOCAL_APP_DIR/qterminal.desktop
-    sed -i \"s|^Exec=.*|Exec=bash -c \\\"cd /home/user && exec qterminal\\\"\"|\" \$LOCAL_APP_DIR/qterminal.desktop
+    sed -i \"s|^Exec=.*|Exec=bash -c \\\"cd /home/$REAL_USER && exec qterminal\\\"\"|\" \$LOCAL_APP_DIR/qterminal.desktop
 fi
 
 sleep 60
