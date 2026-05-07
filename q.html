@@ -3952,16 +3952,79 @@ free -h</pre>
             </ul>
         </div>
         
-        <!-- ========== تحذير مهم ========== -->
-        <div class="note-critical" style="margin-top: 20px;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ تحذير هام:</strong>
-            <ul style="margin-top: 10px; margin-right: 20px;">
-                <li>• هذا السكريبت يقوم بتعديل ملفات النظام (GRUB، initramfs).</li>
-                <li>• <strong>خذ نسخة احتياطية كاملة</strong> قبل التشغيل.</li>
-                <li>• قد يستغرق التنفيذ عدة دقائق.</li>
-                <li>• يتطلب إعادة تشغيل النظام لتفعيل خيارات Live Mode.</li>
-            </ul>
+<div class="note-critical" style="margin-top: 20px;">
+    <i class="fas fa-exclamation-triangle"></i>
+    <strong>⚠️ تحذير هام:</strong>
+    <ul style="margin-top: 10px; margin-right: 20px;">
+        <li>• هذا السكريبت يقوم بإنشاء ملفات نظام جديدة (GRUB custom، initramfs).</li>
+        <li>• <strong>لا يعدل الملفات الأصلية</strong> - خيارات الإقلاع الحالية تبقى كما هي.</li>
+        <li>• يضيف فقط خيار إقلاع جديد "Qubes Overlay-Live Mode" إلى قائمة GRUB.</li>
+        <li>• <strong>خذ نسخة احتياطية كاملة</strong> قبل التشغيل (احتياطاً).</li>
+        <li>• قد يستغرق التنفيذ عدة دقائق.</li>
+        <li>• يتطلب إعادة تشغيل النظام لتفعيل خيارات Live Mode.</li>
+    </ul>
+</div>
+
+        <!-- ========== 🔥 Live Mode + RAM-VM: الدرع الكامل ========== -->
+        <div class="section-title" style="margin-top: 40px;">
+            <i class="fas fa-fire"></i>
+            <h2>🔥 أقوى سيناريو: دمج Live Mode + RAM-VM</h2>
+            <p>هذا هو الدرع الكامل. dom0 يعمل في RAM، والبيانات الحساسة في RAM أيضاً. لا يوجد أي دليل رقمي بعد الإغلاق.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-shield-haltered"></i>
+                <h3>🛡️ مقارنة السيناريوهات الثلاثة</h3>
+            </div>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>السيناريو</th>
+                        <th>dom0</th>
+                        <th>بيانات VMs</th>
+                        <th>مستوى الحماية</th>
+                        <th>المتطلبات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>وضع Live فقط</td>
+                        <td>✅ في RAM</td>
+                        <td>⚠️ على القرص</td>
+                        <td>🟢 جيدة</td>
+                        <td>16GB RAM</td>
+                    </tr>
+                    <tr>
+                        <td>RAM-VM فقط</td>
+                        <td>⚠️ على القرص</td>
+                        <td>✅ في RAM</td>
+                        <td>🟢 جيدة</td>
+                        <td>حسب حجم VM</td>
+                    </tr>
+                    <tr style="background: #1a0a0a;">
+                        <td><strong>Live + RAM-VM</strong></td>
+                        <td><strong>✅ في RAM</strong></td>
+                        <td><strong>✅ في RAM</strong></td>
+                        <td><strong>🔴 قصوى</strong></td>
+                        <td><strong>32GB+ RAM</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note" style="margin-top: 15px; background: #2a1a1a;">
+                <i class="fas fa-lightbulb"></i>
+                <strong>💡 الخلاصة:</strong>
+                <p style="margin-top: 8px;">
+                    عند الدمج: <strong>لا أثر لـ dom0 ولا لبيانات VMs الحساسة على القرص</strong>. 
+                    بمجرد إطفاء الجهاز، لا يوجد أي دليل رقمي على أي نشاط. 
+                    هذا هو ما يجعل النظام "فاقداً للذاكرة" (Amnesic) بشكل كامل.
+                </p>
+                <p style="margin-top: 5px;">
+                    <strong>للاستخدام اليومي:</strong> Live Mode وحده + Ephemeral VMs كافٍ لمعظم المستخدمين.
+                    <strong>للجلسات شديدة الحساسية:</strong> الدمج مع RAM-VM هو الخيار الأقوى.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -3987,6 +4050,7 @@ free -h</pre>
                         <th>Amnesic Tmpfs</th>
                         <th>VM في RAM Pool</th>
                         <th>Dom0 Live Boot</th>
+                        <th style="background: #1a0a0a;">Live + RAM-VM</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -3997,6 +4061,7 @@ free -h</pre>
                         <td>RAM (tmpfs)</td>
                         <td><strong>RAM (ram_pool)</strong><br><small>جميع volumes في RAM</small></td>
                         <td>RAM (نسخة كاملة)</td>
+                        <td style="background: #1a0a0a;"><strong>RAM (dom0 + VMs)</strong></td>
                     </tr>
                     <tr>
                         <th>مكان <code>/home/user</code></th>
@@ -4005,6 +4070,7 @@ free -h</pre>
                         <td>RAM (tmpfs)</td>
                         <td>RAM</td>
                         <td>RAM</td>
+                        <td style="background: #1a0a0a;">RAM</td>
                     </tr>
                     <tr>
                         <th>الكتابة إلى <code>/</code> (root)</th>
@@ -4013,6 +4079,7 @@ free -h</pre>
                         <td>تُكتب في RAM</td>
                         <td>تُكتب في RAM</td>
                         <td>تُكتب في RAM</td>
+                        <td style="background: #1a0a0a;">تُكتب في RAM</td>
                     </tr>
                     <tr>
                         <th>خاصية <code>ephemeral</code></th>
@@ -4021,6 +4088,7 @@ free -h</pre>
                         <td>❌</td>
                         <td>❌ (غير ضرورية)</td>
                         <td>N/A</td>
+                        <td style="background: #1a0a0a;">✅ كامل</td>
                     </tr>
                     <tr>
                         <th>مسح الذاكرة (RAM Wipe)</th>
@@ -4029,6 +4097,7 @@ free -h</pre>
                         <td>❌</td>
                         <td>❌ (تُحرر فقط)</td>
                         <td>✅ نعم</td>
+                        <td style="background: #1a0a0a;"><strong>✅ نعم</strong></td>
                     </tr>
                     <tr>
                         <th>سرعة الإقلاع</th>
@@ -4037,6 +4106,7 @@ free -h</pre>
                         <td>🟡 متوسط</td>
                         <td>🔴 أبطأ</td>
                         <td>🔴 أبطأ</td>
+                        <td style="background: #1a0a0a;">🔴 الأبطأ</td>
                     </tr>
                     <tr>
                         <th>الاستخدام المثالي</th>
@@ -4045,6 +4115,7 @@ free -h</pre>
                         <td>جعل مجلدات محددة تختفي</td>
                         <td><strong>أقصى عزل - جهاز كامل في RAM</strong></td>
                         <td>جلسة طوارئ - dom0 في RAM</td>
+                        <td style="background: #1a0a0a;"><strong>حماية قصوى - لا أثر نهائياً</strong></td>
                     </tr>
                     <tr>
                         <th>التبويب المرجعي</th>
@@ -4053,6 +4124,7 @@ free -h</pre>
                         <td>تبويب 5</td>
                         <td>تبويب 6</td>
                         <td>تبويب 9</td>
+                        <td style="background: #1a0a0a;">9 + 6</td>
                     </tr>
                 </tbody>
             </table>
@@ -4067,6 +4139,7 @@ free -h</pre>
                 <li><strong>✅ "Ephemeral" تعني "تشفير عابر بمفتاح عشوائي"</strong> وليس "تخزين في RAM".</li>
                 <li><strong>✅ Amnesic Tmpfs</strong> يجعل مجلدات محددة في RAM، لكن VM نفسه لا يزال على القرص.</li>
                 <li><strong>✅ الوحيد الذي يعمل في RAM بالكامل هو RAM Pool و Dom0 Live Boot.</strong></li>
+                <li><strong>🔴 أقوى سيناريو: دمج Live Mode + RAM-VM = dom0 في RAM + بيانات VMs في RAM.</strong></li>
             </ul>
         </div>
 
@@ -4113,13 +4186,12 @@ free -h</pre>
                 <li>• إذا أردت <strong>مجلدات محددة نظيفة</strong> (سجلات، كاش) ← استخدم <strong>Amnesic Tmpfs</strong> (تبويب 5)</li>
                 <li>• إذا أردت <strong>VM بكامله في RAM</strong> (أقصى عزل، لا بيانات على القرص إطلاقاً) ← استخدم <strong>RAM Pool</strong> (تبويب 6)</li>
                 <li>• إذا أردت <strong>جلسة طوارئ كاملة</strong> (dom0 نفسه في RAM) ← استخدم <strong>Dom0 Live Boot</strong> (هذا التبويب)</li>
+                <li>• <strong>🔴 إذا أردت الحماية القصوى المطلقة:</strong> ادمج <strong>Live Mode + RAM-VM</strong> (يتطلب 32GB+ RAM). هذا هو الدرع الكامل: dom0 في RAM وبيانات VMs في RAM. لا يوجد أي أثر على القرص بعد الإغلاق.</li>
                 <li>• الفرق جوهري: Ephemeral <strong>يُخزن البيانات على القرص لكن بشكل مشفر</strong>، RAM Pool <strong>لا يخزن أي شيء على القرص</strong>، Amnesic Tmpfs <strong>يجعل أجزاء محددة فقط في RAM</strong>.</li>
             </ul>
         </div>
     </div>
 </div>
-<!-- ==================== نهاية تبويب 9 ==================== -->
-
 
 <!-- ==================== تبويب 10: التطبيقات المحمولة (النسخة الكاملة والموحدة - متوافقة مع Whonix) ==================== -->
 <div class="tab-pane" id="tab10">
@@ -7034,7 +7106,6 @@ menu</pre>
             </div>
         </div>
     </div>
-    <!-- ==================== نهاية تبويب 11 ==================== -->
     
     <!-- ==================== الفوتر ==================== -->
     <div class="footer">
