@@ -1865,14 +1865,22 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         <li>انقر <strong>Connect</strong> وانتظر حتى يظهر "Connected to Tor".</li>
     </ol>
     
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-        <p><strong>📸 كيف يبدو Tor Control Panel؟</strong></p>
-        <ul style="margin-right: 20px;">
-            <li>أيقونة البصلة 🧅 في شريط المهام السفلي (LXQt)</li>
-            <li>تظهر حالة الاتصال: "Connected to Tor" أو "Connecting..."</li>
-            <li>زر Configure يفتح نافذة الإعدادات</li>
+  <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
+    <p><strong>📸 كيف يبدو Tor Control Panel؟</strong></p>
+    <ul style="margin-right: 20px;">
+        <li>أيقونة <strong>🔒 قفل</strong> في شريط المهام العلوي (داخل dom0) للوصول إلى إعدادات Tor و sdwdate</li>
+        <li>عند النقر على الأيقونة تظهر قائمة منسدلة تحتوي على:</li>
+        <ul style="margin-right: 20px; margin-top: 5px;">
+            <li><strong>Show Tor status</strong> - عرض حالة اتصال Tor</li>
+            <li><strong>Tor control panel</strong> - فتح لوحة تحكم Tor</li>
+            <li><strong>Show sdwdate status</strong> - عرض حالة مزامنة الوقت</li>
+            <li><strong>Open sdwdate's log</strong> - فتح سجل sdwdate</li>
+            <li><strong>Restart sdwdate</strong> - إعادة تشغيل خدمة الوقت</li>
+            <li><strong>Stop sdwdate</strong> - إيقاف خدمة الوقت</li>
+            <li><strong>Exit</strong> - خروج</li>
         </ul>
-    </div>
+    </ul>
+</div>
     
     <div class="note" style="margin-top: 15px;">
         <i class="fas fa-terminal"></i>
