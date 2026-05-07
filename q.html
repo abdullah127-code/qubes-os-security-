@@ -265,9 +265,9 @@ pre, .code-block {
     font-size: 0.85em;
     line-height: 1.5;
 }
-/* ============================================ */
+/* ======== */
 /* أنماط تبويب مصفوفة التهديدات – أضفها إلى <style> */
-/* ============================================ */
+/* ======== */
 
 /* شبكة البطاقات – 3 أعمدة تتكيف مع الشاشة */
 .threat-grid {
@@ -420,7 +420,7 @@ body.light-mode .card-badge {
     <i class="fas fa-terminal"></i> السكربت المساعد</button>
 
      
-<!-- ==================== تبويب 0: الأساسيات ==================== -->
+<!-- ======== تبويب 0: الأساسيات ======== -->
 <div class="tab-pane active" id="tab0">
     <!-- ========== إشارة للسكربت المساعد ========== -->
     <div class="note-success" style="margin-bottom: 25px;">
@@ -660,13 +660,13 @@ body.light-mode .card-badge {
     </div>
 </div>
 
-<!-- ==================== تبويب 1: الشبكة (الطبقات السفلية) ==================== -->
+<!-- ======== تبويب 1: الشبكة (الطبقات السفلية) ======== -->
 <div class="tab-pane" id="tab1">
     <div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
-        <i class="fas fa-info-circle"></i> <strong>نطاق هذا التبويب:</strong> الطبقات السفلية للشبكة (<code>sys-net</code>، العزل الفيزيائي، وما يراه كل طرف). أما إعدادات Tor والبوابات ففي <strong>تبويب 2</strong>.
+        <i class="fas fa-info-circle"></i> <strong>نطاق هذا التبويب:</strong> الطبقات السفلية للشبكة (<code>sys-net</code>، العزل الفيزيائي، وما يراه كل طرف). أما إعدادات Tor والبوابات ففي <strong><a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a></strong>.
     </div>
 
-    <!-- ==================== القسم 1: الحل الموصى به وشرحه ==================== -->
+    <!-- ======== القسم 1: الحل الموصى به وشرحه ======== -->
     <div class="section-title">
         <i class="fas fa-star"></i>
         <h2>✅ الحل الموصى به: راوتر WISP + Ethernet فقط</h2>
@@ -701,7 +701,7 @@ body.light-mode .card-badge {
         </div>
     </div>
 
-<!-- ==================== القسم 2: الرسم البياني ==================== -->
+<!-- ======== القسم 2: الرسم البياني ======== -->
 <div class="section-title">
     <i class="fas fa-project-diagram"></i>
     <h2>🏗️ رسم بياني: تدفق الاتصال في الإعدادين</h2>
@@ -793,7 +793,7 @@ body.light-mode .card-badge {
     </div>
 </div>
 
-    <!-- ==================== القسم 3: بنية الشبكة في Qubes ==================== -->
+    <!-- ======== القسم 3: بنية الشبكة في Qubes ======== -->
     <div class="section-title">
         <i class="fas fa-cubes"></i>
         <h2>🧱 بنية الشبكة داخل Qubes: sys-net و sys-firewall</h2>
@@ -824,7 +824,7 @@ body.light-mode .card-badge {
         </div>
     </div>
 
-    <!-- ==================== القسم 4: المقارنات ==================== -->
+    <!-- ======== القسم 4: المقارنات ======== -->
     <div class="section-title">
         <i class="fas fa-balance-scale"></i>
         <h2>📊 جداول المقارنات</h2>
@@ -890,7 +890,7 @@ body.light-mode .card-badge {
         </div>
     </div>
 
-    <!-- ==================== القسم 5: سيناريو اختراق sys-net ==================== -->
+    <!-- ======== القسم 5: سيناريو اختراق sys-net ======== -->
     <div class="section-title">
         <i class="fas fa-theater-masks"></i>
         <h2>⚠️ سيناريو: ماذا لو تم اختراق sys-net؟</h2>
@@ -925,7 +925,7 @@ body.light-mode .card-badge {
         </div>
     </div>
 
-    <!-- ==================== القسم 6: خطط الطوارئ ==================== -->
+    <!-- ======== القسم 6: خطط الطوارئ ======== -->
     <div class="section-title">
         <i class="fas fa-life-ring"></i>
         <h2>🔄 خطط الطوارئ: إذا لم يتوفر Ethernet أو راوتر WISP</h2>
@@ -957,7 +957,7 @@ body.light-mode .card-badge {
         </div>
     </div>
 
-    <!-- ==================== القسم 7: إعدادات إضافية وتحذيرات ==================== -->
+    <!-- ======== القسم 7: إعدادات إضافية وتحذيرات ======== -->
     <div class="section-title">
         <i class="fas fa-cog"></i>
         <h2>⚙️ إعدادات إضافية وتحذيرات</h2>
@@ -993,7 +993,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
-    <!-- ==================== خلاصة التبويب ==================== -->
+    <!-- ======== خلاصة التبويب ======== -->
     <div class="note" style="background:#1a3a3a;">
         <i class="fas fa-star-of-life"></i> <strong>📚 خلاصة تبويب الشبكة:</strong>
         <ul style="margin-right:20px;">
@@ -1006,19 +1006,19 @@ wifi.scan-rand-mac-address=yes</pre>
             <li><strong>طبقة VPN إضافية:</strong> يمكن تشغيل VPN على راوتر WISP نفسه لحماية البيانات حتى قبل وصولها لـ Qubes.</li>
             <li><strong>الكروت الملصقة:</strong> توفر خصوصية من الموزع والجيران، لكن في تحقيق جنائي رسمي قد تُتَتبع عبر كاميرات المحل.</li>
         </ul>
-        <p style="margin-top:10px;"><strong>🔗 للمرحلة التالية:</strong> توجه إلى <strong>تبويب 2</strong> لإعداد Tor والبوابات وأنواع الاتصال المشفر.</p>
+        <p style="margin-top:10px;"><strong>🔗 للمرحلة التالية:</strong> توجه إلى <strong><a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a></strong> لإعداد Tor والبوابات وأنواع الاتصال.</p>
     </div>
 </div>
-<!-- ==================== تبويب 2: بوابات Whonix (النسخة النهائية المحدثة) ==================== -->
+<!-- ======== تبويب 2: بوابات Whonix (النسخة النهائية المحدثة) ======== -->
 <div class="tab-pane" id="tab2">
     <div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
         <i class="fas fa-user-secret"></i> <strong>إصدار Whonix:</strong> تستخدم هذه الأوامر الإصدار 18. إذا كنت تستخدم إصداراً أحدث، عدّل اسم القالب.
     </div>
 
-<!-- ==================== الرسم البياني: البنية الكاملة (مُحسَّن) ==================== -->
+<!-- ======== الرسم البياني: البنية الكاملة (مُحسَّن) ======== -->
 <div style="background: var(--code-bg); border-radius: 24px; padding: 20px; text-align: center; font-family: monospace; font-size: 0.85em; direction: ltr; overflow-x: auto;">
     
-    <!-- ==================== الهوية الأولى ==================== -->
+    <!-- ======== الهوية الأولى ======== -->
     <div style="background: #2a2a4a; padding: 15px; border-radius: 20px; margin-bottom: 25px;">
         <div style="color: #ff6666; font-weight: bold; margin-bottom: 15px; text-align: center;">
             🔴 الهوية الأولى (Persona A) - مثال: البريد الإلكتروني اليومي
@@ -1076,7 +1076,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
     
-<!-- ==================== الهوية الثانية ==================== -->
+<!-- ======== الهوية الثانية ======== -->
 <div style="background: #1a3a3a; padding: 15px; border-radius: 20px;">
     <div style="color: #6666ff; font-weight: bold; margin-bottom: 15px; text-align: center;">
         🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
@@ -1103,7 +1103,7 @@ wifi.scan-rand-mac-address=yes</pre>
     </div>
 </div>
     
-    <!-- ==================== ملخص الميزات ==================== -->
+    <!-- ======== ملخص الميزات ======== -->
     <div style="margin-top: 20px; padding: 12px; background: #0a1a2a; border-radius: 15px; text-align: center;">
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-size: 0.8em;">
             <div><span style="color: #66ccff;">🔐</span> كل Gateway لها Bridges مختلفة</div>
@@ -1126,7 +1126,7 @@ wifi.scan-rand-mac-address=yes</pre>
     </ul>
     <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> بهذا الشكل، حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بتقنية TLS، ولا تستطيع التجسس على المحتوى الفعلي لاتصالك (كلمات المرور، الرسائل، إلخ). يستبدل Tor حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات.</p>
 </div>
-    <!-- ==================== الفرق بين Gateway و Workstation ==================== -->
+    <!-- ======== الفرق بين Gateway و Workstation ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-sitemap"></i>
@@ -1150,7 +1150,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
-    <!-- ==================== لماذا Whonix Workstation؟ ==================== -->
+    <!-- ======== لماذا Whonix Workstation؟ ======== -->
     <div class="card" style="margin-top: 25px; border-right: 6px solid #ff9800;">
         <div class="card-header" style="color: #ffaa33;">
             <i class="fas fa-hard-hat"></i> 🛡️ لماذا Whonix Workstation؟ ليس مجرد توجيه مرور
@@ -1173,7 +1173,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
-    <!-- ==================== المشكلة: Entry Guards ==================== -->
+    <!-- ======== المشكلة: Entry Guards ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-shield-alt"></i>
@@ -1189,7 +1189,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
-    <!-- ==================== الحل: بوابات متعددة ==================== -->
+    <!-- ======== الحل: بوابات متعددة ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-code-branch"></i>
@@ -1218,7 +1218,7 @@ wifi.scan-rand-mac-address=yes</pre>
         </div>
     </div>
 
-    <!-- ==================== الأوامر ==================== -->
+    <!-- ======== الأوامر ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-terminal"></i>
@@ -1278,7 +1278,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </div>
     </div>
 
-    <!-- ==================== الواجهة الرسومية ==================== -->
+    <!-- ======== الواجهة الرسومية ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-mouse-pointer"></i>
@@ -1316,7 +1316,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </ol>
     </div>
 
-    <!-- ==================== تحذيرات موحدة ==================== -->
+    <!-- ======== تحذيرات موحدة ======== -->
     <div class="note-critical">
         <i class="fas fa-exclamation-triangle"></i>
         <strong>⚠️ تحذيرات أمنية مهمة:</strong>
@@ -1326,7 +1326,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
             <li><strong>البوابات الزائلة (Disposable Gateway) غير موصى بها</strong> - تخرب آلية اختيار حراس الدخول وتزيد المخاطر.</li>
         </ul>
     </div>
-<!-- ==================== حزمة Stream Isolation كاملة ==================== -->
+<!-- ======== حزمة Stream Isolation كاملة ======== -->
 
 <!-- 1. بطاقة: Stream Isolation - لماذا نحتاجه؟ -->
 <div class="card" style="margin-top: 30px; border-right: 6px solid #66ccff;">
@@ -1381,7 +1381,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
     <div class="card-header" style="color: #ff8888;"><i class="fas fa-exclamation-triangle"></i> ⚠️ تنبيه: Stream Isolation في Qubes أقل قوة</div>
     <p><strong>من وثائق Whonix:</strong> جميع القوالب تستخدم نفس UpdatesProxy عبر sys-whonix.</p>
     <ul><li>🔴 <strong>النتيجة:</strong> تحديثات جميع القوالب تختلط في نفس الدائرة.</li><li>✅ <strong>الحل:</strong> استخدم بوابات Whonix متعددة.</li></ul>
-    <div class="mitigation-badge" style="margin-top: 15px;"><i class="fas fa-check-circle"></i> الحل: بوابات متعددة (تبويب 2)</div>
+   <div class="mitigation-badge" style="margin-top: 15px;"><i class="fas fa-check-circle"></i> الحل: بوابات متعددة (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)</div>
 </div>
 
 <!-- 7. جدول: التطبيقات المحمية -->
@@ -1398,7 +1398,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
 </div>
 
 
-<!-- ==================== حزمة sdwdate + Time Attacks كاملة ==================== -->
+<!-- ======== حزمة sdwdate + Time Attacks كاملة ======== -->
 
 <!-- 1. بطاقة: ما هو sdwdate؟ -->
 <div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
@@ -1482,7 +1482,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </div>
     </div>
 </div>
-    <!-- ==================== شرح أنواع اتصالات Tor و VPN ==================== -->
+    <!-- ======== شرح أنواع اتصالات Tor و VPN ======== -->
     <div class="card" style="margin-top: 20px;">
         <div class="card-header"><i class="fas fa-network-wired"></i> 🌐 شرح أنواع اتصالات Tor و VPN</div>
         
@@ -1577,7 +1577,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </div>
     </div>
 
-<!-- ==================== جدول موحد: من يرى ماذا؟ (شامل) ==================== -->
+<!-- ======== جدول موحد: من يرى ماذا؟ (شامل) ======== -->
 <div class="card" style="margin-top: 20px;">
     <div class="card-header"><i class="fas fa-eye"></i> 👁️ جدول شامل: من يرى ماذا في كل نوع اتصال؟</div>
     <table class="comparison-table">
@@ -1701,7 +1701,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </ul>
     </div>
 </div>
-    <!-- ==================== جدول المقارنة الشامل ==================== -->
+    <!-- ======== جدول المقارنة الشامل ======== -->
     <div class="card" style="margin-top: 20px;">
         <div class="card-header"><i class="fas fa-crown"></i> 🏆 جدول المقارنة الشامل (أفضل التوصيات)</div>
         <table class="comparison-table">
@@ -1729,7 +1729,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </div>
     </div>
 
-    <!-- ==================== مقارنة: VPN | Tor (Whonix) | Tor + Bridges | I2P ==================== -->
+    <!-- ======== مقارنة: VPN | Tor (Whonix) | Tor + Bridges | I2P ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-chart-simple"></i> مقارنة: VPN | Tor (Whonix) | Tor + Bridges | I2P</div>
         <table class="comparison-table">
@@ -1748,7 +1748,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </table>
     </div>
 
-    <!-- ==================== حزمة الجسور (Bridges) كاملة ==================== -->
+    <!-- ======== حزمة الجسور (Bridges) كاملة ======== -->
 
 <!-- 1. بطاقة: ما هي الجسور؟ -->
 <div class="card" style="margin-top: 30px; border-right: 6px solid #2196f3;">
@@ -1977,7 +1977,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     
 
-    <!-- ==================== خلاصة سريعة ==================== -->
+    <!-- ======== خلاصة سريعة ======== -->
     <div class="note" style="background:#1a3a3a;">
         <i class="fas fa-star-of-life"></i>
         <strong>📚 خلاصة سريعة:</strong>
@@ -1996,7 +1996,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
 </div>
 
 
-  <!-- ==================== تبويب 3: التخزين الآمن ( ==================== -->
+  <!-- ======== تبويب 3: التخزين الآمن ( ======== -->
 <div class="tab-pane" id="tab3">
     <div class="note warning">
         <i class="fas fa-exclamation-triangle"></i> 
@@ -2004,7 +2004,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <br>📌 <strong>الحل الأمثل على SSD:</strong> استخدم طريقة <strong>التشفير المزدوج (VC خارجي + LUKS داخلي)</strong> مع فصل التخزين عن التنفيذ كما هو موضح أدناه.
     </div>
     
-    <!-- ==================== بطاقة: التخزين المزدوج - صندوق الأمانات ==================== -->
+    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
 <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
     <div class="card-header" style="color: #ce93d8;">
         <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
@@ -2037,7 +2037,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 
-<!-- ==================== مقارنة LUKS vs VeraCrypt ==================== -->
+<!-- ======== مقارنة LUKS vs VeraCrypt ======== -->
 <div class="card">
     <div class="card-header">
         <i class="fas fa-balance-scale"></i>
@@ -2131,7 +2131,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         • <strong>التوصية للمراسلة شديدة الحساسية:</strong> استخدم <strong>VC خارجي + LUKS داخلي</strong> – يجمع بين إخفاء وجود المحادثات (VC) ومنع التلاعب بالرسائل (LUKS).
     </div>
 </div>
-    <!-- ==================== الطريقة الآمنة: فصل التخزين عن التنفيذ ==================== -->
+    <!-- ======== الطريقة الآمنة: فصل التخزين عن التنفيذ ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-random"></i>
@@ -2167,7 +2167,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </table>
     </div>
 
-    <!-- ====================== التمرير العملي عبر الواجهة الرسومية ====================== -->
+    <!-- ========== التمرير العملي عبر الواجهة الرسومية ========== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-mouse-pointer"></i>
@@ -2201,7 +2201,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     </div>
 
-    <!-- ==================== طريقة التشفير الأساسية (LUKS فقط) ==================== -->
+    <!-- ======== طريقة التشفير الأساسية (LUKS فقط) ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-database"></i>
@@ -2230,7 +2230,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     </div>
 
-    <!-- ==================== جدول الأوامر الأساسية ==================== -->
+    <!-- ======== جدول الأوامر الأساسية ======== -->
     <div style="overflow-x: auto;">
     <table class="comparison-table">
         <thead><th>الخطوة</th><th>الأمر (في dom0)</th><th>ملاحظات</th></thead>
@@ -2259,9 +2259,9 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </table>
     </div>
 
-    <!-- ==================== نصائح إضافية ==================== -->
+    <!-- ======== نصائح إضافية ======== -->
     
-    <!-- ==================== مقارنة HDD vs SSD للمسح الآمن ==================== -->
+    <!-- ======== مقارنة HDD vs SSD للمسح الآمن ======== -->
 <div class="card" style="margin-top:20px;">
     <div class="card-header"><i class="fas fa-hdd"></i> 💾 مقارنة: HDD vs SSD للمسح الآمن للبيانات</div>
     <table class="comparison-table">
@@ -2336,7 +2336,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </ul>
     </div>
 </div>
-<!-- ==================== أدوات إزالة البيانات الوصفية ==================== -->
+<!-- ======== أدوات إزالة البيانات الوصفية ======== -->
 <div class="card" style="margin-top:20px;">
     <div class="card-header"><i class="fas fa-eraser"></i> 🧹 أدوات إزالة البيانات الوصفية (Metadata Removal)</div>
     <p>البيانات الوصفية (Metadata) هي معلومات مخفية في الملفات تكشف تفاصيل عنك: الموقع، الكاميرا، تاريخ الإنشاء، اسم المؤلف، وغيرها. هذه الأدوات تساعدك في إزالتها قبل مشاركة الملفات.</p>
@@ -2449,7 +2449,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>storage-vault</strong> (يفتح VC+LUKS، لا يثبت) → يظهر الجهاز في dom0 → <strong>توصيله عبر واجهة dom0</strong> إلى <strong>ram-work</strong> (يعمل على RAM) → <strong>تثبيت الجهاز في ram-work</strong> → العمل على البيانات في RAM فقط → عند الإغلاق، تختفي كل البيانات.
     </div>
 
-<!-- ====================== قاعدة تمرير البلوك ديفايس الآمن ====================== -->
+<!-- ========== قاعدة تمرير البلوك ديفايس الآمن ========== -->
 <div class="card">
     <div class="card-header">
         <i class="fas fa-shield-alt"></i>
@@ -2519,7 +2519,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 
-    <!-- ==================== رسم بياني: فصل التخزين عن التنفيذ ==================== -->
+    <!-- ======== رسم بياني: فصل التخزين عن التنفيذ ======== -->
     <div class="card">
         <div class="card-header">
             <i class="fas fa-chart-network"></i>
@@ -2583,7 +2583,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             • <strong>الطريقة الآمنة:</strong> فتح التشفير في كيوبس معزول (storage-vault) ثم تمرير الجهاز المفتوح فقط إلى كيوبس يعمل على RAM Pool (ram-work). البيانات تُكتب في الذاكرة وتختفي عند الإغلاق.
         </div>
     </div>
-<!-- ==================== سيناريو عملي: فلاشة LUKS ← Whonix (مختصر) ==================== -->
+<!-- ======== سيناريو عملي: فلاشة LUKS ← Whonix (مختصر) ======== -->
 <div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
     <div class="card-header" style="color: #4caf50;">
         <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS ← Whonix (GNOME Disks)
@@ -2626,7 +2626,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
 </div>
 </div>
 
-<!-- ==================== تبويب 4: مصفوفة التهديدات ==================== -->
+<!-- ======== تبويب 4: مصفوفة التهديدات ======== -->
 <div class="tab-pane" id="tab4">
     <div class="section-title">
         <i class="fas fa-skull-crosswalk"></i>
@@ -2678,8 +2678,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">تسريب DNS و SNI</div>
             <p>مزود الخدمة (ISP) يرى كل المواقع التي تزورها حتى مع HTTPS. يمكنه بيع هذه البيانات أو تسليمها للسلطات.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: sys-whonix + DNS over Tor (تبويب 2)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: sys-whonix + DNS over Tor (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)
+</div>
         </div>
 
         <!-- 2. هجمات التوقيت (Timing Attacks) -->
@@ -2705,9 +2705,9 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <li>✅ <strong>لا تتصل بنفس الـ WiFi</strong> الذي تستخدمه لهويتك الحقيقية</li>
                 <li>✅ <strong>تجنب الأنشطة في أوقات متطابقة</strong> بين هويتك الحقيقية والمجهولة</li>
             </ul>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: Whonix + بوابات متعددة (تبويب 2)
-            </div>
+         <div class="mitigation-badge">
+    <i class="fas fa-check-circle"></i> الحل: Whonix + بوابات متعددة (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)
+</div>
         </div>
 
         <!-- 3. نقاط وصول وهمية -->
@@ -2722,8 +2722,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <li>✅ <strong>sys-whonix + Tor:</strong> حتى لو تنصت المهاجم على حركة المرور، البيانات مشفرة بـ 3 طبقات Tor + TLS.</li>
             </ul>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: WISP + Ethernet (تبويب 1) + sys-whonix (تبويب 2)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: WISP + Ethernet (<a href="#" onclick="document.querySelector('[data-tab=\'tab1\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 1</a>) + sys-whonix (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)
+</div>
         </div>
 
         <!-- 4. مسح Wi-Fi/Bluetooth -->
@@ -2744,8 +2744,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">تسريب IPv6</div>
             <p>إذا كنت تستخدم VPN يدعم IPv4 فقط، فقد تتسرب اتصالات IPv6 مباشرة إلى مزود الخدمة.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: تعطيل IPv6 في sys-net (تبويب 1)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: تعطيل IPv6 في sys-net (<a href="#" onclick="document.querySelector('[data-tab=\'tab1\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 1</a>)
+</div>
         </div>
 
         <!-- 6. حراس الدخول الخبيثون -->
@@ -2755,8 +2755,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">حراس الدخول الخبيثون</div>
             <p>إذا وقعت على عقدة دخول خبيثة، تبقى عالقاً معها لأشهر، ويمكن ربط جميع أنشطتك.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: بوابات Whonix متعددة (تبويب 2)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: بوابات Whonix متعددة (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)
+</div>
         </div>
 
         <!-- 7. بصمة المتصفح -->
@@ -2766,8 +2766,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">بصمة المتصفح</div>
             <p>المواقع تجمع معلومات عن جهازك: الخطوط، دقة الشاشة، اللغة. هذه البصمة فريدة بنسبة 99%.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: Kicksecure (تبويب 2 - Whonix Workstation)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: Kicksecure (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a> - Whonix Workstation)
+</div>
         </div>
 
         <!-- 8. تسريب WebRTC -->
@@ -2831,9 +2831,9 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-icon"><i class="fas fa-microchip"></i></div>
             <div class="threat-title">Spectre / Meltdown</div>
             <p>ثغرات في تصميم المعالجات تسمح بسرقة البيانات من الذاكرة عبر الحدود الافتراضية.</p>
-            <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: mitigations=auto (تبويب 0)
-            </div>
+           <div class="mitigation-badge">
+    <i class="fas fa-check-circle"></i> الحل: mitigations=auto (<a href="#" onclick="document.querySelector('[data-tab=\'tab0\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 0</a>)
+</div>
         </div>
 
         <!-- 14. Intel ME / AMD PSP -->
@@ -2865,8 +2865,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <div class="threat-title">Metadata / EXIF</div>
             <p>الصور تحمل إحداثيات GPS، نوع الكاميرا، تاريخ الالتقاط، واسم المؤلف.</p>
             <div class="mitigation-badge">
-                <i class="fas fa-check-circle"></i> الحل: ExifTool / mat2 (تبويب 3)
-            </div>
+    <i class="fas fa-check-circle"></i> الحل: ExifTool / mat2 (<a href="#" onclick="document.querySelector('[data-tab=\'tab3\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 3</a>)
+</div>
         </div>
 
         <!-- 17. العلامات المائية -->
@@ -3110,7 +3110,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
 
     </div><!-- نهاية شبكة البطاقات -->
 
-    <!-- ==================== كيف تحل بنية Qubes المتقدمة التهديدات ==================== -->
+    <!-- ======== كيف تحل بنية Qubes المتقدمة التهديدات ======== -->
     <div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
         <div class="card-header" style="color: #88ff88;">
             <i class="fas fa-shield-virus"></i> 🛡️ حلول Qubes المتقدمة: Ephemeral VM + RAM-VM + Live Mode
@@ -3266,7 +3266,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         </div>
     </div>
 </div>
-    <!-- ==================== تبويب 5: Amnesic Tmpfs ==================== -->
+    <!-- ======== تبويب 5: Amnesic Tmpfs ======== -->
 <div class="tab-pane" id="tab5">
     <div class="card">
         <div class="card-header"><i class="fas fa-memory"></i> Amnesic Tmpfs</div>
@@ -3286,7 +3286,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 
-    <!-- ==================== تبويب 6: RAM Pool ==================== -->
+    <!-- ======== تبويب 6: RAM Pool ======== -->
     <div class="tab-pane" id="tab6">
 <div class="card">
     <div class="card-header"><i class="fas fa-microchip"></i> RAM Pool (التخزين في الذاكرة) - الإنكار التام</div>
@@ -3406,7 +3406,7 @@ free -h</pre>
         </div>    
     </div>
     
-<!-- ==================== تبويب 7: الأمان المتقدم ==================== -->
+<!-- ======== تبويب 7: الأمان المتقدم ======== -->
 <div class="tab-pane" id="tab7">
     <div class="section-title">
         <i class="fas fa-shield-virus"></i>
@@ -3635,10 +3635,22 @@ free -h</pre>
     </div>
 </div>
     
-<!-- ==================== تبويب 8: Kicksecure (النسخة النهائية المُنقّحة) ==================== -->
+<!-- ======== تبويب 8: Kicksecure (النسخة النهائية المُنقّحة) ======== -->
 <div class="tab-pane" id="tab8">
     
-    <!-- ==================== القسم 1: ما هو Kicksecure؟ ==================== -->
+    <!-- ========== إشارة للسكربت المساعد ========== -->
+    <div class="note-success" style="margin: 20px 0;">
+        <i class="fas fa-check-circle"></i>
+        <strong>⚡ للتطبيق التلقائي:</strong>
+        <p style="margin-top: 10px;">
+            استخدم <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline;">تبويب 11</a> 
+            لتطبيق إعدادات Kicksecure تلقائياً على جميع القوالب.
+        </p>
+        <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 10px;">chmod +x auto-script.sh && ./auto-script.sh</code>
+        <p style="margin-top: 10px;">ثم اختر: <strong>3) تطبيق إعدادات Kicksecure</strong></p>
+    </div>
+    
+    <!-- ======== القسم 1: ما هو Kicksecure؟ ======== -->
     <div class="section-title">
         <i class="fas fa-fingerprint"></i>
         <h2>🧬 Kicksecure - توحيد البصمة وتحصين النظام</h2>
@@ -3667,7 +3679,7 @@ free -h</pre>
         <p style="margin-top: 10px;">Tor يخفي عنوان IP فقط. لكن المواقع يمكنها التعرف عليك عبر <strong>بصمة المتصفح</strong>: الخطوط، دقة الشاشة، الإعدادات... Kicksecure يوحد هذه المعلومات بين جميع مستخدميه، مما يجعل بصمتك غير مميزة.</p>
     </div>
 
-    <!-- ==================== القسم 2: التثبيت والإعداد الأساسي ==================== -->
+    <!-- ======== القسم 2: التثبيت والإعداد الأساسي ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-download"></i>
         <h2>📥 التثبيت والإعداد الأساسي</h2>
@@ -3686,7 +3698,7 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== القسم 3: tirdad - حماية إضافية للشبكة ==================== -->
+    <!-- ======== القسم 3: tirdad - حماية إضافية للشبكة ======== -->
     <div class="card" style="margin-top: 25px; border-right: 6px solid #4caf50;">
         <div class="card-header" style="color: #88ff88;"><i class="fas fa-shield-virus"></i> 🛡️ tirdad - حماية إضافية لاتصالات TCP</div>
         <p><strong>ما هي tirdad؟</strong> أداة تقوم بعشوائية أرقام تسلسل TCP (TCP ISN Randomization)، مما يصعّب على المهاجمين حقن حزم ضارة في اتصالاتك.</p>
@@ -3701,34 +3713,107 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== القسم 4: ما الذي يوحده Kicksecure؟ ==================== -->
-    <div class="card" style="margin-top: 25px;">
-        <div class="card-header"><i class="fas fa-list-check"></i> ما الذي يوحده Kicksecure؟</div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-            <div><i class="fas fa-font"></i> قائمة الخطوط (Fonts)</div>
-            <div><i class="fas fa-desktop"></i> دقة الشاشة</div>
-            <div><i class="fas fa-language"></i> إعدادات اللغة (en_US.UTF-8)</div>
-            <div><i class="fas fa-clock"></i> المنطقة الزمنية (UTC)</div>
-            <div><i class="fas fa-code-branch"></i> إصدار نظام التشغيل</div>
-            <div><i class="fas fa-firefox"></i> إعدادات المتصفح</div>
-        </div>
+<!-- ======== القسم 4: ما الذي يوحده Kicksecure؟ ======== -->
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header"><i class="fas fa-list-check"></i> ما الذي يوحده Kicksecure؟</div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+        <div><i class="fas fa-font"></i> قائمة الخطوط (Fonts)</div>
+        <div><i class="fas fa-desktop"></i> دقة الشاشة</div>
+        <div><i class="fas fa-language"></i> إعدادات اللغة (en_US.UTF-8)</div>
+        <div><i class="fas fa-clock"></i> المنطقة الزمنية (UTC)</div>
+        <div><i class="fas fa-code-branch"></i> إصدار نظام التشغيل</div>
+        <div><i class="fas fa-firefox"></i> إعدادات المتصفح</div>
     </div>
+</div>
 
-    <!-- ==================== القسم 5: Kicksecure vs Whonix ==================== -->
-    <div class="card" style="margin-top: 25px;">
-        <div class="card-header"><i class="fas fa-balance-scale"></i> Kicksecure vs Whonix</div>
+<!-- ======== القسم 5: مقارنة موثقة - Kicksecure vs Whonix ======== -->
+<div class="section-title" style="margin-top: 40px;">
+    <i class="fas fa-balance-scale-left"></i>
+    <h2>⚖️ مقارنة موثقة: Kicksecure vs Whonix Workstation</h2>
+    <p>مقارنة دقيقة مبنية على وثائق المشروعين الرسمية. الفرق جوهري وليس مجرد تشابه.</p>
+</div>
+
+<div class="card" style="border-right: 6px solid #6c63ff;">
+    <div class="card-header" style="color: #6c63ff;">
+        <i class="fas fa-table"></i> 📊 جدول المقارنة الشامل
+    </div>
+    <div style="overflow-x: auto;">
         <table class="comparison-table">
-            <thead><th>الميزة</th><th>Kicksecure</th><th>Whonix</th></thead>
+            <thead>
+                <tr>
+                    <th>الميزة</th>
+                    <th style="background: #1a2a3a;">🛡️ Kicksecure</th>
+                    <th style="background: #1a2a3a;">🧅 Whonix Workstation</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr><td><strong>التركيز الأساسي</strong></td><td>توحيد بصمة الجهاز والمتصفح</td><td>إخفاء عنوان IP عبر Tor</td></tr>
-                <tr><td><strong>طبقة الحماية</strong></td><td>نظام التشغيل (OS level)</td><td>الشبكة (Network level)</td></tr>
-                <tr><td><strong>البنية في Qubes</strong></td><td>قالب (Template) واحد</td><td>Gateway + Workstation</td></tr>
-                <tr><td><strong>الدمج المثالي</strong></td><td colspan="2"><code>qvm-create --template=kicksecure anon-work && qvm-prefs anon-work netvm sys-whonix</code></td></tr>
+                <tr>
+                    <td><strong>الهدف الأساسي</strong></td>
+                    <td><strong>تحصين الأمان</strong> (Security Hardening)</td>
+                    <td><strong>إخفاء الهوية</strong> (Anonymity)</td>
+                </tr>
+                <tr>
+                    <td><strong>العلاقة بينهما</strong></td>
+                    <td colspan="2" style="text-align: center;">Whonix مبني على Kicksecure ← يرث جميع تحسيناته الأمنية</td>
+                </tr>
+                <tr>
+                    <td><strong>توجيه الشبكة</strong></td>
+                    <td>❌ لا يوجد توجيه إجباري</td>
+                    <td>✅ توجيه إجباري عبر Tor</td>
+                </tr>
+                <tr>
+                    <td><strong>بنية النظام</strong></td>
+                    <td>نظام تشغيل واحد (Monolithic)</td>
+                    <td>جهازان: Gateway + Workstation</td>
+                </tr>
+                <tr>
+                    <td><strong>تصليب النواة</strong></td>
+                    <td>✅ <code>hardened-kernel</code></td>
+                    <td>✅ <strong>نفس الحزمة</strong> - لا فرق</td>
+                </tr>
+                <tr>
+                    <td><strong>تصليب مساحة المستخدم</strong></td>
+                    <td>🟢 <strong>أقوى</strong> (Hardened Malloc مفعّل)</td>
+                    <td>🟡 أقل (Hardened Malloc غير مفعّل)</td>
+                </tr>
+                <tr>
+                    <td><strong>مُخصص الذاكرة</strong></td>
+                    <td>✅ Hardened Malloc افتراضي</td>
+                    <td>⚠️ غير مفعّل (مشاكل توافق)</td>
+                </tr>
+                <tr>
+                    <td><strong>passwordless-sudo</strong></td>
+                    <td>❌ معطّل</td>
+                    <td>❌ معطّل</td>
+                </tr>
+                <tr>
+                    <td><strong>الاستخدام المثالي</strong></td>
+                    <td>بيئة محصنة بدون متطلبات Tor</td>
+                    <td>مهام تتطلب إخفاء هوية مضمون</td>
+                </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- ==================== القسم 6: إعدادات الأمان الأساسية ==================== -->
+    <div class="note" style="background: #1a3a3a; margin-top: 15px;">
+        <i class="fas fa-lightbulb"></i>
+        <strong>💡 الفرق الجوهري باختصار:</strong><br>
+        <strong>Kicksecure</strong> = كل التحصينات الأمنية (بدون Tor إجباري)<br>
+        <strong>Whonix WS</strong> = نفس التحصينات الأساسية + توجيه Tor الإجباري (لكن بتصليب أقل في مساحة المستخدم)
+    </div>
+
+    <div class="note" style="background: #2a1a1a; margin-top: 10px;">
+        <i class="fas fa-question-circle"></i>
+        <strong>❓ لماذا Kicksecure أكثر تصليباً؟</strong>
+        <p style="margin-top: 8px;">
+            Kicksecure يركز على <strong>الأمان</strong> كهدف رئيسي. لذلك يفعّل ميزات قوية مثل <strong>Hardened Memory Allocator</strong> افتراضياً.
+            Whonix يركز على <strong>إخفاء الهوية</strong>، ويضحي ببعض ميزات التصليب القوية لتجنب مشاكل التوافق مع التطبيقات المختلفة.
+        </p>
+    </div>
+</div>
+
+
+    <!-- ======== القسم 6: إعدادات الأمان الأساسية ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-shield"></i>
         <h2>⚙️ إعدادات الأمان الأساسية</h2>
@@ -3760,7 +3845,7 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== القسم 7: security-misc - إعدادات أمان متقدمة ==================== -->
+    <!-- ======== القسم 7: security-misc - إعدادات أمان متقدمة ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-shield-virus"></i>
         <h2>🛡️ security-misc - إعدادات أمان متقدمة</h2>
@@ -3827,7 +3912,7 @@ free -h</pre>
         <code onclick="copyText(this)">sudo nano /etc/default/grub.d/50_user.conf && sudo update-grub</code>
     </div>
 
-    <!-- ==================== القسم 8: hardened-kernel - النواة المحصنة ==================== -->
+    <!-- ======== القسم 8: hardened-kernel - النواة المحصنة ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-microchip"></i>
         <h2>🛡️ hardened-kernel - النواة المحصنة</h2>
@@ -3892,7 +3977,7 @@ free -h</pre>
         </ul>
     </div>
 
-    <!-- ==================== القسم 9: اختبار الفعالية ==================== -->
+    <!-- ======== القسم 9: اختبار الفعالية ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-flask"></i>
         <h2>🧪 اختبار الفعالية</h2>
@@ -3908,15 +3993,76 @@ free -h</pre>
         <p class="note" style="margin-top: 15px;"><i class="fas fa-chart-line"></i> <strong>النتيجة المتوقعة:</strong> بصمتك غير مميزة ضمن أكبر مجموعة من المستخدمين.</p>
     </div>
 
-    <!-- ==================== تذكير ==================== -->
-    <div class="note" style="margin-top: 20px; background: #1a3a3a;">
-        <i class="fas fa-sync-alt"></i> 
-        <strong>💡 تذكير:</strong> بعد تطبيق أي إعدادات داخل قالب Kicksecure، تأكد من <strong>إيقاف القالب وإعادة تشغيله</strong>:
-        <code onclick="copyText(this)">qvm-shutdown --wait kicksecure-18 && qvm-start kicksecure-18</code>
-    </div>
+<!-- ======== القسم 10: جعل Kicksecure افتراضي لـ default-dvm ======== -->
+
+<div class="section-title" style="margin-top: 40px;">
+    <i class="fas fa-sync-alt"></i>
+    <h2>🔄 جعل Kicksecure القالب الافتراضي لـ default-dvm</h2>
 </div>
 
-<!-- ==================== تبويب 9: Live Script ==================== -->
+<div class="card" style="border-right: 6px solid #6c63ff;">
+    <div class="card-header" style="color: #6c63ff;">
+        <i class="fas fa-sitemap"></i> 🧬 لماذا هذا مهم؟
+    </div>
+    <p><code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code> وجميع الأجهزة المستهلكة (Disposable VMs) مشتقة من <code>default-dvm</code>. تغيير قالبها إلى Kicksecure سيحصن جميع مكونات النظام الأساسية دفعة واحدة.</p>
+<!-- ========== إشارة للسكربت المساعد ========== -->
+<div class="note-success" style="margin: 20px 0;">
+    <i class="fas fa-check-circle"></i>
+    <strong>⚡ للتطبيق التلقائي:</strong>
+    <p style="margin-top: 8px;">
+        كل هذه الخطوات مؤتمتة في <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline;">تبويب 11</a>.
+    </p>
+    <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 8px;">chmod +x auto-script.sh && ./auto-script.sh</code>
+    <p style="margin-top: 8px;">ثم اختر: <strong>3) تطبيق إعدادات Kicksecure</strong></p>
+</div>
+
+<!-- ========== بطاقة موحدة ========== -->
+<div class="card" style="border-right: 6px solid #6c63ff; margin-top: 20px;">
+    <div class="card-header" style="color: #6c63ff;">
+        <i class="fas fa-sitemap"></i> 🧬 العلاقة: default-dvm وجميع مشتقاته
+    </div>
+    
+    <!-- الرسم التوضيحي -->
+    <div style="background: #0d1b2a; padding: 20px; border-radius: 12px; margin: 15px 0; text-align: center;">
+        <code style="font-size: 1.3em; color: #ffaa33; background: #1b2838; padding: 8px 20px; border-radius: 8px;">default-dvm</code>
+        <div style="margin: 12px 0; color: #6c63ff; font-size: 1.2em;">⬇️ يغذي ⬇️</div>
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-usb</code></div>
+            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-net</code></div>
+            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-firewall</code></div>
+            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>جميع DVMs</strong></div>
+            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>أي DVM جديد</strong></div>
+        </div>
+    </div>
+    
+    <div class="note" style="background: #1a3a3a;">
+        <i class="fas fa-lightbulb"></i> <strong>القاعدة:</strong> أي تغيير على <code>default-dvm</code> ينعكس تلقائياً على كل ما هو مشتق منه.
+    </div>
+
+    <!-- النتيجة -->
+    <h4 style="margin-top: 20px; color: #88ff88;"><i class="fas fa-check-circle"></i> 🎯 النتيجة النهائية</h4>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0;">
+        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🖥️ sys-usb<br><small>محصن</small></div>
+        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🌐 sys-net<br><small>محصن</small></div>
+        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🔥 sys-firewall<br><small>محصن</small></div>
+        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">📦 جميع DVMs<br><small>محصنة</small></div>
+    </div>
+
+    <!-- فاصل -->
+    <hr style="border-color: #2a3a4a; margin: 20px 0;">
+
+    <!-- التنبيهات -->
+    <h4 style="color: #ffaa33;"><i class="fas fa-exclamation-triangle"></i> ⚠️ تنبيهات مهمة</h4>
+    <ul style="margin-right: 20px; line-height: 1.8;">
+        <li><strong>⚠️ استثناء default-mgmt-dvm:</strong> لا تغير قالبه إلى Kicksecure لأنه يعطل <code>passwordless-sudo</code> الضروري لعمل هذا الجهاز. أبقِه على القالب الرسمي.</li>
+        <li><strong>✅ الأجهزة الأخرى:</strong> Kicksecure قالب مجتمعي مُعدّ خصيصاً لـ Qubes ويحتوي على جميع أدوات التكامل. يعمل بنجاح مع <code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code>.</li>
+        <li><strong>🔴 هام:</strong> خذ نسخة احتياطية كاملة قبل أي تغيير على <code>default-dvm</code>.</li>
+    </ul>
+</div>
+</div>
+</div>
+
+<!-- ======== تبويب 9: Live Script ======== -->
 <div class="tab-pane" id="tab9">
     <div class="live-script-section">
         <div class="live-script-header">
@@ -3935,8 +4081,7 @@ free -h</pre>
                 الذي يقوم بتشغيل Live Mode تلقائياً (الخيار رقم 7). السكريبت الكامل موجود هناك.
             </p>
             <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 10px;">chmod +x auto-script.sh && ./auto-script.sh</code>
-            <p style="margin-top: 10px;">ثم اختر: <strong>7) تشغيل Live Mode</strong></p>
-            <p style="margin-top: 8px;"><small>💡 <strong>ملاحظة:</strong> كود <code>live.sh</code> الكامل موجود داخل السكريبت المساعد في تبويب 11، وليس هنا. هذا لتجنب التكرار وتسهيل الصيانة.</small></p>
+            <p style="margin-top: 8px;"><small>💡 <strong>ملاحظة:</strong> كود <code>live.sh</code> الكامل موجود داخل السكريبت المساعد في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 11</a>، وليس هنا. هذا لتجنب التكرار وتسهيل الصيانة.</small></p>
         </div>
         
         <!-- ========== ملخص ما يفعله السكريبت ========== -->
@@ -4028,7 +4173,7 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== بطاقة المقارنة الشاملة ==================== -->
+    <!-- ======== بطاقة المقارنة الشاملة ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-chart-line"></i>
         <h2>📊 المقارنة الشاملة: جميع أنواع الأجهزة الزائلة والآمنة</h2>
@@ -4118,30 +4263,30 @@ free -h</pre>
                         <td style="background: #1a0a0a;"><strong>حماية قصوى - لا أثر نهائياً</strong></td>
                     </tr>
                     <tr>
-                        <th>التبويب المرجعي</th>
-                        <td>-</td>
-                        <td>تبويب 9</td>
-                        <td>تبويب 5</td>
-                        <td>تبويب 6</td>
-                        <td>تبويب 9</td>
-                        <td style="background: #1a0a0a;">9 + 6</td>
-                    </tr>
+    <th>التبويب المرجعي</th>
+    <td>-</td>
+    <td><a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a></td>
+    <td><a href="#" onclick="document.querySelector('[data-tab=\'tab5\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 5</a></td>
+    <td><a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 6</a></td>
+    <td><a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a></td>
+    <td style="background: #1a0a0a;"><a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">9</a> + <a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">6</a></td>
+</tr>
                 </tbody>
             </table>
         </div>
         
         <!-- ========== توضيحات هامة ========== -->
         <div class="note-critical" style="margin-top: 15px;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ توضيحات أساسية:</strong>
-            <ul style="margin-top: 10px; margin-right: 20px;">
-                <li><strong>❌ Ephemeral DVM لا يعمل في RAM.</strong> البيانات (بما فيها <code>/home/user</code>) لا تزال على القرص الصلب.</li>
-                <li><strong>✅ "Ephemeral" تعني "تشفير عابر بمفتاح عشوائي"</strong> وليس "تخزين في RAM".</li>
-                <li><strong>✅ Amnesic Tmpfs</strong> يجعل مجلدات محددة في RAM، لكن VM نفسه لا يزال على القرص.</li>
-                <li><strong>✅ الوحيد الذي يعمل في RAM بالكامل هو RAM Pool و Dom0 Live Boot.</strong></li>
-                <li><strong>🔴 أقوى سيناريو: دمج Live Mode + RAM-VM = dom0 في RAM + بيانات VMs في RAM.</strong></li>
-            </ul>
-        </div>
+    <i class="fas fa-exclamation-triangle"></i>
+    <strong>⚠️ توضيحات أساسية:</strong>
+    <ul style="margin-top: 10px; margin-right: 20px;">
+        <li><strong>❌ Ephemeral DVM لا يعمل في RAM.</strong> البيانات (بما فيها <code>/home/user</code>) لا تزال على القرص الصلب.</li>
+        <li><strong>✅ "Ephemeral" تعني "تشفير عابر بمفتاح عشوائي"</strong> وليس "تخزين في RAM".</li>
+        <li><strong>✅ Amnesic Tmpfs</strong> يجعل مجلدات محددة في RAM، لكن VM نفسه لا يزال على القرص (<a href="#" onclick="document.querySelector('[data-tab=\'tab5\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 5</a>).</li>
+        <li><strong>✅ الوحيد الذي يعمل في RAM بالكامل هو RAM Pool و Dom0 Live Boot</strong> (<a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 6</a> + <a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a>).</li>
+        <li><strong>🔴 أقوى سيناريو: دمج Live Mode + RAM-VM</strong> = dom0 في RAM + بيانات VMs في RAM (<a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a> + <a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 6</a>).</li>
+    </ul>
+</div>
 
         <!-- ========== مقارنة إضافية: Amnesic Tmpfs vs RAM Pool ========== -->
         <h4 style="margin-top: 25px;"><i class="fas fa-balance-scale"></i> ⚖️ Amnesic Tmpfs vs RAM Pool - متى تستخدم كل منهما؟</h4>
@@ -4178,22 +4323,21 @@ free -h</pre>
         </table>
         
         <!-- ========== الخلاصة ========== -->
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-lightbulb"></i>
-            <strong>💡 الخلاصة النهائية:</strong>
-            <ul style="margin-top: 10px; margin-right: 20px;">
-                <li>• إذا أردت <strong>تشفيراً عابراً</strong> (البيانات تُشفر ثم يُفقد المفتاح عند الإغلاق) ← استخدم <strong>Ephemeral DVM</strong> من <code>live.sh</code></li>
-                <li>• إذا أردت <strong>مجلدات محددة نظيفة</strong> (سجلات، كاش) ← استخدم <strong>Amnesic Tmpfs</strong> (تبويب 5)</li>
-                <li>• إذا أردت <strong>VM بكامله في RAM</strong> (أقصى عزل، لا بيانات على القرص إطلاقاً) ← استخدم <strong>RAM Pool</strong> (تبويب 6)</li>
-                <li>• إذا أردت <strong>جلسة طوارئ كاملة</strong> (dom0 نفسه في RAM) ← استخدم <strong>Dom0 Live Boot</strong> (هذا التبويب)</li>
-                <li>• <strong>🔴 إذا أردت الحماية القصوى المطلقة:</strong> ادمج <strong>Live Mode + RAM-VM</strong> (يتطلب 32GB+ RAM). هذا هو الدرع الكامل: dom0 في RAM وبيانات VMs في RAM. لا يوجد أي أثر على القرص بعد الإغلاق.</li>
-                <li>• الفرق جوهري: Ephemeral <strong>يُخزن البيانات على القرص لكن بشكل مشفر</strong>، RAM Pool <strong>لا يخزن أي شيء على القرص</strong>، Amnesic Tmpfs <strong>يجعل أجزاء محددة فقط في RAM</strong>.</li>
-            </ul>
-        </div>
+       <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+    <i class="fas fa-lightbulb"></i>
+    <strong>💡 الخلاصة النهائية:</strong>
+    <ul style="margin-top: 10px; margin-right: 20px;">
+        <li>• إذا أردت <strong>تشفيراً عابراً</strong> (البيانات تُشفر ثم يُفقد المفتاح عند الإغلاق) ← استخدم <strong>Ephemeral DVM</strong> من <a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a></li>
+        <li>• إذا أردت <strong>مجلدات محددة نظيفة</strong> (سجلات، كاش) ← استخدم <strong>Amnesic Tmpfs</strong> (<a href="#" onclick="document.querySelector('[data-tab=\'tab5\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 5</a>)</li>
+        <li>• إذا أردت <strong>VM بكامله في RAM</strong> (أقصى عزل، لا بيانات على القرص إطلاقاً) ← استخدم <strong>RAM Pool</strong> (<a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 6</a>)</li>
+        <li>• إذا أردت <strong>جلسة طوارئ كاملة</strong> (dom0 نفسه في RAM) ← استخدم <strong>Dom0 Live Boot</strong> (<a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a>)</li>
+        <li>• <strong>🔴 إذا أردت الحماية القصوى المطلقة:</strong> ادمج <strong>Live Mode + RAM-VM</strong> (<a href="#" onclick="document.querySelector('[data-tab=\'tab9\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 9</a> + <a href="#" onclick="document.querySelector('[data-tab=\'tab6\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 6</a>). هذا هو الدرع الكامل: dom0 في RAM وبيانات VMs في RAM. لا يوجد أي أثر على القرص بعد الإغلاق.</li>
+    </ul>
+</div>
     </div>
 </div>
 
-<!-- ==================== تبويب 10: التطبيقات المحمولة (النسخة الكاملة والموحدة - متوافقة مع Whonix) ==================== -->
+<!-- ======== تبويب 10: التطبيقات المحمولة (النسخة الكاملة والموحدة - متوافقة مع Whonix) ======== -->
 <div class="tab-pane" id="tab10">
     <div class="section-title">
         <i class="fas fa-mobile-alt"></i>
@@ -4210,7 +4354,7 @@ free -h</pre>
         <strong>⚠️ تحذير أساسي:</strong> تستند التوصيات أدناه إلى <strong>صفحة Whonix الرسمية للدردشة</strong>. التطبيقات التي تتطلب معرفات ثابتة (مثل رقم الهاتف) أو تعاني من مشاكل أمنية معروفة <strong>غير موصى بها</strong> للاستخدام المجهول.
     </div>
 
-    <!-- ==================== ✅ قائمة تدقيق قبل البدء ==================== -->
+    <!-- ======== ✅ قائمة تدقيق قبل البدء ======== -->
     <div class="card" style="border-right: 6px solid #ffaa33; margin-bottom: 20px;">
         <div class="card-header"><i class="fas fa-clipboard-check"></i> ✅ قبل أن تبدأ - قائمة تدقيق سريعة</div>
         <ul style="list-style: none; padding-right: 0;">
@@ -4223,7 +4367,7 @@ free -h</pre>
         </ul>
     </div>
 
-<!-- ==================== 📊 جدول المقارنة الشامل (مدمج: Whonix + جميع التطبيقات) ==================== -->
+<!-- ======== 📊 جدول المقارنة الشامل (مدمج: Whonix + جميع التطبيقات) ======== -->
 <div class="card">
     <div class="card-header"><i class="fas fa-chart-simple"></i> 📊 مقارنة شاملة: تطبيقات المراسلة والمشاركة الآمنة</div>
     <p>مقارنة دقيقة ومحدثة لأهم تطبيقات المراسلة والمشاركة من حيث الأمان والخصوصية، <strong>متوافقة مع تقييمات صفحة Whonix الرسمية (2025)</strong>:</p>
@@ -4385,7 +4529,7 @@ free -h</pre>
         <p style="margin-top: 8px;"><strong>❌ تطبيقات غير موصى بها في Whonix:</strong> Signal (رقم هاتف إلزامي)، Session (مشاكل أمنية وغياب PFS)، Briar (تعارض Tor-over-Tor)، Telegram (تشفير جزئي وخوادم مركزية)، Matrix/Element (مشاكل forward secrecy وتسريب بيانات وصفية).</p>
     </div>
 </div>
-    <!-- ==================== 🔍 نماذج الشبكة - لماذا يهم؟ ==================== -->
+    <!-- ======== 🔍 نماذج الشبكة - لماذا يهم؟ ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-project-diagram"></i> 🔍 نماذج الشبكة - لماذا يهم؟</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
@@ -4416,7 +4560,7 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== 🧩 دمج التطبيقات معاً ==================== -->
+    <!-- ======== 🧩 دمج التطبيقات معاً ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-puzzle-piece"></i> 🧩 دمج التطبيقات معاً (لأقصى حماية)</div>
         <p><strong>لا يوجد تطبيق واحد يفعل كل شيء.</strong> الإستراتيجية المثلى هي استخدام التطبيق المناسب لكل مهمة:</p>
@@ -4432,7 +4576,7 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ==================== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix ==================== -->
+    <!-- ======== 🔧 حل عام لتشغيل تطبيقات Tor على Whonix ======== -->
     <div class="card" style="border-right: 6px solid #66ccff;">
         <div class="card-header" style="color: #88aaff;">
             <i class="fas fa-shield-virus"></i> 🧅 تشغيل تطبيقات Tor داخل Whonix (الحل الكامل: البوابة + محطة العمل)
@@ -4510,7 +4654,7 @@ torsocks curl https://check.torproject.org/api/ip</pre>
         </div>
     </div>
 
-<!-- ==================== SimpleX Chat Card ==================== -->
+<!-- ======== SimpleX Chat Card ======== -->
 <div class="card">
     <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (⭐ الموصى به رسمياً - الأعلى أماناً ومجهولية)</div>
     <p>SimpleX Chat هو تطبيق مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية. <strong>تم اختباره ويعمل بشكل ممتاز في Whonix و Qubes OS</strong> دون الحاجة لإعدادات معقدة.</p>
@@ -4662,7 +4806,7 @@ exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
     <p><strong>💡 الخلاصة:</strong> تشغيل SimpleX مع تفعيل SOCKS Proxy من داخل الإعدادات هو الخيار الأمثل لجميع البيئات. على Qubes OS تحديداً، جميع الطرق مستقرة بسبب استخدام X11 عبر طبقة GUI الافتراضية.</p>
 </div>
 
-    <!-- ==================== Cwtch Card ==================== -->
+    <!-- ======== Cwtch Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (⭐ الموصى به - ند للند مقاوم للبيانات الوصفية)</div>
         <p><strong>Cwtch</strong> (يُنطق /kʊtʃ/) هو بروتوكول مراسلة <strong>لامركزي ومقاوم للبيانات الوصفية (Metadata)</strong>، مبني على شبكة <strong>Tor v3 Onion Services</strong>. تم تطويره بواسطة منظمة <strong>Open Privacy Research Society</strong> (كندا).</p>
@@ -4705,10 +4849,10 @@ exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
         <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whonix وتشغيلها عند الحاجة:</p>
         <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
         <pre class="code-block" id="cwtch-portable-script">#!/bin/sh
-# ===================================================================
+# =======
 # سكريبت تشغيل Cwtch المحمول لـ Whonix داخل Qubes
 # مطابق لما يفعله install-whonix.sh مع التشغيل المحمول
-# ===================================================================
+# =======
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
@@ -4751,7 +4895,7 @@ exec env LD_LIBRARY_PATH="./lib/:./Tor" \
         </ul>
     </div>
 
-    <!-- ==================== OnionShare Card ==================== -->
+    <!-- ======== OnionShare Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-onion"></i> 🧅 OnionShare (⭐ مشاركة آمنة ومجهولة للملفات + محادثة مؤقتة)</div>
         
@@ -4803,7 +4947,7 @@ onionshare</pre>
         </table>
     </div>
 
-    <!-- ==================== XMPP/Gajim Cards ==================== -->
+    <!-- ======== XMPP/Gajim Cards ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-info-circle"></i> ما هو XMPP؟</div>
         <p><strong>XMPP</strong> هو بروتوكول مفتوح ولامركزي للمراسلة الفورية. يدعم تشفيراً قوياً من طرف إلى طرف عبر <strong>OMEMO</strong>، ولا يتطلب رقم هاتف للتسجيل. اختر خادماً موثوقاً مثل <code>conversations.im</code>.</p>
@@ -4853,7 +4997,7 @@ fi
 gajim -c "$PORTABLE_DIR" &</pre>
     </div>
 
-    <!-- ==================== Matrix/Element Cards ==================== -->
+    <!-- ======== Matrix/Element Cards ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-info-circle"></i> ما هو Matrix؟ (⚠️ عليه تحفظات أمنية)</div>
         <p><strong>Matrix</strong> هو بروتوكول مفتوح ولامركزي للتواصل الفوري يعتمد على نموذج "الخادم-الخادم" (Federation). <strong>حسب صفحة Whonix الرسمية، عليه تحفظات أمنية خطيرة:</strong></p>
@@ -4894,7 +5038,7 @@ fi
 element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &</pre>
     </div>
 
-    <!-- ==================== Signal Card ==================== -->
+    <!-- ======== Signal Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (❌ غير موصى به للمجهولية - رقم هاتف إلزامي)</div>
         
@@ -4968,7 +5112,7 @@ exit 0</pre>
         </div>
     </div>
 
-    <!-- ==================== Session Card ==================== -->
+    <!-- ======== Session Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-key"></i> Session (❌ غير موصى به رسمياً - مشاكل أمنية معروفة)</div>
         <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
@@ -4998,7 +5142,7 @@ chmod +x "$APPIMAGE" 2>/dev/null
 exec "./$APPIMAGE" "$@"</pre>
     </div>
 
-    <!-- ==================== Telegram Card ==================== -->
+    <!-- ======== Telegram Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fab fa-telegram"></i> Telegram (❌ غير آمن - غير موصى به نهائياً)</div>
         <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
@@ -5026,7 +5170,7 @@ export XDG_CACHE_HOME="$PWD/data/cache"
 exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
     </div>
 
-    <!-- ==================== إزالة البيانات الوصفية ==================== -->
+    <!-- ======== إزالة البيانات الوصفية ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-eraser"></i> 🧹 إزالة البيانات الوصفية (Metadata) - قبل المشاركة</div>
         <p>حتى مع أقوى تطبيقات المراسلة، الصور والمستندات تحمل بيانات خفية تكشف عنك (GPS، نوع الكاميرا، اسم المؤلف، تاريخ الإنشاء).</p>
@@ -5055,7 +5199,7 @@ exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
         <div class="note"><i class="fas fa-info-circle"></i> <strong>تثبيت سريع:</strong> <code>sudo apt install mat2 exiftool</code></div>
     </div>
 
-    <!-- ==================== 🆘 ماذا تفعل إذا... ==================== -->
+    <!-- ======== 🆘 ماذا تفعل إذا... ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-life-ring"></i> 🆘 استكشاف الأخطاء - ماذا تفعل إذا...</div>
         <table class="comparison-table">
@@ -5068,7 +5212,7 @@ exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
         </table>
     </div>
 
-    <!-- ==================== هيكل الملفات الموحد ==================== -->
+    <!-- ======== هيكل الملفات الموحد ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-folder-tree"></i> 📁 هيكل الملفات الموحد (للتشغيل من فلاشة USB)</div>
         <pre class="code-block" style="direction: ltr; text-align: left;">USB/
@@ -5105,7 +5249,7 @@ exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
 └── README.md</pre>
     </div>
 
-    <!-- ==================== النسخ الاحتياطي ==================== -->
+    <!-- ======== النسخ الاحتياطي ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-save"></i> 💾 النسخ الاحتياطي واستعادة البيانات المحمولة</div>
         <p>لحماية بياناتك المحمولة، قم بعمل نسخ احتياطية دورية:</p>
@@ -5121,7 +5265,7 @@ tar -xzf backups/backup-YYYYMMDD.tar.gz</pre>
         <div class="note"><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> لا تنسخ بيانات Gajim أثناء تشغيله، وتذكر أن Dino لا يمكن تشغيله من نفس قاعدة البيانات مرتين.</div>
     </div>
 
-    <!-- ==================== torsocks الكامل ==================== -->
+    <!-- ======== torsocks الكامل ======== -->
     <div class="card" style="border-right: 6px solid #4caf50;">
         <div class="card-header" style="color: #88ff88;"><i class="fas fa-socks"></i> 🧦 torsocks - تشغيل أي تطبيق عبر Tor</div>
         <p><strong>torsocks</strong> يفرض على أي تطبيق استخدام شبكة Tor، حتى لو كان لا يدعم الـ Proxy. <strong>لا يتطلب أي إعدادات في البوابة.</strong></p>
@@ -5146,7 +5290,7 @@ torsocks curl https://check.torproject.org/api/ip</pre>
         </div>
     </div>
 
-    <!-- ==================== 📚 مصادر إضافية ==================== -->
+    <!-- ======== 📚 مصادر إضافية ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-book-open"></i> 📚 مصادر إضافية</div>
         <ul style="line-height: 2;">
@@ -5164,7 +5308,7 @@ torsocks curl https://check.torproject.org/api/ip</pre>
     </div>
 </div>
 
-        <!-- ==================== 11 auto-script ==================== -->
+        <!-- ======== 11 auto-script ======== -->
     <div class="tab-pane" id="tab11">
         <div class="live-script-section">
             <div class="live-script-header">
@@ -5180,9 +5324,9 @@ torsocks curl https://check.torproject.org/api/ip</pre>
             
             <button class="btn-copy-all" onclick="copyScript('auto-script')"><i class="fas fa-copy"></i> نسخ السكريبت بالكامل (auto-script.sh)</button>
             <pre class="code-block" id="auto-script">#!/bin/bash
-# ============================================
+# ========
 # سكريبت تعزيز أمان Qubes OS
-# ============================================
+# ========
 
 # الحصول على المستخدم الحقيقي والمسارات
 REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
@@ -5201,9 +5345,9 @@ BASE_TEMPLATE="debian-13-xfce"
 
 menu() {
     clear
-    echo "=========================================="
+    echo "======"
     echo "  🔒 تعزيز أمان Qubes OS + Kicksecure"
-    echo "=========================================="
+    echo "======"
     echo ""
     echo "1) إعداد معلمات النواة (dom0 + VMs) شامل"
     echo "2) إعداد MAC Randomization + تعطيل IPv6"
@@ -5232,14 +5376,14 @@ menu() {
     esac
 }
 
-# ============================================
+# ========
 # 1. قائمة إعداد معلمات النواة
-# ============================================
+# ========
 kernel_opts_menu() {
     clear
-    echo "=========================================="
+    echo "======"
     echo "  ⚙️  إعداد معلمات النواة"
-    echo "=========================================="
+    echo "======"
     echo ""
     echo "1) إعداد dom0 فقط (GRUB)"
     echo "2) إعداد جميع VMs فقط"
@@ -5256,14 +5400,14 @@ kernel_opts_menu() {
     esac
 }
 
-# ============================================
+# ========
 # 1أ. إضافة معلمات النواة لـ dom0 فقط
-# ============================================
+# ========
 setup_kernel_opts_dom0() {
     clear
-    echo "=========================================="
+    echo "======"
     echo "  🔧 إضافة معلمات النواة لـ dom0 (GRUB)"
-    echo "=========================================="
+    echo "======"
     
     if [ ! -f /etc/default/grub ]; then
         err "الملف /etc/default/grub غير موجود!"
@@ -5330,14 +5474,14 @@ INNER_EOF
     pause
 }
 
-# ============================================
+# ========
 # 1ب. إضافة معلمات النواة لجميع الـ VMs فقط
-# ============================================
+# ========
 setup_kernel_opts_vms() {
     clear
-    echo "=========================================="
+    echo "======"
     echo "  🔧 إضافة معلمات النواة لجميع الـ VMs"
-    echo "=========================================="
+    echo "======"
 
     # VMs لا ترث معلمات GRUB من dom0، لذا يجب تعيينها بشكل منفصل
     NEW_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
@@ -5409,14 +5553,14 @@ setup_kernel_opts_vms() {
     pause
 }
 
-# ============================================
+# ========
 # 1ج. استعادة GRUB من النسخة الاحتياطية
-# ============================================
+# ========
 rollback_grub() {
     clear
-    echo "=========================================="
+    echo "======"
     echo "  🔄 استعادة GRUB من النسخة الاحتياطية"
-    echo "=========================================="
+    echo "======"
     echo ""
     
     echo "📁 النسخ الاحتياطية المتوفرة:"
@@ -5444,9 +5588,9 @@ rollback_grub() {
     pause
 }
 
-# ============================================
+# ========
 # 2. MAC Randomization + تعطيل IPv6 + إغلاق القالب
-# ============================================
+# ========
 mac_random() {
     info "إعداد MAC Randomization: $BASE_TEMPLATE"
     
@@ -5490,9 +5634,9 @@ EOF'"
 }
 
 
-# ============================================
+# ========
 # 3. إنشاء بوابات Whonix
-# ============================================
+# ========
 whonix_gws() {
     for g in "sys-whonix-A:red" "sys-whonix-B:blue"; do
         n=${g%:*}; l=${g#*:}
@@ -5507,9 +5651,9 @@ whonix_gws() {
     pause
 }
 
-# ============================================
+# ========
 # 4. تثبيت Kicksecure + جعله الأساس + إعدادات متقدمة
-# ============================================
+# ========
 kicksecure() {
     info "التحقق من وجود قالب Kicksecure 18..."
     
@@ -5542,16 +5686,16 @@ kicksecure() {
     # انتظار اكتمال التشغيل
     sleep 5
     
-    # ============================================
+    # ========
     # 1. ضبط المنطقة الزمنية
-    # ============================================
+    # ========
     info "ضبط المنطقة الزمنية على UTC..."
     qvm-run kicksecure-18 "sudo timedatectl set-timezone Etc/UTC" 2>/dev/null || true
     ok "تم ضبط المنطقة الزمنية"
     
-    # ============================================
+    # ========
     # 2. إعداد MAC Randomization
-    # ============================================
+    # ========
     info "إعداد MAC Randomization في قالب Kicksecure 18..."
     
     qvm-run kicksecure-18 "sudo bash -c 'mkdir -p /usr/lib/NetworkManager/conf.d/ && cat > /usr/lib/NetworkManager/conf.d/31-randomize-mac.conf << EOF
@@ -5563,15 +5707,15 @@ EOF'" 2>/dev/null || true
     
     ok "تم إعداد MAC Randomization"
     
-    # ============================================
+    # ========
     # 3. إعدادات sysctl المتقدمة
-    # ============================================
+    # ========
     info "تطبيق إعدادات sysctl المتقدمة على Kicksecure 18..."
     
     qvm-run kicksecure-18 "sudo bash -c 'cat > /etc/sysctl.d/99-qubes-hardening.conf << EOF
-# ============================================
+# ========
 # إعدادات أمان متقدمة لـ Qubes + Kicksecure 18
-# ============================================
+# ========
 
 # -------------------- حماية الشبكة --------------------
 net.ipv4.tcp_syncookies = 1
@@ -5605,31 +5749,31 @@ EOF'"
     qvm-run kicksecure-18 "sudo sysctl -p /etc/sysctl.d/99-qubes-hardening.conf" 2>/dev/null || true
     ok "تم تطبيق إعدادات sysctl المتقدمة"
     
-    # ============================================
+    # ========
     # 4. تعطيل الخدمات غير الضرورية
-    # ============================================
+    # ========
     info "تعطيل الخدمات غير الضرورية في Kicksecure 18..."
     qvm-run kicksecure-18 "sudo systemctl mask bluetooth.service cups.service avahi-daemon.service ModemManager.service 2>/dev/null || true" 2>/dev/null || true
     ok "تم تعطيل الخدمات غير الضرورية"
     
-    # ============================================
+    # ========
     # 5. تثبيت tirdad - حماية TCP الإضافية
-    # ============================================
+    # ========
     info "تثبيت tirdad - أداة عشوائية أرقام تسلسل TCP..."
     info "توفر حماية إضافية ضد حقن الحزم الضارة في اتصالات الشبكة"
     qvm-run kicksecure-18 "sudo apt update && sudo apt install tirdad -y" 2>/dev/null || true
     ok "تم تثبيت tirdad بنجاح"
     
-    # ============================================
+    # ========
     # 6. إغلاق قالب Kicksecure
-    # ============================================
+    # ========
     info "إغلاق قالب Kicksecure 18..."
     qvm-shutdown --wait kicksecure-18 2>/dev/null || true
     ok "تم إغلاق kicksecure-18"
     
-    # ============================================
+    # ========
     # 7. جعل Kicksecure الأساس
-    # ============================================
+    # ========
     read -p "جعل Kicksecure 18 الأساس لـ default-dvm؟ (y/n): " yn
     if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
         BASE_TEMPLATE="kicksecure-18"
@@ -5674,9 +5818,9 @@ fi
     pause
 }
 
-# ============================================
+# ========
 # 5. سكريبتات RAM Pool 
-# ============================================
+# ========
 ram_pool_scripts() {
     mkdir -p "$DESKTOP_PATH/ram-pool-scripts"
     
@@ -6140,17 +6284,17 @@ EOF
     pause
 }
 
-# ============================================
+# ========
 # 6. سكريبت Amnesic Tmpfs
-# ============================================
+# ========
 amnesic_script() {
     mkdir -p "$DESKTOP_PATH/amnesic-scripts"
     
     cat > "$DESKTOP_PATH/amnesic-scripts/apply-tmpfs.sh" << EOF
 #!/bin/bash
-# ============================================
+# ========
 # TMPFS الكامل لـ Amnesic Disposable VM
-# ============================================
+# ========
 USER="$REAL_USER"
 mkdir -p /var/log /var/cache /var/tmp /tmp "$REAL_HOME/QubesIncoming"
 mount -t tmpfs tmpfs /var/log -o size=512M,mode=0755,nosuid,nodev
@@ -6170,9 +6314,9 @@ EOF
     pause
 }
 
-# ============================================
+# ========
 # 7. Live Mode - Overlay فقط (بدون Zram)
-# ============================================
+# ========
 live_mode() {
     clear
     REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
@@ -6675,9 +6819,9 @@ EOF
     pause
 }
 
-# ============================================
+# ========
 # 8. سكريبتات الطوارئ (BusKill)
-# ============================================
+# ========
 emergency_script() {
     mkdir -p "$DESKTOP_PATH/emergency"
     
@@ -7075,9 +7219,9 @@ EOF
     pause
 }
 
-# ============================================
+# ========
 # 9. تنفيذ التلقائي فقط (يشغل من 1 إلى 8)
-# ============================================
+# ========
 run_auto() {
     info "بدء التنفيذ التلقائي لجميع الأقسام..."
     echo ""
@@ -7107,7 +7251,7 @@ menu</pre>
         </div>
     </div>
     
-    <!-- ==================== الفوتر ==================== -->
+    <!-- ======== الفوتر ======== -->
     <div class="footer">
         <p>جميع الأوامر قابلة للنسخ بالضغط عليها — يبقى أمنك مسؤوليتك. تم التحديث وفقاً لـ Qubes OS 4.3 و Whonix 18 و Kicksecure.<p>
     </div>
