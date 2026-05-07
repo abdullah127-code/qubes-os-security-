@@ -6380,16 +6380,10 @@ mkdir -p /home/$REAL_USER/.config
 cat > /home/$REAL_USER/.config/swapoff.sh << 'INNER_EOF'
 #!/bin/bash
 sleep 2
-if findmnt -n -o SOURCE / | grep -qE "(overlay|/dev/zram0)"; then
-    sudo systemctl stop dev-zram0.swap systemd-zram-setup@zram0.service 2>/dev/null || true
-    sudo systemctl disable dev-zram0.swap systemd-zram-setup@zram0.service 2>/dev/null || true
-    sudo systemctl mask dev-zram0.swap systemd-zram-setup@zram0.service 2>/dev/null || true
-    sudo swapoff /dev/zram0 2>/dev/null || true
+if findmnt -n -o SOURCE / | grep -q "overlay"; then
     sudo swapoff -a 2>/dev/null || true
     notify-send --expire-time=20000 "Live session is running" "dom0 mode: $(findmnt -n -o SOURCE /)" --icon=dialog-information 2>/dev/null || true
     sudo sed -i '/[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab 2>/dev/null || true
-    sudo sed -i '/[[:space:]]\+none[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab 2>/dev/null || true
-    sudo sed -i '/[[:space:]]\?\/dev\/.*[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab 2>/dev/null || true
     sudo sysctl -w kernel.sysrq=0 2>/dev/null || true
     sudo sysctl -w kernel.perf_event_paranoid=3 2>/dev/null || true
     sudo sysctl -w kernel.kptr_restrict=2 2>/dev/null || true
