@@ -5585,11 +5585,8 @@ setup_kernel_opts_vms() {
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && { err "تم الإلغاء"; pause; return 0; }
 
     info "إغلاق جميع VMs قبل تطبيق المعلمات..."
-    for v in $(qvm-ls --raw-list 2>/dev/null | grep -v dom0); do
-        echo "   🔻 إغلاق: $v"
-        qvm-shutdown --wait "$v" 2>/dev/null || true
-    done
-    ok "تم إغلاق جميع VMs"
+sudo qvm-shutdown --all 2>/dev/null || true
+ok "تم إغلاق جميع VMs"
 
     for vm in $(qvm-ls --raw-list 2>/dev/null); do
         vm_clean=$(echo "$vm" | tr -d '[:space:]')
@@ -5625,13 +5622,13 @@ setup_kernel_opts_vms() {
     done
 
     echo ""
-    info "إعادة تشغيل sys-net و sys-usb..."
-    for vm in sys-net sys-usb; do
-        if qvm-check --quiet "$vm" 2>/dev/null; then
-            qvm-start "$vm"
-            echo "   🔄 $vm"
-        fi
-    done
+    info "إعادة تشغيل sys-net و sys-firewall و sys-usb..."
+for vm in sys-net sys-firewall sys-usb; do
+    if qvm-check --quiet "$vm" 2>/dev/null; then
+        qvm-start "$vm"
+        echo "   🔄 $vm"
+    fi
+done
 
     warn "⚠️  تذكر: أي VM كان مفتوحاً أثناء تشغيل السكربت يجب إعادة تشغيله يدوياً لتطبيق المعاملات الجديدة."
 
