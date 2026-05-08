@@ -466,8 +466,7 @@ body.light-mode .card-badge {
     <code class="warning" onclick="copyText(this)">bootscrub=1 xen_scrub_pages=1</code>
     
     <p style="margin-top: 15px;"><strong>🔴 معلمات Linux:</strong> أضفها إلى <code>GRUB_CMDLINE_LINUX</code></p>
-    <code class="critical" onclick="copyText(this)">smt=off init_on_free=1 init_on_alloc=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off quiet loglevel=0 spectre_v2=on page_alloc.shuffle=1 preempt=full</code>
-    
+    <code class="critical" onclick="copyText(this)">smt=off init_on_free=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off quiet loglevel=0 spectre_v2=on page_alloc.shuffle=1 preempt=full</code>   
     <div class="note" style="margin-top: 10px; background: #2a2a1a; border-right-color: #ffaa33;">
         <i class="fas fa-shield-alt"></i>
         <strong>🛡️ smt=off إجراء أمني إلزامي:</strong> تعطيل Hyper-Threading يمنع هجمات القنوات الجانبية (Spectre/Meltdown) بين الأجهزة الافتراضية. نظام التحديث في Qubes يفرض هذه المعلمة تلقائياً عند كل تحديث للنواة.
@@ -525,12 +524,12 @@ body.light-mode .card-badge {
                     <td>يمنع تسرب كلمات المرور والمفاتيح</td>
                     <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
                 </tr>
-                <tr style="background: #1a3a1a;">
+                <tr style="background: #1a2a1a;">
                     <td>5</td>
                     <td><code onclick="copyText(this)">init_on_alloc=1</code></td>
-                    <td>يمسح الذاكرة قبل تخصيصها</td>
-                    <td>يمنع الوصول إلى بقايا بيانات سابقة</td>
-                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                    <td>يمسح الذاكرة قبل تخصيصها داخل الـ VM</td>
+                    <td>يمنع تطبيقاً خبيثاً داخل VM من قراءة بقايا بيانات تطبيق آخر</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
                 </tr>
                 <!-- dom0 فقط -->
                 <tr style="background: #2a2a1a;">
@@ -555,13 +554,15 @@ body.light-mode .card-badge {
                     <td>يمنع تسرب البيانات عبر IPv6</td>
                     <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
                 </tr>
-                <tr style="background: #1a3a1a;">
+                <!-- dom0 فقط -->
+                <tr style="background: #2a2a1a;">
                     <td>9</td>
                     <td><code onclick="copyText(this)">noswap</code></td>
                     <td>يعطل الـ swap تماماً</td>
                     <td>يمنع تسرب البيانات إلى القرص</td>
-                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
                 </tr>
+                <!-- مشتركة -->
                 <tr style="background: #1a3a1a;">
                     <td>10</td>
                     <td><code onclick="copyText(this)">slab_nomerge</code></td>
@@ -689,13 +690,6 @@ body.light-mode .card-badge {
                     <td><code onclick="copyText(this)">randomize_kstack_offset=on</code></td>
                     <td>عشوائية إزاحة مكدس النواة</td>
                     <td>يصعّب استغلال ثغرات stack</td>
-                    <td><span class="badge badge-success">📱 AppVMs</span></td>
-                </tr>
-                <tr style="background: #1a2a1a;">
-                    <td>28</td>
-                    <td><code onclick="copyText(this)">nosmt=force</code></td>
-                    <td>تعطيل Hyper-Threading بقوة داخل VMs</td>
-                    <td>يمنع هجمات القنوات الجانبية</td>
                     <td><span class="badge badge-success">📱 AppVMs</span></td>
                 </tr>
             </tbody>
@@ -2203,13 +2197,13 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <h3>🔐 الطريقة الآمنة: فصل التخزين عن التنفيذ (لمنع التسريب)</h3>
         </div>
         
-        <p><strong>الفكرة الأساسية:</strong> بعد فتح التشفير (VC + LUKS) داخل كيوبس التخزين، <strong>لا تقم بتثبيت (mount) نظام الملفات فيه</strong>. بدلاً من ذلك، <strong>مرر الجهاز المفتوح فقط</strong> إلى كيوبس آخر يعمل على RAM Pool. بهذه الطريقة، البيانات الحساسة تُكتب فقط في الذاكرة العشوائية (RAM) وتختفي تماماً عند الإغلاق.</p>
+        <p><strong>الفكرة الأساسية:</strong> بعد فتح التشفير (VC + LUKS) داخل  كيوب التخزين، <strong>لا تقم بتثبيت (mount) نظام الملفات فيه</strong>. بدلاً من ذلك، <strong>مرر الجهاز المفتوح فقط</strong> إلى  كيوب آخر يعمل على RAM Pool. بهذه الطريقة، البيانات الحساسة تُكتب فقط في الذاكرة العشوائية (RAM) وتختفي تماماً عند الإغلاق.</p>
         
         <div class="note" style="background:#1a3a3a; border-right-color:#66ccff;">
             <i class="fas fa-info-circle"></i>
             <strong>📌 لماذا هذا مهم؟</strong><br>
-            • إذا قمت بتثبيت نظام الملفات في كيوبس التخزين، فإن البيانات تُكتب على القرص (Swap, logs, cache) وقد تُستعاد لاحقاً.<br>
-            • إذا قمت بتمرير الجهاز فقط (بدون تثبيت) إلى كيوبس على RAM Pool، فإن البيانات تعمل في RAM فقط وتختفي عند الإغلاق.<br>
+            • إذا قمت بتثبيت نظام الملفات في  كيوب التخزين، فإن البيانات تُكتب على القرص (Swap, logs, cache) وقد تُستعاد لاحقاً.<br>
+            • إذا قمت بتمرير الجهاز فقط (بدون تثبيت) إلى  كيوب على RAM Pool، فإن البيانات تعمل في RAM فقط وتختفي عند الإغلاق.<br>
             • هذه هي الطريقة الوحيدة لمنع التسريب بالكامل في Qubes OS.
         </div>
         
@@ -2218,13 +2212,13 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <tbody>
                 <tr>
                     <td><strong>الطريقة الخطرة</strong><br><small>(لا تفعلها)</small></td>
-                    <td>كيوبس التخزين (على HDD/SSD)</td>
+                    <td> كيوب التخزين (على HDD/SSD)</td>
                     <td>تُكتب على القرص الدائم</td>
                     <td>🔴 <strong>يحدث تسريب</strong><br><small>(يمكن استرجاعها لاحقاً)</small></td>
                 </tr>
                 <tr>
                     <td><strong>الطريقة الآمنة</strong><br><small>(افعلها)</small></td>
-                    <td>كيوبس التنفيذ (على RAM Pool)</td>
+                    <td> كيوب التنفيذ (على RAM Pool)</td>
                     <td>تُكتب في RAM فقط</td>
                     <td>🟢 <strong>لا تسريب</strong><br><small>(تختفي بعد الإغلاق)</small></td>
                 </tr>
@@ -2239,7 +2233,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <h3>🖱️ التمرير العملي: عبر الواجهة الرسومية لـ dom0</h3>
         </div>
         
-        <p><strong>المبدأ:</strong> بعد فتح التشفير في كيوبس التخزين (دون تثبيته)، يظهر الجهاز المفتوح في قائمة الأجهزة على سطح مكتب dom0. يمكنك بعد ذلك <strong>توصيله</strong> إلى أي كيوبس آخر كما تفعل مع أي USB عادي.</p>
+        <p><strong>المبدأ:</strong> بعد فتح التشفير في  كيوب التخزين (دون تثبيته)، يظهر الجهاز المفتوح في قائمة الأجهزة على سطح مكتب dom0. يمكنك بعد ذلك <strong>توصيله</strong> إلى أي  كيوب آخر كما تفعل مع أي USB عادي.</p>
         
         <div style="background:#202036; padding:15px; border-radius:20px; margin:15px 0;">
             <p><strong>🖱️ الخطوات بالتفصيل:</strong></p>
@@ -2247,7 +2241,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <li>في <strong>storage-vault</strong>: افتح VeraCrypt ثم LUKS (بدون mount). الجهاز الآن جاهز للتمرير.</li>
                 <li>في <strong>dom0</strong>: افتح قائمة "Qubes Devices" (أيقونة USB في شريط المهام أو من Qubes Tools).</li>
                 <li>ستجد الجهاز (مثل <code>secret-data</code>) مدرجاً تحت <strong>storage-vault</strong>.</li>
-                <li>حدد الجهاز، ثم اختر كيوبس الوجهة (مثل <strong>ram-work</strong>) واضغط <strong>Attach</strong> أو <strong>توصيل</strong>.</li>
+                <li>حدد الجهاز، ثم اختر  كيوب الوجهة (مثل <strong>ram-work</strong>) واضغط <strong>Attach</strong> أو <strong>توصيل</strong>.</li>
                 <li>في <strong>ram-work</strong>: قم بتثبيت الجهاز (mount) كالمعتاد عبر المدير أو الأمر <code>sudo mount /dev/xvdi /mnt/secret</code>.</li>
             </ol>
         </div>
@@ -2257,12 +2251,12 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <strong>💡 لماذا هذا سهل؟</strong><br>
             • dom0 يتعامل مع أي جهاز بلوك (block device) بنفس الطريقة، سواء كان USB فعلياً أو جهاز LUKS مفتوحاً.<br>
             • لا تحتاج إلى كتابة أوامر معقدة – كل شيء يتم عبر الواجهة الرسومية.<br>
-            • كيوبس الوجهة يرى الجهاز كقرص عادي (مثل /dev/xvdi) ويمكنه تثبيته فوراً.
+            •  كيوب الوجهة يرى الجهاز كقرص عادي (مثل /dev/xvdi) ويمكنه تثبيته فوراً.
         </div>
         
         <div class="note-critical" style="margin-top:15px;">
             <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ تذكر:</strong> لا تقم بتثبيت (mount) الجهاز في كيوبس التخزين. فقط افتح التشفير واتركه. التثبيت يتم فقط في كيوبس الوجهة الذي يعمل على RAM.
+            <strong>⚠️ تذكر:</strong> لا تقم بتثبيت (mount) الجهاز في  كيوب التخزين. فقط افتح التشفير واتركه. التثبيت يتم فقط في  كيوب الوجهة الذي يعمل على RAM.
         </div>
     </div>
 
@@ -2301,9 +2295,9 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <thead><th>الخطوة</th><th>الأمر (في dom0)</th><th>ملاحظات</th></thead>
         <tbody>
             <tr>
-                <td>إنشاء كيوبس التخزين</td>
+                <td>إنشاء  كيوب التخزين</td>
                 <td><code class="safe" onclick="copyText(this)">qvm-create --class AppVM --label black --template debian-13-xfce storage-vault</code></td>
-                <td>كيوبس معزول يحتوي على الملف المشفر</td>
+                <td> كيوب معزول يحتوي على الملف المشفر</td>
             </tr>
             <tr>
                 <td>إنشاء RAM Pool</td>
@@ -2311,9 +2305,9 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <td>مساحة عمل في الذاكرة (تختفي بعد الإقلاع)</td>
             </tr>
             <tr>
-                <td>إنشاء كيوبس تنفيذ زائل</td>
+                <td>إنشاء  كيوب تنفيذ زائل</td>
                 <td><code class="safe" onclick="copyText(this)">qvm-create -P ram_pool -t debian-13-xfce --label yellow ram-work</code></td>
-                <td>هذا الكيوبس يعمل على RAM فقط</td>
+                <td>هذا ال كيوب يعمل على RAM فقط</td>
             </tr>
             <tr>
                 <td>(اختياري) إنشاء RAM Pool أكبر</td>
@@ -2499,8 +2493,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <li>🔹 <strong>تحذير SSD:</strong> لا تستخدم الأحجام المخفية على SSD إذا كان الإنكار المعقول ضرورياً.</li>
             <li>🔹 <strong>النسخ الاحتياطي للرأس:</strong> <code>sudo cryptsetup luksHeaderBackup /dev/sdX --header-backup-file /path/to/backup</code></li>
             <li>🔹 <strong>تعطيل TRIM:</strong> <code>veracrypt --mount-options=nokernelcrypto /path/to/container /mnt/point</code></li>
-            <li>🔹 <strong>التمرير دون تثبيت:</strong> تذكر دائماً: لا تثبت (mount) في كيوبس التخزين، فقط مرر الجهاز عبر واجهة dom0.</li>
-            <li>🔹 <strong>تنظيف RAM Pool:</strong> بعد الانتهاء، يمكنك إيقاف كيوبس ram-work وتفريغ الذاكرة: <code>sudo umount /home/user/ram_pool</code></li>
+            <li>🔹 <strong>التمرير دون تثبيت:</strong> تذكر دائماً: لا تثبت (mount) في  كيوب التخزين، فقط مرر الجهاز عبر واجهة dom0.</li>
+            <li>🔹 <strong>تنظيف RAM Pool:</strong> بعد الانتهاء، يمكنك إيقاف  كيوب ram-work وتفريغ الذاكرة: <code>sudo umount /home/user/ram_pool</code></li>
         </ul>
     </div>
 
@@ -2644,8 +2638,8 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <div class="note" style="margin-top: 10px;">
             <i class="fas fa-info-circle"></i>
             <strong>📌 شرح الرسم البياني:</strong><br>
-            • <strong>الطريقة الخطرة:</strong> فتح التشفير وتركيبه (mount) في نفس الكيوبس يؤدي إلى كتابة البيانات على القرص الصلب، مما يترك آثاراً يمكن استرجاعها.<br>
-            • <strong>الطريقة الآمنة:</strong> فتح التشفير في كيوبس معزول (storage-vault) ثم تمرير الجهاز المفتوح فقط إلى كيوبس يعمل على RAM Pool (ram-work). البيانات تُكتب في الذاكرة وتختفي عند الإغلاق.
+            • <strong>الطريقة الخطرة:</strong> فتح التشفير وتركيبه (mount) في نفس ال كيوب يؤدي إلى كتابة البيانات على القرص الصلب، مما يترك آثاراً يمكن استرجاعها.<br>
+            • <strong>الطريقة الآمنة:</strong> فتح التشفير في  كيوب معزول (storage-vault) ثم تمرير الجهاز المفتوح فقط إلى  كيوب يعمل على RAM Pool (ram-work). البيانات تُكتب في الذاكرة وتختفي عند الإغلاق.
         </div>
     </div>
 <!-- ======== سيناريو عملي: فلاشة LUKS ← Whonix (مختصر) ======== -->
