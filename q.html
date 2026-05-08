@@ -458,193 +458,250 @@ body.light-mode .card-badge {
             <p>تُطبّق معلمات dom0 في GRUB، ومعلمات VMs عبر qvm-prefs</p>
         </div>
 
-        <!-- القسم 1: معلمات dom0 -->
-        <div class="card" style="margin-bottom: 25px; border-right: 6px solid #ffaa33;">
-            <div class="card-header"><i class="fas fa-desktop"></i> 🖥️ معلمات dom0 (تُطبّق في GRUB)</div>
-            
-            <p><strong>🔴 معلمات Xen:</strong> أضفها إلى <code>GRUB_CMDLINE_XEN_DEFAULT</code></p>
-            <code class="warning" onclick="copyText(this)">xen_scrub_pages=1</code>
-            
-            <p style="margin-top: 15px;"><strong>🔴 معلمات Linux:</strong> أضفها إلى <code>GRUB_CMDLINE_LINUX</code></p>
-            <code class="critical" onclick="copyText(this)">smt=off init_on_free=1 init_on_alloc=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off quiet loglevel=0</code>
-            
-            <div class="note" style="margin-top: 10px; background: #2a2a1a; border-right-color: #ffaa33;">
-                <i class="fas fa-shield-alt"></i>
-                <strong>🛡️ smt=off إجراء أمني إلزامي:</strong> تعطيل Hyper-Threading يمنع هجمات القنوات الجانبية (Spectre/Meltdown) بين الأجهزة الافتراضية. نظام التحديث في Qubes يفرض هذه المعلمة تلقائياً عند كل تحديث للنواة.
-            </div>
-        </div>
+<!-- القسم 1: معلمات dom0 -->
+<div class="card" style="margin-bottom: 25px; border-right: 6px solid #ffaa33;">
+    <div class="card-header"><i class="fas fa-desktop"></i> 🖥️ معلمات dom0 (تُطبّق في GRUB)</div>
+    
+    <p><strong>🔴 معلمات Xen:</strong> أضفها إلى <code>GRUB_CMDLINE_XEN_DEFAULT</code></p>
+    <code class="warning" onclick="copyText(this)">bootscrub=1 xen_scrub_pages=1</code>
+    
+    <p style="margin-top: 15px;"><strong>🔴 معلمات Linux:</strong> أضفها إلى <code>GRUB_CMDLINE_LINUX</code></p>
+    <code class="critical" onclick="copyText(this)">smt=off init_on_free=1 init_on_alloc=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off quiet loglevel=0 spectre_v2=on page_alloc.shuffle=1 preempt=full</code>
+    
+    <div class="note" style="margin-top: 10px; background: #2a2a1a; border-right-color: #ffaa33;">
+        <i class="fas fa-shield-alt"></i>
+        <strong>🛡️ smt=off إجراء أمني إلزامي:</strong> تعطيل Hyper-Threading يمنع هجمات القنوات الجانبية (Spectre/Meltdown) بين الأجهزة الافتراضية. نظام التحديث في Qubes يفرض هذه المعلمة تلقائياً عند كل تحديث للنواة.
+    </div>
+</div>
 
 <!-- القسم 2: معلمات VMs -->
 <div class="card" style="margin-bottom: 25px; border-right: 6px solid #4caf50;">
     <div class="card-header"><i class="fas fa-th-large"></i> 🖼️ معلمات القوالب و AppVMs (تُطبّق عبر qvm-prefs)</div>
     
     <p>هذه المعلمات تحمي برامجك من هجمات المعالج. في Qubes، VMs تستخدم نواة dom0 لكن معاملاتها تُضبط بشكل منفصل ولا ترث معاملات GRUB.</p>
-    <code class="critical" onclick="copyText(this)">init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force</code>
+<code class="critical" onclick="copyText(this)">xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none</code>
 </div>
-        <!-- جدول الشرح المُفصّل -->
-        <div class="card">
-            <div class="card-header"><i class="fas fa-list-ul"></i> 📖 شرح كل معلمة</div>
-            <div style="overflow-x: auto;">
-                <table class="comparison-table">
-                    <thead>
-                        <th>#</th>
-                        <th>المعلمة</th>
-                        <th>الشرح</th>
-                        <th>الفائدة</th>
-                        <th style="text-align: center;">يطبق على</th>
-                    </thead>
-                    <tbody>
-                        <!-- Xen (للجميع) -->
-                        <tr style="background: #1a3a1a;">
-                            <td>1</td>
-                            <td><code onclick="copyText(this)">xen_scrub_pages=1</code></td>
-                            <td>يمسح الذاكرة قبل إعادة استخدامها بين VMs</td>
-                            <td>يمنع تسرب البيانات من VM إلى آخر</td>
-                            <td><span class="badge badge-info">🔄 Xen (للجميع)</span></td>
-                        </tr>
-                        <!-- مشتركة -->
-                        <tr style="background: #1a3a1a;">
-                            <td>2</td>
-                            <td><code onclick="copyText(this)">smt=off</code></td>
-                            <td>يعطل Hyper-Threading</td>
-                            <td>يمنع هجمات Spectre/Meltdown بين VMs</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>3</td>
-                            <td><code onclick="copyText(this)">init_on_free=1</code></td>
-                            <td>يمسح الذاكرة فور تحريرها</td>
-                            <td>يمنع تسرب كلمات المرور والمفاتيح</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>4</td>
-                            <td><code onclick="copyText(this)">init_on_alloc=1</code></td>
-                            <td>يمسح الذاكرة قبل تخصيصها</td>
-                            <td>يمنع الوصول إلى بقايا بيانات سابقة</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <!-- dom0 فقط -->
-                        <tr style="background: #2a2a1a;">
-                            <td>5</td>
-                            <td><code onclick="copyText(this)">lockdown=confidentiality</code></td>
-                            <td>يمنع حتى الجذر من تعديل النواة أو قراءة ذاكرتها</td>
-                            <td>يمنع العبث بنظام dom0</td>
-                            <td><span class="badge badge-warning">🖥️ dom0</span></td>
-                        </tr>
-                        <tr style="background: #2a2a1a;">
-                            <td>6</td>
-                            <td><code onclick="copyText(this)">module.sig_enforce=1</code></td>
-                            <td>يمنع تحميل وحدات نواة غير موقعة</td>
-                            <td>يمنع حقن rootkits</td>
-                            <td><span class="badge badge-warning">🖥️ dom0</span></td>
-                        </tr>
-                        <!-- مشتركة -->
-                        <tr style="background: #1a3a1a;">
-                            <td>7</td>
-                            <td><code onclick="copyText(this)">ipv6.disable=1</code></td>
-                            <td>يعطل IPv6 بالكامل</td>
-                            <td>يمنع تسرب البيانات عبر IPv6</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>8</td>
-                            <td><code onclick="copyText(this)">noswap</code></td>
-                            <td>يعطل الـ swap تماماً</td>
-                            <td>يمنع تسرب البيانات إلى القرص</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>9</td>
-                            <td><code onclick="copyText(this)">slab_nomerge</code></td>
-                            <td>يمنع دمج الكائنات المتشابهة في النواة</td>
-                            <td>يصعّب استغلال ثغرات الكومة</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>10</td>
-                            <td><code onclick="copyText(this)">slub_debug=FZ</code></td>
-                            <td>يفعل فحوصات سلامة الذاكرة ويضيف مناطق عازلة</td>
-                            <td>يكتشف تجاوزات السعة</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>11</td>
-                            <td><code onclick="copyText(this)">vsyscall=none</code></td>
-                            <td>يعطل واجهة vsyscall القديمة</td>
-                            <td>يغلق سطح هجوم ROP</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <!-- dom0 فقط -->
-                        <tr style="background: #2a2a1a;">
-                            <td>12</td>
-                            <td><code onclick="copyText(this)">kernel.kptr_restrict=2</code></td>
-                            <td>يمنع عرض عناوين النواة</td>
-                            <td>يصعّب بناء هجمات ROP</td>
-                            <td><span class="badge badge-warning">🖥️ dom0</span></td>
-                        </tr>
-                        <tr style="background: #2a2a1a;">
-                            <td>13</td>
-                            <td><code onclick="copyText(this)">oops=panic</code></td>
-                            <td>يجعل النواة تنهار عند أي خطأ</td>
-                            <td>يمنع استغلال الأخطاء لمواصلة الهجوم</td>
-                            <td><span class="badge badge-warning">🖥️ dom0</span></td>
-                        </tr>
-                        <tr style="background: #2a2a1a;">
-                            <td>14</td>
-                            <td><code onclick="copyText(this)">debugfs=off</code></td>
-                            <td>يعطل debugfs بالكامل</td>
-                            <td>يمنع تسرب معلومات بنية النواة</td>
-                            <td><span class="badge badge-warning">🖥️ dom0</span></td>
-                        </tr>
-                        <tr style="background: #1a3a1a;">
-                            <td>15</td>
-                            <td><code onclick="copyText(this)">quiet loglevel=0</code></td>
-                            <td>يمنع عرض رسائل النواة أثناء الإقلاع</td>
-                            <td>يمنع تسرب معلومات للمهاجم</td>
-                            <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
-                        </tr>
-                        <!-- AppVMs فقط -->
-                        <tr style="background: #1a2a1a;">
-                            <td>16</td>
-                            <td><code onclick="copyText(this)">mitigations=auto</code></td>
-                            <td>يفعّل تصحيحات الثغرات تلقائياً</td>
-                            <td>يمنع Spectre, Meltdown داخل VMs</td>
-                            <td><span class="badge badge-success">📱 AppVMs</span></td>
-                        </tr>
-                        <tr style="background: #1a2a1a;">
-                            <td>17</td>
-                            <td><code onclick="copyText(this)">random.trust_cpu=off</code></td>
-                            <td>لا تثق بمولد الأرقام العشوائية في المعالج</td>
-                            <td>يمنع تخمين المفاتيح عبر RNG مخترق</td>
-                            <td><span class="badge badge-success">📱 AppVMs</span></td>
-                        </tr>
-                        <tr style="background: #1a2a1a;">
-                            <td>18</td>
-                            <td><code onclick="copyText(this)">random.trust_bootloader=off</code></td>
-                            <td>لا تثق بمولد الأرقام العشوائية في محمل الإقلاع</td>
-                            <td>يمنع تخمين المفاتيح عبر RNG مخترق</td>
-                            <td><span class="badge badge-success">📱 AppVMs</span></td>
-                        </tr>
-                        <tr style="background: #1a2a1a;">
-                            <td>19</td>
-                            <td><code onclick="copyText(this)">spec_store_bypass_disable=on</code></td>
-                            <td>يعطل ثغرة Spectre v4</td>
-                            <td>يمنع تسرب البيانات عبر المخازن المؤقتة</td>
-                            <td><span class="badge badge-success">📱 AppVMs</span></td>
-                        </tr>
-                        <tr style="background: #1a2a1a;">
-                            <td>20</td>
-                            <td><code onclick="copyText(this)">l1tf=full,force</code></td>
-                            <td>يفعل الحماية الكاملة من L1 Terminal Fault</td>
-                            <td>يمنع تسرب بيانات ذاكرة L1</td>
-                            <td><span class="badge badge-success">📱 AppVMs</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
+<!-- جدول الشرح المُفصّل -->
+<div class="card">
+    <div class="card-header"><i class="fas fa-list-ul"></i> 📖 شرح كل معلمة</div>
+    <div style="overflow-x: auto;">
+        <table class="comparison-table">
+            <thead>
+                <th>#</th>
+                <th>المعلمة</th>
+                <th>الشرح</th>
+                <th>الفائدة</th>
+                <th style="text-align: center;">يطبق على</th>
+            </thead>
+            <tbody>
+                <!-- Xen (للجميع) -->
+                <tr style="background: #1a3a1a;">
+                    <td>1</td>
+                    <td><code onclick="copyText(this)">bootscrub=1</code></td>
+                    <td>يمسح الذاكرة عند إقلاع Xen</td>
+                    <td>يمنع تسرب بيانات من جلسة سابقة</td>
+                    <td><span class="badge badge-info">🔄 Xen (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>2</td>
+                    <td><code onclick="copyText(this)">xen_scrub_pages=1</code></td>
+                    <td>يمسح الذاكرة قبل إعادة استخدامها بين VMs</td>
+                    <td>يمنع تسرب البيانات من VM إلى آخر</td>
+                    <td><span class="badge badge-info">🔄 Xen (للجميع)</span></td>
+                </tr>
+                <!-- مشتركة -->
+                <tr style="background: #1a3a1a;">
+                    <td>3</td>
+                    <td><code onclick="copyText(this)">smt=off</code></td>
+                    <td>يعطل Hyper-Threading</td>
+                    <td>يمنع هجمات Spectre/Meltdown بين VMs</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>4</td>
+                    <td><code onclick="copyText(this)">init_on_free=1</code></td>
+                    <td>يمسح الذاكرة فور تحريرها</td>
+                    <td>يمنع تسرب كلمات المرور والمفاتيح</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>5</td>
+                    <td><code onclick="copyText(this)">init_on_alloc=1</code></td>
+                    <td>يمسح الذاكرة قبل تخصيصها</td>
+                    <td>يمنع الوصول إلى بقايا بيانات سابقة</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <!-- dom0 فقط -->
+                <tr style="background: #2a2a1a;">
+                    <td>6</td>
+                    <td><code onclick="copyText(this)">lockdown=confidentiality</code></td>
+                    <td>يمنع حتى الجذر من تعديل النواة أو قراءة ذاكرتها</td>
+                    <td>يمنع العبث بنظام dom0</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <tr style="background: #2a2a1a;">
+                    <td>7</td>
+                    <td><code onclick="copyText(this)">module.sig_enforce=1</code></td>
+                    <td>يمنع تحميل وحدات نواة غير موقعة</td>
+                    <td>يمنع حقن rootkits</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <!-- مشتركة -->
+                <tr style="background: #1a3a1a;">
+                    <td>8</td>
+                    <td><code onclick="copyText(this)">ipv6.disable=1</code></td>
+                    <td>يعطل IPv6 بالكامل</td>
+                    <td>يمنع تسرب البيانات عبر IPv6</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>9</td>
+                    <td><code onclick="copyText(this)">noswap</code></td>
+                    <td>يعطل الـ swap تماماً</td>
+                    <td>يمنع تسرب البيانات إلى القرص</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>10</td>
+                    <td><code onclick="copyText(this)">slab_nomerge</code></td>
+                    <td>يمنع دمج الكائنات المتشابهة في النواة</td>
+                    <td>يصعّب استغلال ثغرات الكومة</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>11</td>
+                    <td><code onclick="copyText(this)">slub_debug=FZ</code></td>
+                    <td>يفعل فحوصات سلامة الذاكرة ويضيف مناطق عازلة</td>
+                    <td>يكتشف تجاوزات السعة</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>12</td>
+                    <td><code onclick="copyText(this)">vsyscall=none</code></td>
+                    <td>يعطل واجهة vsyscall القديمة</td>
+                    <td>يغلق سطح هجوم ROP</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <!-- dom0 فقط -->
+                <tr style="background: #2a2a1a;">
+                    <td>13</td>
+                    <td><code onclick="copyText(this)">kernel.kptr_restrict=2</code></td>
+                    <td>يمنع عرض عناوين النواة</td>
+                    <td>يصعّب بناء هجمات ROP</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <tr style="background: #2a2a1a;">
+                    <td>14</td>
+                    <td><code onclick="copyText(this)">oops=panic</code></td>
+                    <td>يجعل النواة تنهار عند أي خطأ</td>
+                    <td>يمنع استغلال الأخطاء لمواصلة الهجوم</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <tr style="background: #2a2a1a;">
+                    <td>15</td>
+                    <td><code onclick="copyText(this)">debugfs=off</code></td>
+                    <td>يعطل debugfs بالكامل</td>
+                    <td>يمنع تسرب معلومات بنية النواة</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <tr style="background: #2a2a1a;">
+                    <td>16</td>
+                    <td><code onclick="copyText(this)">spectre_v2=on</code></td>
+                    <td>يفعل حماية إضافية من Spectre v2</td>
+                    <td>يمنع هجمات القنوات الجانبية على المعالج</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <tr style="background: #2a2a1a;">
+                    <td>17</td>
+                    <td><code onclick="copyText(this)">preempt=full</code></td>
+                    <td>جدولة استباقية كاملة للنواة</td>
+                    <td>استجابة أسرع وأداء أفضل لـ dom0</td>
+                    <td><span class="badge badge-warning">🖥️ dom0</span></td>
+                </tr>
+                <!-- مشتركة -->
+                <tr style="background: #1a3a1a;">
+                    <td>18</td>
+                    <td><code onclick="copyText(this)">quiet loglevel=0</code></td>
+                    <td>يمنع عرض رسائل النواة أثناء الإقلاع</td>
+                    <td>يمنع تسرب معلومات للمهاجم</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <tr style="background: #1a3a1a;">
+                    <td>19</td>
+                    <td><code onclick="copyText(this)">page_alloc.shuffle=1</code></td>
+                    <td>عشوائية تخصيص صفحات الذاكرة</td>
+                    <td>يصعّب استغلال ثغرات heap</td>
+                    <td><span class="badge badge-info">🔄 Linux (للجميع)</span></td>
+                </tr>
+                <!-- AppVMs فقط -->
+                <tr style="background: #1a2a1a;">
+                    <td>20</td>
+                    <td><code onclick="copyText(this)">mitigations=auto</code></td>
+                    <td>يفعّل تصحيحات الثغرات تلقائياً</td>
+                    <td>يمنع Spectre, Meltdown داخل VMs</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>21</td>
+                    <td><code onclick="copyText(this)">random.trust_cpu=off</code></td>
+                    <td>لا تثق بمولد الأرقام العشوائية في المعالج</td>
+                    <td>يمنع تخمين المفاتيح عبر RNG مخترق</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>22</td>
+                    <td><code onclick="copyText(this)">random.trust_bootloader=off</code></td>
+                    <td>لا تثق بمولد الأرقام العشوائية في محمل الإقلاع</td>
+                    <td>يمنع تخمين المفاتيح عبر RNG مخترق</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>23</td>
+                    <td><code onclick="copyText(this)">spec_store_bypass_disable=on</code></td>
+                    <td>يعطل ثغرة Spectre v4</td>
+                    <td>يمنع تسرب البيانات عبر المخازن المؤقتة</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>24</td>
+                    <td><code onclick="copyText(this)">tsx_async_abort=full</code></td>
+                    <td>يفعل الحماية الكاملة من TSX Async Abort</td>
+                    <td>يمنع تسرب بيانات المعالج</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>25</td>
+                    <td><code onclick="copyText(this)">mds=full,nosmt</code></td>
+                    <td>يفعل الحماية الكاملة من Microarchitectural Data Sampling</td>
+                    <td>يمنع تسرب البيانات بين الخيوط</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>26</td>
+                    <td><code onclick="copyText(this)">l1tf=full,force</code></td>
+                    <td>يفعل الحماية الكاملة من L1 Terminal Fault</td>
+                    <td>يمنع تسرب بيانات ذاكرة L1</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>27</td>
+                    <td><code onclick="copyText(this)">randomize_kstack_offset=on</code></td>
+                    <td>عشوائية إزاحة مكدس النواة</td>
+                    <td>يصعّب استغلال ثغرات stack</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+                <tr style="background: #1a2a1a;">
+                    <td>28</td>
+                    <td><code onclick="copyText(this)">nosmt=force</code></td>
+                    <td>تعطيل Hyper-Threading بقوة داخل VMs</td>
+                    <td>يمنع هجمات القنوات الجانبية</td>
+                    <td><span class="badge badge-success">📱 AppVMs</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
         <!-- كيفية التطبيق -->
         <div class="card" style="margin-top: 20px;">
             <div class="card-header"><i class="fas fa-cog"></i> 🔧 طريقة التطبيق</div>
@@ -5534,10 +5591,10 @@ GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
 GRUB_DISABLE_SUBMENU=false
 GRUB_TERMINAL_OUTPUT="console"
-GRUB_CMDLINE_LINUX="rd.luks.uuid=UUID_PLACEHOLDER rd.lvm.lv=qubes_dom0/root rd.lvm.lv=qubes_dom0/swap plymouth.ignore-serial-consoles rhgb quiet smt=off init_on_free=1 init_on_alloc=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off loglevel=0"
+GRUB_CMDLINE_LINUX="rd.luks.uuid=UUID_PLACEHOLDER rd.lvm.lv=qubes_dom0/root rd.lvm.lv=qubes_dom0/swap plymouth.ignore-serial-consoles rhgb quiet smt=off init_on_free=1 init_on_alloc=1 lockdown=confidentiality module.sig_enforce=1 ipv6.disable=1 noswap slab_nomerge slub_debug=FZ vsyscall=none kernel.kptr_restrict=2 oops=panic debugfs=off loglevel=0 spectre_v2=on page_alloc.shuffle=1 preempt=full"
 GRUB_DISABLE_RECOVERY="true"
 GRUB_THEME="/boot/grub2/themes/qubes/theme.txt"
-GRUB_CMDLINE_XEN_DEFAULT="console=none dom0_mem=min:1024M dom0_mem=max:8192M ucode=scan xen_scrub_pages=1 gnttab_max_frames=2048 gnttab_max_maptrack_frames=4096"
+GRUB_CMDLINE_XEN_DEFAULT="console=none dom0_mem=min:1024M dom0_mem=max:8192M ucode=scan bootscrub=1 xen_scrub_pages=1 gnttab_max_frames=2048 gnttab_max_maptrack_frames=4096"
 GRUB_DISABLE_OS_PROBER="true"
 GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX rd.qubes.hide_all_usb"
 INNER_EOF
@@ -5570,7 +5627,7 @@ setup_kernel_opts_vms() {
     echo "======"
 
     # VMs لا ترث معلمات GRUB من dom0، لذا يجب تعيينها بشكل منفصل
-    NEW_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+    NEW_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none"
 
     echo "📋 سيتم إضافة هذه المعلمات لجميع VMs:"
     echo "   $NEW_OPTS"
@@ -5935,7 +5992,7 @@ R='\033[0;31m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none"
 
 echo -e "${G}🔧 إنشاء VM في RAM pool...${N}"
 
@@ -5996,7 +6053,7 @@ R='\033[0;31m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none"
 
 echo -e "${G}🔧 إنشاء VM في RAM pool...${N}"
 
@@ -6061,7 +6118,7 @@ B='\033[0;34m'
 N='\033[0m'
 
 # ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on nosmt=force l1tf=full,force"
+KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none"
 
 echo -e "${G}🔧 إنشاء أجهزة VM في RAM pool...${N}"
 
