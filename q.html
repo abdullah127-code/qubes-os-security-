@@ -838,8 +838,8 @@ body.light-mode .card-badge {
     <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
         <i class="fas fa-lightbulb"></i> <strong>💡 شرح الرسم:</strong>
         <ul style="margin-right: 20px; margin-top: 8px;">
-            <li><strong>أعلى:</strong> من يراك على الشبكة المحلية؟ في الإعداد العادي، Qubes مكشوف للموزع والجيران. في الإعداد المفضل، الراوتر يعزل Qubes تماماً — لا أحد يرى ما خلفه.</li>
-            <li><strong>أسفل (المسار المنقط):</strong> كيف تسير البيانات فعلياً؟ في كلا الإعدادين، البيانات تمر عبر كل المحطات: Qubes ← راوتر ← موزع ← مزود ← موقع. Qubes لا يتصل بالموقع مباشرة أبداً.</li>
+            <li><strong>يمين:</strong> من يراك على الشبكة المحلية؟ في الإعداد العادي، Qubes مكشوف للموزع والجيران. في الإعداد المفضل، الراوتر يعزل Qubes تماماً — لا أحد يرى ما خلفه.</li>
+            <li><strong>يسار (المسار المنقط):</strong> كيف تسير البيانات فعلياً؟ في كلا الإعدادين، البيانات تمر عبر كل المحطات: Qubes ← راوتر ← موزع ← مزود ← موقع. Qubes لا يتصل بالموقع مباشرة أبداً.</li>
         </ul>
     </div>
 </div>
@@ -871,7 +871,7 @@ body.light-mode .card-badge {
         </div>
 
         <div class="note-critical">
-            <i class="fas fa-skull-crossbones"></i> <strong>⚠️ خطأ شائع قاتل:</strong> لا تقم أبداً بتوصيل أي Qube مباشرة بـ <code>sys-net</code>. الإعداد الصحيح: <code>التطبيق ← sys-firewall ← sys-net ← الإنترنت</code>.
+            <i class="fas fa-skull-crossbones"></i> <strong>⚠️ خطأ شائع قاتل:</strong> لا تقم أبداً بتوصيل أي Qube مباشرة بـ <code>sys-net</code>. الإعداد الصحيح: <code>التطبيق ← sys-firewall ← sys-net → الإنترنت</code>.
         </div>
     </div>
 
@@ -1003,7 +1003,7 @@ body.light-mode .card-badge {
             <i class="fas fa-info-circle"></i> <strong>شرح سريع للخطط البديلة:</strong>
             <ul style="margin-right:20px;">
                 <li><strong>الخطة B:</strong> راوتر WISP يشغل VPN (WireGuard) — الموزع لا يرى حتى البيانات المشفرة العادية، يرى فقط اتصال VPN واحد.</li>
-                <li><strong>الخطة D:</strong> هاتف أندرويد متصل بشبكة الموزع ← كابل USB لـ Qubes ← يظهر كـ <code>usb0</code>. أفضل من WiFi مباشر لكن الهاتف نفسه قد يكون مخترقاً.</li>
+                <li><strong>الخطة D:</strong> هاتف أندرويد متصل بشبكة الموزع → كابل USB لـ Qubes ← يظهر كـ <code>usb0</code>. أفضل من WiFi مباشر لكن الهاتف نفسه قد يكون مخترقاً.</li>
             </ul>
         </div>
     </div>
@@ -1053,7 +1053,6 @@ wifi.scan-rand-mac-address=yes</pre>
             <li><strong>عدوك الحقيقي:</strong> الموزع الوسيط والجيران على الشبكة المحلية — وليس المزود الرسمي.</li>
             <li><strong>مسار البيانات:</strong> Qubes ← راوتر WISP ← موزع ← مزود إنترنت ← موقع نهائي. البيانات تمر مرة واحدة في كل اتجاه.</li>
             <li><strong>سيناريو الاختراق:</strong> حتى لو تم اختراق sys-net، لا يستطيع المهاجم الوصول لـ dom0 أو باقي الأجهزة إلا بثغرة Xen نادرة.</li>
-            <li><strong>خطط الطوارئ:</strong> Ethernet (🟢) → USB Tethering (🟡) → WiFi داخلي مشفر (🟡) → WiFi مباشر مع حماية (🟠) → WiFi عادي (🔴).</li>
             <li><strong>طبقة VPN إضافية:</strong> يمكن تشغيل VPN على راوتر WISP نفسه لحماية البيانات حتى قبل وصولها لـ Qubes.</li>
             <li><strong>الكروت الملصقة:</strong> توفر خصوصية من الموزع والجيران، لكن في تحقيق جنائي رسمي قد تُتَتبع عبر كاميرات المحل.</li>
         </ul>
@@ -1078,9 +1077,9 @@ wifi.scan-rand-mac-address=yes</pre>
         <!-- مسار البيانات داخل Qubes -->
         <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px;">
             <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-A<br><small>Workstation</small></div>
-            <div style="color: #4caf50;">→</div>
+            <div style="color: #4caf50;">←</div>
             <div style="background: #4a2a2a; padding: 8px 12px; border-radius: 12px;">🔐 sys-whonix-A<br><small>Gateway A</small></div>
-            <div style="color: #4caf50;">→</div>
+            <div style="color: #4caf50;">←</div>
             <div style="background: #ff6666; padding: 8px 12px; border-radius: 12px;">🔥 sys-firewall-A<br><small>جدار ناري A</small></div>
             <div style="color: #4caf50;">→</div>
             <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
@@ -1123,7 +1122,7 @@ wifi.scan-rand-mac-address=yes</pre>
         <!-- شرح التشفير الصحيح (محدث ليشمل HTTPS) -->
         <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
             <strong>🔒🔒 مسار التشفير الكامل (HTTPS + Tor):</strong><br>
-            📱 محطة العمل: تشفر البيانات بـ <span style="color: #66ccff;">TLS/HTTPS</span> (طبقة 1) ← 🔐 Gateway A: تضيف <span style="color: #ffaa33;">3 طبقات Tor</span> (الطبقات 2، 3، 4) ← 🔥 جدار الحماية: يمررها كما هي ← 🔓 Entry Guard: يفك الطبقة الخارجية لـ Tor ← 🔓 Middle Relay: يفك الطبقة الوسطى لـ Tor ← 🔓 Exit Node: تفك الطبقة الأخيرة لـ Tor وتكشف عن بيانات <span style="color: #66ccff;">TLS المشفرة</span> للموقع النهائي.
+            📱 محطة العمل: تشفر البيانات بـ <span style="color: #66ccff;">TLS/HTTPS</span> (طبقة 1) → 🔐 Gateway A: تضيف <span style="color: #ffaa33;">3 طبقات Tor</span> (الطبقات 2، 3، 4) → 🔥 جدار الحماية: يمررها كما هي → 🔓 Entry Guard: يفك الطبقة الخارجية لـ Tor → 🔓 Middle Relay: يفك الطبقة الوسطى لـ Tor → 🔓 Exit Node: تفك الطبقة الأخيرة لـ Tor وتكشف عن بيانات <span style="color: #66ccff;">TLS المشفرة</span> للموقع النهائي.
         </div>
     </div>
     
@@ -1256,15 +1255,15 @@ wifi.scan-rand-mac-address=yes</pre>
                 <div style="color: #ff6666; font-weight: bold;">❌ Gateway واحد</div>
                 <hr style="margin: 10px 0;">
                 بريد إلكتروني + نشر وثائق<br>
-                ← <strong>نفس حارس الدخول</strong><br>
-                ← يمكن ربط النشاطين
+                → <strong>نفس حارس الدخول</strong><br>
+                → يمكن ربط النشاطين
             </div>
             <div style="flex: 1; background: #1a3a3a; padding: 15px; border-radius: 20px; text-align: center;">
                 <div style="color: #66ccff; font-weight: bold;">✅ Gateway منفصل لكل نشاط</div>
                 <hr style="margin: 10px 0;">
                 بريد إلكتروني → Gateway A → حارس دخول A<br>
                 نشر وثائق → Gateway B → حارس دخول B<br>
-                ← <strong>لا يمكن ربط النشاطين</strong>
+                → <strong>لا يمكن ربط النشاطين</strong>
             </div>
         </div>
     </div>
@@ -1386,8 +1385,8 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
     </div>
     <p><strong>المشكلة:</strong> بدون Stream Isolation، جميع تطبيقاتك تستخدم نفس دائرة Tor، مما يسمح بربط أنشطتك المختلفة ببعضها.</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-        <div style="background: #2a1a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #ff8888;">❌ بدون Stream Isolation</h4><p>بريد + تصفح + محادثة ← <strong>نفس دائرة Tor</strong> ← يمكن ربطها</p></div>
-        <div style="background: #1a3a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #88ff88;">✅ مع Stream Isolation</h4><p>بريد ← دائرة 1 | تصفح ← دائرة 2 | محادثة ← دائرة 3 ← <strong>لا يمكن ربطها</strong></p></div>
+        <div style="background: #2a1a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #ff8888;">❌ بدون Stream Isolation</h4><p>بريد + تصفح + محادثة → <strong>نفس دائرة Tor</strong> → يمكن ربطها</p></div>
+        <div style="background: #1a3a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #88ff88;">✅ مع Stream Isolation</h4><p>بريد → دائرة 1 | تصفح → دائرة 2 | محادثة → دائرة 3 → <strong>لا يمكن ربطها</strong></p></div>
     </div>
     <div class="note" style="background: #1a3a3a;"><i class="fas fa-check-circle"></i> <strong>✅ Whonix يحمي التطبيقات المدمجة تلقائياً:</strong> Tor Browser، Thunderbird، apt-get، curl، wget، ssh، gpg.</div>
 </div>
@@ -1397,7 +1396,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
     <div class="card-header" style="color: #88ff88;"><i class="fas fa-network-wired"></i> 🔄 Transparent Proxy - ما هو؟</div>
     <p><strong>من وثائق Whonix:</strong> "أي تطبيق يمكنه الاتصال بالإنترنت عبر Tor <strong>بدون أي إعدادات إضافية</strong>."</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-        <div style="background: #1a3a3a; padding: 12px; border-radius: 12px;"><h4>✅ مع Transparent Proxy</h4><p>Telegram (غير معدل) ← يعمل تلقائياً عبر Tor</p></div>
+        <div style="background: #1a3a3a; padding: 12px; border-radius: 12px;"><h4>✅ مع Transparent Proxy</h4><p>Telegram (غير معدل) → يعمل تلقائياً عبر Tor</p></div>
         <div style="background: #3a1a1a; padding: 12px; border-radius: 12px;"><h4>❌ بدون Transparent Proxy</h4><p>يجب إعداد كل تطبيق يدوياً لاستخدام SOCKS proxy</p></div>
     </div>
     <div class="note" style="margin-top: 15px; background: #1a3a3a;"><i class="fas fa-shield-alt"></i> <strong>🛡️ ملاحظة أمنية:</strong> Transparent Proxy يحمي IP ولكن <strong>لا يوفر Stream Isolation</strong>.</div>
@@ -1424,7 +1423,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
 <div class="card" style="margin-top: 20px;">
     <div class="card-header"><i class="fas fa-firefox"></i> <h3>🔐 IsolateSOCKSAuth - ميزة Tor Browser</h3></div>
     <p><strong>من وثائق Whonix:</strong> "كل موقع يزوره المستخدم يحصل على دائرة Tor مختلفة."</p>
-    <ul><li>✅ google.com ← دائرة مختلفة عن twitter.com</li><li>✅ Whonix <strong>لا يكسر</strong> هذه الميزة</li></ul>
+    <ul><li>✅ google.com → دائرة مختلفة عن twitter.com</li><li>✅ Whonix <strong>لا يكسر</strong> هذه الميزة</li></ul>
 </div>
 
 <!-- 6. بطاقة: Qubes UpdatesProxy - تنبيه -->
@@ -1523,13 +1522,13 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
             <h4 style="color: #ff8888;">❌ بدون حماية</h4>
             <p>المنطقة الزمنية الحقيقية مكشوفة:</p>
             <code>Asia/Riyadh</code> أو <code>Europe/Berlin</code>
-            <p style="margin-top: 10px;">← يمكن تحديد موقعك التقريبي</p>
+            <p style="margin-top: 10px;">→ يمكن تحديد موقعك التقريبي</p>
         </div>
         <div style="background: #1a3a1a; padding: 15px; border-radius: 15px;">
             <h4 style="color: #88ff88;">✅ مع Whonix</h4>
             <p>المنطقة الزمنية موحدة:</p>
             <code>Etc/UTC</code>
-            <p style="margin-top: 10px;">← جميع مستخدمي Whonix يظهرون بنفس المنطقة</p>
+            <p style="margin-top: 10px;">→ جميع مستخدمي Whonix يظهرون بنفس المنطقة</p>
         </div>
     </div>
 </div>
@@ -1546,7 +1545,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(الأساسي)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> جهازك يتصل مباشرة بشبكة Tor دون أي طبقات إضافية.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← شبكة Tor ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → شبكة Tor → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى أنك تتصل بشبكة Tor (يمكنه معرفة أنك تستخدم Tor).</p>
             <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان IP لعقدة خروج Tor.</p>
             <p><strong>في Qubes:</strong> <code>anon-work → sys-whonix → sys-firewall → sys-net</code></p>
@@ -1559,7 +1558,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(لتجاوز الحجب)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> مثل Tor فقط، لكنك تتصل أولاً بـ "جسر" (Bridge) يخفي حقيقة أنك تستخدم Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← جسر سري ← شبكة Tor ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → جسر سري → شبكة Tor → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى اتصالاً عادياً مشفراً (لا يعرف أنه Tor).</p>
             <p><strong>متى تستخدمه؟</strong> إذا كان Tor محجوباً في بلدك (مثل الصين، إيران، روسيا).</p>
             <p><strong>أنواع الجسور:</strong> obfs4, Snowflake, meek_lite</p>
@@ -1572,7 +1571,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(الأكثر أماناً)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل أولاً بـ VPN، ثم من VPN إلى شبكة Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← VPN ← شبكة Tor ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → VPN → شبكة Tor → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى اتصال VPN فقط (لا يعلم أنك تستخدم Tor).</p>
             <p><strong>ماذا يرى VPN؟</strong> يرى أنك تتصل بشبكة Tor (لكنه لا يعرف وجهتك النهائية).</p>
             <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان Tor فقط.</p>
@@ -1586,7 +1585,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(للراحة فقط)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل أولاً بـ Tor، ثم تخرج إلى الإنترنت عبر VPN.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← شبكة Tor ← VPN ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → شبكة Tor → VPN → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى أنك تتصل بشبكة Tor.</p>
             <p><strong>ماذا يرى VPN؟</strong> لا يعرف هويتك الحقيقية (لأنك أتيت من Tor)، لكنه يرى وجهتك النهائية.</p>
             <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان VPN (وليس Tor).</p>
@@ -1603,7 +1602,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(للاستخدام العادي)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل مباشرة بـ VPN بدون Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← VPN ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → VPN → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى اتصال VPN فقط.</p>
             <p><strong>ماذا يرى VPN؟</strong> يرى كل شيء: هويتك (عنوان IP الحقيقي) ووجهتك النهائية.</p>
             <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان VPN.</p>
@@ -1619,7 +1618,7 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                 <span style="color: #aaa;">(غير آمن)</span>
             </div>
             <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> اتصال مباشر بالإنترنت دون أي حماية.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك ← الإنترنت</pre>
+            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → الإنترنت</pre>
             <p><strong>ماذا يرى ISP؟</strong> يرى كل شيء: كل موقع تزوره، كل ما تفعله.</p>
             <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان IP الحقيقي الخاص بك.</p>
             <div class="note-critical" style="margin-top:10px;">
@@ -1716,25 +1715,25 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
         <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
             <span style="background:#4caf50; padding:3px 10px; border-radius:15px; font-weight:bold;">🧅 Tor فقط</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك ← شبكة Tor ← الإنترنت</p>
+            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → شبكة Tor → الإنترنت</p>
             <p><strong>ISP يرى:</strong> اتصال Tor | <strong>الموقع يرى:</strong> IP خروج Tor</p>
             <p><strong>التوصية:</strong> الخيار الأساسي للخصوصية اليومية.</p>
         </div>
         <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
             <span style="background:#2196f3; padding:3px 10px; border-radius:15px; font-weight:bold;">🌉 Tor + Bridges</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك ← جسر سري ← شبكة Tor ← الإنترنت</p>
+            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → جسر سري → شبكة Tor → الإنترنت</p>
             <p><strong>ISP يرى:</strong> اتصال مشفر عادي | <strong>الموقع يرى:</strong> IP خروج Tor</p>
             <p><strong>متى تستخدم؟</strong> عندما يكون Tor محجوباً (مثل الصين، إيران، روسيا).</p>
         </div>
         <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
             <span style="background:#ff9800; padding:3px 10px; border-radius:15px; font-weight:bold;">🔐 VPN → Tor</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك ← VPN ← شبكة Tor ← الإنترنت</p>
+            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → VPN → شبكة Tor → الإنترنت</p>
             <p><strong>ISP يرى:</strong> VPN | <strong>VPN يرى:</strong> Tor | <strong>الموقع يرى:</strong> IP Tor</p>
             <p><strong>التوصية:</strong> الأكثر خصوصية - ISP لا يعرف أنك تستخدم Tor.</p>
         </div>
         <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
             <span style="background:#9c27b0; padding:3px 10px; border-radius:15px; font-weight:bold;">🔄 Tor → VPN</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك ← شبكة Tor ← VPN ← الإنترنت</p>
+            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → شبكة Tor → VPN → الإنترنت</p>
             <p><strong>ISP يرى:</strong> Tor | <strong>VPN يرى:</strong> وجهتك | <strong>الموقع يرى:</strong> IP VPN</p>
             <p><strong>⚠️ تحذير:</strong> VPN يرى وجهتك النهائية! للراحة فقط مع خدمات تمنع Tor.</p>
         </div>
@@ -1810,8 +1809,8 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
     <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
         <p><strong>🕵️ ماذا يرى المراقب؟</strong></p>
         <ul style="margin-right: 20px;">
-            <li><strong>بدون جسر:</strong> يرى اتصالاً بشبكة Tor ← قد يحجبه</li>
-            <li><strong>مع جسر:</strong> يرى اتصالاً مشفراً عادياً ← لا يمكنه تمييزه بسهولة</li>
+            <li><strong>بدون جسر:</strong> يرى اتصالاً بشبكة Tor → قد يحجبه</li>
+            <li><strong>مع جسر:</strong> يرى اتصالاً مشفراً عادياً → لا يمكنه تمييزه بسهولة</li>
         </ul>
     </div>
     <div class="note" style="background: #1a3a3a;">
@@ -2044,7 +2043,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <li>✅ <strong>Gateway</strong> = <code>--class AppVM --template whonix-gateway-18</code> + <code>provides_network true</code> (🔒 بداية التشفير)</li>
             <li>✅ <strong>Workstation</strong> = <code>--class AppVM --template whonix-workstation-18</code> + <code>netvm sys-whonix-X</code></li>
             <li>✅ <strong>جدار ناري مخصص</strong> = لكل Gateway جدار ناري خاص به (<code>sys-firewall-A</code> و <code>sys-firewall-B</code>) - يمرر البيانات كما هي</li>
-            <li>✅ <strong>فك التشفير</strong> = يحدث فقط في عقد Tor الثلاث (Entry Guard ← Middle Relay ← Exit Node)</li>
+            <li>✅ <strong>فك التشفير</strong> = يحدث فقط في عقد Tor الثلاث (Entry Guard → Middle Relay → Exit Node)</li>
             <li>✅ <strong>Whonix يخفي التوقيت</strong> = SDWDate يمنع هجمات التوقيت عملياً</li>
             <li>✅ <strong>الجسور (Bridges)</strong> = تخفي استخدام Tor عن ISP</li>
             <li>✅ <strong>بوابات متعددة</strong> = أنشئ Gateways جديدة من القالب (وليس Clone)</li>
@@ -2073,12 +2072,12 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
         <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
             <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
-            <p>تدخل كلمة مرور "الفخ" (Decoy Password) → يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
+            <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
             <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
         </div>
         <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
             <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
-            <p>تدخل كلمة المرور الحقيقية → يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
+            <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
             <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
         </div>
     </div>
@@ -2642,10 +2641,10 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             • <strong>الطريقة الآمنة:</strong> فتح التشفير في  كيوب معزول (storage-vault) ثم تمرير الجهاز المفتوح فقط إلى  كيوب يعمل على RAM Pool (ram-work). البيانات تُكتب في الذاكرة وتختفي عند الإغلاق.
         </div>
     </div>
-<!-- ======== سيناريو عملي: فلاشة LUKS ← Whonix (مختصر) ======== -->
+<!-- ======== سيناريو عملي: فلاشة LUKS → Whonix (مختصر) ======== -->
 <div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
     <div class="card-header" style="color: #4caf50;">
-        <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS ← Whonix (GNOME Disks)
+        <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS → Whonix (GNOME Disks)
     </div>
     
     <p><strong>التدفق الكامل بخطوات بسيطة:</strong></p>
