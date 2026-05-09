@@ -2683,6 +2683,81 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>🔄 بعد الانتهاء:</strong> Unmount في Whonix ← افصل الجهاز ← Lock في storage-vault ← افصل الفلاشة.
     </div>
 </div>
+
+<!-- ======== تقوية قرص نظام LUKS الموجود دون إعادة تهيئته ======== -->
+<div class="card" style="margin-top: 30px; border-right: 8px solid #ff9944;">
+    <div class="card-header" style="color: #ff9944;">
+        <i class="fas fa-lock"></i> 🛡️ تقوية قرص <strong>النظام</strong> LUKS الموجود دون إعادة تهيئته
+    </div>
+    
+    <p><strong>المشكلة:</strong> أنشأت قرص النظام المشفر بإعدادات PBKDF الافتراضية وتريد رفع استهلاك الذاكرة ووقت الاشتقاق لحماية الإقلاع. لا يوجد أمر مباشر لتعديل فتحة موجودة على قرص النظام.</p>
+    
+    <p><strong>تنبيه هام:</strong> هذا هو قرص <strong>النظام</strong> — الذي يُقلع منه Qubes. أي خطأ يمنع الإقلاع. تأكد من وجود <strong>USB حي</strong> للطوارئ قبل البدء.</p>
+    
+    <p><strong>الطريقة الوحيدة:</strong> استبدال كلمة المرور الضعيفة بأخرى قوية، ثم حذف القديمة. <strong>الخطوتان إجباريتان في كل مرة</strong> — حتى عند تغيير كلمة المرور لاحقًا.</p>
+    
+    <div style="background: #151525; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center;">
+        <code style="background: transparent;">luksAddKey (بذاكرة ووقت عاليين) → luksRemoveKey (للقديمة) → كلمة مرور واحدة فقط → المهاجم يختار الأضعف</code>
+    </div>
+    
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">0</td>
+            <td style="padding: 10px;"><strong>قبل البدء:</strong> يُفضّل رفع رام dom0 لتحقيق أقصى استفادة</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;" colspan="2">
+                <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ عبر تعديل <code>dom0_mem</code> في إعدادات GRUB ثم تحديثه وإعادة التشغيل ⬆️</p>
+            </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">1</td>
+            <td style="padding: 10px;">شغّل السكربت من القائمة الرئيسية</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;" colspan="2">
+                <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>11</strong> في القائمة. يكتشف القرص تلقائيًا ويسألك عن الذاكرة (بالجيجابايت) والوقت (بالثواني) المطلوبين ⬆️</p>
+            </td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 10px; font-weight: bold; color: #ffd966;">2</td>
+            <td style="padding: 10px;">سيُنشئ السكربت على سطح المكتب ويُشغّله</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;" colspan="2">
+                <p style="margin:5px 0; text-align:center; color:#ff9944;">⬆️ يُنفذ <code>luksAddKey --iter-time</code> بقيمك المدخلة ثم يسألك قبل حذف القديمة وتحديث الإقلاع ⬆️</p>
+            </td>
+        </tr>
+    </table>
+    
+    <p style="margin: 15px 0 0 0; text-align: center; font-weight: bold; color: #ff5555;">
+        ⛔ <strong>لا تستخدم <code>luksChangeKey</code> أبدًا لهذا الغرض.</strong>
+    </p>
+    <p style="margin: 5px 0; text-align: center; color: #cccccc;">
+        حتى مع <code>--pbkdf-force-iterations</code>، لا يقبل <code>--pbkdf-memory</code> أبدًا — سيعيد الذاكرة للقيمة الافتراضية (1GB).
+    </p>
+    
+    <div class="note" style="margin-top: 15px; background: #1a2a3a; border-right-color: #66ccff;">
+        <i class="fas fa-lightbulb"></i>
+        <strong>💡 الخلاصة:</strong><br>
+        • <strong>ارفع رام dom0</strong> عبر <code>dom0_mem</code> في GRUB لتحقيق أقصى استفادة.<br>
+        • <strong>اطلب ذاكرة عالية</strong> (مثلاً 4GB) — النظام لن ينهار، سينزل تلقائيًا للحد الآمن.<br>
+        • <strong>السكربت</strong> ينفذ <code>luksAddKey</code> + <code>luksRemoveKey</code> تلقائيًا باستخدام الوقت الذي تحدده.<br>
+        • <strong>luksChangeKey</strong> = عودة صامتة للذاكرة الافتراضية.<br>
+        • <strong>كلمة مرور واحدة</strong> فقط — وجود اثنتين يجعل الأضعف هو المستهدف.<br>
+        • <strong>لقرص النظام في Qubes:</strong> حدّث صورة الإقلاع بـ <code>sudo dracut -f</code>.
+    </div>
+    
+    <strong>⚡ للتطبيق التلقائي لجميع إعدادات هذا التبويب:</strong>
+    <p style="margin-top: 10px;">
+        استخدم <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a>.
+    </p>
+    
+    <div class="note-critical" style="margin-top: 10px;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>⚠️ تذكّر:</strong> لا تترك فتحتين. بعد <code>luksAddKey</code> مباشرةً نفّذ <code>luksRemoveKey</code>. المهاجم يختار الأسهل دائمًا.
+    </div>
+</div>
 </div>
 
 <!-- ======== تبويب 4: مصفوفة التهديدات ======== -->
@@ -5494,7 +5569,8 @@ menu() {
     echo "6) إنشاء سكريبت Amnesic Tmpfs"
     echo "7) تشغيل Live Mode"
     echo "8) 💀 أدوات التدمير (BusKill + الطوارئ)"
-    echo "9) تنفيذ الأقسام التلقائية"
+    echo "9) 🛡️ تقوية تشفير قرص النظام (LUKS PBKDF)"
+    echo "10) تنفيذ الأقسام التلقائية (1 إلى 8)"
     echo "0) خروج"
     echo ""
     read -p "اختر: " c
@@ -5507,7 +5583,8 @@ menu() {
         6) amnesic_script ;;
         7) live_mode ;;
         8) emergency_script ;;
-        9) run_auto ;;
+        9) luks_hardening ;;
+        10) run_auto ;;
         0) exit 0 ;;
         *) menu ;;
     esac
@@ -7347,8 +7424,134 @@ EOF
     pause
 }
 
+#=====≈=
+9. تقوية قرص النظام
+#=======
+luks_hardening() {
+    clear
+    echo "======"
+    echo "  🛡️ تقوية تشفير قرص النظام (LUKS PBKDF)"
+    echo "======"
+    echo ""
+
+    # تحديد المستخدم الحقيقي وسطح المكتب
+    REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
+    DESKTOP_DIR="/home/${REAL_USER}/Desktop"
+    SCRIPT_PATH="${DESKTOP_DIR}/luks-harden.sh"
+
+    # تحديد قرص النظام
+    ROOT_DISK=$(sudo blkid | grep crypto_LUKS | head -1 | cut -d: -f1)
+
+    if [ -z "$ROOT_DISK" ]; then
+        echo "❌ لم يتم العثور على قرص نظام مشفر بـ LUKS"
+        read -p "اضغط Enter للعودة..."
+        return
+    fi
+
+    echo "✅ قرص النظام: $ROOT_DISK"
+
+    # عرض الإعدادات الحالية
+    echo ""
+    echo "📊 الإعدادات الحالية:"
+    sudo cryptsetup luksDump "$ROOT_DISK" | grep -E "Memory|Time cost|PBKDF" | head -5
+
+    # إدخال المستخدم
+    echo ""
+    read -p "كم جيجابايت رام تريد تخصيصها؟ (مثلاً 3 أو 4): " RAM_GB
+    read -p "كم ثانية تريد أن يستغرق فتح القرص؟ (مثلاً 8 أو 10): " TARGET_SEC
+
+    RAM_KB=$((RAM_GB * 1024 * 1024))
+
+    # تأكيد
+    echo ""
+    echo "⚠️  القرص: $ROOT_DISK"
+    echo "   الذاكرة: ${RAM_GB}GB"
+    echo "   الزمن المستهدف: ~${TARGET_SEC} ثوانٍ"
+    echo ""
+    read -p "هل تريد المتابعة؟ (y/n): " CONFIRM
+
+    if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+        echo "❌ أُلغي"
+        read -p "اضغط Enter للعودة..."
+        return
+    fi
+
+    # إنشاء السكربت
+    cat > "$SCRIPT_PATH" << SCRIPTEOF
+#!/bin/bash
+set -e
+
+echo "🔐 إضافة كلمة مرور جديدة..."
+echo ""
+echo "📋 سَيُطلب منك:"
+echo "   1️⃣  كلمة المرور القديمة (لأي فتحة موجودة)"
+echo "   2️⃣  كلمة المرور الجديدة (مرتين للتأكيد)"
+echo ""
+echo "⚠️  لن يقبل النظام كلمة مرور ضعيفة."
+echo "   استخدم عبارة طويلة (6+ كلمات عشوائية) أو استخدم --force-password لاحقًا."
+echo ""
+
+sudo cryptsetup luksAddKey \\
+    --pbkdf argon2id \\
+    --pbkdf-memory ${RAM_KB} \\
+    --iter-time $((TARGET_SEC * 1000)) \\
+    ${ROOT_DISK}
+
+echo ""
+echo "✅ أُضيفت كلمة المرور الجديدة"
+echo ""
+echo "📊 القيم الفعلية:"
+sudo cryptsetup luksDump ${ROOT_DISK} | grep -E "Memory|Time cost" | tail -2
+echo ""
+echo "💡 احتفظ بعدد الدورات أعلاه. إذا غيّرت كلمة المرور مستقبلًا،"
+echo "   استخدم --pbkdf-force-iterations بهذا الرقم لتضمن نفس القوة."
+
+echo ""
+read -p "🗑️  هل تريد حذف كلمة المرور القديمة؟ (y/n): " DELETE_OLD
+
+if [ "\$DELETE_OLD" = "y" ] || [ "\$DELETE_OLD" = "Y" ]; then
+    sudo cryptsetup luksRemoveKey ${ROOT_DISK}
+    echo "✅ حُذفت كلمة المرور القديمة"
+else
+    echo "⚠️  نصيحة: وجود كلمتي مرور يجعل الأضعف هو المستهدف."
+fi
+
+echo ""
+read -p "🔄 هل تريد تحديث صورة الإقلاع؟ (y/n): " UPDATE_INIT
+
+if [ "\$UPDATE_INIT" = "y" ] || [ "\$UPDATE_INIT" = "Y" ]; then
+    sudo dracut -f
+    echo "✅ تم تحديث صورة الإقلاع. أعد التشغيل للتأكد."
+fi
+
+echo ""
+read -p "🗑️  هل تريد حذف ملف السكربت هذا من سطح المكتب؟ (y/n): " DELETE_SELF
+
+if [ "\$DELETE_SELF" = "y" ] || [ "\$DELETE_SELF" = "Y" ]; then
+    rm -f "\$0"
+    echo "✅ حُذف ملف السكربت."
+fi
+
+echo ""
+echo "🎉 تم!"
+SCRIPTEOF
+
+    chmod +x "$SCRIPT_PATH"
+    chown "$REAL_USER:$REAL_USER" "$SCRIPT_PATH"
+
+    echo ""
+    echo "📄 أُنشئ السكربت في: $SCRIPT_PATH"
+    echo ""
+
+    # تشغيل السكربت
+    bash "$SCRIPT_PATH"
+
+    echo ""
+    read -p "اضغط Enter للعودة..."
+}
+
 # ========
-# 9. تنفيذ التلقائي فقط (يشغل من 1 إلى 8)
+# 10. تنفيذ التلقائي فقط (يشغل من 1 إلى 8)
 # ========
 run_auto() {
     info "بدء التنفيذ التلقائي لجميع الأقسام..."
