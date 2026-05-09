@@ -1275,50 +1275,46 @@ wifi.scan-rand-mac-address=yes</pre>
             <h3>📝 الأوامر (انسخ والصق بالترتيب)</h3>
         </div>
         
-        <!-- الهوية الأولى -->
+        <!-- قالب الهوية -->
         <div style="background: #2a2a4a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #ff6666;">
             <div style="color: #ff6666; font-weight: bold; margin-bottom: 10px;">
-                <i class="fas fa-user-circle"></i> 🔴 الهوية الأولى (Persona A) - مثال: البريد الإلكتروني اليومي
+                <i class="fas fa-user-circle"></i> 🔴 أنشئ الهوية الأولى (Persona A)
             </div>
-            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># إنشاء جدار ناري مخصص A
-qvm-create --class AppVM --label orange --template debian-13-xfce sys-firewall-A
+            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># 1. جدار ناري مؤقت (DispVM) - يختفي عند الإيقاف ويُعاد بناؤه تلقائياً
+qvm-create --class DispVM --label orange --template default-dvm sys-firewall-A
 qvm-prefs sys-firewall-A provides_network true
 qvm-prefs sys-firewall-A netvm sys-net
 
-# إنشاء Gateway A
+# 2. بوابة Whonix
 qvm-create --class AppVM --label red --template whonix-gateway-18 sys-whonix-A
 qvm-prefs sys-whonix-A provides_network true
 qvm-prefs sys-whonix-A netvm sys-firewall-A
 
-# إنشاء Workstation A
+# 3. محطة العمل المجهولة
 qvm-create --class AppVM --label green --template whonix-workstation-18 anon-work-A
 qvm-prefs anon-work-A netvm sys-whonix-A</pre>
         </div>
         
-        <!-- الهوية الثانية -->
+        <!-- نسخ للهوية الثانية -->
         <div style="background: #1a3a3a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #6666ff;">
             <div style="color: #6666ff; font-weight: bold; margin-bottom: 10px;">
-                <i class="fas fa-user-secret"></i> 🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
+                <i class="fas fa-copy"></i> 🔵 انسخ للهوية الثانية (Persona B) - غيّر A إلى B فقط
             </div>
-            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># إنشاء جدار ناري مخصص B
-qvm-create --class AppVM --label cyan --template debian-13-xfce sys-firewall-B
+            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># انسخ الأوامر أعلاه وغير A → B (والألوان إن أردت)
+
+# مثال للسطر الأول فقط:
+qvm-create --class DispVM --label cyan --template default-dvm sys-firewall-B
 qvm-prefs sys-firewall-B provides_network true
 qvm-prefs sys-firewall-B netvm sys-net
 
-# إنشاء Gateway B
-qvm-create --class AppVM --label blue --template whonix-gateway-18 sys-whonix-B
-qvm-prefs sys-whonix-B provides_network true
-qvm-prefs sys-whonix-B netvm sys-firewall-B
-
-# إنشاء Workstation B
-qvm-create --class AppVM --label yellow --template whonix-workstation-18 anon-work-B
-qvm-prefs anon-work-B netvm sys-whonix-B</pre>
+# ... تابع بنفس الطريقة لبقية الأسطر</pre>
         </div>
         
         <div class="note" style="margin-top:15px;">
             <i class="fas fa-info-circle"></i>
             <strong>📌 ملاحظات مهمة:</strong>
             <ul style="margin-right:20px; margin-top:10px;">
+                <li><strong>جدار الحماية مؤقت (DispVM)</strong> → يُعاد بناؤه من الصفر عند كل بدء تشغيل، مما يمنع استمرار أي برمجيات خبيثة</li>
                 <li>كل Gateway له <code>private volume</code> مستقل → كل بوابة تأخذ <strong>عقد دخول مختلفة</strong> تلقائياً</li>
                 <li>كل Gateway له <strong>جدار ناري مخصص</strong> → عزل كامل على مستوى الشبكة</li>
                 <li><strong>جدار الحماية لا يفك تشفير</strong> → يمرر البيانات كما هي (مشفرة)</li>
@@ -1336,11 +1332,11 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
         </div>
         <ol style="margin-right:20px; line-height:1.8;">
             <li>افتح <strong>Qube Manager</strong> → <strong>Create New Qube</strong></li>
-            <li>لإنشاء <strong>جدار ناري مخصص</strong>:
+            <li>لإنشاء <strong>جدار ناري مؤقت (DispVM)</strong>:
                 <ul>
                     <li><strong>Name:</strong> <code>sys-firewall-A</code></li>
-                    <li><strong>Type:</strong> <code>AppVM</code></li>
-                    <li><strong>Template:</strong> <code>debian-13-xfce</code></li>
+                    <li><strong>Type:</strong> <code>DisposableVM</code></li>
+                    <li><strong>Template:</strong> <code>default-dvm</code></li>
                     <li><strong>Networking:</strong> <code>sys-net</code></li>
                     <li>فعّل <strong>"Provides network access to other qubes"</strong></li>
                 </ul>
@@ -1362,20 +1358,21 @@ qvm-prefs anon-work-B netvm sys-whonix-B</pre>
                     <li><strong>Networking:</strong> <code>sys-whonix-A</code></li>
                 </ul>
             </li>
-            <li>كرر الخطوات للهوية الثانية بأسماء مختلفة (<code>sys-firewall-B</code>, <code>sys-whonix-B</code>, <code>anon-work-B</code>)</li>
+            <li>للنسخ إلى الهوية الثانية: <strong>أعد الخطوات</strong> مع تغيير <code>A</code> إلى <code>B</code> في الأسماء</li>
         </ol>
     </div>
 
-    <!-- ======== تحذيرات موحدة ======== -->
-    <div class="note-critical">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ تحذيرات أمنية مهمة:</strong>
-        <ul style="margin-right:20px; margin-top:10px;">
-            <li><strong>لا تشغل بوابتين معاً</strong> - <code>qvm-shutdown sys-whonix-A</code> قبل <code>qvm-start sys-whonix-B</code> (من وثائق Whonix)</li>
-            <li><strong>لا تستخدم Clone</strong> - <code>qvm-clone</code> ينسخ ملف <code>/var/lib/tor/state</code> مع حارس الدخول القديم. أنشئ Gateway جديداً من القالب مباشرة.</li>
-            <li><strong>البوابات الزائلة (Disposable Gateway) غير موصى بها</strong> - تخرب آلية اختيار حراس الدخول وتزيد المخاطر.</li>
-        </ul>
-    </div>
+<!-- ======== تحذيرات موحدة ======== -->
+<div class="note-critical">
+    <i class="fas fa-exclamation-triangle"></i>
+    <strong>⚠️ تحذيرات أمنية مهمة:</strong>
+    <ul style="margin-right:20px; margin-top:10px;">
+        <li><strong>لا تشغل بوابتين معاً</strong> - <code>qvm-shutdown sys-whonix-A</code> قبل <code>qvm-start sys-whonix-B</code> (من وثائق Whonix)</li>
+        <li><strong>لا تستخدم Clone</strong> - <code>qvm-clone</code> ينسخ ملف <code>/var/lib/tor/state</code> مع حارس الدخول القديم. أنشئ Gateway جديداً من القالب مباشرة.</li>
+        <li><strong>البوابات الزائلة (Disposable Gateway) غير موصى بها</strong> - تخرب آلية اختيار حراس الدخول وتزيد المخاطر.</li>
+        <li><strong>لا تُخصص <code>default-dvm</code></strong> - لا تضف أي إعدادات أو حزم أو قواعد جدار ناري للقالب <code>default-dvm</code> نفسه. أي تغيير فيه سيؤثر على <strong>كل</strong> الأجهزة المؤقتة في النظام، وليس فقط جدار الحماية هذا. جدار الحماية المؤقت سيأخذ إعداداته تلقائياً من <code>default-dvm</code> النظيف دون أي تدخل.</li>
+    </ul>
+</div>
 <!-- ======== حزمة Stream Isolation كاملة ======== -->
 
 <!-- 1. بطاقة: Stream Isolation - لماذا نحتاجه؟ -->
