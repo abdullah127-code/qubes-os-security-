@@ -1059,22 +1059,23 @@ wifi.scan-rand-mac-address=yes</pre>
         <p style="margin-top:10px;"><strong>🔗 للمرحلة التالية:</strong> توجه إلى <strong><a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a></strong> لإعداد Tor والبوابات وأنواع الاتصال.</p>
     </div>
 </div>
-<!-- ======== تبويب 2: بوابات Whonix (النسخة النهائية المحدثة) ======== -->
-<div class="tab-pane" id="tab2">
-    <div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
-        <i class="fas fa-user-secret"></i> <strong>إصدار Whonix:</strong> تستخدم هذه الأوامر الإصدار 18. إذا كنت تستخدم إصداراً أحدث، عدّل اسم القالب.
-    </div>
 
-<!-- ======== الرسم البياني: البنية الكاملة (مُحسَّن) ======== -->
+
+<!-- ======== تبويب 2: بوابات Whonix (النسخة النهائية الموحدة) ======== -->
+<div class="tab-pane" id="tab2">
+
+<div class="note" style="background:#2a4a6a; border-right-color:#66ccff;">
+    <i class="fas fa-user-secret"></i> <strong>إصدار Whonix:</strong> تستخدم هذه الأوامر الإصدار 18. إذا كنت تستخدم إصداراً أحدث، عدّل اسم القالب.
+</div>
+
+<!-- ======== الرسم البياني: البنية الكاملة ======== -->
 <div style="background: var(--code-bg); border-radius: 24px; padding: 20px; text-align: center; font-family: monospace; font-size: 0.85em; direction: ltr; overflow-x: auto;">
-    
-    <!-- ======== الهوية الأولى ======== -->
+
+    <!-- الهوية الأولى -->
     <div style="background: #2a2a4a; padding: 15px; border-radius: 20px; margin-bottom: 25px;">
         <div style="color: #ff6666; font-weight: bold; margin-bottom: 15px; text-align: center;">
             🔴 الهوية الأولى (Persona A) - مثال: البريد الإلكتروني اليومي
         </div>
-        
-        <!-- مسار البيانات داخل Qubes -->
         <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 20px;">
             <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-A<br><small>Workstation</small></div>
             <div style="color: #4caf50;">←</div>
@@ -1084,76 +1085,60 @@ wifi.scan-rand-mac-address=yes</pre>
             <div style="color: #4caf50;">→</div>
             <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
         </div>
-        
-        <!-- سطر التشفير الكامل (محدث مع HTTPS) -->
         <div style="margin: 15px 0; padding: 12px; background: #1a2a1a; border-radius: 20px;">
-            <div style="color: #66ccff; font-weight: bold; margin-bottom: 10px; text-align: center;">
-                🌐 شبكة Tor + التشفير الكامل
-            </div>
+            <div style="color: #66ccff; font-weight: bold; margin-bottom: 10px;">🌐 شبكة Tor + التشفير الكامل</div>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px;">
                 <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🚪 <strong>العقدة 1</strong><br>
-                    <small>حارس الدخول</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الخارجية (Tor)</div>
+                    🚪 <strong>العقدة 1</strong><br><small>حارس الدخول</small>
+                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الخارجية</div>
                     <div style="color: #aaa; font-size: 0.65em;">تعرف هوية المستخدم فقط</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
                 <div style="background: #2a3a2a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🔄 <strong>العقدة 2</strong><br>
-                    <small>عقدة وسطى</small>
-                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الوسطى (Tor)</div>
+                    🔄 <strong>العقدة 2</strong><br><small>عقدة وسطى</small>
+                    <div style="color: #ffaa33; font-size: 0.7em;">🔓 يفك الطبقة الوسطى</div>
                     <div style="color: #aaa; font-size: 0.65em;">لا تعرف المصدر ولا الوجهة</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
                 <div style="background: #2a2a3a; padding: 8px 12px; border-radius: 12px; min-width: 130px;">
-                    🚪 <strong>العقدة 3</strong><br>
-                    <small>عقدة خروج</small>
-                    <div style="color: #ff4444; font-size: 0.7em;">🔓 تفك الطبقة الأخيرة (Tor)</div>
+                    🚪 <strong>العقدة 3</strong><br><small>عقدة خروج</small>
+                    <div style="color: #ff4444; font-size: 0.7em;">🔓 تفك الطبقة الأخيرة</div>
                     <div style="color: #ff4444; font-size: 0.65em;">ترى الوجهة فقط (المحتوى مشفر)</div>
                 </div>
                 <div style="color: #4caf50;">→</div>
-                <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">
-                    🌐 <strong>الإنترنت</strong><br>
-                    <small>الموقع النهائي</small>
-                </div>
+                <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 <strong>الإنترنت</strong><br><small>الموقع النهائي</small></div>
             </div>
         </div>
-        
-        <!-- شرح التشفير الصحيح (محدث ليشمل HTTPS) -->
         <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 15px; margin-bottom: 10px;">
             <strong>🔒🔒 مسار التشفير الكامل (HTTPS + Tor):</strong><br>
-            📱 محطة العمل: تشفر البيانات بـ <span style="color: #66ccff;">TLS/HTTPS</span> (طبقة 1) → 🔐 Gateway A: تضيف <span style="color: #ffaa33;">3 طبقات Tor</span> (الطبقات 2، 3، 4) → 🔥 جدار الحماية: يمررها كما هي → 🔓 Entry Guard: يفك الطبقة الخارجية لـ Tor → 🔓 Middle Relay: يفك الطبقة الوسطى لـ Tor → 🔓 Exit Node: تفك الطبقة الأخيرة لـ Tor وتكشف عن بيانات <span style="color: #66ccff;">TLS المشفرة</span> للموقع النهائي.
+            📱 محطة العمل: تشفر البيانات بـ <span style="color: #66ccff;">TLS/HTTPS</span> (طبقة 1) → 🔐 Gateway A: تضيف <span style="color: #ffaa33;">3 طبقات Tor</span> (الطبقات 2، 3، 4) → 🔥 جدار الحماية: يمررها كما هي → 🔓 Entry Guard: يفك الطبقة الخارجية → 🔓 Middle Relay: يفك الطبقة الوسطى → 🔓 Exit Node: تفك الطبقة الأخيرة وتكشف عن بيانات <span style="color: #66ccff;">TLS المشفرة</span> للموقع النهائي.
         </div>
     </div>
-    
-<!-- ======== الهوية الثانية ======== -->
-<div style="background: #1a3a3a; padding: 15px; border-radius: 20px;">
-    <div style="color: #6666ff; font-weight: bold; margin-bottom: 15px; text-align: center;">
-        🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
+
+    <!-- الهوية الثانية -->
+    <div style="background: #1a3a3a; padding: 15px; border-radius: 20px;">
+        <div style="color: #6666ff; font-weight: bold; margin-bottom: 15px; text-align: center;">
+            🔵 الهوية الثانية (Persona B) - مثال: النشر المجهول للوثائق
+        </div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 15px;">
+            <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-B<br><small>Workstation</small></div>
+            <div style="color: #4caf50;">→</div>
+            <div style="background: #4a2a2a; padding: 8px 12px; border-radius: 12px;">🔐 sys-whonix-B<br><small>Gateway B</small></div>
+            <div style="color: #4caf50;">→</div>
+            <div style="background: #6666ff; padding: 8px 12px; border-radius: 12px;">🔥 sys-firewall-B<br><small>جدار ناري B</small></div>
+            <div style="color: #4caf50;">→</div>
+            <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
+            <div style="color: #4caf50;">→</div>
+            <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px;">🚪 عقد Tor الثلاث</div>
+            <div style="color: #4caf50;">→</div>
+            <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 الإنترنت</div>
+        </div>
+        <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 12px;">
+            🔒🔒 نفس آلية الهوية الأولى: تشفير TLS من محطة العمل → Gateway B يضيف 3 طبقات Tor → تفكيك متسلسل عبر عقد Tor الثلاث (بدائرة مستقلة تماماً عن الهوية A).
+        </div>
     </div>
-    
-    <!-- مسار البيانات داخل Qubes + Tor Network -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 15px;">
-        <div style="background: #2a4a2a; padding: 8px 12px; border-radius: 12px;">📱 anon-work-B<br><small>Workstation</small></div>
-        <div style="color: #4caf50;">→</div>
-        <div style="background: #4a2a2a; padding: 8px 12px; border-radius: 12px;">🔐 sys-whonix-B<br><small>Gateway B</small></div>
-        <div style="color: #4caf50;">→</div>
-        <div style="background: #6666ff; padding: 8px 12px; border-radius: 12px;">🔥 sys-firewall-B<br><small>جدار ناري B</small></div>
-        <div style="color: #4caf50;">→</div>
-        <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 sys-net</div>
-        <div style="color: #4caf50;">→</div>
-        <div style="background: #3a2a2a; padding: 8px 12px; border-radius: 12px;">🚪 عقد Tor الثلاث</div>
-        <div style="color: #4caf50;">→</div>
-        <div style="background: #1a3a3a; padding: 8px 12px; border-radius: 12px;">🌐 الإنترنت</div>
-    </div>
-    
-    <!-- شرح مختصر -->
-    <div style="font-size: 0.75em; color: #aaa; text-align: center; background: #1a1a2a; border-radius: 15px; padding: 12px;">
-        🔒🔒 نفس آلية الهوية الأولى: تشفير TLS من محطة العمل → Gateway B يضيف 3 طبقات Tor → تفكيك متسلسل عبر عقد Tor الثلاث (بدائرة مستقلة تمامًا عن الهوية A).
-    </div>
-</div>
-    
-    <!-- ======== ملخص الميزات ======== -->
+
+    <!-- ملخص الميزات -->
     <div style="margin-top: 20px; padding: 12px; background: #0a1a2a; border-radius: 15px; text-align: center;">
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-size: 0.8em;">
             <div><span style="color: #66ccff;">🔐</span> كل Gateway لها Bridges مختلفة</div>
@@ -1164,123 +1149,271 @@ wifi.scan-rand-mac-address=yes</pre>
     </div>
 </div>
 
+<!-- ======== شرح التشفير الطبقي ======== -->
 <div class="note" style="margin-top: 15px;">
     <i class="fas fa-info-circle"></i>
-    <strong>🔐 كيف يعمل التشفير الطبقي بشكل صحيح (مع HTTPS):</strong>
+    <strong>🔐 كيف يعمل التشفير الطبقي (HTTPS + Tor):</strong>
     <ul style="margin-right:20px; margin-top:10px;">
-        <li><strong>الخطوة 0 (في محطة العمل):</strong> المتصفح في <code>anon-work</code> يقوم أولاً بتشفير البيانات بطبقة <strong>TLS/HTTPS</strong> قبل إرسالها إلى Gateway Tor.</li>
-        <li><strong>الخطوة 1 (داخل Gateway):</strong> Gateway Tor يقوم <strong>بتشفير</strong> البيانات (المشفرة فعلاً بـ TLS) ثلاث مرات متتالية. يبدأ بمفتاح عقدة الخروج، ثم الوسطى، ثم الدخول. هذا يغلفها بأربع طبقات إجمالاً.</li>
-        <li><strong>الخطوة 2 (عند عقدة الدخول):</strong> تفك تشفير طبقة Tor الخارجية، وتكشف عن رسالة مشفرة بـ 3 طبقات (1 TLS + 2 Tor).</li>
-        <li><strong>الخطوة 3 (عند العقدة الوسطى):</strong> تفك تشفير طبقة Tor الوسطى، وتكشف عن رسالة مشفرة بـ 2 طبقات (1 TLS + 1 Tor).</li>
-        <li><strong>الخطوة 4 (عند عقدة الخروج):</strong> تفك تشفير طبقة Tor الأخيرة، لتكشف عن رسالة مشفرة بطبقة <strong>TLS/HTTPS</strong> الواحدة التي لا تستطيع فكها، فترسلها للخادم النهائي الذي يمتلك مفتاح TLS.</li>
+        <li><strong>الخطوة 0:</strong> المتصفح في <code>anon-work</code> يشفر البيانات بطبقة <strong>TLS/HTTPS</strong>.</li>
+        <li><strong>الخطوة 1:</strong> Gateway يضيف <strong>3 طبقات Tor</strong> فوق تشفير TLS (الإجمالي: 4 طبقات).</li>
+        <li><strong>الخطوة 2:</strong> Entry Guard يفك الطبقة الأولى من Tor (يتبقى 1 TLS + 2 Tor).</li>
+        <li><strong>الخطوة 3:</strong> Middle Relay يفك الطبقة الثانية من Tor (يتبقى 1 TLS + 1 Tor).</li>
+        <li><strong>الخطوة 4:</strong> Exit Node تفك الطبقة الأخيرة من Tor وتكشف عن <strong>TLS المشفر</strong> الذي لا تستطيع فكه.</li>
     </ul>
-    <p style="margin-top: 10px;"><strong>📖 ملاحظة فنية متقدمة:</strong> بهذا الشكل، حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بتقنية TLS، ولا تستطيع التجسس على المحتوى الفعلي لاتصالك (كلمات المرور، الرسائل، إلخ). يستبدل Tor حالياً خوارزمية "tor1" القديمة بخوارزمية "Counter Galois Onion (CGO)" الأحدث والأكثر مقاومة للهجمات.</p>
+    <p style="margin-top: 10px;"><strong>📖 نتيجة:</strong> حتى لو كانت عقدة الخروج خبيثة، فهي لا ترى سوى بيانات مشفرة بـ TLS (كلمات المرور، الرسائل، إلخ).</p>
 </div>
-    <!-- ======== الفرق بين Gateway و Workstation ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-sitemap"></i>
-            <h3>🏗️ الفرق بين Whonix Gateway و Whonix Workstation</h3>
+
+<!-- ======== جدول موحد: أنواع الاتصالات والمقارنة الشاملة ======== -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-network-wired"></i>
+        <h3>🌐 أنواع اتصالات Tor و VPN - مقارنة شاملة</h3>
+    </div>
+
+    <!-- شرح مختصر للأنواع -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px;">
+        <div style="background:#2a2a4a; padding:12px; border-radius:12px;">
+            <span style="background:#4caf50; padding:3px 10px; border-radius:15px; font-weight:bold;">🧅 Tor فقط</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → شبكة Tor → الإنترنت</p>
+            <p style="font-size:0.8em; color:#aaa;">ISP يرى اتصال Tor | الموقع يرى IP خروج Tor</p>
         </div>
-        <table class="comparison-table">
-            <thead><th></th><th>Gateway (GW)</th><th>Workstation (WS)</th></thead>
-            <tbody>
-                <tr><th>الوظيفة</th><td>بوابة Tor (ترسل حركة المرور عبر Tor)</th><td>جهاز المستخدم (متصفح، تطبيقات)</th></tr>
-                <tr><th>نوع الـ VM في Qubes</th><td><code>AppVM</code> + <code>provides_network true</code></th><td><code>AppVM</code> (عادي)</th></tr>
-                <tr><th>يحتوي على Tor</th><td>✅ نعم (يدير شبكة Tor)</th><td>❌ لا</th></tr>
-                <tr><th>يأخذ عقد دخول (Entry Guards)</th><td>✅ نعم (يحفظ في private volume)</th><td>❌ لا</th></tr>
-                <tr><th>netvm الخاص به</th><td>sys-firewall-X (جدار ناري مخصص)</th><td>sys-whonix-X</th></tr>
-                <tr><th>provides_network</th><td>✅ true</th><td>❌ false</th></tr>
-            </tbody>
-        </table>
-        <div class="note" style="margin-top:10px;">
-            <i class="fas fa-project-diagram"></i>
-            <strong>البنية الكاملة:</strong> <code>sys-net → sys-firewall-A → sys-whonix-A → anon-work-A</code><br>
-            <strong>للهوية الثانية:</strong> <code>sys-net → sys-firewall-B → sys-whonix-B → anon-work-B</code>
+        <div style="background:#2a2a4a; padding:12px; border-radius:12px;">
+            <span style="background:#2196f3; padding:3px 10px; border-radius:15px; font-weight:bold;">🌉 Tor + Bridges</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → جسر سري → Tor → الإنترنت</p>
+            <p style="font-size:0.8em; color:#aaa;">ISP يرى اتصال مشفر عادي | لتجاوز الحجب</p>
+        </div>
+        <div style="background:#2a2a4a; padding:12px; border-radius:12px;">
+            <span style="background:#ff9800; padding:3px 10px; border-radius:15px; font-weight:bold;">🔐 VPN → Tor</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → VPN → Tor → الإنترنت</p>
+            <p style="font-size:0.8em; color:#aaa;">ISP يرى VPN فقط | الأكثر خصوصية</p>
+        </div>
+        <div style="background:#2a2a4a; padding:12px; border-radius:12px;">
+            <span style="background:#9c27b0; padding:3px 10px; border-radius:15px; font-weight:bold;">🔄 Tor → VPN</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → Tor → VPN → الإنترنت</p>
+            <p style="font-size:0.8em; color:#aaa;">VPN يرى وجهتك | للراحة فقط</p>
+        </div>
+        <div style="background:#2a2a4a; padding:12px; border-radius:12px;">
+            <span style="background:#607d8b; padding:3px 10px; border-radius:15px; font-weight:bold;">🔒 VPN فقط</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → VPN → الإنترنت</p>
+            <p style="font-size:0.8em; color:#aaa;">VPN يعرف هويتك ووجهاتك</p>
+        </div>
+        <div style="background:#3a1a1a; padding:12px; border-radius:12px;">
+            <span style="background:#f44336; padding:3px 10px; border-radius:15px; font-weight:bold;">❌ بدون حماية</span>
+            <p style="margin-top:8px; font-size:0.9em;">جهازك → الإنترنت</p>
+            <p style="font-size:0.8em; color:#ff8888;">كل شيء مكشوف</p>
         </div>
     </div>
 
-    <!-- ======== لماذا Whonix Workstation؟ ======== -->
-    <div class="card" style="margin-top: 25px; border-right: 6px solid #ff9800;">
-        <div class="card-header" style="color: #ffaa33;">
-            <i class="fas fa-hard-hat"></i> 🛡️ لماذا Whonix Workstation؟ ليس مجرد توجيه مرور
-        </div>
-        <p><strong>من وثائق Whonix و Privacy Guides:</strong> Whonix-Workstation ليست مجرد آلة افتراضية عادية، بل هو نظام تشغيل مُصلب (Hardened OS) يعتمد على توزيعة <strong>Kicksecure</strong> الأمنية. هذا يوفر طبقات حماية إضافية تتجاوز بكثير مجرد تمرير البيانات عبر Tor.</p>
-        
-        <p>إذا تم اختراق المتصفح أو أي تطبيق، فإن المهاجم لن يتمكن من معرفة عنوان IP الحقيقي، ولكن <strong>يمكنه الوصول إلى كل البيانات داخل الجهاز</strong>. هنا يأتي دور التصليب الداخلي للمساعدة في منع أو إعاقة هذا الاختراق من البداية.</p>
+    <!-- جدول موحد: من يرى ماذا + التوصيات -->
+    <table class="comparison-table">
+        <thead>
+            <tr>
+                <th>نوع الاتصال</th>
+                <th>ISP يرى</th>
+                <th>الموقع يرى</th>
+                <th>الخصوصية</th>
+                <th>السرعة</th>
+                <th>التوصية</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>بدون حماية</strong></td>
+                <td><span style="color:#ff4d4d;">كل شيء</span></td>
+                <td><span style="color:#ff4d4d;">IP حقيقي</span></td>
+                <td>🔴 معدومة</td>
+                <td>🟢 سريع</td>
+                <td><span style="background:#ff4d4d; padding:3px 10px; border-radius:15px; color:white;">❌ لا تستخدم</span></td>
+            </tr>
+            <tr>
+                <td><strong>VPN فقط</strong></td>
+                <td><span style="color:#ffaa33;">اتصال VPN</span></td>
+                <td><span style="color:#ffaa33;">IP VPN</span></td>
+                <td>🟡 متوسطة</td>
+                <td>🟢 سريع</td>
+                <td><span style="background:#607d8b; padding:3px 10px; border-radius:15px; color:white;">استخدام عادي</span></td>
+            </tr>
+            <tr>
+                <td><strong>Tor فقط</strong></td>
+                <td><span style="color:#ffaa33;">اتصال Tor</span></td>
+                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
+                <td>🟢 عالية</td>
+                <td>🟡 متوسط</td>
+                <td><span style="background:#4caf50; padding:3px 10px; border-radius:15px; color:white;">✅ أساسي</span></td>
+            </tr>
+            <tr>
+                <td><strong>Tor + Bridges</strong></td>
+                <td><span style="color:#4caf50;">اتصال مشفر عادي</span></td>
+                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
+                <td>🟢 عالية جداً</td>
+                <td>🟡 متوسط</td>
+                <td><span style="background:#2196f3; padding:3px 10px; border-radius:15px; color:white;">🌉 لتجاوز الحجب</span></td>
+            </tr>
+            <tr>
+                <td><strong>VPN → Tor</strong></td>
+                <td><span style="color:#4caf50;">اتصال VPN</span></td>
+                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
+                <td>🟢 ممتازة</td>
+                <td>🟡 متوسط</td>
+                <td><span style="background:#ff9800; padding:3px 10px; border-radius:15px; color:white;">🔐 موصى به</span></td>
+            </tr>
+            <tr>
+                <td><strong>Tor → VPN</strong></td>
+                <td><span style="color:#ffaa33;">اتصال Tor</span></td>
+                <td><span style="color:#4caf50;">IP VPN</span></td>
+                <td>🟡 جيدة</td>
+                <td>🟡 متوسط</td>
+                <td><span style="background:#9c27b0; padding:3px 10px; border-radius:15px; color:white;">⚠️ للراحة</span></td>
+            </tr>
+        </tbody>
+    </table>
 
-        <ul>
-            <li><strong>عزل التدفق (Stream Isolation):</strong> كل تطبيق يحصل على دائرة Tor خاصة به، مما يمنع ربط هوياتك المختلفة.</li>
-            <li><strong>مكافحة بصمة لوحة المفاتيح (Keystroke Anonymization):</strong> بفضل أداة <code>kloak</code>، يتم تشويش أسلوب كتابتك لمنع التعرف عليك من خلال إيقاع الكتابة.</li>
-            <li><strong>تشفير الذاكرة المؤقتة (Encrypted Swap):</strong> حتى البيانات التي تخرج مؤقتاً إلى القرص تبقى مشفرة بالكامل.</li>
-            <li><strong>مُخصص ذاكرة مُصلب (Hardened Memory Allocator):</strong> يحمي من استغلال ثغرات الذاكرة المعقدة.</li>
-            <li><strong>حماية النواة (Kernel Hardening):</strong> يتم تطبيق إعدادات <code>sysctl</code> المتقدمة بشكل افتراضي. ويمكن تعزيزها لاحقاً عبر تثبيت <code>hardened-kernel</code> الذي يعيد بناء النواة برموز عشوائية لتصعيب استغلال الثغرات.</li>
+    <!-- جدول مقارنة مع I2P -->
+    <table class="comparison-table" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>المعيار</th>
+                <th>VPN</th>
+                <th>Tor (Whonix)</th>
+                <th>Tor + Bridges</th>
+                <th>I2P</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>السرعة</strong></td>
+                <td><span style="color:#4caf50;">🟢 سريع</span></td>
+                <td><span style="color:#ffaa33;">🟡 متوسط</span></td>
+                <td><span style="color:#ffaa33;">🟡 متوسط</span></td>
+                <td><span style="color:#ffaa33;">🟡 متوسط إلى بطيء</span></td>
+            </tr>
+            <tr>
+                <td><strong>إخفاء الهوية</strong></td>
+                <td><span style="color:#ffaa33;">🟡 متوسط</span></td>
+                <td><span style="color:#4caf50;">🟢 عالي جداً</span></td>
+                <td><span style="color:#4caf50;">🟢 عالي جداً</span></td>
+                <td><span style="color:#4caf50;">🟢 عالي</span></td>
+            </tr>
+            <tr>
+                <td><strong>مقاومة الحجب</strong></td>
+                <td><span style="color:#4caf50;">🟢 عالية</span></td>
+                <td><span style="color:#ff4d4d;">🔴 ضعيفة</span></td>
+                <td><span style="color:#4caf50;">🟢 عالية جداً</span></td>
+                <td><span style="color:#ffaa33;">🟡 متوسطة</span></td>
+            </tr>
+            <tr>
+                <td><strong>إخفاء استخدام Tor</strong></td>
+                <td>❌ لا</td>
+                <td>❌ لا</td>
+                <td>✅ نعم</td>
+                <td>🟡 غير معروف</td>
+            </tr>
+            <tr>
+                <td><strong>سهولة الإعداد</strong></td>
+                <td><span style="color:#4caf50;">🟢 سهلة</span></td>
+                <td><span style="color:#4caf50;">🟢 سهلة</span></td>
+                <td><span style="color:#4caf50;">🟢 سهلة</span></td>
+                <td><span style="color:#ff4d4d;">🔴 صعبة</span></td>
+            </tr>
+            <tr>
+                <td><strong>التكلفة</strong></td>
+                <td>~50€/سنة</td>
+                <td>مجاني</td>
+                <td>مجاني</td>
+                <td>مجاني</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="note" style="margin-top:15px;">
+        <i class="fas fa-lightbulb"></i>
+        <strong>💡 خلاصة التوصيات:</strong>
+        <ul style="margin-right:20px; margin-top:10px;">
+            <li><strong>للاستخدام اليومي العادي:</strong> VPN فقط كافٍ (يوتيوب، أخبار)</li>
+            <li><strong>للخصوصية الأساسية:</strong> Tor فقط (Whonix) هو الأساس</li>
+            <li><strong>للخصوصية العالية:</strong> VPN → Tor يخفي استخدام Tor عن مزود الخدمة</li>
+            <li><strong>إذا كان Tor محجوباً:</strong> Tor + Bridges (استخدم Snowflake)</li>
+            <li><strong>للوصول لخدمات تمنع Tor:</strong> Tor → VPN يعطيك IP ثابت</li>
+            <li><strong>للأنشطة الحساسة:</strong> لا تستخدم اتصالاً مباشراً بدون حماية أبداً</li>
         </ul>
+    </div>
+</div>
 
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-check-circle"></i>
-            <strong>نتيجة هذه التحصينات:</strong> Whonix-Workstation يُعتبر بيئة عالية الأمان بحد ذاته. حتى لو تم اختراقه، فإن تحصيناته الداخلية تجعل مهمة استمرار واستغلال هذا الاختراق أصعب بكثير. يوصى دائمًا باستنساخه بشكل دوري والعمل على نسخ نظيفة لتقليل أثر أي اختراق محتمل.
+<!-- ======== الفرق بين Gateway و Workstation ======== -->
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-sitemap"></i>
+        <h3>🏗️ الفرق بين Whonix Gateway و Whonix Workstation</h3>
+    </div>
+    <table class="comparison-table">
+        <thead><tr><th></th><th>Gateway (GW)</th><th>Workstation (WS)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>الوظيفة</strong></td><td>تشغيل عمليات Tor والعمل كجسر اتصال لـ WS</td><td>تشغيل تطبيقات المستخدم وإجراء الأنشطة بأمان</td></tr>
+            <tr><td><strong>نوع الـ VM في Qubes</strong></td><td><code>AppVM</code> + <code>provides_network true</code></td><td><code>AppVM</code> (عادي)</td></tr>
+            <tr><td><strong>يحتوي على Tor</strong></td><td>✅ نعم</td><td>❌ لا</td></tr>
+            <tr><td><strong>يأخذ عقد دخول (Entry Guards)</strong></td><td>✅ نعم</td><td>❌ لا</td></tr>
+            <tr><td><strong>netvm الخاص به</strong></td><td>sys-firewall-X</td><td>sys-whonix-X</td></tr>
+            <tr><td><strong>provides_network</strong></td><td>✅ true</td><td>❌ false</td></tr>
+        </tbody>
+    </table>
+    <div class="note" style="margin-top:10px;">
+        <i class="fas fa-project-diagram"></i>
+        <strong>البنية:</strong> <code>sys-net → sys-firewall-A → sys-whonix-A → anon-work-A</code>
+    </div>
+</div>
+
+<!-- ======== لماذا Whonix Workstation؟ ======== -->
+<div class="card" style="margin-top: 25px;">
+    <div class="card-header">
+        <i class="fas fa-hard-hat"></i>
+        <h3>🛡️ لماذا Whonix Workstation؟ نظام تشغيل مُصلب</h3>
+    </div>
+    <p>Whonix-Workstation تعتمد على توزيعة <strong>Kicksecure</strong> الأمنية، وهو نظام تشغيل مُصلب (Hardened OS) يوفر طبقات حماية تتجاوز مجرد تمرير البيانات عبر Tor.</p>
+    <ul>
+        <li><strong>عزل التدفق (Stream Isolation):</strong> كل تطبيق يحصل على دائرة Tor خاصة به</li>
+        <li><strong>تشويش إيقاع الكتابة (kloak):</strong> يمنع التعرف عليك من خلال أسلوب كتابتك</li>
+        <li><strong>تشفير الذاكرة المؤقتة:</strong> البيانات المؤقتة على القرص تبقى مشفرة</li>
+        <li><strong>مُخصص ذاكرة مُصلب:</strong> يحمي من استغلال ثغرات الذاكرة</li>
+        <li><strong>حماية النواة:</strong> إعدادات sysctl متقدمة + إمكانية إعادة بناء النواة برموز عشوائية</li>
+    </ul>
+</div>
+
+<!-- ======== المشكلة والحل: Entry Guards ======== -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-shield-alt"></i>
+        <h3>🛡️ حراس الدخول ثابتون والحل: بوابات متعددة</h3>
+    </div>
+    <p>حارس الدخول (Entry Guard) هو أول عقدة Tor تتصل بها البوابة. دورة تغييره تستمر لأسابيع أو أشهر. إذا وقعت على عقدة خبيثة، فستظل عالقاً معها. استخدام Gateway واحد لجميع الأنشطة يعني أن <strong>جميع هوياتك مرتبطة بنفس الحارس</strong>.</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+        <div style="flex: 1; background: #2a2a4a; padding: 15px; border-radius: 20px; text-align: center;">
+            <div style="color: #ff6666; font-weight: bold;">❌ Gateway واحد</div>
+            <hr style="margin: 10px 0;">
+            بريد + نشر وثائق → <strong>نفس الحارس</strong> → يمكن ربطهما
+        </div>
+        <div style="flex: 1; background: #1a3a3a; padding: 15px; border-radius: 20px; text-align: center;">
+            <div style="color: #66ccff; font-weight: bold;">✅ Gateway منفصل لكل نشاط</div>
+            <hr style="margin: 10px 0;">
+            بريد → Gateway A → حارس A<br>
+            نشر → Gateway B → حارس B<br>
+            → <strong>لا يمكن ربطهما</strong>
         </div>
     </div>
+</div>
 
-    <!-- ======== المشكلة: Entry Guards ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-shield-alt"></i>
-            <h3>🛡️ المشكلة: حراس الدخول (Entry Guards) ثابتون</h3>
-        </div>
-        <p>حارس الدخول هو أول عقدة Tor تتصل بها بوابة Whonix. وفقاً لوثائق Whonix:</p>
-        <div class="note" style="background:#1a3a3a; margin:10px 0;">
-            "من أجل تحسين إخفاء الهوية، قرر مطورو Tor <strong>تقليل عدد حراس الدخول من 3 إلى 1</strong> وجعل <strong>دورة تغيير الحراس أقل تكراراً</strong> (4-8 أسابيع، قد تصل إلى 120 يوماً)."
-        </div>
-        <div class="note-critical">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ النتيجة:</strong> إذا وقع اختيارك على عقدة دخول خبيثة، فستظل عالقاً معها لأشهر. كما أن استخدام Gateway واحد لجميع الأنشطة يعني أن <strong>جميع هوياتك مرتبطة بنفس حارس الدخول</strong>.
-        </div>
+<!-- ======== الأوامر ======== -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-terminal"></i>
+        <h3>📝 الأوامر (انسخ والصق بالترتيب)</h3>
     </div>
 
-    <!-- ======== الحل: بوابات متعددة ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-code-branch"></i>
-            <h3>🔀 الحل: بوابات متعددة (هوية منفصلة لكل Gateway)</h3>
+    <div style="background: #2a2a4a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #ff6666;">
+        <div style="color: #ff6666; font-weight: bold; margin-bottom: 10px;">
+            <i class="fas fa-user-circle"></i> 🔴 الهوية الأولى (Persona A)
         </div>
-        <div class="note" style="background:#1a3a3a;">
-            <strong>📖 من وثائق Whonix (Multiple Tor-Gateways):</strong><br>
-            "لا يُنصح باستخدام نفس <strong>Whonix-Gateway</strong> لأكثر من مهمة واحدة... إنها ممارسة أمنية سيئة استخدام نفس البوابة للبريد الإلكتروني ونشر وثيقة مجهولة المصدر."
-        </div>
-        
-        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
-            <div style="flex: 1; background: #2a2a4a; padding: 15px; border-radius: 20px; text-align: center;">
-                <div style="color: #ff6666; font-weight: bold;">❌ Gateway واحد</div>
-                <hr style="margin: 10px 0;">
-                بريد إلكتروني + نشر وثائق<br>
-                → <strong>نفس حارس الدخول</strong><br>
-                → يمكن ربط النشاطين
-            </div>
-            <div style="flex: 1; background: #1a3a3a; padding: 15px; border-radius: 20px; text-align: center;">
-                <div style="color: #66ccff; font-weight: bold;">✅ Gateway منفصل لكل نشاط</div>
-                <hr style="margin: 10px 0;">
-                بريد إلكتروني → Gateway A → حارس دخول A<br>
-                نشر وثائق → Gateway B → حارس دخول B<br>
-                → <strong>لا يمكن ربط النشاطين</strong>
-            </div>
-        </div>
-    </div>
-
-    <!-- ======== الأوامر ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-terminal"></i>
-            <h3>📝 الأوامر (انسخ والصق بالترتيب)</h3>
-        </div>
-        
-        <!-- قالب الهوية -->
-        <div style="background: #2a2a4a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #ff6666;">
-            <div style="color: #ff6666; font-weight: bold; margin-bottom: 10px;">
-                <i class="fas fa-user-circle"></i> 🔴 أنشئ الهوية الأولى (Persona A)
-            </div>
-            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># 1. جدار ناري مؤقت (DispVM) - يختفي عند الإيقاف ويُعاد بناؤه تلقائياً
+        <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># 1. جدار ناري مؤقت (DispVM)
 qvm-create --class DispVM --label orange --template default-dvm sys-firewall-A
 qvm-prefs sys-firewall-A provides_network true
 qvm-prefs sys-firewall-A netvm sys-net
@@ -1290,524 +1423,64 @@ qvm-create --class AppVM --label red --template whonix-gateway-18 sys-whonix-A
 qvm-prefs sys-whonix-A provides_network true
 qvm-prefs sys-whonix-A netvm sys-firewall-A
 
-# 3. محطة العمل المجهولة
+# 3. محطة العمل
 qvm-create --class AppVM --label green --template whonix-workstation-18 anon-work-A
 qvm-prefs anon-work-A netvm sys-whonix-A</pre>
-        </div>
-        
-        <!-- نسخ للهوية الثانية -->
-        <div style="background: #1a3a3a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #6666ff;">
-            <div style="color: #6666ff; font-weight: bold; margin-bottom: 10px;">
-                <i class="fas fa-copy"></i> 🔵 انسخ للهوية الثانية (Persona B) - غيّر A إلى B فقط
-            </div>
-            <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># انسخ الأوامر أعلاه وغير A → B (والألوان إن أردت)
+    </div>
 
-# مثال للسطر الأول فقط:
+    <div style="background: #1a3a3a; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-right: 4px solid #6666ff;">
+        <div style="color: #6666ff; font-weight: bold; margin-bottom: 10px;">
+            <i class="fas fa-copy"></i> 🔵 الهوية الثانية (Persona B)
+        </div>
+        <pre class="code-block" style="direction: ltr; text-align: left; margin: 0;"># انسخ الأوامر أعلاه وغير A → B
 qvm-create --class DispVM --label cyan --template default-dvm sys-firewall-B
 qvm-prefs sys-firewall-B provides_network true
 qvm-prefs sys-firewall-B netvm sys-net
-
-# ... تابع بنفس الطريقة لبقية الأسطر</pre>
-        </div>
-        
-        <div class="note" style="margin-top:15px;">
-            <i class="fas fa-info-circle"></i>
-            <strong>📌 ملاحظات مهمة:</strong>
-            <ul style="margin-right:20px; margin-top:10px;">
-                <li><strong>جدار الحماية مؤقت (DispVM)</strong> → يُعاد بناؤه من الصفر عند كل بدء تشغيل، مما يمنع استمرار أي برمجيات خبيثة</li>
-                <li>كل Gateway له <code>private volume</code> مستقل → كل بوابة تأخذ <strong>عقد دخول مختلفة</strong> تلقائياً</li>
-                <li>كل Gateway له <strong>جدار ناري مخصص</strong> → عزل كامل على مستوى الشبكة</li>
-                <li><strong>جدار الحماية لا يفك تشفير</strong> → يمرر البيانات كما هي (مشفرة)</li>
-                <li><strong>Whonix يخفي التوقيت</strong> عبر SDWDate → هجمات التوقيت مستحيلة عملياً</li>
-                <li><strong>الجسور (Bridges)</strong> تخفي حقيقة استخدام Tor عن ISP</li>
-            </ul>
-        </div>
+# ... تابع بنفس الطريقة</pre>
     </div>
+</div>
 
-    <!-- ======== الواجهة الرسومية ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-mouse-pointer"></i>
-            <h3>🖱️ أو عبر الواجهة الرسومية (Qube Manager)</h3>
-        </div>
-        <ol style="margin-right:20px; line-height:1.8;">
-            <li>افتح <strong>Qube Manager</strong> → <strong>Create New Qube</strong></li>
-            <li>لإنشاء <strong>جدار ناري مؤقت (DispVM)</strong>:
-                <ul>
-                    <li><strong>Name:</strong> <code>sys-firewall-A</code></li>
-                    <li><strong>Type:</strong> <code>DisposableVM</code></li>
-                    <li><strong>Template:</strong> <code>default-dvm</code></li>
-                    <li><strong>Networking:</strong> <code>sys-net</code></li>
-                    <li>فعّل <strong>"Provides network access to other qubes"</strong></li>
-                </ul>
-            </li>
-            <li>لإنشاء <strong>Gateway</strong>:
-                <ul>
-                    <li><strong>Name:</strong> <code>sys-whonix-A</code></li>
-                    <li><strong>Type:</strong> <code>AppVM</code></li>
-                    <li><strong>Template:</strong> <code>whonix-gateway-18</code></li>
-                    <li><strong>Networking:</strong> <code>sys-firewall-A</code></li>
-                    <li>فعّل <strong>"Provides network access to other qubes"</strong></li>
-                </ul>
-            </li>
-            <li>لإنشاء <strong>Workstation</strong>:
-                <ul>
-                    <li><strong>Name:</strong> <code>anon-work-A</code></li>
-                    <li><strong>Type:</strong> <code>AppVM</code></li>
-                    <li><strong>Template:</strong> <code>whonix-workstation-18</code></li>
-                    <li><strong>Networking:</strong> <code>sys-whonix-A</code></li>
-                </ul>
-            </li>
-            <li>للنسخ إلى الهوية الثانية: <strong>أعد الخطوات</strong> مع تغيير <code>A</code> إلى <code>B</code> في الأسماء</li>
-        </ol>
+<!-- ======== الواجهة الرسومية ======== -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-mouse-pointer"></i>
+        <h3>🖱️ أو عبر الواجهة الرسومية (Qube Manager)</h3>
     </div>
+    <ol style="margin-right:20px; line-height:1.8;">
+        <li>افتح <strong>Qube Manager</strong> → <strong>Create New Qube</strong></li>
+        <li><strong>جدار ناري:</strong> Name: <code>sys-firewall-A</code> | Type: <code>DisposableVM</code> | Template: <code>default-dvm</code> | Networking: <code>sys-net</code> | فعّل Provides network</li>
+        <li><strong>Gateway:</strong> Name: <code>sys-whonix-A</code> | Type: <code>AppVM</code> | Template: <code>whonix-gateway-18</code> | Networking: <code>sys-firewall-A</code> | فعّل Provides network</li>
+        <li><strong>Workstation:</strong> Name: <code>anon-work-A</code> | Type: <code>AppVM</code> | Template: <code>whonix-workstation-18</code> | Networking: <code>sys-whonix-A</code></li>
+        <li>للهوية الثانية: أعد الخطوات مع تغيير <code>A</code> إلى <code>B</code></li>
+    </ol>
+</div>
 
 <!-- ======== تحذيرات موحدة ======== -->
-<div class="note-critical">
+<div class="note-critical" style="margin-top: 20px;">
     <i class="fas fa-exclamation-triangle"></i>
     <strong>⚠️ تحذيرات أمنية مهمة:</strong>
     <ul style="margin-right:20px; margin-top:10px;">
-        <li><strong>لا تشغل بوابتين معاً</strong> - <code>qvm-shutdown sys-whonix-A</code> قبل <code>qvm-start sys-whonix-B</code> (من وثائق Whonix)</li>
-        <li><strong>لا تستخدم Clone</strong> - <code>qvm-clone</code> ينسخ ملف <code>/var/lib/tor/state</code> مع حارس الدخول القديم. أنشئ Gateway جديداً من القالب مباشرة.</li>
-        <li><strong>البوابات الزائلة (Disposable Gateway) غير موصى بها</strong> - تخرب آلية اختيار حراس الدخول وتزيد المخاطر.</li>
-        <li><strong>لا تُخصص <code>default-dvm</code></strong> - لا تضف أي إعدادات أو حزم أو قواعد جدار ناري للقالب <code>default-dvm</code> نفسه. أي تغيير فيه سيؤثر على <strong>كل</strong> الأجهزة المؤقتة في النظام، وليس فقط جدار الحماية هذا. جدار الحماية المؤقت سيأخذ إعداداته تلقائياً من <code>default-dvm</code> النظيف دون أي تدخل.</li>
+        <li><strong>لا تستخدم Clone</strong> - <code>qvm-clone</code> ينسخ حالة Tor مع حارس الدخول. أنشئ Gateway جديداً من القالب مباشرة.</li>
+        <li><strong>البوابات الزائلة (Disposable Gateway) غير موصى بها</strong> - تخرب آلية اختيار حراس الدخول.</li>
+        <li><strong>لا تُخصص <code>default-dvm</code></strong> - أي تغيير فيه سيؤثر على كل الأجهزة المؤقتة في النظام.</li>
+        <li><strong>جدار الحماية لا يفك تشفير</strong> - يمرر البيانات المشفرة كما هي دون تعديل.</li>
     </ul>
 </div>
-<!-- ======== حزمة Stream Isolation كاملة ======== -->
 
-<!-- 1. بطاقة: Stream Isolation - لماذا نحتاجه؟ -->
-<div class="card" style="margin-top: 30px; border-right: 6px solid #66ccff;">
-    <div class="card-header" style="color: #88aaff;">
-        <i class="fas fa-stream"></i> 🌊 Stream Isolation (عزل التدفق) - من وثائق Whonix
-    </div>
-    <p><strong>المشكلة:</strong> بدون Stream Isolation، جميع تطبيقاتك تستخدم نفس دائرة Tor، مما يسمح بربط أنشطتك المختلفة ببعضها.</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-        <div style="background: #2a1a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #ff8888;">❌ بدون Stream Isolation</h4><p>بريد + تصفح + محادثة → <strong>نفس دائرة Tor</strong> → يمكن ربطها</p></div>
-        <div style="background: #1a3a1a; padding: 15px; border-radius: 15px;"><h4 style="color: #88ff88;">✅ مع Stream Isolation</h4><p>بريد → دائرة 1 | تصفح → دائرة 2 | محادثة → دائرة 3 → <strong>لا يمكن ربطها</strong></p></div>
-    </div>
-    <div class="note" style="background: #1a3a3a;"><i class="fas fa-check-circle"></i> <strong>✅ Whonix يحمي التطبيقات المدمجة تلقائياً:</strong> Tor Browser، Thunderbird، apt-get، curl، wget، ssh، gpg.</div>
-</div>
-
-<!-- 2. بطاقة: Transparent Proxy -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #4caf50;">
-    <div class="card-header" style="color: #88ff88;"><i class="fas fa-network-wired"></i> 🔄 Transparent Proxy - ما هو؟</div>
-    <p><strong>من وثائق Whonix:</strong> "أي تطبيق يمكنه الاتصال بالإنترنت عبر Tor <strong>بدون أي إعدادات إضافية</strong>."</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-        <div style="background: #1a3a3a; padding: 12px; border-radius: 12px;"><h4>✅ مع Transparent Proxy</h4><p>Telegram (غير معدل) → يعمل تلقائياً عبر Tor</p></div>
-        <div style="background: #3a1a1a; padding: 12px; border-radius: 12px;"><h4>❌ بدون Transparent Proxy</h4><p>يجب إعداد كل تطبيق يدوياً لاستخدام SOCKS proxy</p></div>
-    </div>
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;"><i class="fas fa-shield-alt"></i> <strong>🛡️ ملاحظة أمنية:</strong> Transparent Proxy يحمي IP ولكن <strong>لا يوفر Stream Isolation</strong>.</div>
-</div>
-
-<!-- 3. بطاقة: SocksPort vs TransPort -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-code-branch"></i> <h3>🔀 SocksPort vs TransPort</h3></div>
-    <table class="comparison-table"><thead><tr><th>المعيار</th><th>SocksPort</th><th>TransPort</th></tr></thead><tbody><tr><td><strong>يحتاج إعدادات؟</strong></td><td>✅ نعم</td><td>❌ لا</td></tr><tr><td><strong>Stream Isolation</strong></td><td>✅ نعم</td><td>❌ لا</td></tr><tr><td><strong>أمثلة</strong></td><td>Tor Browser، apt-get</td><td>Telegram</td></tr><tr><td><strong>التوصية</strong></td><td>✅ الأفضل</td><td>🟡 مقبول</td></tr></tbody></table>
-</div>
-
-<!-- 4. بطاقة: كيفية عزل التطبيقات المخصصة -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ffaa33;">
-    <div class="card-header" style="color: #ffaa33;"><i class="fas fa-cog"></i> 🔧 كيفية عزل التطبيقات المخصصة</div>
-    <p><strong>إذا قمت بتثبيت تطبيق جديد، فأنت بحاجة لتهيئته يدوياً.</strong></p>
-    <h4>🛠️ الطريقة السهلة: torsocks</h4>
-    <code onclick="copyText(this)">torsocks my-application</code>
-    <h4>⚙️ الطريقة اليدوية:</h4>
-    <ul><li><strong>Protocol:</strong> SOCKS5</li><li><strong>IP:</strong> <code>10.152.152.10</code> (Non-Qubes) أو <code>qubesdb-read /qubes-gateway</code> (Qubes)</li><li><strong>Port:</strong> <code>9153-9159</code></li></ul>
-    <div class="note-critical" style="margin-top: 15px;"><i class="fas fa-exclamation-triangle"></i> <strong>⚠️ مهم:</strong> لا تستخدم نفس المنفذ لأكثر من تطبيق!</div>
-</div>
-
-<!-- 5. بطاقة: IsolateSOCKSAuth - ميزة Tor Browser -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-firefox"></i> <h3>🔐 IsolateSOCKSAuth - ميزة Tor Browser</h3></div>
-    <p><strong>من وثائق Whonix:</strong> "كل موقع يزوره المستخدم يحصل على دائرة Tor مختلفة."</p>
-    <ul><li>✅ google.com → دائرة مختلفة عن twitter.com</li><li>✅ Whonix <strong>لا يكسر</strong> هذه الميزة</li></ul>
-</div>
-
-<!-- 6. بطاقة: Qubes UpdatesProxy - تنبيه -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ff4444;">
-    <div class="card-header" style="color: #ff8888;"><i class="fas fa-exclamation-triangle"></i> ⚠️ تنبيه: Stream Isolation في Qubes أقل قوة</div>
-    <p><strong>من وثائق Whonix:</strong> جميع القوالب تستخدم نفس UpdatesProxy عبر sys-whonix.</p>
-    <ul><li>🔴 <strong>النتيجة:</strong> تحديثات جميع القوالب تختلط في نفس الدائرة.</li><li>✅ <strong>الحل:</strong> استخدم بوابات Whonix متعددة.</li></ul>
-   <div class="mitigation-badge" style="margin-top: 15px;"><i class="fas fa-check-circle"></i> الحل: بوابات متعددة (<a href="#" onclick="document.querySelector('[data-tab=\'tab2\']').click(); return false;" style="color: #6c63ff; text-decoration: underline;">تبويب 2</a>)</div>
-</div>
-
-<!-- 7. جدول: التطبيقات المحمية -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-table"></i> <h3>📋 التطبيقات المحمية في Whonix</h3></div>
-    <table class="comparison-table"><thead><tr><th>التطبيق</th><th>مثبت</th><th>محمي</th><th>المنفذ</th></tr></thead><tbody><tr><td>Tor Browser</td><td>✅</td><td>✅</td><td>9150</td></tr><tr><td>Thunderbird</td><td>✅</td><td>✅</td><td>9102</td></tr><tr><td>apt-get/curl/wget</td><td>✅</td><td>✅ (uwt)</td><td>-</td></tr><tr><td>ssh/git</td><td>✅</td><td>✅ (uwt)</td><td>-</td></tr></tbody></table>
-</div>
-
-<!-- 8. جدول: المنافذ الجاهزة -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-plug"></i> <h3>🔌 المنافذ الجاهزة للاستخدام</h3></div>
-    <table class="comparison-table"><thead><tr><th>نطاق المنافذ</th><th>IsolateDestAddr</th><th>متى تستخدم؟</th></tr></thead><tbody><tr><td><code>9153-9159</code></td><td>❌</td><td>استخدام عام</td></tr><tr><td><code>9160-9169</code></td><td>✅</td><td>خوادم متعددة</td></tr><tr><td><code>9180-9189</code></td><td>✅</td><td>أقصى عزل</td></tr></tbody></table>
-    <div class="note" style="margin-top: 15px;"><i class="fas fa-lightbulb"></i> <strong>💡 نصيحة:</strong> استخدم <code>9153-9159</code> لمعظم الحالات.</div>
-</div>
-
-
-<!-- ======== حزمة sdwdate + Time Attacks كاملة ======== -->
-
-<!-- 1. بطاقة: ما هو sdwdate؟ -->
-<div class="card" style="margin-top: 30px; border-right: 6px solid #4caf50;">
-    <div class="card-header" style="color: #88ff88;">
-        <i class="fas fa-clock"></i> 🕐 sdwdate - Secure Distributed Web Date
-    </div>
-    <p><strong>من وثائق Whonix:</strong> sdwdate هي أداة مزامنة الوقت الآمنة في Whonix. بدلاً من استخدام NTP التقليدي (الذي يمكن للمراقب التلاعب به)، تستخدم sdwdate <strong>شبكة Tor</strong> لجلب الوقت من مصادر متعددة.</p>
-    
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-        <p><strong>🔧 كيف تعمل؟</strong></p>
-        <ul style="margin-right: 20px;">
-            <li>تتصل بعدة خوادم ويب عبر Tor</li>
-            <li>تقرأ التوقيت من HTTP headers</li>
-            <li>تقارن النتائج وتختار التوقيت "الأكثر إجماعاً"</li>
-            <li>تضبط ساعة النظام تدريجياً (بدون قفزات مفاجئة)</li>
-        </ul>
-    </div>
-    
-    <h4>🛡️ لماذا هذا مهم؟</h4>
-    <table class="comparison-table">
-        <thead><tr><th>بدون sdwdate</th><th>مع sdwdate</th></tr></thead>
-        <tbody>
-            <tr><td>NTP يمكن التلاعب به من قبل ISP أو مهاجم</td><td>الاتصال مشفر عبر Tor - لا يمكن التلاعب به</td></tr>
-            <tr><td>تسريب معلومات عن منطقتك الزمنية الحقيقية</td><td>يخفي منطقتك الزمنية تماماً</td></tr>
-            <tr><td>عرضة لهجمات انحراف الوقت (Time Skewing)</td><td>مقارنة مصادر متعددة تمنع التلاعب</td></tr>
-        </tbody>
-    </table>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-check-circle"></i>
-        <strong>✅ sdwdate مثبت ومفعل افتراضياً في Whonix. لا تحتاج لفعل أي شيء.</strong>
-    </div>
-</div>
-
-<!-- 2. بطاقة: كيف تتحقق من sdwdate؟ -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header">
-        <i class="fas fa-check-circle"></i>
-        <h3>✅ كيف تتحقق من أن sdwdate يعمل؟</h3>
-    </div>
-    
-    <p><strong>من وثائق Whonix:</strong> sdwdate يعمل بصمت في الخلفية. للتحقق من حالته:</p>
-    
-    <h4>🖥️ التحقق من الخدمة:</h4>
-    <code onclick="copyText(this)">sudo systemctl status sdwdate</code>
-    <p>يجب أن تظهر <code>active (running)</code>.</p>
-    
-    <h4>📋 عرض السجلات:</h4>
-    <code onclick="copyText(this)">sudo journalctl -u sdwdate --since today</code>
-    <p>سترى رسائل مثل <code>sdwdate: Successfully set time</code>.</p>
-    
-    <h4>🔍 التحقق من آخر مزامنة:</h4>
-    <code onclick="copyText(this)">sudo sdwdate-clock-jump</code>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 ملاحظة:</strong> sdwdate يضبط الوقت <strong>تدريجياً</strong> لتجنب لفت الانتباه. لا تتوقع تغييرات مفاجئة في الساعة.
-    </div>
-</div>
-
-<!-- 3. بطاقة: إخفاء المنطقة الزمنية - شرح موسع -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #66ccff;">
-    <div class="card-header" style="color: #88aaff;">
-        <i class="fas fa-globe-asia"></i> 🌍 إخفاء المنطقة الزمنية (Time Zone) - شرح موسع
-    </div>
-    
-    <p><strong>لماذا هذا مهم؟</strong> مواقع الويب والتطبيقات يمكنها قراءة المنطقة الزمنية لجهازك. هذا يكشف عن موقعك الجغرافي التقريبي.</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-        <div style="background: #2a1a1a; padding: 15px; border-radius: 15px;">
-            <h4 style="color: #ff8888;">❌ بدون حماية</h4>
-            <p>المنطقة الزمنية الحقيقية مكشوفة:</p>
-            <code>Asia/Riyadh</code> أو <code>Europe/Berlin</code>
-            <p style="margin-top: 10px;">→ يمكن تحديد موقعك التقريبي</p>
-        </div>
-        <div style="background: #1a3a1a; padding: 15px; border-radius: 15px;">
-            <h4 style="color: #88ff88;">✅ مع Whonix</h4>
-            <p>المنطقة الزمنية موحدة:</p>
-            <code>Etc/UTC</code>
-            <p style="margin-top: 10px;">→ جميع مستخدمي Whonix يظهرون بنفس المنطقة</p>
-        </div>
-    </div>
-</div>
-    <!-- ======== شرح أنواع اتصالات Tor و VPN ======== -->
-    <div class="card" style="margin-top: 20px;">
-        <div class="card-header"><i class="fas fa-network-wired"></i> 🌐 شرح أنواع اتصالات Tor و VPN</div>
-        
-        <p>قبل المقارنة، دعنا نشرح معنى كل نوع من أنواع الاتصال:</p>
-
-        <!-- 1. Tor فقط -->
-        <div style="background: #2a2a4a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #4caf50; padding: 5px 12px; border-radius: 20px; font-weight: bold;">🧅 Tor فقط</span>
-                <span style="color: #aaa;">(الأساسي)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> جهازك يتصل مباشرة بشبكة Tor دون أي طبقات إضافية.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → شبكة Tor → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى أنك تتصل بشبكة Tor (يمكنه معرفة أنك تستخدم Tor).</p>
-            <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان IP لعقدة خروج Tor.</p>
-            <p><strong>في Qubes:</strong> <code>anon-work → sys-whonix → sys-firewall → sys-net</code></p>
-        </div>
-
-        <!-- 2. Tor + Bridges -->
-        <div style="background: #1a3a3a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #2196f3; padding: 5px 12px; border-radius: 20px; font-weight: bold;">🌉 Tor + Bridges</span>
-                <span style="color: #aaa;">(لتجاوز الحجب)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> مثل Tor فقط، لكنك تتصل أولاً بـ "جسر" (Bridge) يخفي حقيقة أنك تستخدم Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → جسر سري → شبكة Tor → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى اتصالاً عادياً مشفراً (لا يعرف أنه Tor).</p>
-            <p><strong>متى تستخدمه؟</strong> إذا كان Tor محجوباً في بلدك (مثل الصين، إيران، روسيا).</p>
-            <p><strong>أنواع الجسور:</strong> obfs4, Snowflake, meek_lite</p>
-        </div>
-
-        <!-- 3. VPN → Tor -->
-        <div style="background: #2a2a4a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #ff9800; padding: 5px 12px; border-radius: 20px; font-weight: bold;">🔐 VPN → Tor</span>
-                <span style="color: #aaa;">(الأكثر أماناً)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل أولاً بـ VPN، ثم من VPN إلى شبكة Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → VPN → شبكة Tor → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى اتصال VPN فقط (لا يعلم أنك تستخدم Tor).</p>
-            <p><strong>ماذا يرى VPN؟</strong> يرى أنك تتصل بشبكة Tor (لكنه لا يعرف وجهتك النهائية).</p>
-            <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان Tor فقط.</p>
-            <p><strong>في Qubes:</strong> <code>anon-work → sys-whonix → sys-vpn → sys-firewall → sys-net</code></p>
-        </div>
-
-        <!-- 4. Tor → VPN -->
-        <div style="background: #1a3a3a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #9c27b0; padding: 5px 12px; border-radius: 20px; font-weight: bold;">🔄 Tor → VPN</span>
-                <span style="color: #aaa;">(للراحة فقط)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل أولاً بـ Tor، ثم تخرج إلى الإنترنت عبر VPN.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → شبكة Tor → VPN → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى أنك تتصل بشبكة Tor.</p>
-            <p><strong>ماذا يرى VPN؟</strong> لا يعرف هويتك الحقيقية (لأنك أتيت من Tor)، لكنه يرى وجهتك النهائية.</p>
-            <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان VPN (وليس Tor).</p>
-            <p><strong>متى تستخدمه؟</strong> إذا كنت تريد الوصول لخدمات تمنع Tor (مثل بعض البنوك)، أو تريد IP ثابت.</p>
-            <div class="note" style="margin-top:10px; background:#3a2a2a;">
-                ⚠️ <strong>تحذير:</strong> VPN يرى وجهتك النهائية! استخدم هذه الطريقة فقط إذا كنت تثق بمزود VPN ثقة كاملة.
-            </div>
-        </div>
-
-        <!-- 5. VPN فقط -->
-        <div style="background: #2a2a4a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #607d8b; padding: 5px 12px; border-radius: 20px; font-weight: bold;">🔒 VPN فقط</span>
-                <span style="color: #aaa;">(للاستخدام العادي)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> تتصل مباشرة بـ VPN بدون Tor.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → VPN → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى اتصال VPN فقط.</p>
-            <p><strong>ماذا يرى VPN؟</strong> يرى كل شيء: هويتك (عنوان IP الحقيقي) ووجهتك النهائية.</p>
-            <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان VPN.</p>
-            <div class="note" style="margin-top:10px; background:#3a2a2a;">
-                ⚠️ <strong>تحذير:</strong> مزود VPN يعرف هويتك الحقيقية وكل المواقع التي تزورها! مناسب فقط للاستخدام العادي غير الحساس.
-            </div>
-        </div>
-
-        <!-- 6. بدون Tor/VPN -->
-        <div style="background: #3a1a1a; padding: 15px; border-radius: 15px; margin-bottom: 15px;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <span style="background: #f44336; padding: 5px 12px; border-radius: 20px; font-weight: bold;">❌ بدون Tor/VPN</span>
-                <span style="color: #aaa;">(غير آمن)</span>
-            </div>
-            <p style="margin-bottom: 10px;"><strong>ماذا يعني؟</strong> اتصال مباشر بالإنترنت دون أي حماية.</p>
-            <pre style="direction: ltr; text-align: left; margin: 10px 0; padding: 10px;">جهازك → الإنترنت</pre>
-            <p><strong>ماذا يرى ISP؟</strong> يرى كل شيء: كل موقع تزوره، كل ما تفعله.</p>
-            <p><strong>ماذا يرى الموقع؟</strong> يرى عنوان IP الحقيقي الخاص بك.</p>
-            <div class="note-critical" style="margin-top:10px;">
-                🔴 <strong>لا تستخدم هذا أبداً للأنشطة الحساسة!</strong>
-            </div>
-        </div>
-    </div>
-
-<!-- ======== جدول موحد: من يرى ماذا؟ (شامل) ======== -->
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header"><i class="fas fa-eye"></i> 👁️ جدول شامل: من يرى ماذا في كل نوع اتصال؟</div>
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>نوع الاتصال</th>
-                <th>ISP يرى</th>
-                <th>VPN يرى</th>
-                <th>Tor يرى</th>
-                <th>الموقع يرى</th>
-                <th>مستوى الكابتشا</th>
-                <th>التوصية</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- 1. بدون حماية -->
-            <tr>
-                <td><strong>بدون حماية</strong></td>
-                <td><span style="color:#ff4d4d;">كل شيء (IP، وجهات)</span></td>
-                <td><span style="color:#666;">-</span></td>
-                <td><span style="color:#666;">-</span></td>
-                <td><span style="color:#ff4d4d;">IP حقيقي + بصمة</span></td>
-                <td>🟢 منخفض</td>
-                <td><span style="background:#ff4d4d; padding:5px 12px; border-radius:20px; color:white;">❌ لا تستخدم</span></td>
-            </tr>
-            <!-- 2. VPN فقط -->
-            <tr>
-                <td><strong>VPN فقط</strong></td>
-                <td><span style="color:#ffaa33;">اتصال VPN فقط</span></td>
-                <td><span style="color:#ff4d4d;">IP حقيقي + كل الوجهات</span></td>
-                <td><span style="color:#666;">-</span></td>
-                <td><span style="color:#ffaa33;">IP الـ VPN</span></td>
-                <td>🟡 متوسط</td>
-                <td><span style="background:#607d8b; padding:5px 12px; border-radius:20px; color:white;">استخدام عادي</span></td>
-            </tr>
-            <!-- 3. Tor فقط -->
-            <tr>
-                <td><strong>Tor فقط</strong></td>
-                <td><span style="color:#ffaa33;">اتصال Tor</span></td>
-                <td><span style="color:#666;">-</span></td>
-                <td><span style="color:#4caf50;">لا تعرف المصدر</span></td>
-                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
-                <td>🔴 عالي جداً</td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">✅ أساسي</span></td>
-            </tr>
-            <!-- 4. Tor + Bridges -->
-            <tr>
-                <td><strong>Tor + Bridges</strong></td>
-                <td><span style="color:#4caf50;">اتصال مشفر عادي</span></td>
-                <td><span style="color:#666;">-</span></td>
-                <td><span style="color:#4caf50;">لا تعرف المصدر</span></td>
-                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
-                <td>🟡 متوسط-عالي</td>
-                <td><span style="background:#2196f3; padding:5px 12px; border-radius:20px; color:white;">🌉 لتجاوز الحجب</span></td>
-            </tr>
-            <!-- 5. VPN → Tor -->
-            <tr>
-                <td><strong>VPN → Tor</strong><br><small>(VPN قبل Tor)</small></td>
-                <td><span style="color:#4caf50;">اتصال VPN فقط</span></td>
-                <td><span style="color:#ffaa33;">اتصال Tor فقط</span></td>
-                <td><span style="color:#4caf50;">لا تعرف المصدر</span></td>
-                <td><span style="color:#ff4d4d;">IP خروج Tor</span></td>
-                <td>🟡 متوسط</td>
-                <td><span style="background:#ff9800; padding:5px 12px; border-radius:20px; color:white;">🔐 موصى به (أقصى خصوصية)</span></td>
-            </tr>
-            <!-- 6. Tor → VPN -->
-            <tr>
-                <td><strong>Tor → VPN</strong><br><small>(Tor قبل VPN)</small></td>
-                <td><span style="color:#ffaa33;">اتصال Tor</span></td>
-                <td><span style="color:#ff4d4d;">الوجهات النهائية</span></td>
-                <td><span style="color:#ffaa33;">تعرف الوجهة (VPN)</span></td>
-                <td><span style="color:#4caf50;">IP الـ VPN</span></td>
-                <td>🟢 منخفض</td>
-                <td><span style="background:#9c27b0; padding:5px 12px; border-radius:20px; color:white;">⚠️ للراحة فقط</span></td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <!-- شرح إضافي -->
-    <div class="note" style="margin-top:15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 شرح أنواع الاتصالات:</strong>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <span style="background:#4caf50; padding:3px 10px; border-radius:15px; font-weight:bold;">🧅 Tor فقط</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → شبكة Tor → الإنترنت</p>
-            <p><strong>ISP يرى:</strong> اتصال Tor | <strong>الموقع يرى:</strong> IP خروج Tor</p>
-            <p><strong>التوصية:</strong> الخيار الأساسي للخصوصية اليومية.</p>
-        </div>
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <span style="background:#2196f3; padding:3px 10px; border-radius:15px; font-weight:bold;">🌉 Tor + Bridges</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → جسر سري → شبكة Tor → الإنترنت</p>
-            <p><strong>ISP يرى:</strong> اتصال مشفر عادي | <strong>الموقع يرى:</strong> IP خروج Tor</p>
-            <p><strong>متى تستخدم؟</strong> عندما يكون Tor محجوباً (مثل الصين، إيران، روسيا).</p>
-        </div>
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <span style="background:#ff9800; padding:3px 10px; border-radius:15px; font-weight:bold;">🔐 VPN → Tor</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → VPN → شبكة Tor → الإنترنت</p>
-            <p><strong>ISP يرى:</strong> VPN | <strong>VPN يرى:</strong> Tor | <strong>الموقع يرى:</strong> IP Tor</p>
-            <p><strong>التوصية:</strong> الأكثر خصوصية - ISP لا يعرف أنك تستخدم Tor.</p>
-        </div>
-        <div style="background:#2a2a4a; padding:15px; border-radius:15px;">
-            <span style="background:#9c27b0; padding:3px 10px; border-radius:15px; font-weight:bold;">🔄 Tor → VPN</span>
-            <p style="margin-top:8px;"><strong>المسار:</strong> جهازك → شبكة Tor → VPN → الإنترنت</p>
-            <p><strong>ISP يرى:</strong> Tor | <strong>VPN يرى:</strong> وجهتك | <strong>الموقع يرى:</strong> IP VPN</p>
-            <p><strong>⚠️ تحذير:</strong> VPN يرى وجهتك النهائية! للراحة فقط مع خدمات تمنع Tor.</p>
-        </div>
-    </div>
-    
-    <div class="note" style="margin-top:15px; background:#1a3a3a;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 ملاحظات هامة:</strong>
-        <ul style="margin-top:10px;">
-            <li>🔹 <strong>VPN → Tor</strong>: الأكثر خصوصية - ISP لا يعرف أنك تستخدم Tor، وVPN لا يعرف وجهتك النهائية.</li>
-            <li>🔹 <strong>Tor → VPN</strong>: للراحة فقط - يسمح بالوصول لخدمات تمنع Tor، لكن VPN يرى وجهتك (تحتاج لثقة كاملة بالمزود).</li>
-            <li>🔹 <strong>Tor + Bridges</strong>: ضروري في الدول التي تحجب Tor. استخدم Snowflake أو obfs4.</li>
-            <li>🔹 <strong>VPN فقط</strong>: مناسب للاستخدام العادي غير الحساس، لكن مزود VPN يعرف هويتك وكل وجهاتك.</li>
-            <li>🔹 <strong>في Qubes:</strong> لتطبيق VPN → Tor، اجعل <code>sys-whonix</code> يستخدم <code>sys-vpn</code> كـ NetVM.</li>
-        </ul>
-    </div>
-</div>
-    <!-- ======== جدول المقارنة الشامل ======== -->
-    <div class="card" style="margin-top: 20px;">
-        <div class="card-header"><i class="fas fa-crown"></i> 🏆 جدول المقارنة الشامل (أفضل التوصيات)</div>
-        <table class="comparison-table">
-            <thead>
-                <tr><th>نوع الاتصال</th><th>إخفاء الهوية</th><th>السرعة</th><th>التكلفة</th><th>التوصية</th><th>متى تستخدمه؟</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><strong>Tor فقط (Whonix)</strong></td><td>🟢 عالي</td><td>🟡 متوسط</td><td>مجاني</td><td>✅ أساسي</td><td>الخصوصية اليومية</td></tr>
-                <tr><td><strong>Tor + Bridges</strong></td><td>🟢 عالي جداً</td><td>🟡 متوسط</td><td>مجاني</td><td>✅ مهم</td><td>عند حجب Tor</td></tr>
-                <tr><td><strong>VPN → Tor</strong></td><td>🟢 ممتاز</td><td>🟡 متوسط</td><td>~50€/سنة</td><td>✅ موصى به</td><td>إخفاء Tor عن ISP</td></tr>
-                <tr><td><strong>Tor → VPN</strong></td><td>🟡 جيد</td><td>🟡 متوسط</td><td>~50€/سنة</td><td>⚠️ للراحة</td><td>خدمات تمنع Tor</td></tr>
-                <tr><td><strong>VPN فقط</strong></td><td>🔴 ضعيف</td><td>🟢 سريع</td><td>~50€/سنة</td><td>🟡 استخدام عادي</td><td>تصفح غير حساس</td></tr>
-                <tr><td><strong>بدون Tor/VPN</strong></td><td>🔴 معدوم</td><td>🟢 سريع</td><td>-</td><td>❌ لا</td><td>لا تستخدمه أبداً</td></tr>
-            </tbody>
-        </table>
-        <div class="note" style="margin-top:15px;">
-            <i class="fas fa-lightbulb"></i>
-            <strong>💡 خلاصة التوصيات:</strong><br>
-            • <strong>للاستخدام اليومي العادي:</strong> VPN فقط كافٍ (يوتيوب، أخبار)<br>
-            • <strong>للخصوصية المتوسطة:</strong> Tor فقط (Whonix) هو الأساس<br>
-            • <strong>للخصوصية العالية:</strong> VPN → Tor يخفي استخدام Tor عن مزود الخدمة<br>
-            • <strong>إذا كان Tor محجوباً:</strong> Tor + Bridges (استخدم Snowflake)<br>
-            • <strong>للراحة مع الخدمات:</strong> Tor → VPN يعطيك IP ثابت<br>
-            • <strong>لا تستخدم أبداً:</strong> اتصال مباشر بدون حماية للأنشطة الحساسة
-        </div>
-    </div>
-
-    <!-- ======== مقارنة: VPN | Tor (Whonix) | Tor + Bridges | I2P ======== -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-chart-simple"></i> مقارنة: VPN | Tor (Whonix) | Tor + Bridges | I2P</div>
-        <table class="comparison-table">
-            <thead>
-                <tr><th>المعيار</th><th>VPN</th><th>Tor (Whonix)</th><th>Tor + Bridges (Whonix)</th><th>I2P</th></tr>
-            </thead>
-            <tbody>
-                <tr><td><strong>السرعة</strong></td><td><span style="color:#4caf50;">🟢 سريع</span></td><td><span style="color:#ff4d4d;">🔴 بطيء جداً</span></td><td><span style="color:#ffaa33;">🟡 متوسط</span><br><small>(أسرع من Tor العادي في البيئات المحجوبة، أبطأ قليلاً في البيئات المفتوحة)</small></td><td><span style="color:#ffaa33;">🟡 متوسط إلى بطيء</span></td></tr>
-                <tr><td><strong>إخفاء الهوية</strong></td><td><span style="color:#ffaa33;">🟡 متوسط</span><br><small>(يعتمد على ثقة المزود)</small></td><td><span style="color:#4caf50;">🟢 عالي جداً</span><br><small>(تصميم معادٍ للمراقبة)</small></td><td><span style="color:#4caf50;">🟢 عالي جداً</span><br><small>(نفس Tor مع ميزة إضافية)</small></td><td><span style="color:#4caf50;">🟢 عالي</span><br><small>(لكن مصمم للخدمات الداخلية أساساً)</small></td></tr>
-                <tr><td><strong>مقاومة المراقبة الجماعية</strong></td><td><span style="color:#ffaa33;">🟡 منخفضة</span><br><small>(نقطة مركزية واحدة)</small></td><td><span style="color:#4caf50;">🟢 عالية</span><br><small>(شبكة لامركزية)</small></td><td><span style="color:#4caf50;">🟢 عالية</span><br><small>(نفس Tor)</small></td><td><span style="color:#4caf50;">🟢 عالية</span><br><small>(لامركزية بالكامل)</small></td></tr>
-                <tr><td><strong>مقاومة الحجب / الرقابة</strong></td><td><span style="color:#4caf50;">🟢 عالية</span><br><small>(تجاوز الحجب)</small></td><td><span style="color:#ff4d4d;">🔴 ضعيفة</span><br><small>(تُحجب بسهولة)</small></td><td><span style="color:#4caf50;">🟢 عالية جداً</span><br><small>(مصممة خصيصاً للتجاوز)</small></td><td><span style="color:#ffaa33;">🟡 متوسطة</span></td></tr>
-                <tr><td><strong>إخفاء استخدام Tor</strong></td><td><span style="color:#ff4d4d;">❌ لا</span><br><small>(يُظهر استخدام VPN)</small></td><td><span style="color:#ff4d4d;">❌ لا</span><br><small>(يمكن كشف استخدام Tor)</small></td><td><span style="color:#4caf50;">✅ نعم</span><br><small>(يُخفي أنك تستخدم Tor)</small></td><td><span style="color:#ffaa33;">🟡 غير معروف</span></td></tr>
-                <tr><td><strong>سهولة الإعداد</strong></td><td><span style="color:#4caf50;">🟢 سهلة جداً</span><br><small>(تطبيق بنقرة واحدة)</small></td><td><span style="color:#4caf50;">🟢 سهلة</span><br><small>(في Qubes مع sys-whonix)</small></td><td><span style="color:#4caf50;">🟢 سهلة</span><br><small>(عبر Tor Controller Panel)</small></td><td><span style="color:#ff4d4d;">🔴 صعبة</span><br><small>(تتطلب خبرة)</small></td></tr>
-                <tr><td><strong>الدعم في Qubes</strong></td><td><span style="color:#4caf50;">✅ VM منفصل</span><br><small>(يمكن إضافته بسهولة)</small></td><td><span style="color:#4caf50;">✅ مدمج</span><br><small>(sys-whonix جاهز فوراً)</small></td><td><span style="color:#4caf50;">✅ مدمج</span><br><small>(نفس sys-whonix + معالج الجسور)</small></td><td><span style="color:#ffaa33;">🟡 يتطلب إعداداً يدوياً</span><br><small>(معقد وقد يؤثر على العزل)</small></td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- ======== حزمة الجسور (Bridges) كاملة ======== -->
+<!-- ======== حزمة الجسور (Bridges) كاملة ======== -->
 
 <!-- 1. بطاقة: ما هي الجسور؟ -->
-<div class="card" style="margin-top: 30px; border-right: 6px solid #2196f3;">
-    <div class="card-header" style="color: #88aaff;">
-        <i class="fas fa-bridge"></i> 🌉 ما هي الجسور (Bridges)؟ - من وثائق Whonix
+<div class="card" style="margin-top: 30px;">
+    <div class="card-header">
+        <i class="fas fa-bridge"></i>
+        <h3>🌉 ما هي الجسور (Bridges)؟</h3>
     </div>
-    <p><strong>الجسور (Tor Bridge Relays)</strong> هي نقاط دخول بديلة إلى شبكة Tor، تعمل كبديل لحراس الدخول العاديين. استخدام الجسر يجعل من الصعب على مزود الخدمة (ISP) معرفة أنك تتصل بـ Tor.</p>
+    <p><strong>الجسور</strong> هي نقاط دخول بديلة إلى شبكة Tor، تخفي حقيقة أنك تتصل بـ Tor عن مزود الخدمة (ISP).</p>
     <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
         <p><strong>🕵️ ماذا يرى المراقب؟</strong></p>
         <ul style="margin-right: 20px;">
-            <li><strong>بدون جسر:</strong> يرى اتصالاً بشبكة Tor → قد يحجبه</li>
-            <li><strong>مع جسر:</strong> يرى اتصالاً مشفراً عادياً → لا يمكنه تمييزه بسهولة</li>
+            <li><strong>بدون جسر:</strong> يرى اتصالاً بشبكة Tor ← قد يحجبه</li>
+            <li><strong>مع جسر:</strong> يرى اتصالاً مشفراً عادياً ← لا يمكنه تمييزه بسهولة</li>
         </ul>
     </div>
     <div class="note" style="background: #1a3a3a;">
@@ -1826,9 +1499,9 @@ qvm-prefs sys-firewall-B netvm sys-net
     <table class="comparison-table">
         <thead><tr><th>الفئة</th><th>الهدف</th><th>نوع الجسر المناسب</th></tr></thead>
         <tbody>
-            <tr><td>1️⃣ المحجوبون</td><td>Tor محجوب - يحتاج أي طريقة للوصول</td><td>obfs4 أو Snowflake</td></tr>
-            <tr><td>2️⃣ المخفيون</td><td>إخفاء حقيقة استخدام Tor (الخصم خطير)</td><td>جسور خاصة (Private)</td></tr>
-            <tr><td>3️⃣ المختبرون</td><td>اختبار اتصال الجسور</td><td>أي نوع</td></tr>
+            <tr><td>1️⃣ المحجوبون</td><td>Tor محجوب ويحتاج أي طريقة للوصول</td><td>obfs4 أو Snowflake</td></tr>
+            <tr><td>2️⃣ المخفيون</td><td>إخفاء حقيقة استخدام Tor عن خصم خطير</td><td>جسور خاصة (Private)</td></tr>
+            <tr><td>3️⃣ المختبرون</td><td>اختبار اتصال الجسور فقط</td><td>أي نوع</td></tr>
         </tbody>
     </table>
     <div class="note-critical" style="margin-top: 15px;">
@@ -1841,7 +1514,7 @@ qvm-prefs sys-firewall-B netvm sys-net
 <div class="card" style="margin-top: 20px;">
     <div class="card-header">
         <i class="fas fa-balance-scale"></i>
-        <h3>📊 مقارنة أنواع الجسور (Bridges)</h3>
+        <h3>📊 مقارنة أنواع الجسور</h3>
     </div>
     <table class="comparison-table">
         <thead>
@@ -1849,7 +1522,8 @@ qvm-prefs sys-firewall-B netvm sys-net
                 <th>النوع</th>
                 <th>السرعة</th>
                 <th>مقاومة الحجب</th>
-                <th>مقاومة الـ Active Probing</th>
+                <th>آلية العمل</th>
+                <th>ماذا يظهر لمزود الإنترنت؟</th>
                 <th>الأفضل لـ</th>
             </tr>
         </thead>
@@ -1858,100 +1532,78 @@ qvm-prefs sys-firewall-B netvm sys-net
                 <td><strong>obfs4</strong></td>
                 <td>🟡 متوسطة</td>
                 <td>🟢 عالية</td>
-                <td>✅ مقاوم</td>
+                <td>تشويش الحزم لجعلها بلا نمط ثابت</td>
+                <td>حركة بيانات مشفرة عشوائية غير مألوفة</td>
                 <td>الاستخدام العام، الحجب المتوسط</td>
             </tr>
             <tr>
                 <td><strong>Snowflake</strong></td>
-                <td>🟢 جيدة</td>
+                <td>🟡 متوسطة إلى جيدة</td>
                 <td>🟢 عالية جداً</td>
-                <td>✅ مقاوم</td>
+                <td>التمرير عبر متصفحات متطوعين باستخدام WebRTC</td>
+                <td>مكالمة فيديو أو تصفح عبر WebRTC (مثل Google Meet)</td>
                 <td>البيئات شديدة الحجب</td>
             </tr>
             <tr>
                 <td><strong>meek_azure</strong></td>
                 <td>🔴 بطيئة</td>
                 <td>🟢 عالية جداً</td>
-                <td>✅ مقاوم</td>
-                <td>الصين، الشرق الأوسط</td>
+                <td>الإخفاء داخل سيرفر CDN ضخم ليظهر كتصفح HTTPS عادي</td>
+                <td>زيارة عادية لموقع خادم سحابي معروف (مثل microsoft.com)</td>
+                <td>الصين، الشرق الأوسط، كحل طوارئ</td>
             </tr>
             <tr>
                 <td><strong>WebTunnel</strong></td>
                 <td>🟢 جيدة</td>
                 <td>🟢 عالية جداً</td>
-                <td>✅ مقاوم</td>
-                <td>شبكات تمنع البروتوكولات الغريبة</td>
+                <td>إخفاء الاتصال داخل نفق WebSocket عبر HTTPS</td>
+                <td>اتصال ويب آمن عادي بدون بصمات غريبة</td>
+                <td>شبكات تمنع البروتوكولات غير المألوفة</td>
             </tr>
         </tbody>
     </table>
     <div class="note" style="margin-top: 15px;">
         <i class="fas fa-lightbulb"></i>
-        <strong>💡 توصية Whonix:</strong> ابدأ بـ <strong>obfs4</strong>. إذا لم يعمل، جرب <strong>Snowflake</strong>. في الحالات القصوى، استخدم <strong>meek_azure</strong>.
+        <strong>💡 توصية:</strong> ابدأ بـ <strong>obfs4</strong>. إذا لم يعمل، جرب <strong>Snowflake</strong>. في الحالات القصوى، استخدم <strong>meek_azure</strong>. يُعد <strong>WebTunnel</strong> خياراً حديثاً وفعالاً ضد الفحص العميق للبيانات.
     </div>
 </div>
 
-<!-- 4. بطاقة: Tor Control Panel - أسهل طريقة لتفعيل الجسور -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #4caf50;">
-    <div class="card-header" style="color: #88ff88;">
-        <i class="fas fa-sliders-h"></i> 🎛️ Tor Control Panel - أسهل طريقة لتفعيل الجسور
+<!-- 4. بطاقة: طريقة التفعيل -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-sliders-h"></i>
+        <h3>🎛️ طريقة تفعيل الجسور</h3>
     </div>
-    <p><strong>الطريقة التي يعرفها الجميع:</strong></p>
+    
+    <p><strong>🖥️ الطريقة الرسومية (الأسهل):</strong></p>
     <ol style="margin-right: 20px; line-height: 1.8;">
-        <li>في <code>sys-whonix</code>، انقر على أيقونة <strong>Tor Control Panel</strong> في شريط المهام (البصلة 🧅).</li>
+        <li>في <code>sys-whonix</code>، انقر على أيقونة <strong>Tor Control Panel</strong> في شريط المهام.</li>
         <li>انقر على <strong>Configure</strong>.</li>
         <li>اذهب إلى تبويب <strong>Tor Bridges</strong>.</li>
-        <li>اختر نوع الجسر:
-            <ul>
-                <li><strong>None</strong> - بدون جسر (افتراضي)</li>
-                <li><strong>obfs4</strong> - الجسر الموصى به</li>
-                <li><strong>Snowflake</strong> - للمناطق شديدة الحجب</li>
-                <li><strong>meek_lite</strong> - للصين والدول القمعية</li>
-                <li><strong>Custom</strong> - لإدخال جسر يدوياً</li>
-            </ul>
-        </li>
+        <li>اختر نوع الجسر: <strong>obfs4</strong> (الافتراضي)، <strong>Snowflake</strong>، <strong>meek_lite</strong>، أو <strong>Custom</strong>.</li>
         <li>انقر <strong>Connect</strong> وانتظر حتى يظهر "Connected to Tor".</li>
     </ol>
     
-  <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-    <p><strong>📸 كيف يبدو Tor Control Panel؟</strong></p>
-    <ul style="margin-right: 20px;">
-        <li>أيقونة <strong>🔒 قفل</strong> في شريط المهام العلوي (داخل dom0) للوصول إلى إعدادات Tor و sdwdate</li>
-        <li>عند النقر على الأيقونة تظهر قائمة منسدلة تحتوي على:</li>
-        <ul style="margin-right: 20px; margin-top: 5px;">
-            <li><strong>Show Tor status</strong> - عرض حالة اتصال Tor</li>
-            <li><strong>Tor control panel</strong> - فتح لوحة تحكم Tor</li>
-            <li><strong>Show sdwdate status</strong> - عرض حالة مزامنة الوقت</li>
-            <li><strong>Open sdwdate's log</strong> - فتح سجل sdwdate</li>
-            <li><strong>Restart sdwdate</strong> - إعادة تشغيل خدمة الوقت</li>
-            <li><strong>Stop sdwdate</strong> - إيقاف خدمة الوقت</li>
-            <li><strong>Exit</strong> - خروج</li>
-        </ul>
-    </ul>
-</div>
+    <p><strong>⌨️ الطريقة الطرفية:</strong></p>
+    <code onclick="copyText(this)">anon-connection-wizard</code>
     
-    <div class="note" style="margin-top: 15px;">
-        <i class="fas fa-terminal"></i>
-        <strong>🖥️ أو عبر الطرفية:</strong>
-        <code onclick="copyText(this)">anon-connection-wizard</code>
-    </div>
-    
-    <div class="note" style="margin-top: 10px; background: #1a3a3a;">
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
         <i class="fas fa-lightbulb"></i>
-        <strong>💡 للحصول على جسور مخصصة:</strong> 
+        <strong>💡 للحصول على جسور مخصصة:</strong>
         <ul style="margin-right: 20px; margin-top: 5px;">
-            <li>موقع <a href="https://bridges.torproject.org" target="_blank" style="color: #66ccff;">bridges.torproject.org</a></li>
-            <li>أو أرسل بريداً إلى <code>bridges@torproject.org</code> من Gmail أو Riseup</li>
+            <li>أرسل بريداً إلى <code>bridges@torproject.org</code> من Gmail أو Riseup</li>
             <li>انسخ الجسر والصقه في خيار <strong>Custom</strong></li>
         </ul>
     </div>
 </div>
 
-<!-- 5. بطاقة: Snowflake -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ff9800;">
-    <div class="card-header" style="color: #ffaa33;">
-        <i class="fas fa-snowflake"></i> ❄️ Snowflake - الجسر الموصى به للمناطق المحجوبة
+<!-- 5. بطاقة: Snowflake بالتفصيل -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-snowflake"></i>
+        <h3>❄️ Snowflake - الجسر الموصى به للمناطق المحجوبة</h3>
     </div>
-    <p><strong>من وثائق Whonix:</strong> Snowflake هو نقل قابل للتوصيل (Pluggable Transport) يمرر حركة المرور عبر وكلاء مؤقتين باستخدام WebRTC.</p>
+    <p>Snowflake هو نقل قابل للتوصيل يمرر حركة المرور عبر متصفحات متطوعين باستخدام WebRTC، مما يجعله الأصعب في الاكتشاف والحجب.</p>
     <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
         <p><strong>✅ مميزات Snowflake:</strong></p>
         <ul style="margin-right: 20px;">
@@ -1971,13 +1623,12 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 
-<!-- 6. بطاقة: التحقق من استخدام الجسر (Nyx) -->
+<!-- 6. بطاقة: التحقق من استخدام الجسر -->
 <div class="card" style="margin-top: 20px;">
     <div class="card-header">
         <i class="fas fa-check-double"></i>
         <h3>✅ التحقق من أنك تستخدم جسراً (Nyx)</h3>
     </div>
-    <p><strong>للتأكد من أن اتصالك يمر عبر جسر وليس عبر Guard عادي:</strong></p>
     <ol style="margin-right: 20px;">
         <li>في <code>sys-whonix</code>، افتح Nyx من قائمة التطبيقات أو اكتب <code>nyx</code> في الطرفية.</li>
         <li>استخدم السهم الأيمن للانتقال إلى <strong>الصفحة 2 من 5</strong>.</li>
@@ -1996,12 +1647,13 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     <p>للخروج من Nyx: اضغط <code>q</code> مرتين.</p>
 </div>
 
-<!-- 7. بطاقة: تحذير - Bridged Networking ≠ Bridges -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #ff4444;">
-    <div class="card-header" style="color: #ff8888;">
-        <i class="fas fa-exclamation-triangle"></i> ⚠️ تحذير: Bridged Networking ≠ Bridges
+<!-- 7. بطاقة: تحذير مهم -->
+<div class="card" style="margin-top: 20px;">
+    <div class="card-header">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>⚠️ تحذير: Bridged Networking ≠ Bridges</h3>
     </div>
-    <p><strong>من وثائق Whonix:</strong> هناك شيئان مختلفان تماماً رغم تشابه الاسم:</p>
+    <p>هناك شيئان مختلفان تماماً رغم تشابه الاسم:</p>
     <table class="comparison-table">
         <thead><tr><th>المصطلح</th><th>المعنى</th></tr></thead>
         <tbody>
@@ -2015,41 +1667,23 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
     </div>
 </div>
 
-        <div class="note" style="margin-top:15px;">
-            <i class="fas fa-info-circle"></i>
-            <div>
-                <strong>كيفية الإعداد في Whonix:</strong><br>
-                1. افتح <code>Tor Controller Panel</code> من الشريط العلوي داخل <code>sys-whonix</code><br>
-                2. اختر <code>Configure</code><br>
-                3. اختر <code>Bridge Type</code><br>
-                4. اختر نوع الجسر المناسب (يُفضل Snowflake للمبتدئين)<br>
-                5. يمكنك الحصول على جسور إضافية عبر: <code>bridges@torproject.org</code> أو موقع Tor Project
-            </div>
-        </div>
-        <div class="note" style="margin-top:15px; background:#1a3a3a;">
-            <i class="fas fa-star-of-life"></i>
-            <strong>نصيحة متقدمة:</strong> للبيئات شديدة الحجب، يمكنك استخدام <strong>Snowflake</strong> لأنه الأصعب في الاكتشاف والحجب، ويعتمد على شبكة واسعة من المتطوعين حول العالم.
-        </div>
-    
-
-    <!-- ======== خلاصة سريعة ======== -->
-    <div class="note" style="background:#1a3a3a;">
-        <i class="fas fa-star-of-life"></i>
-        <strong>📚 خلاصة سريعة:</strong>
-        <ul style="margin-right:20px; margin-top:10px;">
-            <li>✅ <strong>Gateway</strong> = <code>--class AppVM --template whonix-gateway-18</code> + <code>provides_network true</code> (🔒 بداية التشفير)</li>
-            <li>✅ <strong>Workstation</strong> = <code>--class AppVM --template whonix-workstation-18</code> + <code>netvm sys-whonix-X</code></li>
-            <li>✅ <strong>جدار ناري مخصص</strong> = لكل Gateway جدار ناري خاص به (<code>sys-firewall-A</code> و <code>sys-firewall-B</code>) - يمرر البيانات كما هي</li>
-            <li>✅ <strong>فك التشفير</strong> = يحدث فقط في عقد Tor الثلاث (Entry Guard → Middle Relay → Exit Node)</li>
-            <li>✅ <strong>Whonix يخفي التوقيت</strong> = SDWDate يمنع هجمات التوقيت عملياً</li>
-            <li>✅ <strong>الجسور (Bridges)</strong> = تخفي استخدام Tor عن ISP</li>
-            <li>✅ <strong>بوابات متعددة</strong> = أنشئ Gateways جديدة من القالب (وليس Clone)</li>
-            <li>✅ <strong>كل Gateway له عقد دخول مختلفة</strong> (private volume مستقل)</li>
-            <li>🔴 <strong>لا تشغل بوابتين معاً</strong> (للأمان النظري، مع الجسور الخطر ضئيل جداً)</li>
-        </ul>
-    </div>
+<!-- ======== خلاصة سريعة ======== -->
+<div class="note" style="margin-top: 20px; background:#1a3a3a;">
+    <i class="fas fa-star-of-life"></i>
+    <strong>📚 خلاصة سريعة:</strong>
+    <ul style="margin-right:20px; margin-top:10px;">
+        <li>✅ <strong>Gateway</strong> = <code>--class AppVM --template whonix-gateway-18</code> + <code>provides_network true</code></li>
+        <li>✅ <strong>Workstation</strong> = <code>--class AppVM --template whonix-workstation-18</code> + <code>netvm sys-whonix-X</code></li>
+        <li>✅ <strong>جدار ناري مخصص</strong> = لكل Gateway جدار ناري خاص به</li>
+        <li>✅ <strong>فك التشفير</strong> = يحدث فقط في عقد Tor الثلاث</li>
+        <li>✅ <strong>Whonix يخفي التوقيت</strong> = SDWDate يمنع هجمات التوقيت</li>
+        <li>✅ <strong>الجسور (Bridges)</strong> = تخفي استخدام Tor عن ISP</li>
+        <li>✅ <strong>بوابات متعددة</strong> = أنشئ Gateways جديدة من القالب (وليس Clone)</li>
+        <li>🔴 <strong>لا تشغل بوابتين معاً</strong> (للأمان النظري، مع الجسور الخطر ضئيل جداً)</li>
+    </ul>
 </div>
 
+</div>
 
   <!-- ======== تبويب 3: التخزين الآمن ( ======== -->
 <div class="tab-pane" id="tab3">
