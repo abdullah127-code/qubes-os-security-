@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html dir="rtl" lang="ar"
 <head>
     <meta charset="UTF-8">
  <meta name="viewport" content="width=1024, initial-scale=1.0">
@@ -1685,274 +1685,439 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
 
 </div>
 
-  <!-- ======== تبويب 3: التخزين الآمن ( ======== -->
+<!-- ======== تبويب 3: التخزين الآمن ======== -->
 <div class="tab-pane" id="tab3">
-    <div class="note warning">
-        <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ تحذير بشأن SSD وTRIM:</strong> لا تستخدم الأحجام المخفية (Hidden Volumes) مع SSD إذا كنت تحتاج إنكاراً معقولاً حقيقياً، وذلك بسبب تقنية TRIM وخاصية تسوية التآكل (Wear-Leveling) التي تترك آثاراً محتملة.
-        <br>📌 <strong>الحل الأمثل على SSD:</strong> استخدم طريقة <strong>التشفير المزدوج (VC خارجي + LUKS داخلي)</strong> مع فصل التخزين عن التنفيذ كما هو موضح أدناه.
-    </div>
-    
-    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
-<div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
-    <div class="card-header" style="color: #ce93d8;">
-        <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
-    </div>
-    <p><strong>الفكرة من Hitchhiker's Guide:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-        <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-            <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
-            <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
-            <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
-        </div>
-        <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-            <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
-            <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
-            <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
-        </div>
-    </div>
-    
-    <p><strong>🔧 كيفية الإنشاء (نظرة عامة):</strong></p>
-    <ol style="margin-right: 20px;">
-        <li>أنشئ حاوية VeraCrypt عادية بحجم كبير (مثلاً 20GB).</li>
-        <li>اختر إنشاء "Hidden Volume" داخل الحاوية (مثلاً 5GB).</li>
-        <li>في الحجم المخفي، أنشئ حاوية LUKS (ملف عادي) أو قسم.</li>
-        <li>استخدم LUKS للتخزين اليومي الحساس.</li>
-    </ol>
-    
-    <div class="card-footer">
-        <i class="fas fa-shield-virus"></i> تذكر: الفصل بين التخزين والتنفيذ (RAM Pool) يبقى هو الطبقة الأهم.
-    </div>
-</div>
 
-<!-- ======== مقارنة LUKS vs VeraCrypt ======== -->
-<div class="card">
-    <div class="card-header">
-        <i class="fas fa-balance-scale"></i>
-        <h3>📊 مقارنة شاملة: LUKS فقط vs VeraCrypt فقط vs التشفير المزدوج</h3>
+    <!-- ========== تعريفات التشفير ========== -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-header">
+            <i class="fas fa-shield-alt"></i> 🔐 تعريفات أساسية: LUKS و VeraCrypt و VC+LUKS
+        </div>
+        <p>قبل الغوص في الأدوات والسيناريوهات العملية، من المهم فهم التقنيات الأساسية التي يعتمد عليها هذا الدليل لتشفير البيانات، وأيضاً سيناريو التشفير المزدوج المتقدم.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+            <!-- LUKS -->
+            <div style="background: #1a2a4a; padding: 20px; border-radius: 15px; border-top: 5px solid #ff9944;">
+                <h3 style="color: #ff9944; margin-top: 0;"><i class="fas fa-lock"></i> LUKS</h3>
+                <p><strong>Linux Unified Key Setup</strong> — معيار تشفير الأقراص المدمج في نواة Linux.</p>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>🔹 <strong>المنصة:</strong> Linux (أصلي).</li>
+                    <li>🔹 <strong>خوارزمية KDF:</strong> LUKS2 + Argon2id (الافتراضي والموصى به).</li>
+                    <li>🔹 <strong>الإنكار المعقول:</strong> غير مدعوم أصلاً.</li>
+                    <li>🔹 <strong>التكامل:</strong> مدمج في Qubes OS وجميع توزيعات Linux الحديثة.</li>
+                    <li>🔹 <strong>الاستخدام الشائع:</strong> تشفير أقسام النظام، الأقراص الخارجية، فلاشات USB.</li>
+                    <li>🔹 <strong>الإدارة:</strong> عبر <code>cryptsetup</code> وأدوات مثل GNOME Disks.</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>🎯 متى تستخدمه؟</strong> عندما تحتاج تشفيراً مدمجاً في Linux وتريد أفضل حماية ضد هجمات GPU بفضل Argon2id.
+                وهو التشفير الأفضل للاستخدام اليومي على لينكس إذا لم ترد الإخفاء. </p>
+            </div>
+            
+            <!-- VeraCrypt -->
+            <div style="background: #1a3a2a; padding: 20px; border-radius: 15px; border-top: 5px solid #66cc66;">
+                <h3 style="color: #66cc66; margin-top: 0;"><i class="fas fa-box"></i> VeraCrypt</h3>
+                <p><strong>VeraCrypt</strong> — خليفة TrueCrypt، برنامج مفتوح المصدر لتشفير الملفات والأقراص.</p>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>🔹 <strong>المنصة:</strong> Windows / Linux / macOS (متعدد المنصات).</li>
+                    <li>🔹 <strong>خوارزمية KDF:</strong> PBKDF2 مع إمكانية رفع PIM لزيادة الأمان.</li>
+                    <li>🔹 <strong>الإنكار المعقول:</strong> <strong>مدعوم</strong> — أحجام مخفية (Hidden Volumes).</li>
+                    <li>🔹 <strong>التكامل:</strong> يعمل كبرنامج منفصل في Linux/Qubes.</li>
+                    <li>🔹 <strong>الاستخدام الشائع:</strong> حاويات مشفرة (ملفات)، أقسام، أقراص كاملة، أجهزة USB محمولة.</li>
+                    <li>🔹 <strong>الإدارة:</strong> واجهة رسومية (GUI) وأوامر سطرية.</li>
+                </ul>
+                <p style="margin-top: 10px;"><strong>🎯 متى تستخدمه؟</strong> عندما تحتاج إنكاراً معقولاً أو التوافق عبر أنظمة متعددة.</p>
+            </div>
+        </div>
     </div>
 
+<!-- ======== شرح Argon2id ومقاومة كروت الشاشة ======== -->
+<div style="background: #1a1a3a; padding: 20px; border-radius: 15px; margin-top: 20px; border-right: 5px solid #ff9944;">
+    <h4 style="color: #ff9944; margin-top: 0;"><i class="fas fa-microchip"></i> 🧠 Argon2id في LUKS2: مقاومة هجمات كروت الشاشة (GPU)</h4>
+    <p><strong>ما هو Argon2id؟</strong></p>
+    <p>خوارزمية اشتقاق مفاتيح حديثة مصممة خصيصاً لاستهلاك كميات كبيرة من الذاكرة، مما يجعل هجمات كروت الشاشة (GPU) ومنصات التعدين (ASIC) غير عملية. قوتها الحقيقية تكمن في إجبار المهاجم على تخصيص ذاكرة ضخمة <strong>لكل تخمين فردي</strong>، مما يقتل تماماً خاصية التوازي الجماعي التي تعتمد عليها كروت الشاشة.</p>
+    
+    <!-- جدول مقارنة السرعات الحديثة -->
+    <h5 style="color: #ffd966; margin-top: 20px;">📊 أرقام موثقة: سرعة كسر كلمات المرور حسب الخوارزمية والذاكرة (أحدث الدراسات 2025-2026)</h5>
     <div style="overflow-x: auto;">
-        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; background: #fff;">
+        <table class="comparison-table" style="font-size: 0.9em; margin: 15px 0;">
             <thead>
                 <tr>
-                    <th style="padding: 12px; background: #2c3e50; color: white;">المعيار</th>
-                    <th style="padding: 12px; background: #2c3e50; color: white;">🔵 LUKS فقط</th>
-                    <th style="padding: 12px; background: #2c3e50; color: white;">🟢 VeraCrypt فقط</th>
-                    <th style="padding: 12px; background: #2c3e50; color: white;">🔴 التشفير المزدوج<br><small style="color:#ccc;">(VC خارجي + LUKS داخلي)</small></th>
+                    <th>الخوارزمية / الإعداد</th>
+                    <th>الذاكرة</th>
+                    <th>سرعة التخمين على GPU متطور</th>
+                    <th>مستوى الأمان</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- سرعة القراءة/الكتابة -->
-                <tr style="background: #f9f9f9;">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>⚡ سرعة القراءة/الكتابة</strong><br><small>(ملفات كبيرة)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>1-5 GB/s</strong><br><small>(في النواة - الأسرع)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟡 100-400 MB/s<br><small>(طبقة FUSE - أبطأ)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟡 100-400 MB/s<br><small>(= سرعة VC فقط، LUKS لا يبطئ)</small></td>
-                </tr>
-                <!-- أداء برامج المراسلة -->
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>📱 أداء برامج المراسلة</strong><br><small>(Signal, SimpleX, Session)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(الفرق غير محسوس)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(الفرق غير محسوس)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(نفس VC)</small></td>
+                    <td><strong>SHA-256</strong> (غير مملح)</td>
+                    <td>أقل من 1 ميغابايت</td>
+                    <td style="color: #ff4d4d; font-weight: bold;">~10,000,000,000/ثانية (10 مليار)</td>
+                    <td>🔴 هش جداً</td>
                 </tr>
-                <!-- سلامة البيانات Integrity -->
-                <tr style="background: #f9f9f9;">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🛡️ سلامة البيانات (Integrity)</strong><br><small>(منع التلاعب بالرسائل)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>مدعوم</strong><br><small>(AEAD - يمنع حقن رسائل مزيفة)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">❌ <strong>غير مدعوم</strong><br><small>(XTS قابلة للتعديل)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ مدعوم<br><small>(من طبقة LUKS الداخلية)</small></td>
+                <tr style="background: #2a1a1a;">
+                    <td><strong>PBKDF2</strong> (افتراضي VeraCrypt)</td>
+                    <td>أقل من 1 ميغابايت</td>
+                    <td style="color: #ff4d4d;">ملايين/ثانية</td>
+                    <td>🔴 ضعيف</td>
                 </tr>
-                <!-- مقاومة هجمات GPU -->
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🔐 مقاومة هجمات GPU</strong><br><small>(KDF)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>قوية (Argon2id)</strong><br><small>(ذاكرة-intensive)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟡 متوسطة (PBKDF2)<br><small>(معالجة-intensive)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢✅ <strong>قوية جداً</strong><br><small>(PBKDF2 + Argon2id)</small></td>
+                    <td><strong>Argon2id</strong> (إعدادات OWASP الدنيا)</td>
+                    <td>46 ميغابايت</td>
+                    <td style="color: #ffaa33;">~1,000/ثانية</td>
+                    <td>🟡 جيد</td>
                 </tr>
-                <!-- قابلية اكتشاف التشفير -->
-                <tr style="background: #f9f9f9;">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🕵️ قابلية اكتشاف التشفير</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🔴 <strong>قابلة للاكتشاف</strong><br><small>(رأس LUKS مكشوف)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>غير قابلة للاكتشاف</strong><br><small>(بيانات عشوائية - لا توقيع)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>غير قابلة للاكتشاف</strong><br><small>(طبقة VC تخفي كل شيء)</small></td>
+                <tr style="background: #1a3a1a;">
+                    <td><strong>Argon2id</strong> (أعلى توصيات RFC 9106)</td>
+                    <td>2 جيجابايت</td>
+                    <td style="color: #4caf50; font-weight: bold;">~20-50/ثانية</td>
+                    <td>🟢 ممتاز</td>
                 </tr>
-                <!-- الإنكار المعقول -->
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🎭 الإنكار المعقول</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">❌ لا يدعم</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>يدعم</strong><br><small>(أحجام مخفية)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅✅ <strong>ممتاز</strong><br><small>(أحجام مخفية + يخفي وجود VC)</small></td>
-                </tr>
-                <!-- التوافق مع Windows -->
-                <tr style="background: #f9f9f9;">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🪟 التوافق مع Windows</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">❌ لا يدعم</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>يدعم</strong><br><small>(التطبيق الرسمي)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ يدعم<br><small>(طبقة VC تعمل)</small></td>
-                </tr>
-                <!-- التوافق مع Qubes OS -->
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>🐧 التوافق مع Qubes OS</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>مدمج أصلاً</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟡 يحتاج تثبيت<br><small>(veracrypt في القالب)</small></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">🟡 يحتاج تثبيت<br><small>(VC في القالب)</small></td>
+                <tr style="background: #1a3a1a;">
+                    <td><strong>Argon2id</strong> (إعداد هذا الدليل – حماية قصوى)</td>
+                    <td>4 جيجابايت</td>
+                    <td style="color: #88ff88; font-weight: bold;">أقل من 25/ثانية</td>
+                    <td>🟢🔒 قصوى</td>
                 </tr>
             </tbody>
         </table>
+        <p style="font-size: 0.8em; color: #aaa; margin-top: 5px;">الأرقام من دراسات أكاديمية حديثة (2025–2026) ومن توصيات OWASP وRFC 9106. بالنسبة لإعداد 4GB، السرعة تتضاءل لأن البطاقة الرسومية القادرة على 24GB VRAM لا يمكنها تشغيل أكثر من 6 تخمينات متوازية، مما ينهار معه معدل التخمين إلى أقل من 25/ثانية.</p>
     </div>
-
-    <div class="note" style="margin-top: 15px; padding: 15px; background: #e8f4f8; border-right: 5px solid #3498db;">
-        <i class="fas fa-lightbulb"></i> <strong>💡 الخلاصة:</strong><br>
-        • <strong>LUKS فقط:</strong> الخيار الأمثل لـ 90% من المستخدمين على Qubes/Linux (أسرع بـ 5-10 مرات، يدعم Integrity، Argon2id).<br>
-        • <strong>VeraCrypt فقط:</strong> مناسب لمن يحتاج الإنكار المعقول أو التوافق مع Windows.<br>
-        • <strong>التشفير المزدوج (VC خارجي + LUKS داخلي):</strong> للبارانويا القصوى – يجمع بين <strong>إنكار VeraCrypt</strong> و <strong>Integrity LUKS</strong> بنفس سرعة VC فقط.
+    
+    <h5 style="color: #ffd966; margin-top: 20px;">💡 ماذا يعني هذا عملياً؟</h5>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+        <div style="background: #2a1a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #ff6666;">
+            <h5 style="color: #ff6666; margin-top: 0;">🔴 بدون Argon2id</h5>
+            <p>المهاجم يستطيع تجربة <strong>مليارات الكلمات</strong> في الثانية باستخدام بطاقة رسوميات واحدة. إذا كانت كلمة مرورك مكونة من 8 أحرف عشوائية، يمكن كسرها في <strong>ساعات أو أيام</strong>.</p>
+        </div>
+        <div style="background: #1a2a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #4caf50;">
+            <h5 style="color: #4caf50; margin-top: 0;">🟢 مع Argon2id (4GB)</h5>
+            <p>نفس البطاقة الرسومية تصبح قادرة على تجربة <strong>أقل من 25 كلمة في الثانية</strong>. حتى مع وجود 1000 بطاقة، فإن كسر كلمة مرور مكونة من 6 كلمات عشوائية سيستغرق <strong>آلاف السنين</strong>.</p>
+        </div>
     </div>
-
-    <div class="note" style="margin-top: 15px; padding: 15px; background: #1a3a3a; border-right: 5px solid #66ccff; color: white;">
-        <i class="fas fa-comment-dots"></i>
-        <strong>💬 ملاحظة خاصة ببيانات المراسلة:</strong><br>
-        • <strong>السرعة: الفرق بين LUKS و VC غير محسوس عملياً</strong> – لأن بيانات المراسلة صغيرة الحجم (قواعد SQLite)، وزمن الوصول (Latency) هو العامل الأهم.<br>
-        • <strong>الأمان:</strong> الفرق الحقيقي يظهر في <strong>سلامة البيانات (Integrity)</strong> – LUKS يمنع التلاعب بالرسائل المخزنة، بينما VC لا يوفر هذه الحماية.<br>
-        • <strong>الإنكار المعقول:</strong> VC يخفي وجود المحادثات أصلاً، بينما LUKS لا يوفر هذه الميزة.<br>
-        • <strong>التوصية للمراسلة شديدة الحساسية:</strong> استخدم <strong>VC خارجي + LUKS داخلي</strong> – يجمع بين إخفاء وجود المحادثات (VC) ومنع التلاعب بالرسائل (LUKS).
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+    <i class="fas fa-lightbulb"></i> <strong>🧠 السر الحقيقي:</strong> قوة Argon2id ليست في إبطاء المستخدم، بل في جعل الهجوم غير قابل للتوازي. كلمة مرورك تُفتح خلال 5 ثوانٍ فقط على جهازك (بذاكرة 4GB مخصصة)، لكن المهاجم لا يستطيع فتحها على 1000 جهاز في نفس الوقت إلا إذا امتلك 1000 × 4GB = 4TB من الذاكرة المخصصة، وهذا غير عملي حتى لأقوى الخصوم. <strong>كلما زادت الذاكرة، انهارت إمكانية التوازي.</strong>
+</div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a2a3a; border-right-color: #66ccff;">
+        <i class="fas fa-check-circle"></i>
+        <strong>✅ ملاحظة لعام 2026:</strong> LUKS2 + Argon2id هو الخيار الافتراضي والوحيد الموصى به في جميع توزيعات Linux الحديثة. استخدم الأمر <code>sudo cryptsetup luksDump /dev/sdX | grep Argon2</code> للتأكد من تفعيله.
     </div>
 </div>
+
+    <!-- ======== شرح VC+LUKS ======== -->
+    <div style="background: #2a1a2a; padding: 20px; border-radius: 15px; margin-top: 20px; border-right: 5px solid #cc66cc;">
+        <h4 style="color: #cc66cc; margin-top: 0;"><i class="fas fa-layer-group"></i> 🧅 VC+LUKS (التشفير المزدوج المتداخل)</h4>
+        <p><strong>ما هو VC+LUKS؟</strong></p>
+        <p>VC+LUKS هو سيناريو متقدم يتم فيه <strong>تشفير البيانات مرتين متتاليتين</strong>: الطبقة الخارجية VeraCrypt، والطبقة الداخلية LUKS. <strong>الترتيب الصحيح:</strong> تُنشأ حاوية VeraCrypt أولاً، ثم يُنشأ تشفير LUKS داخل الحاوية المفتوحة.</p>
+        
+        <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
+            <i class="fas fa-arrow-right"></i>
+            <strong>⚠️ الترتيب:</strong> VeraCrypt (الخارجي) → LUKS (الداخلي). VC توفر الإنكار المعقول، بينما LUKS2 + Argon2id توفر الحماية من هجمات GPU.
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+            <div style="background: #1a2a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #66cc66;">
+                <h5 style="color: #66cc66; margin-top: 0;">🟢 لماذا VC+LUKS؟</h5>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>• <strong>الإنكار المعقول + مقاومة GPU:</strong> VC يوفر الإنكار، LUKS2 يوفر Argon2id.</li>
+                    <li>• <strong>طبقتان مستقلتان:</strong> اختراق إحداهما لا يكفي للوصول للبيانات.</li>
+                </ul>
+            </div>
+            <div style="background: #2a1a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #ff9944;">
+                <h5 style="color: #ff9944; margin-top: 0;">⚠️ تحذيرات:</h5>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>• <strong>أداء أقل:</strong> طبقتان تشفير = أبطأ من طبقة واحدة.</li>
+                    <li>• <strong>تعقيد أعلى:</strong> كلمتا مرور ومفتاحان مختلفان.</li>
+                    <li>• <strong>ليس متعدد المنصات:</strong> الطبقة الداخلية LUKS لا تعمل على Windows.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- خطوات إنشاء VC+LUKS العملية -->
+        <div style="background: #0a1a2a; padding: 18px; border-radius: 12px; margin-top: 15px;">
+            <h5 style="color: #66ccff; margin-top: 0;">🛠️ خطوات إنشاء VC+LUKS العملية (VeraCrypt أولاً ثم LUKS داخله)</h5>
+            <p><strong>المرحلة الأولى: إنشاء حاوية VeraCrypt الخارجية</strong></p>
+            <ol style="margin-right: 25px; line-height: 2;">
+                <li>افتح VeraCrypt واختر <strong>Create Volume</strong>.</li>
+                <li>اختر <strong>Create an encrypted file container</strong> (أو قسم/قرص كامل حسب حاجتك).</li>
+                <li>اختر <strong>Standard VeraCrypt volume</strong> (أو Hidden إن أردت إنكاراً معقولاً).</li>
+                <li>حدد موقع وحجم الحاوية، واختر خوارزمية التشفير (مثلاً AES+Serpent).</li>
+                <li>أدخل كلمة مرور <strong>قوية ومعقدة</strong> (هذه كلمة مرور الطبقة الخارجية).</li>
+                <li>اختر نظام ملفات <strong>لا تقم بإنشاء نقطة توصيل (do not mount)</strong> أو استخدم نظام ملفات مؤقت.</li>
+            </ol>
+            <p style="margin-top: 15px;"><strong>المرحلة الثانية: فتح حاوية VeraCrypt بدون توصيل (Mount)</strong></p>
+            <ol style="margin-right: 25px; line-height: 2;">
+                <li>في VeraCrypt، اختر الحاوية واضغط <strong>Mount</strong>.</li>
+                <li>في خيارات التوصيل (Mount Options)، اختر <strong>Do not mount</strong>.</li>
+                <li>الهدف: أن تظهر الحاوية كجهاز بلوك ديفايس (مثلاً <code>/dev/mapper/veracrypt1</code>) <strong>بدون</strong> أن تُركب على نظام الملفات.</li>
+            </ol>
+            <p style="margin-top: 15px;"><strong>المرحلة الثالثة: إنشاء LUKS داخل الحاوية المفتوحة</strong></p>
+            <p>استخدم أداة GNOME Disks أو الأمر <code>cryptsetup</code> لتهيئة الجهاز الظاهر (<code>/dev/mapper/veracrypt1</code>) كـ LUKS2 مع Argon2id. أدخل كلمة مرور <strong>ثانية مختلفة وقوية</strong> لـ LUKS (الطبقة الداخلية).</p>
+        </div>
+    </div>
+
+    <!-- ======== جدول مقارنة شامل ======== -->
+    <div style="background: #151525; padding: 18px; border-radius: 15px; margin-top: 20px;">
+        <h4 style="color: #ffd966; margin-top: 0; margin-bottom: 15px;">
+            <i class="fas fa-balance-scale"></i> 📊 مقارنة شاملة: LUKS فقط vs VeraCrypt فقط vs التشفير المزدوج
+        </h4>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: #fff; color: #000;">
+                <thead>
+                    <tr>
+                        <th style="padding: 12px; background: #2c3e50; color: white;">المعيار</th>
+                        <th style="padding: 12px; background: #2c3e50; color: white;">🔵 LUKS فقط</th>
+                        <th style="padding: 12px; background: #2c3e50; color: white;">🟢 VeraCrypt فقط</th>
+                        <th style="padding: 12px; background: #2c3e50; color: white;">🔴 التشفير المزدوج<br><small style="color:#ccc;">(VC خارجي + LUKS داخلي)</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>⚡ سرعة القراءة/الكتابة</strong><br><small>(ملفات كبيرة)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>1-5 GB/s</strong><br><small>(في النواة - الأسرع)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟡 100-400 MB/s<br><small>(طبقة FUSE - أبطأ)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟡 100-400 MB/s<br><small>(= سرعة VC فقط)</small></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>📱 أداء برامج المراسلة</strong><br><small>(Signal, SimpleX, Session)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(الفرق غير محسوس)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(الفرق غير محسوس)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 ممتاز<br><small>(نفس VC)</small></td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🛡️ سلامة البيانات (Integrity)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>مدعوم</strong><br><small>(AEAD - يمنع التلاعب)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">❌ <strong>غير مدعوم</strong><br><small>(XTS قابلة للتعديل)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅ مدعوم<br><small>(من طبقة LUKS الداخلية)</small></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🔐 مقاومة هجمات GPU</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>قوية (Argon2id)</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟡 متوسطة (PBKDF2)</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢✅ <strong>قوية جداً</strong><br><small>(PBKDF2 + Argon2id)</small></td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🕵️ قابلية اكتشاف التشفير</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🔴 <strong>قابلة للاكتشاف</strong><br><small>(رأس LUKS مكشوف)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>غير قابلة للاكتشاف</strong><br><small>(بيانات عشوائية)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟢 <strong>غير قابلة للاكتشاف</strong><br><small>(طبقة VC تخفي كل شيء)</small></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🎭 الإنكار المعقول</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">❌ لا يدعم</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>يدعم</strong><br><small>(أحجام مخفية)</small></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅✅ <strong>ممتاز</strong><br><small>(أحجام مخفية + يخفي LUKS)</small></td>
+                    </tr>
+                    <tr style="background: #f9f9f9;">
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🪟 التوافق مع Windows</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">❌ لا يدعم</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>يدعم</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">❌ لا يدعم<br><small>(LUKS داخلي)</small></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;"><strong>🐧 التوافق مع Qubes OS</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">✅ <strong>مدمج أصلاً</strong></td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟡 يحتاج تثبيت</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">🟡 يحتاج تثبيت</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="note" style="margin-top: 15px; padding: 15px; background: #e8f4f8; border-right: 5px solid #3498db;">
+            <i class="fas fa-lightbulb"></i> <strong>💡 الخلاصة:</strong><br>
+            • <strong>LUKS فقط:</strong> الخيار الأمثل لـ 90% من المستخدمين على Qubes/Linux (أسرع بـ 5-10 مرات، يدعم Integrity، Argon2id).<br>
+            • <strong>VeraCrypt فقط:</strong> مناسب لمن يحتاج الإنكار المعقول أو التوافق مع Windows.<br>
+            • <strong>التشفير المزدوج:</strong> للبارانويا القصوى – يجمع بين <strong>إنكار VeraCrypt</strong> و <strong>Integrity LUKS</strong> بنفس سرعة VC فقط. <strong>ليس متعدد المنصات.</strong>
+        </div>
+
+        <div class="note" style="margin-top: 15px; padding: 15px; background: #1a3a3a; border-right: 5px solid #66ccff; color: white;">
+            <i class="fas fa-comment-dots"></i>
+            <strong>💬 ملاحظة خاصة ببيانات المراسلة:</strong><br>
+            • <strong>السرعة: الفرق بين LUKS و VC غير محسوس عملياً</strong> – لأن بيانات المراسلة صغيرة الحجم (قواعد SQLite)، وزمن الوصول (Latency) هو العامل الأهم.<br>
+            • <strong>الأمان:</strong> الفرق الحقيقي يظهر في <strong>سلامة البيانات (Integrity)</strong> – LUKS يمنع التلاعب بالرسائل المخزنة، بينما VC لا يوفر هذه الحماية.<br>
+            • <strong>الإنكار المعقول:</strong> VC يخفي وجود المحادثات أصلاً، بينما LUKS لا يوفر هذه الميزة.<br>
+            • <strong>التوصية للمراسلة شديدة الحساسية:</strong> استخدم <strong>VC خارجي + LUKS داخلي</strong> – يجمع بين إخفاء وجود المحادثات (VC) ومنع التلاعب بالرسائل (LUKS).
+        </div>
+    </div>
+
+    <!-- ======== بطاقة: تمويه الفلاشة - قسم عادي + قسم مشفر مخفي ======== -->
+    <div class="card" style="margin-top:20px; border-right: 6px solid #9c27b0;">
+        <div class="card-header" style="color: #ce93d8;">
+            <i class="fas fa-mask"></i> 🎭 تمويه متقدم: فلاشة بقسمين (عادي + مشفر مخفي)
+        </div>
+        <p><strong>الفكرة:</strong> بدلاً من تشفير الفلاشة بالكامل (مما يثير الشك)، يمكن تقسيمها لقسمين: <strong>قسم عادي مرئي</strong> يشغل معظم المساحة، و<strong>قسم مشفر مخفي</strong> في المؤخرة لتخزين بيانات المراسلة.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0;">
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4 style="color: #66ccff;"><i class="fas fa-eye"></i> ماذا يرى أي شخص يوصّل الفلاشة؟</h4>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>🔹 يظهر <strong>قسم واحد فقط</strong> بنظام FAT (أو exFAT).</li>
+                    <li>🔹 بداخله ملفات عادية: أفلام، موسيقى، صور، مستندات عمل.</li>
+                    <li>🔹 الفلاشة تبدو طبيعية تماماً — لا شيء يثير الريبة.</li>
+                </ul>
+            </div>
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4 style="color: #ce93d8;"><i class="fas fa-eye-slash"></i> ماذا يوجد حقاً؟</h4>
+                <ul style="margin-right: 20px; line-height: 1.8;">
+                    <li>🔹 المساحة المتبقية في نهاية الفلاشة <strong>مشفرة بتشفير مزدوج</strong> (VC+LUKS).</li>
+                    <li>🔹 لا تحمل أي نظام ملفات معروف — تبدو كمساحة <strong>غير مهيأة</strong>.</li>
+                    <li>🔹 حتى أدوات فحص الأقراص لن تميزها عن مساحة فارغة.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h4><i class="fas fa-ruler"></i> 📐 مثال عملي: فلاشة 32GB</h4>
+        <div style="background: #0d1b2a; padding: 15px; border-radius: 12px; text-align: center; direction: ltr; margin: 15px 0;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0; font-family: monospace; font-size: 0.8em;">
+                <span style="background: #4caf50; padding: 12px 25px; border-radius: 0 12px 12px 0; color: white;">30GB — FAT32 مرئي<br><small>ملفات عادية</small></span>
+                <span style="background: #9c27b0; padding: 12px 15px; color: white;">2GB — مشفر<br><small>VC+LUKS</small></span>
+            </div>
+        </div>
+        
+        <h4><i class="fas fa-shield-alt"></i> 🛡️ كيف يتم ذلك؟ (نظرة عامة بدون أوامر)</h4>
+        <ol style="margin-right: 20px; line-height: 2;">
+            <li><strong>تقسيم الفلاشة:</strong> باستخدام أداة تقسيم الأقراص (مثل GNOME Disks أو GParted)، تُنشئ جدول أقسام جديد.</li>
+            <li><strong>القسم الأول (المرئي):</strong> أنشئ قسماً بحجم 30GB في بداية الفلاشة، وهيئه بنظام FAT32 أو exFAT. هذا القسم سيكون مرئياً على أي جهاز. املأه بملفات عادية.</li>
+            <li><strong>القسم الثاني (المخفي):</strong> المساحة المتبقية (2GB تقريباً) في نهاية الفلاشة — <strong>لا تهيئها بأي نظام ملفات</strong>. بدلاً من ذلك، استخدم VeraCrypt لإنشاء حاوية مشفرة على هذا القسم الخام، ثم طبق LUKS داخلها.</li>
+            <li><strong>النتيجة:</strong> عند توصيل الفلاشة، يظهر القسم الأول فقط. القسم الثاني لا يظهر لأنه لا يحمل نظام ملفات معروفاً. حتى أدوات استعادة البيانات لن تجد شيئاً ذا معنى.</li>
+        </ol>
+        
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-lightbulb"></i> <strong>💡 لماذا هذا أفضل من تشفير الفلاشة بالكامل؟</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li>• <strong>التمويه:</strong> الفلاشة تبدو طبيعية بمحتويات عادية، فلا تثير الشك.</li>
+                <li>• <strong>الإنكار:</strong> حتى لو تم فحص الفلاشة، المساحة غير المهيأة تبدو طبيعية (بقايا تقسيم سابق أو مساحة محجوزة).</li>
+                <li>• <strong>أمان البيانات:</strong> القسم المشفر لا يُفتح إلا داخل Qubes (storage-vault)، ثم يُمرر إلى ram-work.</li>
+            </ul>
+        </div>
+        
+        <div class="note-critical" style="margin-top: 10px;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ تذكر:</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li>• لا تهيّئ القسم الثاني أبداً — اتركه كمساحة خام (unformatted).</li>
+                <li>• استخدم VeraCrypt على الجهاز الخام مباشرة، ثم طبق LUKS داخله.</li>
+                <li>• على SSD، قد تكشف تقنية TRIM وجود بيانات مشفرة في المساحة "غير المهيأة". استخدم هذه الطريقة على فلاشات USB عادية (HDD أو Flash) إن أمكن.</li>
+            </ul>
+        </div>
+    </div>
+    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
+    <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
+        <div class="card-header" style="color: #ce93d8;">
+            <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
+        </div>
+        <p><strong>الفكرة:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
+                <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
+                <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
+            </div>
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
+                <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
+                <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
+            </div>
+        </div>
     <!-- ======== الطريقة الآمنة: فصل التخزين عن التنفيذ ======== -->
-    <div class="card">
+    <div class="card" style="margin-top: 20px;">
         <div class="card-header">
             <i class="fas fa-random"></i>
             <h3>🔐 الطريقة الآمنة: فصل التخزين عن التنفيذ (لمنع التسريب)</h3>
         </div>
-        
-        <p><strong>الفكرة الأساسية:</strong> بعد فتح التشفير (VC + LUKS) داخل  كيوب التخزين، <strong>لا تقم بتثبيت (mount) نظام الملفات فيه</strong>. بدلاً من ذلك، <strong>مرر الجهاز المفتوح فقط</strong> إلى  كيوب آخر يعمل على RAM Pool. بهذه الطريقة، البيانات الحساسة تُكتب فقط في الذاكرة العشوائية (RAM) وتختفي تماماً عند الإغلاق.</p>
-        
-        <div class="note" style="background:#1a3a3a; border-right-color:#66ccff;">
-            <i class="fas fa-info-circle"></i>
-            <strong>📌 لماذا هذا مهم؟</strong><br>
-            • إذا قمت بتثبيت نظام الملفات في  كيوب التخزين، فإن البيانات تُكتب على القرص (Swap, logs, cache) وقد تُستعاد لاحقاً.<br>
-            • إذا قمت بتمرير الجهاز فقط (بدون تثبيت) إلى  كيوب على RAM Pool، فإن البيانات تعمل في RAM فقط وتختفي عند الإغلاق.<br>
-            • هذه هي الطريقة الوحيدة لمنع التسريب بالكامل في Qubes OS.
-        </div>
+        <p><strong>الفكرة الأساسية:</strong> بعد فتح التشفير (VC + LUKS) داخل كيوب التخزين، <strong>لا تقم بتثبيت (mount) نظام الملفات فيه</strong>. بدلاً من ذلك، <strong>مرر الجهاز المفتوح فقط</strong> إلى كيوب آخر يعمل على RAM Pool. بهذه الطريقة، البيانات الحساسة تُكتب فقط في الذاكرة العشوائية (RAM) وتختفي تماماً عند الإغلاق.</p>
         
         <table class="comparison-table">
-            <thead><th>السيناريو</th><th>مكان التثبيت (mount)</th><th>مكان البيانات</th><th>التسريب</th></thead>
+            <thead><tr><th>السيناريو</th><th>مكان التثبيت</th><th>مكان البيانات</th><th>التسريب</th></tr></thead>
             <tbody>
-                <tr>
-                    <td><strong>الطريقة الخطرة</strong><br><small>(لا تفعلها)</small></td>
-                    <td> كيوب التخزين (على HDD/SSD)</td>
-                    <td>تُكتب على القرص الدائم</td>
-                    <td>🔴 <strong>يحدث تسريب</strong><br><small>(يمكن استرجاعها لاحقاً)</small></td>
-                </tr>
-                <tr>
-                    <td><strong>الطريقة الآمنة</strong><br><small>(افعلها)</small></td>
-                    <td> كيوب التنفيذ (على RAM Pool)</td>
-                    <td>تُكتب في RAM فقط</td>
-                    <td>🟢 <strong>لا تسريب</strong><br><small>(تختفي بعد الإغلاق)</small></td>
-                </tr>
+                <tr><td><strong>الطريقة الخطرة</strong></td><td>كيوب التخزين (على HDD/SSD)</td><td>تُكتب على القرص الدائم</td><td>🔴 <strong>يحدث تسريب</strong></td></tr>
+                <tr><td><strong>الطريقة الآمنة</strong></td><td>كيوب التنفيذ (على RAM Pool)</td><td>تُكتب في RAM فقط</td><td>🟢 <strong>لا تسريب</strong></td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- ========== التمرير العملي عبر الواجهة الرسومية ========== -->
-    <div class="card">
+    <!-- ======== التمرير العملي عبر الواجهة الرسومية ======== -->
+    <div class="card" style="margin-top: 20px;">
         <div class="card-header">
             <i class="fas fa-mouse-pointer"></i>
             <h3>🖱️ التمرير العملي: عبر الواجهة الرسومية لـ dom0</h3>
         </div>
-        
-        <p><strong>المبدأ:</strong> بعد فتح التشفير في  كيوب التخزين (دون تثبيته)، يظهر الجهاز المفتوح في قائمة الأجهزة على سطح مكتب dom0. يمكنك بعد ذلك <strong>توصيله</strong> إلى أي  كيوب آخر كما تفعل مع أي USB عادي.</p>
-        
-        <div style="background:#202036; padding:15px; border-radius:20px; margin:15px 0;">
-            <p><strong>🖱️ الخطوات بالتفصيل:</strong></p>
-            <ol style="margin-right:20px; line-height:1.8;">
-                <li>في <strong>storage-vault</strong>: افتح VeraCrypt ثم LUKS (بدون mount). الجهاز الآن جاهز للتمرير.</li>
-                <li>في <strong>dom0</strong>: افتح قائمة "Qubes Devices" (أيقونة USB في شريط المهام أو من Qubes Tools).</li>
-                <li>ستجد الجهاز (مثل <code>secret-data</code>) مدرجاً تحت <strong>storage-vault</strong>.</li>
-                <li>حدد الجهاز، ثم اختر  كيوب الوجهة (مثل <strong>ram-work</strong>) واضغط <strong>Attach</strong> أو <strong>توصيل</strong>.</li>
-                <li>في <strong>ram-work</strong>: قم بتثبيت الجهاز (mount) كالمعتاد عبر المدير أو الأمر <code>sudo mount /dev/xvdi /mnt/secret</code>.</li>
-            </ol>
-        </div>
-        
-        <div class="note" style="margin-top:15px; background:#1a3a3a; border-right-color:#66ccff;">
-            <i class="fas fa-info-circle"></i>
-            <strong>💡 لماذا هذا سهل؟</strong><br>
-            • dom0 يتعامل مع أي جهاز بلوك (block device) بنفس الطريقة، سواء كان USB فعلياً أو جهاز LUKS مفتوحاً.<br>
-            • لا تحتاج إلى كتابة أوامر معقدة – كل شيء يتم عبر الواجهة الرسومية.<br>
-            •  كيوب الوجهة يرى الجهاز كقرص عادي (مثل /dev/xvdi) ويمكنه تثبيته فوراً.
-        </div>
-        
+        <p><strong>المبدأ:</strong> بعد فتح التشفير في كيوب التخزين (دون تثبيته)، يظهر الجهاز المفتوح في قائمة الأجهزة على سطح مكتب dom0. يمكنك بعد ذلك <strong>توصيله</strong> إلى أي كيوب آخر.</p>
+        <ol style="margin-right:20px; line-height:1.8;">
+            <li>في <strong>storage-vault</strong>: افتح VeraCrypt ثم LUKS (بدون mount).</li>
+            <li>في <strong>dom0</strong>: افتح قائمة "Qubes Devices" (أيقونة USB في شريط المهام).</li>
+            <li>ستجد الجهاز مدرجاً تحت <strong>storage-vault</strong>.</li>
+            <li>حدد الجهاز، ثم اختر كيوب الوجهة (مثل <strong>ram-work</strong>) واضغط <strong>Attach</strong>.</li>
+            <li>في <strong>ram-work</strong>: قم بتثبيت الجهاز (mount) كالمعتاد.</li>
+        </ol>
         <div class="note-critical" style="margin-top:15px;">
             <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ تذكر:</strong> لا تقم بتثبيت (mount) الجهاز في  كيوب التخزين. فقط افتح التشفير واتركه. التثبيت يتم فقط في  كيوب الوجهة الذي يعمل على RAM.
+            <strong>⚠️ تذكر:</strong> لا تقم بتثبيت (mount) الجهاز في كيوب التخزين. فقط افتح التشفير واتركه. التثبيت يتم فقط في كيوب الوجهة الذي يعمل على RAM.
         </div>
     </div>
 
-    <!-- ======== طريقة التشفير الأساسية (LUKS فقط) ======== -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-database"></i>
-            <h3>📌 الطريقة الأساسية: LUKS فقط (الموصى به للاستخدام اليومي)</h3>
-        </div>
-        <p><strong>مثال لتهيئة LUKS2 مع التكامل (AES-256-XTS + HMAC-SHA256):</strong></p>
-        <code class="safe dynamic-path" onclick="copyText(this)">sudo cryptsetup luksFormat --type luks2 \
---cipher aes-xts-plain64 \
---integrity hmac-sha256 \
---key-size 512 \
---pbkdf argon2id \
---pbkdf-memory 4194304 \
---iter-time 8000 \
---pbkdf-parallel 4 \
-/home/user/data.img</code>
-        <div class="note" style="margin-top:15px;">
-            <i class="fas fa-list-ul"></i> <strong>شرح المعاملات:</strong>
-            <ul style="margin-right:20px; margin-top:8px;">
-                <li><code>--type luks2</code> : استخدام النسخة الحديثة من LUKS.</li>
-                <li><code>--cipher aes-xts-plain64</code> : وضع التشفير XTS-AES (مفتاح 512 بت).</li>
-                <li><code>--integrity hmac-sha256</code> : تفعيل التحقق من السلامة (يمنع التلاعب).</li>
-                <li><code>--pbkdf argon2id</code> : الأقوى ضد هجمات GPU/ASIC.</li>
-                <li><code>--pbkdf-memory 4194304</code> : 4 جيجابايت ذاكرة لاشتقاق المفتاح.</li>
-                <li><code>--iter-time 8000</code> : 8 ثوانٍ لفتح الحاوية (يمكن رفعه).</li>
-            </ul>
-        </div>
+<!-- ======== إنشاء كيوب RAM للتخزين الآمن ======== -->
+<div class="card" style="margin-top:20px;">
+    <div class="card-header">
+        <i class="fas fa-microchip"></i>
+        <h3>🧠 إعداد فصل التخزين عن التنفيذ</h3>
     </div>
-
-    <!-- ======== جدول الأوامر الأساسية ======== -->
-    <div style="overflow-x: auto;">
+    <p>لتطبيق فصل التخزين عن التنفيذ، تحتاج إلى ثلاثة مكونات. <strong>كيوب التخزين على القرص الصلب</strong> (يفتح التشفير فقط دون أن يثبته)، و<strong>كيوب التنفيذ في RAM</strong> (يثبت البيانات ويعمل عليها). يمكن تنفيذها دفعة واحدة عبر السكربت المساعد.</p>
+    
     <table class="comparison-table">
-        <thead><th>الخطوة</th><th>الأمر (في dom0)</th><th>ملاحظات</th></thead>
+        <thead><tr><th>المكون</th><th>مكانه</th><th>وظيفته فقط</th><th>ما لا يفعله</th></tr></thead>
         <tbody>
             <tr>
-                <td>إنشاء  كيوب التخزين</td>
-                <td><code class="safe" onclick="copyText(this)">qvm-create --class AppVM --label black --template debian-13-xfce storage-vault</code></td>
-                <td> كيوب معزول يحتوي على الملف المشفر</td>
+                <td><strong>كيوب التخزين</strong><br><small>(storage-vault)</small></td>
+                <td>🟡 <strong>على القرص الصلب</strong></td>
+                <td>يفتح تشفير VC+LUKS فقط — يدخل كلمة المرور ثم يتوقف</td>
+                <td>❌ لا يثبت (mount) أبداً — لا يرى الملفات — لا يلمس البيانات</td>
             </tr>
             <tr>
-                <td>إنشاء RAM Pool</td>
-                <td><code class="safe" onclick="copyText(this)">sudo mkdir -p /home/user/ram_pool && sudo mount -t tmpfs -o size=8G tmpfs /home/user/ram_pool && qvm-pool add ram_pool file -o dir_path=/home/user/ram_pool</code></td>
-                <td>مساحة عمل في الذاكرة (تختفي بعد الإقلاع)</td>
+                <td><strong>RAM Pool</strong></td>
+                <td>🟢 <strong>في الذاكرة (RAM)</strong></td>
+                <td>مساحة عمل مؤقتة تختفي بعد الإغلاق</td>
+                <td>—</td>
             </tr>
             <tr>
-                <td>إنشاء  كيوب تنفيذ زائل</td>
-                <td><code class="safe" onclick="copyText(this)">qvm-create -P ram_pool -t debian-13-xfce --label yellow ram-work</code></td>
-                <td>هذا ال كيوب يعمل على RAM فقط</td>
-            </tr>
-            <tr>
-                <td>(اختياري) إنشاء RAM Pool أكبر</td>
-                <td><code class="safe" onclick="copyText(this)">sudo mount -t tmpfs -o size=16G tmpfs /home/user/ram_pool</code></td>
-                <td>إذا كنت تحتاج مساحة أكبر للبيانات</td>
+                <td><strong>كيوب التنفيذ الزائل</strong><br><small>(ram-work)</small></td>
+                <td>🟢 <strong>في الذاكرة (RAM)</strong></td>
+                <td>يثبت الجهاز المفتوح ويعمل على البيانات</td>
+                <td>❌ لا يعرف كلمة المرور — لا يفتح تشفيراً — لا يرى القرص</td>
             </tr>
         </tbody>
     </table>
+    
+    <div style="background: #0d1b2a; padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center;">
+        <p style="color: #ffd966; font-weight: bold;">🔑 لماذا هذا الفصل؟</p>
+        <p style="margin-top: 8px;"><strong>storage-vault</strong> (على القرص) يعرف كلمة المرور لكنه <strong>لا يرى البيانات</strong>.</p>
+        <p><strong>ram-work</strong> (في RAM) يرى البيانات لكنه <strong>لا يعرف كلمة المرور</strong>.</p>
+        <p style="margin-top: 8px; color: #66ccff;">النتيجة: لا يوجد كيوب واحد يملك كلمة المرور + البيانات معاً.</p>
+    </div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
+        <i class="fas fa-bolt"></i>
+        <strong>⚡ للتطبيق التلقائي:</strong> السكربت المساعد في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a> يقوم بإنشاء RAM Pool وكيوب ram-work <strong>دفعة واحدة</strong> (خيار RAM Pool). أما كيوب storage-vault فتنشئه أنت مرة واحدة فقط كنقطة دخول دائمة للتشفير.
+    </div>
+</div>
+
+<!-- ======== تحذير SSD + مقارنة HDD vs SSD للمسح الآمن ======== -->
+<div class="card" style="margin-top:20px;">
+    <div class="card-header">
+        <i class="fas fa-exclamation-triangle"></i> 💾 تحذير SSD وتقنيات المسح الآمن
     </div>
 
-    <!-- ======== نصائح إضافية ======== -->
-    
-    <!-- ======== مقارنة HDD vs SSD للمسح الآمن ======== -->
-<div class="card" style="margin-top:20px;">
-    <div class="card-header"><i class="fas fa-hdd"></i> 💾 مقارنة: HDD vs SSD للمسح الآمن للبيانات</div>
+    <!-- التحذير الأساسي -->
+    <div class="note-critical" style="margin-bottom: 20px;">
+        <i class="fas fa-exclamation-triangle"></i> 
+        <strong>⚠️ تحذير بشأن SSD وTRIM:</strong> لا تستخدم الأحجام المخفية (Hidden Volumes) مع SSD إذا كنت تحتاج إنكاراً معقولاً حقيقياً، وذلك بسبب تقنية TRIM وخاصية تسوية التآكل (Wear-Leveling) التي تترك آثاراً محتملة.
+        <br>📌 <strong>الحل الأمثل على SSD:</strong> استخدم طريقة <strong>التشفير المزدوج (VC خارجي + LUKS داخلي)</strong> مع فصل التخزين عن التنفيذ كما هو موضح في التبويب.
+    </div>
+
+    <!-- جدول المقارنة -->
+    <h4 style="color: #ffd966; margin-bottom: 12px;"><i class="fas fa-hdd"></i> 📊 مقارنة: HDD vs SSD للمسح الآمن للبيانات</h4>
     <table class="comparison-table">
         <thead>
             <tr>
@@ -1968,7 +2133,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <td>ذاكرة فلاش (NAND)</td>
             </tr>
             <tr>
-                <td><strong>المسح الآمن (Secure Delete)</strong></td>
+                <td><strong>المسح الآمن</strong></td>
                 <td><span style="color:#4caf50;">✅ سهل</span><br><small>الكتابة فوق نفس الموقع الفيزيائي</small></td>
                 <td><span style="color:#ff4d4d;">❌ صعب</span><br><small>بسبب Wear Leveling</small></td>
             </tr>
@@ -1988,7 +2153,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <td><span style="color:#ffaa33;">⚠️ موجود</span><br><small>ينظف الصفحات المهملة في الخلفية</small></td>
             </tr>
             <tr>
-                <td><strong>طريقة المسح الآمن الموصى بها</strong></td>
+                <td><strong>طريقة المسح الموصى بها</strong></td>
                 <td><code>wipe</code> أو <code>shred</code> (1-3 passes)</td>
                 <td>ATA Secure Erase / Sanitize / Crypto Erase</td>
             </tr>
@@ -1997,125 +2162,36 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
                 <td><span style="color:#ffaa33;">🟡 ممكنة</span><br><small>إذا لم يتم overwrite</small></td>
                 <td><span style="color:#4caf50;">🟢 شبه مستحيلة</span><br><small>بعد TRIM و Garbage Collection</small></td>
             </tr>
-            <tr>
-                <td><strong>أداة المسح الموصى بها</strong></td>
-                <td>ShredOS, DBAN, BleachBit</td>
-                <td>PartedMagic, hdparm, nvme-cli</td>
-            </tr>
         </tbody>
     </table>
+
+    <!-- شرح المصطلحات -->
     <div class="note" style="margin-top:15px;">
         <i class="fas fa-info-circle"></i>
         <strong>📖 شرح المصطلحات:</strong>
         <ul style="margin-top:10px;">
-            <li><strong>Wear Leveling:</strong> تقنية في SSD توزع عمليات الكتابة على جميع الخلايا بالتساوي لإطالة عمر القرص. هذا يعني أن الكتابة فوق ملف لا تحدث في نفس المكان الفيزيائي.</li>
+            <li><strong>Wear Leveling:</strong> تقنية في SSD توزع عمليات الكتابة على جميع الخلايا بالتساوي لإطالة عمر القرص.</li>
             <li><strong>TRIM:</strong> أمر يصدره نظام التشغيل ليخبر SSD أن صفحات معينة لم تعد مستخدمة ويمكن مسحها.</li>
             <li><strong>Garbage Collection:</strong> عملية داخلية في SSD تقوم بمسح الصفحات المهملة فعلياً في الخلفية.</li>
-            <li><strong>ATA Secure Erase:</strong> أمر يصدر للمتحكم لمسح جدول التعيينات (mapping table) مما يجعل البيانات غير قابلة للوصول.</li>
+            <li><strong>ATA Secure Erase:</strong> أمر يصدر للمتحكم لمسح جدول التعيينات مما يجعل البيانات غير قابلة للوصول.</li>
             <li><strong>Crypto Erase:</strong> تغيير مفتاح التشفير الداخلي للقرص (لأقراص SED) مما يجعل كل البيانات غير قابلة للقراءة.</li>
         </ul>
     </div>
+
+    <!-- تحذيرات إضافية -->
     <div class="note-critical" style="margin-top:15px;">
         <i class="fas fa-exclamation-triangle"></i>
         <strong>⚠️ تحذير هام:</strong>
         <ul style="margin-top:10px;">
             <li>• لا تستخدم أدوات المسح التقليدية (مثل shred أو wipe) على SSD - فهي غير فعالة وقد تقلل من عمر القرص.</li>
-            <li>• إذا كنت تستخدم تشفير كامل للقرص (LUKS/Veracrypt)، فإن Crypto Erase (تغيير كلمة المرور وإعادة التشفير) هو أسهل طريقة لمسح SSD.</li>
-            <li>• تأكد من تفعيل TRIM على نظامك: <code>sudo systemctl enable fstrim.timer</code> (Linux) أو استخدم Optimize في Windows.</li>
+            <li>• إذا كنت تستخدم تشفير كامل للقرص (LUKS/Veracrypt)، فإن Crypto Erase هو أسهل طريقة لمسح SSD.</li>
+            <li>• تأكد من تفعيل TRIM على نظامك: <code>sudo systemctl enable fstrim.timer</code>.</li>
         </ul>
     </div>
 </div>
-<!-- ======== أدوات إزالة البيانات الوصفية ======== -->
-<div class="card" style="margin-top:20px;">
-    <div class="card-header"><i class="fas fa-eraser"></i> 🧹 أدوات إزالة البيانات الوصفية (Metadata Removal)</div>
-    <p>البيانات الوصفية (Metadata) هي معلومات مخفية في الملفات تكشف تفاصيل عنك: الموقع، الكاميرا، تاريخ الإنشاء، اسم المؤلف، وغيرها. هذه الأدوات تساعدك في إزالتها قبل مشاركة الملفات.</p>
-    
-    <table class="comparison-table">
-        <thead>
-            <tr>
-                <th>الأداة</th>
-                <th>المنصة</th>
-                <th>نوع الملفات</th>
-                <th>الاستخدام</th>
-                <th>التوصية</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>ExifTool</strong></td>
-                <td>Windows / Linux / macOS</td>
-                <td>صور، PDF، Office، فيديو، صوت</td>
-                <td><code>exiftool -all= file.jpg</code></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ الأقوى</span></td>
-            </tr>
-            <tr>
-                <td><strong>ExifCleaner</strong></td>
-                <td>Windows / Linux / macOS</td>
-                <td>صور، PDF، مستندات</td>
-                <td>واجهة رسومية - سحب وإفلات</td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ سهل الاستخدام</span></td>
-            </tr>
-            <tr>
-                <td><strong>mat2</strong></td>
-                <td>Linux (Whonix/Tails)</td>
-                <td>صور، PDF، Office، صوت، فيديو</td>
-                <td><code>mat2 file.jpg</code></td>
-                <td><span style="background:#4caf50; padding:5px 12px; border-radius:20px; color:white;">⭐ مدمج في Whonix/Tails</span></td>
-            </tr>
-            <tr>
-                <td><strong>Dangerzone</strong></td>
-                <td>Windows / Linux / macOS</td>
-                <td>PDF، Office، صور</td>
-                <td>يحول الملف إلى PDF آمن (صورة متسلسلة)</td>
-                <td><span style="background:#2196f3; padding:5px 12px; border-radius:20px; color:white;">🌐 للملفات المشبوهة</span></td>
-            </tr>
-            <tr>
-                <td><strong>PDF Redact Tools</strong></td>
-                <td>Linux</td>
-                <td>PDF فقط</td>
-                <td>سطر أوامر لتحويل PDF إلى صور</td>
-                <td><span style="background:#607d8b; padding:5px 12px; border-radius:20px; color:white;">متخصص للـ PDF</span></td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
-        <div style="background:#1a2a3a; padding:15px; border-radius:15px;">
-            <h4><i class="fas fa-terminal"></i> أمثلة سريعة لـ ExifTool</h4>
-            <p><strong>عرض metadata:</strong></p>
-            <code onclick="copyText(this)">exiftool image.jpg</code>
-            <p><strong>حذف كل metadata:</strong></p>
-            <code onclick="copyText(this)">exiftool -all= image.jpg</code>
-            <p><strong>حذف من مجلد كامل:</strong></p>
-            <code onclick="copyText(this)">exiftool -all= -r /path/to/folder/</code>
-        </div>
-        <div style="background:#1a2a3a; padding:15px; border-radius:15px;">
-            <h4><i class="fas fa-shield-alt"></i> تثبيت سريع</h4>
-            <p><strong>Linux (Debian/Ubuntu):</strong></p>
-            <code onclick="copyText(this)">sudo apt install exiftool mat2</code>
-            <p><strong>Windows:</strong> حمل من <code>exiftool.org</code> أو <code>exifcleaner.com</code></p>
-            <p><strong>macOS:</strong></p>
-            <code onclick="copyText(this)">brew install exiftool</code>
-        </div>
-    </div>
-    
-    <div class="note" style="margin-top:15px;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 نصائح مهمة:</strong>
-        <ul style="margin-top:10px;">
-            <li>• <strong>ExifTool</strong> هو الأداة الأقوى والأكثر شمولاً - مثبت مسبقاً في Whonix و Tails.</li>
-            <li>• <strong>ExifCleaner</strong> خيار ممتاز للمبتدئين بواجهة رسومية بسيطة.</li>
-            <li>• <strong>mat2</strong> موصى به من PrivacyGuides ومدمج في Whonix Workstation.</li>
-            <li>• <strong>Dangerzone</strong> يحول أي ملف إلى PDF آمن (يحوله لصور ثم يعيد تجميعه) - مثالي للملفات المشبوهة.</li>
-            <li>• تأكد دائماً من إزالة metadata قبل مشاركة أي ملف، خاصة الصور والمستندات.</li>
-        </ul>
-    </div>
-    <div class="note-critical" style="margin-top:15px;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ تذكر:</strong> إزالة metadata لا تضمن إزالة العلامات المائية (watermarks) أو تقنيات إخفاء المعلومات (steganography). للملفات شديدة الحساسية، استخدم Dangerzone لتحويلها إلى صور ثم PDF.
-    </div>
-</div>
-    <div class="card">
+
+    <!-- ======== نصائح إضافية ======== -->
+    <div class="card" style="margin-top:20px;">
         <div class="card-header"><i class="fas fa-tools"></i> 🛠️ نصائح إضافية للتخزين الآمن</div>
         <ul style="margin-right:20px; line-height:1.8;">
             <li>🔹 <strong>فصل الرأس (Header):</strong> يمكنك حفظ رأس LUKS على جهاز منفصل – بدون الرأس لا يمكن فتح الحاوية حتى مع كلمة المرور.</li>
@@ -2123,12 +2199,12 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             <li>🔹 <strong>تحذير SSD:</strong> لا تستخدم الأحجام المخفية على SSD إذا كان الإنكار المعقول ضرورياً.</li>
             <li>🔹 <strong>النسخ الاحتياطي للرأس:</strong> <code>sudo cryptsetup luksHeaderBackup /dev/sdX --header-backup-file /path/to/backup</code></li>
             <li>🔹 <strong>تعطيل TRIM:</strong> <code>veracrypt --mount-options=nokernelcrypto /path/to/container /mnt/point</code></li>
-            <li>🔹 <strong>التمرير دون تثبيت:</strong> تذكر دائماً: لا تثبت (mount) في  كيوب التخزين، فقط مرر الجهاز عبر واجهة dom0.</li>
-            <li>🔹 <strong>تنظيف RAM Pool:</strong> بعد الانتهاء، يمكنك إيقاف  كيوب ram-work وتفريغ الذاكرة: <code>sudo umount /home/user/ram_pool</code></li>
+            <li>🔹 <strong>التمرير دون تثبيت:</strong> تذكر دائماً: لا تثبت (mount) في كيوب التخزين، فقط مرر الجهاز عبر واجهة dom0.</li>
+            <li>🔹 <strong>تنظيف RAM Pool:</strong> بعد الانتهاء، يمكنك إيقاف كيوب ram-work وتفريغ الذاكرة: <code>sudo umount /home/user/ram_pool</code></li>
         </ul>
     </div>
 
-    <div class="note">
+    <div class="note" style="margin-top:15px;">
         <i class="fas fa-lightbulb"></i> <strong>نصيحة:</strong> استخدم أمر <code>sudo dmesg | tail</code> بعد إدخال USB لرؤية اسم الجهاز (مثل <code>/dev/sdb1</code>) إذا كنت تريد التعامل مع أجهزة USB مباشرة.
     </div>
     
@@ -2138,256 +2214,191 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>storage-vault</strong> (يفتح VC+LUKS، لا يثبت) → يظهر الجهاز في dom0 → <strong>توصيله عبر واجهة dom0</strong> إلى <strong>ram-work</strong> (يعمل على RAM) → <strong>تثبيت الجهاز في ram-work</strong> → العمل على البيانات في RAM فقط → عند الإغلاق، تختفي كل البيانات.
     </div>
 
-<!-- ========== قاعدة تمرير البلوك ديفايس الآمن ========== -->
-<div class="card">
-    <div class="card-header">
-        <i class="fas fa-shield-alt"></i>
-        <h3>🛡️ القاعدة الذهبية: تمرير البلوك ديفايس (جهاز التخزين الخام)</h3>
-    </div>
-    
-    <p>عندما تريد إتاحة جهاز تخزين لأحد الكيوبسات في Qubes، <strong>استخدم تمرير البلوك ديفايس (Block Device)</strong> بدلاً من تمرير منفذ USB بالكامل. هذه هي الطريقة الموصى بها والمفضلة من قبل فريق Qubes لأسباب أمنية.</p>
-    
-    <!-- شرح مبسط: sda vs sda3 -->
-    <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
-        <h4 style="color: #ffd966; margin-bottom: 12px;"><i class="fas fa-lightbulb"></i> 💡 فهم الفرق: sda (القرص كاملاً) vs sda3 (قسم واحد)</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div style="background: #3a1a1a; padding: 12px; border-radius: 12px; border-right: 4px solid #ff4444;">
-                <strong style="color: #ff8888;">🔴 sda (القرص كاملاً) – خطر</strong>
-                <p style="margin-top: 8px;">الـ VM ترى القرص بالكامل وتستطيع:</p>
-                <ul style="margin-right: 20px; margin-top: 5px;">
-                    <li>قراءة الأقسام الأخرى</li>
-                    <li>تنفيذ أوامر ATA/NVMe خطيرة (مثل Secure Erase)</li>
-                    <li>تدمير جدول الأقسام</li>
-                    <li>معرفة أنواع الأقسام الأخرى (swap، LUKS...)</li>
-                </ul>
-            </div>
-            <div style="background: #1a3a1a; padding: 12px; border-radius: 12px; border-right: 4px solid #4caf50;">
-                <strong style="color: #88ff88;">🟢 sda3 (قسم واحد) – آمن</strong>
-                <p style="margin-top: 8px;">الـ VM ترى فقط بيانات القسم:</p>
-                <ul style="margin-right: 20px; margin-top: 5px;">
-                    <li>لا تعرف بوجود أقسام أخرى</li>
-                    <li>لا تستطيع الوصول للأوامر منخفضة المستوى</li>
-                    <li>معزولة تماماً عن باقي القرص</li>
-                    <li>تتعامل مع القسم كـ "ملف كبير" فقط</li>
-                </ul>
+    <!-- ========== قاعدة تمرير البلوك ديفايس الآمن ========== -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-header">
+            <i class="fas fa-shield-alt"></i>
+            <h3>🛡️ القاعدة الذهبية: تمرير البلوك ديفايس (جهاز التخزين الخام)</h3>
+        </div>
+        <p>عندما تريد إتاحة جهاز تخزين لأحد الكيوبسات في Qubes، <strong>استخدم تمرير البلوك ديفايس (Block Device)</strong> بدلاً من تمرير منفذ USB بالكامل.</p>
+        
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 15px; margin: 15px 0;">
+            <h4 style="color: #ffd966; margin-bottom: 12px;"><i class="fas fa-lightbulb"></i> 💡 sda (القرص كاملاً) vs sda3 (قسم واحد)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: #3a1a1a; padding: 12px; border-radius: 12px; border-right: 4px solid #ff4444;">
+                    <strong style="color: #ff8888;">🔴 sda – خطر</strong>
+                    <ul style="margin-right: 20px; margin-top: 5px;"><li>تنفيذ أوامر ATA/NVMe خطيرة</li><li>تدمير جدول الأقسام</li><li>رؤية الأقسام الأخرى</li></ul>
+                </div>
+                <div style="background: #1a3a1a; padding: 12px; border-radius: 12px; border-right: 4px solid #4caf50;">
+                    <strong style="color: #88ff88;">🟢 sda3 – آمن</strong>
+                    <ul style="margin-right: 20px; margin-top: 5px;"><li>معزولة تماماً عن باقي القرص</li><li>لا أوامر منخفضة المستوى</li><li>تتعامل مع القسم كـ "ملف كبير"</li></ul>
+                </div>
             </div>
         </div>
-        <p style="margin-top: 12px; text-align: center; font-style: italic; color: #aaa;">
-            <i class="fas fa-arrow-left"></i> 
-            مرر أقل قدر ممكن – القسم الواحد آمن، القرص الكامل خطر 
-            <i class="fas fa-arrow-right"></i>
-        </p>
+        
+        <div class="note" style="margin-top:15px; background:#1a3a3a; border-right-color:#66ccff;">
+            <i class="fas fa-terminal"></i>
+            <strong>🖥️ مثال عملي:</strong><br>
+            <code onclick="copyText(this)" style="margin-top: 8px; display: inline-block;">qvm-block attach work-vm dom0:/dev/sdb1</code>
+            <p style="margin-top: 8px;">يمرر <strong>القسم الأول فقط</strong>. ⚠️ لا تستخدم <code>/dev/sdb</code> (القرص كاملاً).</p>
+        </div>
+        <div class="note" style="margin-top:15px; background:#2a2a4a; border-right-color:#ffaa33;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ استثناء: الأجهزة المركبة (كاميرات، YubiKey):</strong> تحتاج <code>qvm-usb attach</code>.
+        </div>
     </div>
-    
-    <div class="note" style="margin-top:15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>📖 من وثائق Qubes:</strong><br>
-        "إن تمرير جهاز USB بالكامل يوفر سطح هجوم أكبر مقارنة بتمرير جهاز بلوك ديفايس واحد. وبالمثل، فإن تمرير جهاز بلوك ديفايس بالكامل (القرص بأكمله) يوفر سطح هجوم أكبر من تمرير قسم واحد فقط."
-    </div>
-    
-    <div class="note" style="margin-top:15px; background:#1a3a3a; border-right-color:#66ccff;">
-        <i class="fas fa-terminal"></i>
-        <strong>🖥️ مثال عملي:</strong><br>
-        <code onclick="copyText(this)" style="margin-top: 8px; display: inline-block;">qvm-block attach work-vm dom0:/dev/sdb1</code>
-        <p style="margin-top: 8px;">هذا يمرر <strong>القسم الأول فقط</strong> من القرص الخارجي إلى VM باسم <code>work-vm</code>.</p>
-        <p style="margin-top: 5px; color: #ffaa33;">⚠️ لا تستخدم: <code>qvm-block attach work-vm dom0:/dev/sdb</code> (هذا يمرر القرص كاملاً).</p>
-    </div>
-    
-    <div class="note" style="margin-top:15px; background:#2a2a4a; border-right-color:#ffaa33;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ استثناء: الأجهزة المركبة (Compound Devices)</strong><br>
-        بعض أجهزة USB (مثل كاميرات الويب) تظهر كجهاز مركب يحتوي على عدة وظائف (فيديو + ميكروفون). تمرير البلوك ديفايس <strong>لا يعمل</strong> معها. في هذه الحالة فقط، استخدم <code>sys-usb</code> مخصص مع <code>qvm-usb attach</code>.
-    </div>
-    
-    <div class="note" style="margin-top:15px; background:#1a2a3a; border-right-color:#66ccff;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 القاعدة الذهبية:</strong><br>
-        • دائماً، <strong>مرر أقل قدر ممكن</strong> من الجهاز للحصول على أعلى درجة أمان.<br>
-        • <strong>للتخزين:</strong> استخدم <code>qvm-block attach vm-name dom0:/dev/sdX#</code> (قسم واحد).<br>
-        • <strong>للأجهزة الخاصة</strong> (كاميرات، YubiKey): قد تحتاج <code>qvm-usb attach</code>، لكن كن واعياً لسطح الهجوم الأكبر.
-    </div>
-</div>
 
     <!-- ======== رسم بياني: فصل التخزين عن التنفيذ ======== -->
-    <div class="card">
+    <div class="card" style="margin-top:20px;">
         <div class="card-header">
             <i class="fas fa-chart-network"></i>
             <h3>📊 الرسم البياني: التدفق الآمن للبيانات</h3>
         </div>
-        
-        <p>يوضح الرسم البياني أدناه الفرق بين الطريقة التقليدية (تسريب البيانات) والطريقة الآمنة (فصل التخزين عن التنفيذ) التي يستخدمها هذا الدليل.</p>
-        
+        <p>الفرق بين الطريقة التقليدية (تسريب البيانات) والطريقة الآمنة (فصل التخزين عن التنفيذ).</p>
         <div style="background: var(--code-bg); border-radius: 24px; padding: 20px; margin: 20px 0; text-align: center; direction: ltr;">
-            
-            <!-- الطريقة الخطرة -->
             <div style="margin-bottom: 30px;">
                 <div style="color: #ff8888; font-weight: bold; margin-bottom: 15px;">❌ الطريقة الخطرة (تسريب البيانات)</div>
                 <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
                     <span style="background: #4a2a2a; padding: 8px 16px; border-radius: 30px;">📦 حاوية VC</span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #4a2a2a; padding: 8px 16px; border-radius: 30px;">🔓 فتح VC+LUKS</span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #4a2a2a; padding: 8px 16px; border-radius: 30px;">💾 Mount + كتابة</span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #8b0000; padding: 8px 16px; border-radius: 30px;">⚠️ بيانات على HDD/SSD</span>
                 </div>
                 <div style="color: #ff8888; font-size: 0.85em; margin-top: 10px;">البيانات تُكتب على القرص → يمكن استرجاعها لاحقاً</div>
             </div>
-            
-            <!-- السهم الفاصل -->
             <div style="margin: 20px 0;">
                 <i class="fas fa-arrow-down" style="font-size: 2em; color: #4caf50;"></i>
                 <div style="color: #4caf50; font-weight: bold;">الطريقة الآمنة (هذا الدليل)</div>
             </div>
-            
-            <!-- الطريقة الآمنة -->
             <div>
                 <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
                     <span style="background: #1a3a3a; padding: 8px 16px; border-radius: 30px;">📦 storage-vault</span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #1a3a3a; padding: 8px 16px; border-radius: 30px;">🔓 فتح VC+LUKS <span style="color:#ffaa33;">(بدون mount)</span></span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #1a3a3a; padding: 8px 16px; border-radius: 30px;">🖱️ تمرير الجهاز عبر dom0</span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #1a3a3a; padding: 8px 16px; border-radius: 30px;">🧠 ram-work <span style="color:#66ccff;">(RAM Pool)</span></span>
-                    <span style="font-size: 1.5em;">→</span>
+                    <span>→</span>
                     <span style="background: #0a3a0a; padding: 8px 16px; border-radius: 30px;">✅ Mount + كتابة في RAM</span>
                 </div>
                 <div style="color: #66ccff; font-size: 0.85em; margin-top: 10px;">البيانات تُكتب في الذاكرة فقط → تختفي بعد الإغلاق 🧹</div>
             </div>
-            
-            <!-- أسهم توضيحية -->
-            <div style="display: flex; justify-content: space-between; margin-top: 20px; font-size: 0.8em; color: var(--text-color); opacity: 0.7;">
-                <div style="text-align: center;">🔑 المفتاح هنا</div>
-                <div style="text-align: center;">🔄 dom0 يمرر المرجع فقط</div>
-                <div style="text-align: center;">🧹 لا أثر على القرص</div>
-            </div>
-            
+        </div>
+    </div>
+
+    <!-- ======== سيناريو عملي: فلاشة LUKS → Whonix ======== -->
+    <div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
+        <div class="card-header" style="color: #4caf50;">
+            <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS → Whonix (GNOME Disks)
+        </div>
+        <p><strong>التدفق:</strong> فلاشة LUKS → storage-vault → GNOME Disks (فتح) → تمرير GUI → Whonix → GNOME Disks (Mount)</p>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr><td style="padding: 10px;">1</td><td style="padding: 10px;">أوصل الفلاشة إلى <code>storage-vault</code></td></tr>
+            <tr><td style="padding: 10px;">2</td><td style="padding: 10px;">GNOME Disks ← Unlock ← <strong>لا Mount</strong></td></tr>
+            <tr><td style="padding: 10px;">3</td><td style="padding: 10px;">أيقونة USB: Attach to <code>whonix-workstation</code></td></tr>
+            <tr><td style="padding: 10px;">4</td><td style="padding: 10px;">في <code>whonix-workstation</code>: GNOME Disks ← Mount</td></tr>
+        </table>
+        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+            <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور LUKS لا تغادر <code>storage-vault</code>.
+        </div>
+    </div>
+
+    <!-- ======== تقوية قرص نظام LUKS الموجود دون إعادة تهيئته ======== -->
+    <div class="card" style="margin-top: 30px; border-right: 8px solid #ff9944;">
+        <div class="card-header" style="color: #ff9944;">
+            <i class="fas fa-lock"></i> 🛡️ تقوية قرص <strong>النظام</strong> LUKS الموجود دون إعادة تهيئته
         </div>
         
-        <div class="note" style="margin-top: 10px;">
-            <i class="fas fa-info-circle"></i>
-            <strong>📌 شرح الرسم البياني:</strong><br>
-            • <strong>الطريقة الخطرة:</strong> فتح التشفير وتركيبه (mount) في نفس ال كيوب يؤدي إلى كتابة البيانات على القرص الصلب، مما يترك آثاراً يمكن استرجاعها.<br>
-            • <strong>الطريقة الآمنة:</strong> فتح التشفير في  كيوب معزول (storage-vault) ثم تمرير الجهاز المفتوح فقط إلى  كيوب يعمل على RAM Pool (ram-work). البيانات تُكتب في الذاكرة وتختفي عند الإغلاق.
+        <p><strong>المشكلة:</strong> أنشأت قرص النظام المشفر بإعدادات PBKDF الافتراضية وتريد رفع استهلاك الذاكرة ووقت الاشتقاق لحماية الإقلاع. لا يوجد أمر مباشر لتعديل فتحة موجودة على قرص النظام.</p>
+        
+        <p><strong>تنبيه هام:</strong> هذا هو قرص <strong>النظام</strong> — الذي يُقلع منه Qubes. أي خطأ يمنع الإقلاع. تأكد من وجود <strong>USB حي</strong> للطوارئ قبل البدء.</p>
+        
+        <p><strong>الطريقة الوحيدة:</strong> استبدال كلمة المرور الضعيفة بأخرى قوية، ثم حذف القديمة. <strong>الخطوتان إجباريتان في كل مرة</strong> — حتى عند تغيير كلمة المرور لاحقًا.</p>
+        
+        <div style="background: #151525; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center;">
+            <code style="background: transparent;">luksAddKey (بذاكرة ووقت عاليين) → luksRemoveKey (للقديمة) → كلمة مرور واحدة فقط → المهاجم يختار الأضعف</code>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">0</td>
+                <td style="padding: 10px;"><strong>قبل البدء:</strong> يُفضّل رفع رام dom0 لتحقيق أقصى استفادة</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;" colspan="2">
+                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ عبر تعديل <code>dom0_mem</code> في إعدادات GRUB ثم تحديثه وإعادة التشغيل ⬆️</p>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">1</td>
+                <td style="padding: 10px;">شغّل السكربت من القائمة الرئيسية</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;" colspan="2">
+                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
+    <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
+        <div class="card-header" style="color: #ce93d8;">
+            <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
+        </div>
+        <p><strong>الفكرة:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
+                <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
+                <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
+            </div>
+            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+                <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
+                <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
+                <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
+            </div>
+        </div></strong> في القائمة. يكتشف القرص تلقائيًا ويسألك عن الذاكرة (بالجيجابايت) والوقت (بالثواني) المطلوبين ⬆️</p>
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 10px; font-weight: bold; color: #ffd966;">2</td>
+                <td style="padding: 10px;">سيُنشئ السكربت على سطح المكتب ويُشغّله</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;" colspan="2">
+                    <p style="margin:5px 0; text-align:center; color:#ff9944;">⬆️ يُنفذ <code>luksAddKey --iter-time</code> بقيمك المدخلة ثم يسألك قبل حذف القديمة وتحديث الإقلاع ⬆️</p>
+                </td>
+            </tr>
+        </table>
+        
+        <p style="margin: 15px 0 0 0; text-align: center; font-weight: bold; color: #ff5555;">
+            ⛔ <strong>لا تستخدم <code>luksChangeKey</code> أبدًا لهذا الغرض.</strong>
+        </p>
+        <p style="margin: 5px 0; text-align: center; color: #cccccc;">
+            حتى مع <code>--pbkdf-force-iterations</code>، لا يقبل <code>--pbkdf-memory</code> أبدًا — سيعيد الذاكرة للقيمة الافتراضية (1GB).
+        </p>
+        
+        <div class="note" style="margin-top: 15px; background: #1a2a3a; border-right-color: #66ccff;">
+            <i class="fas fa-lightbulb"></i>
+            <strong>💡 الخلاصة:</strong><br>
+            • <strong>ارفع رام dom0</strong> عبر <code>dom0_mem</code> في GRUB لتحقيق أقصى استفادة.<br>
+            • <strong>اطلب ذاكرة عالية</strong> (مثلاً 4GB) — النظام لن ينهار، سينزل تلقائيًا للحد الآمن.<br>
+            • <strong>السكربت</strong> ينفذ <code>luksAddKey</code> + <code>luksRemoveKey</code> تلقائيًا باستخدام الوقت الذي تحدده.<br>
+            • <strong>luksChangeKey</strong> = عودة صامتة للذاكرة الافتراضية.<br>
+            • <strong>كلمة مرور واحدة</strong> فقط — وجود اثنتين يجعل الأضعف هو المستهدف.<br>
+            • <strong>لقرص النظام في Qubes:</strong> حدّث صورة الإقلاع بـ <code>sudo dracut -f</code>.
+        </div>
+        
+        <strong>⚡ للتطبيق التلقائي لجميع إعدادات هذا التبويب:</strong>
+        <p style="margin-top: 10px;">
+            استخدم <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a>.
+        </p>
+        
+        <div class="note-critical" style="margin-top: 10px;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ تذكّر:</strong> لا تترك فتحتين. بعد <code>luksAddKey</code> مباشرةً نفّذ <code>luksRemoveKey</code>. المهاجم يختار الأسهل دائمًا.
         </div>
     </div>
-<!-- ======== سيناريو عملي: فلاشة LUKS → Whonix (مختصر) ======== -->
-<div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
-    <div class="card-header" style="color: #4caf50;">
-        <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS → Whonix (GNOME Disks)
     </div>
-    
-    <p><strong>التدفق الكامل بخطوات بسيطة:</strong></p>
-    
-    <div style="background: #151525; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center;">
-        <code style="background: transparent;">فلاشة LUKS → storage-vault → GNOME Disks (فتح) → تمرير GUI → Whonix → GNOME Disks (Mount)</code>
-    </div>
-    
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">1</td>
-            <td style="padding: 10px;">أوصل الفلاشة إلى <code>storage-vault</code> من أيقونة USB</td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966;">2</td>
-            <td style="padding: 10px;">في <code>storage-vault</code>: افتح GNOME Disks ← Unlock القسم ← <strong>لا تضغط Mount</strong></td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966;">3</td>
-            <td style="padding: 10px;">من أيقونة USB: اختر الجهاز المفتوح ← Attach to <code>whonix-workstation</code></td>
-        </tr>
-        <tr>
-            <td style="padding: 10px; font-weight: bold; color: #ffd966;">4</td>
-            <td style="padding: 10px;">في <code>whonix-workstation</code>: افتح GNOME Disks ← Mount</td>
-        </tr>
-    </table>
-    
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-shield-alt"></i>
-        <strong>🛡️ لماذا آمن؟</strong> كلمة مرور LUKS لا تغادر <code>storage-vault</code>. Whonix ترى فقط البيانات بعد فك التشفير.
-    </div>
-    
-    <div class="note-critical" style="margin-top: 10px;">
-        <i class="fas fa-undo-alt"></i>
-        <strong>🔄 بعد الانتهاء:</strong> Unmount في Whonix ← افصل الجهاز ← Lock في storage-vault ← افصل الفلاشة.
-    </div>
-</div>
-
-<!-- ======== تقوية قرص نظام LUKS الموجود دون إعادة تهيئته ======== -->
-<div class="card" style="margin-top: 30px; border-right: 8px solid #ff9944;">
-    <div class="card-header" style="color: #ff9944;">
-        <i class="fas fa-lock"></i> 🛡️ تقوية قرص <strong>النظام</strong> LUKS الموجود دون إعادة تهيئته
-    </div>
-    
-    <p><strong>المشكلة:</strong> أنشأت قرص النظام المشفر بإعدادات PBKDF الافتراضية وتريد رفع استهلاك الذاكرة ووقت الاشتقاق لحماية الإقلاع. لا يوجد أمر مباشر لتعديل فتحة موجودة على قرص النظام.</p>
-    
-    <p><strong>تنبيه هام:</strong> هذا هو قرص <strong>النظام</strong> — الذي يُقلع منه Qubes. أي خطأ يمنع الإقلاع. تأكد من وجود <strong>USB حي</strong> للطوارئ قبل البدء.</p>
-    
-    <p><strong>الطريقة الوحيدة:</strong> استبدال كلمة المرور الضعيفة بأخرى قوية، ثم حذف القديمة. <strong>الخطوتان إجباريتان في كل مرة</strong> — حتى عند تغيير كلمة المرور لاحقًا.</p>
-    
-    <div style="background: #151525; border-radius: 15px; padding: 15px; margin: 15px 0; text-align: center;">
-        <code style="background: transparent;">luksAddKey (بذاكرة ووقت عاليين) → luksRemoveKey (للقديمة) → كلمة مرور واحدة فقط → المهاجم يختار الأضعف</code>
-    </div>
-    
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">0</td>
-            <td style="padding: 10px;"><strong>قبل البدء:</strong> يُفضّل رفع رام dom0 لتحقيق أقصى استفادة</td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;" colspan="2">
-                <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ عبر تعديل <code>dom0_mem</code> في إعدادات GRUB ثم تحديثه وإعادة التشغيل ⬆️</p>
-            </td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966; width: 30px;">1</td>
-            <td style="padding: 10px;">شغّل السكربت من القائمة الرئيسية</td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;" colspan="2">
-                <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>11</strong> في القائمة. يكتشف القرص تلقائيًا ويسألك عن الذاكرة (بالجيجابايت) والوقت (بالثواني) المطلوبين ⬆️</p>
-            </td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--border-color);">
-            <td style="padding: 10px; font-weight: bold; color: #ffd966;">2</td>
-            <td style="padding: 10px;">سيُنشئ السكربت على سطح المكتب ويُشغّله</td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;" colspan="2">
-                <p style="margin:5px 0; text-align:center; color:#ff9944;">⬆️ يُنفذ <code>luksAddKey --iter-time</code> بقيمك المدخلة ثم يسألك قبل حذف القديمة وتحديث الإقلاع ⬆️</p>
-            </td>
-        </tr>
-    </table>
-    
-    <p style="margin: 15px 0 0 0; text-align: center; font-weight: bold; color: #ff5555;">
-        ⛔ <strong>لا تستخدم <code>luksChangeKey</code> أبدًا لهذا الغرض.</strong>
-    </p>
-    <p style="margin: 5px 0; text-align: center; color: #cccccc;">
-        حتى مع <code>--pbkdf-force-iterations</code>، لا يقبل <code>--pbkdf-memory</code> أبدًا — سيعيد الذاكرة للقيمة الافتراضية (1GB).
-    </p>
-    
-    <div class="note" style="margin-top: 15px; background: #1a2a3a; border-right-color: #66ccff;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 الخلاصة:</strong><br>
-        • <strong>ارفع رام dom0</strong> عبر <code>dom0_mem</code> في GRUB لتحقيق أقصى استفادة.<br>
-        • <strong>اطلب ذاكرة عالية</strong> (مثلاً 4GB) — النظام لن ينهار، سينزل تلقائيًا للحد الآمن.<br>
-        • <strong>السكربت</strong> ينفذ <code>luksAddKey</code> + <code>luksRemoveKey</code> تلقائيًا باستخدام الوقت الذي تحدده.<br>
-        • <strong>luksChangeKey</strong> = عودة صامتة للذاكرة الافتراضية.<br>
-        • <strong>كلمة مرور واحدة</strong> فقط — وجود اثنتين يجعل الأضعف هو المستهدف.<br>
-        • <strong>لقرص النظام في Qubes:</strong> حدّث صورة الإقلاع بـ <code>sudo dracut -f</code>.
-    </div>
-    
-    <strong>⚡ للتطبيق التلقائي لجميع إعدادات هذا التبويب:</strong>
-    <p style="margin-top: 10px;">
-        استخدم <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a>.
-    </p>
-    
-    <div class="note-critical" style="margin-top: 10px;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ تذكّر:</strong> لا تترك فتحتين. بعد <code>luksAddKey</code> مباشرةً نفّذ <code>luksRemoveKey</code>. المهاجم يختار الأسهل دائمًا.
-    </div>
-</div>
 </div>
 
 <!-- ======== تبويب 4: مصفوفة التهديدات ======== -->
@@ -5012,34 +5023,36 @@ export XDG_CACHE_HOME="$PWD/data/cache"
 exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
     </div>
 
-    <!-- ======== إزالة البيانات الوصفية ======== -->
-    <div class="card">
-        <div class="card-header"><i class="fas fa-eraser"></i> 🧹 إزالة البيانات الوصفية (Metadata) - قبل المشاركة</div>
-        <p>حتى مع أقوى تطبيقات المراسلة، الصور والمستندات تحمل بيانات خفية تكشف عنك (GPS، نوع الكاميرا، اسم المؤلف، تاريخ الإنشاء).</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
-            <div style="text-align: center;">
-                <i class="fas fa-shield"></i>
-                <h4>mat2 (الأفضل)</h4>
-                <code onclick="copyText(this)">mat2 document.pdf</code>
-                <p style="font-size: 0.9em;">مدمج في Whonix/Tails - ينشئ نسخة نظيفة</p>
-            </div>
-            <div style="text-align: center;">
-                <i class="fas fa-image" style="font-size: 2em;"></i>
-                <h4>ExifTool</h4>
-                <code onclick="copyText(this)">exiftool -all= -overwrite_original image.jpg</code>
-                <p style="font-size: 0.9em;">الأقوى - يدعم جميع الصيغ</p>
-            </div>
-            <div style="text-align: center;">
-                <i class="fas fa-dragon"></i>
-                <h4>Dangerzone</h4>
-                <code onclick="copyText(this)">dangerzone-cli file.pdf</code>
-                <p style="font-size: 0.9em;">للملفات المشبوهة - يحولها لصور آمنة</p>
-            </div>
+<!-- ======== إزالة البيانات الوصفية ======== -->
+<div class="card">
+    <div class="card-header"><i class="fas fa-eraser"></i> 🧹 إزالة البيانات الوصفية (Metadata) - قبل المشاركة</div>
+    <p>حتى مع أقوى تطبيقات المراسلة، الصور والمستندات تحمل بيانات خفية تكشف عنك (GPS، نوع الكاميرا، اسم المؤلف، تاريخ الإنشاء).</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
+        <div style="text-align: center;">
+            <i class="fas fa-shield" style="font-size: 2em;"></i>
+            <h4>mat2 (الأفضل)</h4>
+            <code onclick="copyText(this)">mat2 document.pdf</code>
+            <p style="font-size: 0.9em;">مدمج في Whonix/Tails - ينشئ نسخة نظيفة</p>
         </div>
-        
-        <div class="note"><i class="fas fa-info-circle"></i> <strong>تثبيت سريع:</strong> <code>sudo apt install mat2 exiftool</code></div>
+        <div style="text-align: center;">
+            <i class="fas fa-image" style="font-size: 2em;"></i>
+            <h4>ExifTool</h4>
+            <code onclick="copyText(this)">exiftool -all= -overwrite_original image.jpg</code>
+            <p style="font-size: 0.9em;">الأقوى - يدعم جميع الصيغ</p>
+        </div>
+        <div style="text-align: center;">
+            <i class="fas fa-dragon" style="font-size: 2em;"></i>
+            <h4>Dangerzone</h4>
+            <code onclick="copyText(this)">dangerzone-cli file.pdf</code>
+            <p style="font-size: 0.9em;">للملفات المشبوهة - يحولها لصور آمنة</p>
+        </div>
     </div>
+    
+    <div class="note"><i class="fas fa-info-circle"></i> <strong>تثبيت سريع:</strong> <code onclick="copyText(this)">sudo apt install mat2 exiftool</code></div>
+    <div class="note"><i class="fas fa-lightbulb"></i> <strong>أدوات إضافية:</strong> <strong>ExifCleaner</strong> (واجهة رسومية سهلة) | <strong>Dangerzone</strong> (يحول الملفات المشبوهة لـ PDF آمن) | <strong>PDF Redact Tools</strong> (متخصص للـ PDF)</div>
+    <div class="note"><i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> إزالة metadata لا تمنع العلامات المائية أو تقنيات إخفاء المعلومات (steganography).</div>
+</div>
 
     <!-- ======== 🆘 ماذا تفعل إذا... ======== -->
     <div class="card">
