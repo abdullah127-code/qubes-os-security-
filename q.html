@@ -5473,8 +5473,8 @@ setup_kernel_opts_vms() {
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && { err "تم الإلغاء"; pause; return 0; }
 
     info "إغلاق جميع VMs قبل تطبيق المعلمات..."
-sudo qvm-shutdown --all 2>/dev/null || true
-ok "تم إغلاق جميع VMs"
+    sudo qvm-shutdown --all 2>/dev/null || true
+    ok "تم إغلاق جميع VMs"
 
     for vm in $(qvm-ls --raw-list 2>/dev/null); do
         vm_clean=$(echo "$vm" | tr -d '[:space:]')
@@ -5511,19 +5511,62 @@ ok "تم إغلاق جميع VMs"
 
     echo ""
     info "إعادة تشغيل sys-net و sys-firewall و sys-usb..."
-for vm in sys-net sys-firewall sys-usb; do
-    if qvm-check --quiet "$vm" 2>/dev/null; then
-        qvm-start "$vm"
-        echo "   🔄 $vm"
-    fi
-done
+    for vm in sys-net sys-firewall sys-usb; do
+        if qvm-check --quiet "$vm" 2>/dev/null; then
+            qvm-start "$vm"
+            echo "   🔄 $vm"
+        fi
+    done
 
     warn "⚠️  تذكر: أي VM كان مفتوحاً أثناء تشغيل السكربت يجب إعادة تشغيله يدوياً لتطبيق المعاملات الجديدة."
 
     ok "تم تطبيق جميع الإعدادات على الـ VMs"
+
+    # ======== خيار تفعيل ephemeral ========
+    echo ""
+    echo "╔═══════════════════════════════════════════════════════════╗"
+    echo "║  🧹 تفعيل ephemeral على pools وجميع الـ VMs              ║"
+    echo "╠═══════════════════════════════════════════════════════════╣"
+    echo "║  هذا يجعل جميع أجهزة VMs تستخدم تشفيراً عابراً (ephemeral) ║"
+    echo "║  بمفتاح عشوائي يُفقد بعد الإغلاق.                        ║"
+    echo "║  ⚠️ تحذير: البيانات على القرص داخل VMs ستصبح غير قابلة     ║"
+    echo "║     للقراءة بعد الإغلاق.                                 ║"
+    echo "╚═══════════════════════════════════════════════════════════╝"
+    echo ""
+    read -p "هل تريد تفعيل ephemeral على pools وجميع الـ VMs؟ (y/n): " ENABLE_EPHEMERAL
+
+    if [[ "$ENABLE_EPHEMERAL" == "y" || "$ENABLE_EPHEMERAL" == "Y" ]]; then
+        # تفعيل ephemeral_volatile على الـ pools
+        info "تفعيل ephemeral_volatile على الـ pools..."
+        for pool in vm-pool varlibqubes; do
+            if qvm-pool ls 2>/dev/null | grep -q "$pool"; then
+                qvm-pool set "$pool" -o ephemeral_volatile=True 2>/dev/null && ok "تم تفعيل ephemeral_volatile على $pool" || warn "فشل تفعيل ephemeral_volatile على $pool"
+            else
+                warn "الـ pool $pool غير موجود، تخطي"
+            fi
+        done
+
+        # تفعيل ephemeral على جميع الـ VMs
+        info "تفعيل ephemeral على جميع الـ VMs..."
+        for vm in $(qvm-ls --raw-list 2>/dev/null); do
+            vm_clean=$(echo "$vm" | tr -d '[:space:]')
+            # تخطي dom0 والقوالب (templates)
+            if [ "$vm_clean" = "dom0" ]; then continue; fi
+            if qvm-prefs "$vm_clean" template 2>/dev/null | grep -q "template_for_dispvms"; then continue; fi
+
+            if qvm-volume set "$vm_clean":volatile ephemeral true 2>/dev/null; then
+                echo "   ✅ $vm_clean: تم تفعيل ephemeral"
+            else
+                warn "   ⏭️  $vm_clean: لا يدعم ephemeral (تخطي)"
+            fi
+        done
+        ok "تم تفعيل ephemeral على pools وجميع الـ VMs"
+    else
+        info "تم تخطي تفعيل ephemeral"
+    fi
+
     pause
 }
-
 # ========
 # 1ج. استعادة GRUB من النسخة الاحتياطية
 # ========
