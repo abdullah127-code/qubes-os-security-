@@ -1805,6 +1805,40 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>✅ ملاحظة لعام 2026:</strong> LUKS2 + Argon2id هو الخيار الافتراضي والوحيد الموصى به في جميع توزيعات Linux الحديثة. استخدم الأمر <code>sudo cryptsetup luksDump /dev/sdX | grep Argon2</code> للتأكد من تفعيله.
     </div>
 </div>
+    <div class="card" style="margin-top:20px; border-right: 6px solid #4caf50;">
+    <div class="card-header" style="color: #88ff88;">
+        <i class="fas fa-terminal"></i> 🛡️ أمر إنشاء حاوية LUKS2 المحصنة
+    </div>
+    <p>أمر مختصر لإنشاء حاوية LUKS2 مشفرة بأعلى معايير الحماية ضد هجمات كروت الشاشة (GPU). تستخدم <strong>Argon2id</strong> مع ذاكرة 4 جيجابايت ووقت اشتقاق 8 ثوانٍ.</p>
+    
+    <code class="safe" onclick="copyText(this)" style="display: block; word-break: break-all;">sudo cryptsetup luksFormat --type luks2 --pbkdf argon2id --pbkdf-memory 4194304 --iter-time 8000 /home/user/data.img</code>
+    
+    <div class="note" style="margin-top: 15px;">
+        <i class="fas fa-info-circle"></i>
+        <strong>🔍 شرح المعاملات:</strong>
+        <ul style="margin-top: 10px; margin-right: 20px;">
+            <li><strong><code>--type luks2</code></strong> — استخدام الإصدار الحديث من LUKS (يدعم Argon2id).</li>
+            <li><strong><code>--pbkdf argon2id</code></strong> — خوارزمية مقاومة لهجمات GPU عبر استهلاك الذاكرة.</li>
+            <li><strong><code>--pbkdf-memory 4194304</code></strong> — تخصيص 4 جيجابايت من RAM لعملية اشتقاق المفتاح.</li>
+            <li><strong><code>--iter-time 8000</code></strong> — وقت اشتقاق ~8 ثوانٍ على جهازك (لنفس الذاكرة).</li>
+        </ul>
+    </div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-shield-alt"></i>
+        <strong>🛡️ لماذا هذا آمن؟</strong>
+        <ul style="margin-top: 8px; margin-right: 20px;">
+            <li>• 4GB ذاكرة تمنع هجمات GPU لأن كل تخمين يحتاج 4GB منفصلة.</li>
+            <li>• كرت شاشة بـ 24GB VRAM يستطيع تشغيل 6 تخمينات فقط في نفس الوقت.</li>
+            <li>• سرعة الهجوم تنهار إلى أقل من 25 تخميناً في الثانية (مقابل مليارات التخمينات بدون Argon2id).</li>
+        </ul>
+    </div>
+    
+    <div class="note" style="margin-top: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>⚠️ متطلبات:</strong> يحتاج الجهاز إلى 4 جيجابايت RAM حرة على الأقل وقت إنشاء الحاوية وفتحها.
+    </div>
+</div>
 
     <!-- ======== شرح VC+LUKS ======== -->
     <div style="background: #2a1a2a; padding: 20px; border-radius: 15px; margin-top: 20px; border-right: 5px solid #cc66cc;">
@@ -1926,7 +1960,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </table>
         </div>
 
-        <div class="note" style="margin-top: 15px; padding: 15px; background: #e8f4f8; border-right: 5px solid #3498db;">
+        <div class="note" style="margin-top: 15px; padding: 15px; background: #1a3a3a; border-right: 5px solid #66ccff; color: white;">
             <i class="fas fa-lightbulb"></i> <strong>💡 الخلاصة:</strong><br>
             • <strong>LUKS فقط:</strong> الخيار الأمثل لـ 90% من المستخدمين على Qubes/Linux (أسرع بـ 5-10 مرات، يدعم Integrity، Argon2id).<br>
             • <strong>VeraCrypt فقط:</strong> مناسب لمن يحتاج الإنكار المعقول أو التوافق مع Windows.<br>
@@ -1977,33 +2011,33 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </div>
         </div>
         
-        <h4><i class="fas fa-shield-alt"></i> 🛡️ كيف يتم ذلك؟ (نظرة عامة بدون أوامر)</h4>
-        <ol style="margin-right: 20px; line-height: 2;">
-            <li><strong>تقسيم الفلاشة:</strong> باستخدام أداة تقسيم الأقراص (مثل GNOME Disks أو GParted)، تُنشئ جدول أقسام جديد.</li>
-            <li><strong>القسم الأول (المرئي):</strong> أنشئ قسماً بحجم 30GB في بداية الفلاشة، وهيئه بنظام FAT32 أو exFAT. هذا القسم سيكون مرئياً على أي جهاز. املأه بملفات عادية.</li>
-            <li><strong>القسم الثاني (المخفي):</strong> المساحة المتبقية (2GB تقريباً) في نهاية الفلاشة — <strong>لا تهيئها بأي نظام ملفات</strong>. بدلاً من ذلك، استخدم VeraCrypt لإنشاء حاوية مشفرة على هذا القسم الخام، ثم طبق LUKS داخلها.</li>
-            <li><strong>النتيجة:</strong> عند توصيل الفلاشة، يظهر القسم الأول فقط. القسم الثاني لا يظهر لأنه لا يحمل نظام ملفات معروفاً. حتى أدوات استعادة البيانات لن تجد شيئاً ذا معنى.</li>
-        </ol>
-        
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-lightbulb"></i> <strong>💡 لماذا هذا أفضل من تشفير الفلاشة بالكامل؟</strong>
-            <ul style="margin-right: 20px; margin-top: 8px;">
-                <li>• <strong>التمويه:</strong> الفلاشة تبدو طبيعية بمحتويات عادية، فلا تثير الشك.</li>
-                <li>• <strong>الإنكار:</strong> حتى لو تم فحص الفلاشة، المساحة غير المهيأة تبدو طبيعية (بقايا تقسيم سابق أو مساحة محجوزة).</li>
-                <li>• <strong>أمان البيانات:</strong> القسم المشفر لا يُفتح إلا داخل Qubes (storage-vault)، ثم يُمرر إلى ram-work.</li>
-            </ul>
-        </div>
-        
-        <div class="note-critical" style="margin-top: 10px;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <strong>⚠️ تذكر:</strong>
-            <ul style="margin-right: 20px; margin-top: 8px;">
-                <li>• لا تهيّئ القسم الثاني أبداً — اتركه كمساحة خام (unformatted).</li>
-                <li>• استخدم VeraCrypt على الجهاز الخام مباشرة، ثم طبق LUKS داخله.</li>
-                <li>• على SSD، قد تكشف تقنية TRIM وجود بيانات مشفرة في المساحة "غير المهيأة". استخدم هذه الطريقة على فلاشات USB عادية (HDD أو Flash) إن أمكن.</li>
-            </ul>
-        </div>
+          <h4><i class="fas fa-shield-alt"></i> 🛡️ كيف يتم ذلك؟ (نظرة عامة بدون أوامر)</h4>
+    <ol style="margin-right: 20px; line-height: 2;">
+        <li><strong>تقسيم الفلاشة:</strong> باستخدام أداة تقسيم الأقراص (مثل GNOME Disks أو GParted)، تُنشئ جدول أقسام جديد.</li>
+        <li><strong>القسم الأول (المرئي):</strong> 30GB في بداية الفلاشة، مهيأ بنظام FAT32/exFAT، مملوء بملفات عادية. يظهر تلقائياً على أي جهاز.</li>
+        <li><strong>القسم الثاني (المخفي):</strong> المساحة المتبقية (2GB) — هيئها مؤقتاً بنظام FAT32 <strong>فقط</strong> لكي يتعرف عليها VeraCrypt. ثم شفرها عبر خيار "Encrypt a non-system partition". بعد التشفير، ستتحول إلى بيانات عشوائية غير قابلة للتمييز. ثم طبق LUKس داخلها للتشفير المزدوج.</li>
+        <li><strong>النتيجة:</strong> عند توصيل الفلاشة، يظهر القسم العادي فقط. القسم المشفر لا يحمل أي توقيع لنظام ملفات، ويبدو كمساحة فارغة أو تالفة.</li>
+    </ol>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-lightbulb"></i> <strong>💡 لماذا هذا التمويه فعال؟</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li>• <strong>التمويه:</strong> الفلاشة تبدو طبيعية بمحتويات اعتيادية، مما يزيل الشك.</li>
+            <li>• <strong>الإنكار المعقول:</strong> المساحة "غير المهيأة" في المؤخرة تبدو كبقايا تقسيم قديم أو مساحة محجوزة.</li>
+            <li>• <strong>عزل الأمان:</strong> القسم المشفر لا يُفتح إلا داخل بيئة Qubes المعزولة (storage-vault)، وتُمرر بياناته إلى ذاكرة RAM المؤقتة فقط.</li>
+        </ul>
     </div>
+    
+    <div class="note-critical" style="margin-top: 10px;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>⚠️ تذكير:</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li>• التهيئة المؤقتة للقسم الثاني هي حيلة ضرورية فقط لإظهاره في VeraCrypt. التشفير اللاحق يمحو هذه التهيئة.</li>
+            <li>• بعد تشفير القسم بـ VeraCrypt، افتحه (بدون توصيل) ثم طبق LUKS لتحصل على مزايا التشفير المزدوج.</li>
+            <li>• تحذير SSD: تقنية TRIM تجعل هذه الطريقة أقل أمناً على الأقراص الإلكترونية. استخدم فلاشات USB تقليدية للحصول على أفضل تمويه.</li>
+        </ul>
+    </div>
+</div>
     <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
     <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
         <div class="card-header" style="color: #ce93d8;">
