@@ -1839,6 +1839,99 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>⚠️ متطلبات:</strong> يحتاج الجهاز إلى 4 جيجابايت RAM حرة على الأقل وقت إنشاء الحاوية وفتحها.
     </div>
 </div>
+<div class="card" style="margin-top:20px; border-right: 6px solid #4caf50;">
+    <div class="card-header" style="color: #88ff88;">
+        <i class="fas fa-terminal"></i> 🛡️ سكريبت إنشاء حاوية LUKS2 المحصنة
+    </div>
+    <p>سكريبت تفاعلي بسيط لإنشاء حاوية LUKS2 مشفرة بأعلى معايير الحماية. يطلب منك المسار، الحجم، الرام، والوقت، ثم ينشئ الحاوية تلقائياً.</p>
+    
+    <button class="btn-copy-all" onclick="copyScript('setup-luks-script')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت والتشغيل</button>
+    <pre class="code-block" id="setup-luks-script">cat > setup-luks.sh << 'EOF'
+#!/bin/bash
+# ========
+# سكريبت إنشاء حاوية LUKS2 مشفرة
+# ========
+
+G='\033[0;32m'
+Y='\033[1;33m'
+R='\033[0;31m'
+N='\033[0m'
+
+ok() { echo -e "${G}✓ $1${N}"; }
+info() { echo -e "${Y}ℹ $1${N}"; }
+err() { echo -e "${R}✗ $1${N}"; exit 1; }
+
+clear
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║        🔐 إنشاء حاوية LUKS2 مشفرة - سكريبت تفاعلي         ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+
+read -r -p "📁 مسار ملف الحاوية: " CONTAINER_PATH
+CONTAINER_PATH="${CONTAINER_PATH/#\~/$HOME}"
+[ -z "$CONTAINER_PATH" ] && err "يجب تحديد المسار"
+
+read -p "📦 حجم الحاوية بالميجابايت: " SIZE_MB
+[ -z "$SIZE_MB" ] && err "يجب تحديد الحجم"
+! [[ "$SIZE_MB" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
+
+read -p "🧠 حجم الرام بالجيجابايت: " RAM_GB
+[ -z "$RAM_GB" ] && err "يجب تحديد حجم الرام"
+! [[ "$RAM_GB" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
+
+read -p "⏱️  وقت اشتقاق المفتاح بالثواني: " ITER_SEC
+[ -z "$ITER_SEC" ] && err "يجب تحديد الوقت"
+! [[ "$ITER_SEC" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
+
+RAM_KB=$((RAM_GB * 1024 * 1024))
+ITER_MS=$((ITER_SEC * 1000))
+
+echo ""
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║                    📋 ملخص الإعدادات:                      ║"
+echo "╠═══════════════════════════════════════════════════════════╣"
+echo "║  المسار:   $CONTAINER_PATH"
+echo "║  الحجم:    ${SIZE_MB}MB"
+echo "║  الرام:    ${RAM_GB}GB"
+echo "║  الوقت:    ${ITER_SEC} ثوانٍ"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+
+read -p "هل تريد المتابعة؟ (y/n): " CONFIRM
+[[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]] && { echo "تم الإلغاء"; exit 0; }
+
+echo ""
+info "إنشاء ملف الحاوية بحجم ${SIZE_MB}MB..."
+dd if=/dev/urandom of="$CONTAINER_PATH" bs=1M count="$SIZE_MB" status=progress
+echo ""
+ok "تم إنشاء ملف الحاوية"
+
+echo ""
+info "تهيئة LUKS2 مع Argon2id..."
+sudo bash -c "cryptsetup luksFormat \
+    --type luks2 \
+    --pbkdf argon2id \
+    --pbkdf-memory $RAM_KB \
+    --iter-time $ITER_MS \
+    $CONTAINER_PATH"
+
+echo ""
+ok "اكتمل بنجاح"
+EOF
+
+chmod +x setup-luks.sh
+./setup-luks.sh</pre>
+
+    <div class="note" style="margin-top: 15px;">
+        <i class="fas fa-info-circle"></i>
+        <strong>🔍 ما يفعله السكريبت:</strong>
+        <ul style="margin-top: 10px; margin-right: 20px;">
+            <li>يسألك عن مسار الحاوية، حجمها، الرام المخصصة، ووقت الاشتقاق.</li>
+            <li>ينشئ ملفاً بالحجم المطلوب مملوءاً ببيانات عشوائية (<code>/dev/urandom</code>).</li>
+            <li>يهيئ الملف كحاوية LUKS2 مع Argon2id بالإعدادات التي حددتها.</li>
+        </ul>
+    </div>
+</div>
 
     <!-- ======== شرح VC+LUKS ======== -->
     <div style="background: #2a1a2a; padding: 20px; border-radius: 15px; margin-top: 20px; border-right: 5px solid #cc66cc;">
@@ -2374,18 +2467,7 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
             </tr>
             <tr>
                 <td style="padding: 10px;" colspan="2">
-                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
-    <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
-        <div class="card-header" style="color: #ce93d8;">
-            <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
-        </div>
-        <p><strong>الفكرة:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-                <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
-                <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
-                <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
-            </div>
+                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>
             <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
                 <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
                 <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
