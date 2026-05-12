@@ -1805,53 +1805,45 @@ Bridge snowflake 192.0.2.3:80 2B280B23E1107BB62ABFC40DDCC8824814F80A72 fingerpri
         <strong>✅ ملاحظة لعام 2026:</strong> LUKS2 + Argon2id هو الخيار الافتراضي والوحيد الموصى به في جميع توزيعات Linux الحديثة. استخدم الأمر <code>sudo cryptsetup luksDump /dev/sdX | grep Argon2</code> للتأكد من تفعيله.
     </div>
 </div>
-    <div class="card" style="margin-top:20px; border-right: 6px solid #4caf50;">
+<div class="card" style="margin-top:20px; border-right: 6px solid #4caf50;">
     <div class="card-header" style="color: #88ff88;">
-        <i class="fas fa-terminal"></i> 🛡️ أمر إنشاء حاوية LUKS2 المحصنة
+        <i class="fas fa-terminal"></i> 🛡️ إنشاء حاوية LUKS2 المحصنة
     </div>
-    <p>أمر مختصر لإنشاء حاوية LUKS2 مشفرة بأعلى معايير الحماية ضد هجمات كروت الشاشة (GPU). تستخدم <strong>Argon2id</strong> مع ذاكرة 4 جيجابايت ووقت اشتقاق 8 ثوانٍ.</p>
+    <p>طريقتان لإنشاء حاوية LUKS2 مشفرة بأعلى معايير الحماية ضد هجمات كروت الشاشة (GPU). اختر الأنسب لك: أمر مباشر أو سكريبت تفاعلي.</p>
     
+    <!-- ======== تنبيه الذاكرة ======== -->
+    <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #1a3a3a; border-right-color: #ffaa33;">
+        <i class="fas fa-lightbulb"></i>
+        <strong>💡 توصية هامة بخصوص الذاكرة:</strong> إذا كنت تستخدم 4 جيجابايت من الرام لـ Argon2id، يُفضّل رفع الحد الأقصى لذاكرة كيوب التخزين (storage-vault) إلى 6 جيجابايت أو أكثر. هذا يعطيه مساحة كافية لاستيعاب 4GB المطلوبة لاشتقاق المفتاح + 2GB للنظام.
+        <br><br>
+        <strong>🟢 تنبيه:</strong> الكيوب <strong>لن يأخذ الرام إلا إذا احتاجها فعلاً</strong>. هذا مجرد حد أقصى (maxmem)، وليس حجزاً إجبارياً. في الاستخدام العادي، سيبقى استهلاك الرام أقل من ذلك بكثير.
+        <br><br>
+        <strong>للتطبيق في dom0:</strong>
+        <code class="safe" onclick="copyText(this)" style="display: block; margin-top: 8px;">qvm-prefs storage-vault maxmem 6000</code>
+    </div>
+    
+    <!-- ======== الطريقة الأولى: أمر مباشر ======== -->
+    <h4 style="color: #ffd966; margin-top: 25px;">🔹 الطريقة الأولى: أمر مباشر (للخبراء)</h4>
     <code class="safe" onclick="copyText(this)" style="display: block; word-break: break-all;">sudo cryptsetup luksFormat --type luks2 --pbkdf argon2id --pbkdf-memory 4194304 --iter-time 8000 /home/user/data.img</code>
     
-    <div class="note" style="margin-top: 15px;">
+    <div class="note" style="margin-top: 10px;">
         <i class="fas fa-info-circle"></i>
         <strong>🔍 شرح المعاملات:</strong>
         <ul style="margin-top: 10px; margin-right: 20px;">
-            <li><strong><code>--type luks2</code></strong> — استخدام الإصدار الحديث من LUKS (يدعم Argon2id).</li>
-            <li><strong><code>--pbkdf argon2id</code></strong> — خوارزمية مقاومة لهجمات GPU عبر استهلاك الذاكرة.</li>
-            <li><strong><code>--pbkdf-memory 4194304</code></strong> — تخصيص 4 جيجابايت من RAM لعملية اشتقاق المفتاح.</li>
-            <li><strong><code>--iter-time 8000</code></strong> — وقت اشتقاق ~8 ثوانٍ على جهازك (لنفس الذاكرة).</li>
+            <li><strong><code>--type luks2</code></strong> — استخدام الإصدار الحديث من LUKS.</li>
+            <li><strong><code>--pbkdf argon2id</code></strong> — خوارزمية مقاومة لهجمات GPU.</li>
+            <li><strong><code>--pbkdf-memory 4194304</code></strong> — تخصيص 4 جيجابايت من RAM لاشتقاق المفتاح.</li>
+            <li><strong><code>--iter-time 8000</code></strong> — وقت اشتقاق ~8 ثوانٍ.</li>
         </ul>
     </div>
     
-    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-shield-alt"></i>
-        <strong>🛡️ لماذا هذا آمن؟</strong>
-        <ul style="margin-top: 8px; margin-right: 20px;">
-            <li>• 4GB ذاكرة تمنع هجمات GPU لأن كل تخمين يحتاج 4GB منفصلة.</li>
-            <li>• كرت شاشة بـ 24GB VRAM يستطيع تشغيل 6 تخمينات فقط في نفس الوقت.</li>
-            <li>• سرعة الهجوم تنهار إلى أقل من 25 تخميناً في الثانية (مقابل مليارات التخمينات بدون Argon2id).</li>
-        </ul>
-    </div>
+    <!-- ======== الطريقة الثانية: سكريبت تفاعلي ======== -->
+    <h4 style="color: #ffd966; margin-top: 25px;">🔹 الطريقة الثانية: سكريبت تفاعلي (موصى به)</h4>
+    <p>سكريبت يسألك عن المسار، الحجم، الرام، والوقت، ثم ينشئ الحاوية تلقائياً. يدعم إنشاء حاوية جديدة أو تشفير ملف موجود مسبقاً.</p>
     
-    <div class="note" style="margin-top: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ متطلبات:</strong> يحتاج الجهاز إلى 4 جيجابايت RAM حرة على الأقل وقت إنشاء الحاوية وفتحها.
-    </div>
-</div>
-<div class="card" style="margin-top:20px; border-right: 6px solid #4caf50;">
-    <div class="card-header" style="color: #88ff88;">
-        <i class="fas fa-terminal"></i> 🛡️ سكريبت إنشاء حاوية LUKS2 المحصنة
-    </div>
-    <p>سكريبت تفاعلي بسيط لإنشاء حاوية LUKS2 مشفرة بأعلى معايير الحماية. يطلب منك المسار، الحجم، الرام، والوقت، ثم ينشئ الحاوية تلقائياً.</p>
-    
-    <button class="btn-copy-all" onclick="copyScript('setup-luks-script')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت والتشغيل</button>
-    <pre class="code-block" id="setup-luks-script">cat > setup-luks.sh << 'EOF'
+    <button class="btn-copy-all" onclick="copyScript('setup-luks-script')"><i class="fas fa-copy"></i> نسخ السكريبت جاهز للتشغيل</button>
+    <pre class="code-block" id="setup-luks-script" style="display:none;">cat > /tmp/luks-setup.sh << 'EOF'
 #!/bin/bash
-# ========
-# سكريبت إنشاء حاوية LUKS2 مشفرة
-# ========
-
 G='\033[0;32m'
 Y='\033[1;33m'
 R='\033[0;31m'
@@ -1861,110 +1853,132 @@ ok() { echo -e "${G}✓ $1${N}"; }
 info() { echo -e "${Y}ℹ $1${N}"; }
 err() { echo -e "${R}✗ $1${N}"; exit 1; }
 
+# تنظيف المسار من علامات التنصيص
+clean_path() {
+    local path="$1"
+    path=$(echo "$path" | sed "s/^['\"]//;s/['\"]$//")
+    path="${path/#\~/$HOME}"
+    echo "$path"
+}
+
 clear
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║        🔐 إنشاء حاوية LUKS2 مشفرة - سكريبت تفاعلي         ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
+echo "╔═══════════════════════════════════╗"
+echo "║    🔐 مدير تشفير LUKS2            ║"
+echo "╚═══════════════════════════════════╝"
 echo ""
-
-read -r -p "📁 مسار ملف الحاوية: " CONTAINER_PATH
-CONTAINER_PATH="${CONTAINER_PATH/#\~/$HOME}"
-[ -z "$CONTAINER_PATH" ] && err "يجب تحديد المسار"
-
-read -p "📦 حجم الحاوية بالميجابايت: " SIZE_MB
-[ -z "$SIZE_MB" ] && err "يجب تحديد الحجم"
-! [[ "$SIZE_MB" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
-
-read -p "🧠 حجم الرام بالجيجابايت: " RAM_GB
-[ -z "$RAM_GB" ] && err "يجب تحديد حجم الرام"
-! [[ "$RAM_GB" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
-
-read -p "⏱️  وقت اشتقاق المفتاح بالثواني: " ITER_SEC
-[ -z "$ITER_SEC" ] && err "يجب تحديد الوقت"
-! [[ "$ITER_SEC" =~ ^[0-9]+$ ]] && err "يجب إدخال رقم صحيح"
-
-RAM_KB=$((RAM_GB * 1024 * 1024))
-ITER_MS=$((ITER_SEC * 1000))
-
+echo "1) إنشاء حاوية جديدة"
+echo "2) تهيئة جهاز/ملف موجود"
+echo "0) خروج"
 echo ""
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║                    📋 ملخص الإعدادات:                      ║"
-echo "╠═══════════════════════════════════════════════════════════╣"
-echo "║  المسار:   $CONTAINER_PATH"
-echo "║  الحجم:    ${SIZE_MB}MB"
-echo "║  الرام:    ${RAM_GB}GB"
-echo "║  الوقت:    ${ITER_SEC} ثوانٍ"
-echo "╚═══════════════════════════════════════════════════════════╝"
-echo ""
+read -p "ادخل الخيار: " OPTION
 
-read -p "هل تريد المتابعة؟ (y/n): " CONFIRM
-[[ "$CONFIRM" != "y" && "$CONFIRM" != "Y" ]] && { echo "تم الإلغاء"; exit 0; }
-
-echo ""
-info "إنشاء ملف الحاوية بحجم ${SIZE_MB}MB..."
-dd if=/dev/urandom of="$CONTAINER_PATH" bs=1M count="$SIZE_MB" status=progress
-echo ""
-ok "تم إنشاء ملف الحاوية"
-
-echo ""
-info "تهيئة LUKS2 مع Argon2id..."
-sudo bash -c "cryptsetup luksFormat \
-    --type luks2 \
-    --pbkdf argon2id \
-    --pbkdf-memory $RAM_KB \
-    --iter-time $ITER_MS \
-    $CONTAINER_PATH"
-
-echo ""
-ok "اكتمل بنجاح"
+if [ "$OPTION" = "0" ]; then
+    echo "تم الخروج"
+    exit 0
+elif [ "$OPTION" = "1" ]; then
+    echo ""
+    echo "=== إنشاء حاوية جديدة ==="
+    echo ""
+    
+    read -r -p "مسار ملف الحاوية: " CONTAINER_PATH
+    CONTAINER_PATH=$(clean_path "$CONTAINER_PATH")
+    
+    read -p "الحجم بالميجابايت: " SIZE_MB
+    
+    read -p "الرام بالجيجابايت: " RAM_GB
+    
+    read -p "وقت اشتقاق المفتاح بالثواني: " ITER_SEC
+    
+    RAM_KB=$((RAM_GB * 1024 * 1024))
+    ITER_MS=$((ITER_SEC * 1000))
+    
+    echo ""
+    echo "ملخص الاعدادات:"
+    echo "المسار: $CONTAINER_PATH"
+    echo "الحجم: ${SIZE_MB}MB"
+    echo "الرام: ${RAM_GB}GB"
+    echo "الوقت: ${ITER_SEC} ثواني"
+    echo ""
+    
+    read -p "متابعة؟ (y/n): " CONFIRM
+    if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+        echo "تم الالغاء"
+        exit 0
+    fi
+    
+    echo ""
+    info "جاري انشاء ملف الحاوية..."
+    dd if=/dev/urandom of="$CONTAINER_PATH" bs=1M count="$SIZE_MB" status=progress
+    ok "تم انشاء الملف"
+    
+    echo ""
+    info "جاري تهيئة LUKS2..."
+    sudo cryptsetup luksFormat --type luks2 --pbkdf argon2id --pbkdf-memory $RAM_KB --iter-time $ITER_MS "$CONTAINER_PATH"
+    ok "اكتمل التشفير"
+    
+    echo ""
+    echo "=== معلومات LUKS2 الفعلية ==="
+    echo -e "${Y}وقت التكرار المطلوب: ${ITER_SEC} ثواني${N}"
+    sudo cryptsetup luksDump "$CONTAINER_PATH" | grep -E "(Memory|Iterations|Time cost|PBKDF|Threads)"
+    
+elif [ "$OPTION" = "2" ]; then
+    echo ""
+    echo "=== تهيئة جهاز/ملف موجود ==="
+    echo ""
+    
+    read -r -p "مسار الجهاز او الملف: " CONTAINER_PATH
+    CONTAINER_PATH=$(clean_path "$CONTAINER_PATH")
+    
+    read -p "الرام بالجيجابايت: " RAM_GB
+    
+    read -p "وقت اشتقاق المفتاح بالثواني: " ITER_SEC
+    
+    RAM_KB=$((RAM_GB * 1024 * 1024))
+    ITER_MS=$((ITER_SEC * 1000))
+    
+    echo ""
+    echo "ملخص الاعدادات:"
+    echo "المسار: $CONTAINER_PATH"
+    echo "الرام: ${RAM_GB}GB"
+    echo "الوقت: ${ITER_SEC} ثواني"
+    echo ""
+    
+    read -p "متابعة؟ (y/n): " CONFIRM
+    if [ "$CONFIRM" != "y" ] && [ "$CONFIRM" != "Y" ]; then
+        echo "تم الالغاء"
+        exit 0
+    fi
+    
+    echo ""
+    info "جاري تهيئة LUKS2..."
+    sudo cryptsetup luksFormat --type luks2 --pbkdf argon2id --pbkdf-memory $RAM_KB --iter-time $ITER_MS "$CONTAINER_PATH"
+    ok "اكتمل التشفير"
+    
+    echo ""
+    echo "=== معلومات LUKS2 الفعلية ==="
+    echo -e "${Y}وقت التكرار المطلوب: ${ITER_SEC} ثواني${N}"
+    sudo cryptsetup luksDump "$CONTAINER_PATH" | grep -E "(Memory|Iterations|Time cost|PBKDF|Threads)"
+    
+else
+    err "خيار غير صالح"
+fi
 EOF
+chmod +x /tmp/luks-setup.sh
+bash /tmp/luks-setup.sh
+rm /tmp/luks-setup.sh</pre>
 
-chmod +x setup-luks.sh
-./setup-luks.sh</pre>
-
-    <div class="note" style="margin-top: 15px;">
-        <i class="fas fa-info-circle"></i>
-        <strong>🔍 ما يفعله السكريبت:</strong>
-        <ul style="margin-top: 10px; margin-right: 20px;">
-            <li>يسألك عن مسار الحاوية، حجمها، الرام المخصصة، ووقت الاشتقاق.</li>
-            <li>ينشئ ملفاً بالحجم المطلوب مملوءاً ببيانات عشوائية (<code>/dev/urandom</code>).</li>
-            <li>يهيئ الملف كحاوية LUKS2 مع Argon2id بالإعدادات التي حددتها.</li>
-        </ul>
+    <!-- ======== الطريقة الثالثة: GNOME Disks ======== -->
+    <h4 style="color: #ffd966; margin-top: 25px;">🔹 الطريقة الثالثة: GNOME Disks (للمبتدئين)</h4>
+    <p>يمكنك استخدام أداة <strong>GNOME Disks</strong> المدمجة للتهيئة السريعة. لكن انتبه: الأداة لا تسمح باختيار Argon2id (تستخدم الإعدادات الافتراضية فقط)، لذا يفضل استخدام الطريقتين أعلاه للحماية القصوى.</p>
+    <div class="note-critical" style="margin-top: 10px;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>⚠️ تنبيه مهم عند استخدام GNOME Disks لفتح حاوية:</strong> عند فتح قسم LUKS، يظهر مربع حوار به خيارات حفظ كلمة المرور. <strong>تأكد من اختيار "Forget password immediately"</strong> (انسَ كلمة المرور فوراً) وليس الخيار الافتراضي "Remember password until you logout" الذي يحفظ كلمة المرور في الذاكرة حتى تسجيل الخروج.
     </div>
 </div>
-
-    <!-- ======== شرح VC+LUKS ======== -->
-    <div style="background: #2a1a2a; padding: 20px; border-radius: 15px; margin-top: 20px; border-right: 5px solid #cc66cc;">
-        <h4 style="color: #cc66cc; margin-top: 0;"><i class="fas fa-layer-group"></i> 🧅 VC+LUKS (التشفير المزدوج المتداخل)</h4>
-        <p><strong>ما هو VC+LUKS؟</strong></p>
-        <p>VC+LUKS هو سيناريو متقدم يتم فيه <strong>تشفير البيانات مرتين متتاليتين</strong>: الطبقة الخارجية VeraCrypt، والطبقة الداخلية LUKS. <strong>الترتيب الصحيح:</strong> تُنشأ حاوية VeraCrypt أولاً، ثم يُنشأ تشفير LUKS داخل الحاوية المفتوحة.</p>
-        
-        <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
-            <i class="fas fa-arrow-right"></i>
-            <strong>⚠️ الترتيب:</strong> VeraCrypt (الخارجي) → LUKS (الداخلي). VC توفر الإنكار المعقول، بينما LUKS2 + Argon2id توفر الحماية من هجمات GPU.
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-            <div style="background: #1a2a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #66cc66;">
-                <h5 style="color: #66cc66; margin-top: 0;">🟢 لماذا VC+LUKS؟</h5>
-                <ul style="margin-right: 20px; line-height: 1.8;">
-                    <li>• <strong>الإنكار المعقول + مقاومة GPU:</strong> VC يوفر الإنكار، LUKS2 يوفر Argon2id.</li>
-                    <li>• <strong>طبقتان مستقلتان:</strong> اختراق إحداهما لا يكفي للوصول للبيانات.</li>
-                </ul>
-            </div>
-            <div style="background: #2a1a1a; padding: 15px; border-radius: 12px; border-right: 4px solid #ff9944;">
-                <h5 style="color: #ff9944; margin-top: 0;">⚠️ تحذيرات:</h5>
-                <ul style="margin-right: 20px; line-height: 1.8;">
-                    <li>• <strong>أداء أقل:</strong> طبقتان تشفير = أبطأ من طبقة واحدة.</li>
-                    <li>• <strong>تعقيد أعلى:</strong> كلمتا مرور ومفتاحان مختلفان.</li>
-                    <li>• <strong>ليس متعدد المنصات:</strong> الطبقة الداخلية LUKS لا تعمل على Windows.</li>
-                </ul>
-            </div>
-        </div>
         
         <!-- خطوات إنشاء VC+LUKS العملية -->
         <div style="background: #0a1a2a; padding: 18px; border-radius: 12px; margin-top: 15px;">
-            <h5 style="color: #66ccff; margin-top: 0;">🛠️ خطوات إنشاء VC+LUKS العملية (VeraCrypt أولاً ثم LUKS داخله)</h5>
+            <h3 style="color: #66ccff; margin-top: 0;">🛠️ خطوات إنشاء VC+LUKS العملية (VeraCrypt أولاً ثم LUKS داخله)</h3>
             <p><strong>المرحلة الأولى: إنشاء حاوية VeraCrypt الخارجية</strong></p>
             <ol style="margin-right: 25px; line-height: 2;">
                 <li>افتح VeraCrypt واختر <strong>Create Volume</strong>.</li>
@@ -1983,8 +1997,26 @@ chmod +x setup-luks.sh
             <p style="margin-top: 15px;"><strong>المرحلة الثالثة: إنشاء LUKS داخل الحاوية المفتوحة</strong></p>
             <p>استخدم أداة GNOME Disks أو الأمر <code>cryptsetup</code> لتهيئة الجهاز الظاهر (<code>/dev/mapper/veracrypt1</code>) كـ LUKS2 مع Argon2id. أدخل كلمة مرور <strong>ثانية مختلفة وقوية</strong> لـ LUKS (الطبقة الداخلية).</p>
         </div>
+    
+<!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
+<div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
+    <div class="card-header" style="color: #ce93d8;">
+        <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
     </div>
-
+    <p><strong>الفكرة:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+            <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
+            <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
+            <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
+        </div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
+            <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
+            <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
+            <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
+        </div>
+    </div>
+</div>
     <!-- ======== جدول مقارنة شامل ======== -->
     <div style="background: #151525; padding: 18px; border-radius: 15px; margin-top: 20px;">
         <h4 style="color: #ffd966; margin-top: 0; margin-bottom: 15px;">
@@ -2131,24 +2163,7 @@ chmod +x setup-luks.sh
         </ul>
     </div>
 </div>
-    <!-- ======== بطاقة: التخزين المزدوج - صندوق الأمانات ======== -->
-    <div class="card" style="margin-top: 20px; border-right: 6px solid #9c27b0;">
-        <div class="card-header" style="color: #ce93d8;">
-            <i class="fas fa-box-open"></i> 📦 صندوق الأمانات - التخزين المزدوج (VeraCrypt + LUKS)
-        </div>
-        <p><strong>الفكرة:</strong> طبقة دفاع ضد الإكراه القانوني (Plausible Deniability).</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
-            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-                <h4><i class="fas fa-lock"></i> ماذا يرى الخصم إذا أرغمك؟</h4>
-                <p>تدخل كلمة مرور "الفخ" (Decoy Password) ← يظهر له ملفات عادية (أفلام، صور شخصية، مستندات عمل عادية).</p>
-                <p style="color: #4caf50; margin-top: 10px;">✅ لا يعرف بوجود البيانات الحساسة أصلاً.</p>
-            </div>
-            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-                <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
-                <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
-                <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
-            </div>
-        </div>
+
     <!-- ======== الطريقة الآمنة: فصل التخزين عن التنفيذ ======== -->
     <div class="card" style="margin-top: 20px;">
         <div class="card-header">
@@ -2192,16 +2207,16 @@ chmod +x setup-luks.sh
         <i class="fas fa-microchip"></i>
         <h3>🧠 إعداد فصل التخزين عن التنفيذ</h3>
     </div>
-    <p>لتطبيق فصل التخزين عن التنفيذ، تحتاج إلى ثلاثة مكونات. <strong>كيوب التخزين على القرص الصلب</strong> (يفتح التشفير فقط دون أن يثبته)، و<strong>كيوب التنفيذ في RAM</strong> (يثبت البيانات ويعمل عليها). يمكن تنفيذها دفعة واحدة عبر السكربت المساعد.</p>
+    <p>لتطبيق فصل التخزين عن التنفيذ، تحتاج إلى ثلاثة مكونات. <strong>كيوب التخزين زائل</strong> (يفتح التشفير فقط دون أن يثبته، ويختفي بعد الإغلاق)، و<strong>كيوب التنفيذ في RAM</strong> (يثبت البيانات ويعمل عليها). يمكن تنفيذها دفعة واحدة عبر السكربت المساعد.</p>
     
     <table class="comparison-table">
         <thead><tr><th>المكون</th><th>مكانه</th><th>وظيفته فقط</th><th>ما لا يفعله</th></tr></thead>
         <tbody>
             <tr>
-                <td><strong>كيوب التخزين</strong><br><small>(storage-vault)</small></td>
-                <td>🟡 <strong>على القرص الصلب</strong></td>
+                <td><strong>كيوب التخزين الزائل</strong><br><small>(storage-vault)</small></td>
+                <td>🟢 <strong>زائل (DispVM)</strong></td>
                 <td>يفتح تشفير VC+LUKS فقط — يدخل كلمة المرور ثم يتوقف</td>
-                <td>❌ لا يثبت (mount) أبداً — لا يرى الملفات — لا يلمس البيانات</td>
+                <td>❌ لا يثبت (mount) أبداً — لا يرى الملفات — لا يلمس البيانات — يختفي بعد الإغلاق</td>
             </tr>
             <tr>
                 <td><strong>RAM Pool</strong></td>
@@ -2220,14 +2235,14 @@ chmod +x setup-luks.sh
     
     <div style="background: #0d1b2a; padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center;">
         <p style="color: #ffd966; font-weight: bold;">🔑 لماذا هذا الفصل؟</p>
-        <p style="margin-top: 8px;"><strong>storage-vault</strong> (على القرص) يعرف كلمة المرور لكنه <strong>لا يرى البيانات</strong>.</p>
+        <p style="margin-top: 8px;"><strong>storage-vault</strong> (زائل) يعرف كلمة المرور لكنه <strong>لا يرى البيانات</strong> — ويختفي تماماً بعد الإغلاق.</p>
         <p><strong>ram-work</strong> (في RAM) يرى البيانات لكنه <strong>لا يعرف كلمة المرور</strong>.</p>
-        <p style="margin-top: 8px; color: #66ccff;">النتيجة: لا يوجد كيوب واحد يملك كلمة المرور + البيانات معاً.</p>
+        <p style="margin-top: 8px; color: #66ccff;">النتيجة: لا يوجد كيوب واحد يملك كلمة المرور + البيانات معاً. وكلا الكيوبين زائلان.</p>
     </div>
     
     <div class="note" style="margin-top: 15px; background: #1a3a3a; border-right-color: #66ccff;">
         <i class="fas fa-bolt"></i>
-        <strong>⚡ للتطبيق التلقائي:</strong> السكربت المساعد في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a> يقوم بإنشاء RAM Pool وكيوب ram-work <strong>دفعة واحدة</strong> (خيار RAM Pool). أما كيوب storage-vault فتنشئه أنت مرة واحدة فقط كنقطة دخول دائمة للتشفير.
+        <strong>⚡ للتطبيق التلقائي:</strong> السكربت المساعد في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11</a> يقوم بإنشاء RAM Pool وكيوب ram-work <strong>دفعة واحدة</strong> (خيار RAM Pool).
     </div>
 </div>
 
@@ -2467,13 +2482,7 @@ chmod +x setup-luks.sh
             </tr>
             <tr>
                 <td style="padding: 10px;" colspan="2">
-                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>
-            <div style="background: #1a2a3a; padding: 15px; border-radius: 15px;">
-                <h4><i class="fas fa-lock"></i> ماذا يوجد حقاً؟</h4>
-                <p>تدخل كلمة المرور الحقيقية ← يظهر LUKS داخلي يحوي بياناتك الحساسة (مفاتيح، محادثات، مستندات سرية).</p>
-                <p style="color: #ffaa33; margin-top: 10px;">⚠️ لا تستخدم هذه الطريقة على SSD إذا كان الإنكار المعقول ضرورياً (بسبب TRIM).</p>
-            </div>
-        </div></strong> في القائمة. يكتشف القرص تلقائيًا ويسألك عن الذاكرة (بالجيجابايت) والوقت (بالثواني) المطلوبين ⬆️</p>
+                    <p style="margin:5px 0; text-align:center; color:#66ccff;">⬆️ الخيار <strong>رقم 9</strong> في القائمة. يكتشف القرص تلقائيًا ويسألك عن الذاكرة (بالجيجابايت) والوقت (بالثواني) المطلوبين ⬆️</p>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid var(--border-color);">
@@ -2514,7 +2523,6 @@ chmod +x setup-luks.sh
             <i class="fas fa-exclamation-triangle"></i>
             <strong>⚠️ تذكّر:</strong> لا تترك فتحتين. بعد <code>luksAddKey</code> مباشرةً نفّذ <code>luksRemoveKey</code>. المهاجم يختار الأسهل دائمًا.
         </div>
-    </div>
     </div>
 </div>
 
@@ -5567,6 +5575,7 @@ setup_kernel_opts_vms() {
 
     pause
 }
+
 # ========
 # 1ج. استعادة GRUB من النسخة الاحتياطية
 # ========
