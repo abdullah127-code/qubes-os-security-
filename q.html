@@ -3250,7 +3250,6 @@ rm /tmp/luks-setup.sh</pre>
     <li>✅ <code>create-multi-ram-vm.sh</code> – ينشئ عدة أجهزة مع اختيار البوابات <span style="color: #4caf50;">(مع معلمات النواة الكاملة + إمكانية الحفظ)</span></li>
     <li>✅ <code>cleanup-ram-pool.sh</code> – يحذف جميع الأجهزة ويفرغ RAM pool</li>
     <li>✅ <code>ram-pool-status.sh</code> – يعرض حالة RAM pool</li>
-    <li>✅ <code>create-dvm-template.sh</code> – يستنسخ VM ويحوله إلى DVM Template مع تشفير زائل</li>
 </ul>
             
             <div class="note" style="margin-top: 20px; background: #1a3a3a;">
@@ -3709,31 +3708,31 @@ free -h</pre>
         </div>
     </div>
 
-    <!-- ======== القسم 3: tirdad - حماية إضافية للشبكة ======== -->
-    <!-- ======== بطاقة: tirdad والنواة الداخلية - نسخة محدثة ======== -->
-    <div class="card" style="margin-top: 25px; border-right: 6px solid #ff9800;">
-        <div class="card-header" style="color: #ffaa33;"><i class="fas fa-shield-virus"></i> 🛡️ tirdad - حماية متقدمة لاتصالات TCP (اختياري ومتقدم)</div>
-        
-        <p><strong>ما هي tirdad؟</strong> أداة تقوم بعشوائية أرقام تسلسل TCP (TCP ISN Randomization)، مما يصعّب على المهاجمين حقن حزم ضارة في اتصالاتك.</p>
-        
-        <div class="note-critical" style="margin-top: 15px;">
-            <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ متطلب أساسي وهام:</strong>
-            <p style="margin-top: 8px;"><strong>tirdad لا تعمل إطلاقاً مع النواة الافتراضية من <code>dom0</code>.</strong> لتفعيلها، أنت بحاجة ماسة إلى <strong>النواة الداخلية (In-VM Kernel)</strong> وهذه خطوة متقدمة تتطلب وعياً كاملاً بالتبعات.</p>
-        </div>
-
-        <h4 style="margin-top: 20px; color: #ffaa33;">📌 ما هي التبعات والمقايضات؟</h4>
-        <p>تفعيل النواة الداخلية لاستخدام tirdad يعني أنك تختار:</p>
-        <ul style="margin-right: 20px; line-height: 1.8;">
-            <li>✅ <strong>ستحصل على:</strong> حماية tirdad الإضافية ضد حقن حزم TCP.</li>
-            <li>❌ <strong>ستفقد مؤقتاً:</strong> الدعم الكامل لميزات الإقلاع الجديدة في Qubes 4.3، حيث أن دعم النواة الداخلية لهذه الميزات <strong>لا يزال قيد التطوير</strong>.</li>
-            <li>⚠️ <strong>مخاطر محتملة:</strong> قد تواجه مشاكل مع أجهزة حيوية مثل <code>sys-usb</code> أو <code>sys-net</code>، وقد يمنع الأجهزة الأخرى من الإقلاع إذا كان القالب يعمل كبوابة (Gateway).</li>
-        </ul>
-        <p>هذه المقايضات هي السبب في أن tirdad <strong>ليست ضمن الإعدادات الافتراضية أو التلقائية</strong>، وهي موجهة للمستخدمين المتقدمين القادرين على إدارة هذه التعقيدات.</p>
-
-        <div class="note" style="background: #1a3a3a; margin-top: 15px;">
-            <i class="fas fa-info-circle"></i> <strong>لمن هذه الميزة؟</strong> إذا كنت مرتاحاً للمخاطر وتريد أقصى درجات الحماية، فهذه الميزة لك. إذا كنت تفضل الاستقرار وسهولة الاستخدام، فالإعدادات الافتراضية (بدون tirdad) توفر حماية ممتازة.
-        </div>
+<!-- ======== القسم 3: tirdad - ملاحظة للتوثيق فقط ======== -->
+<div class="card" style="margin-top: 25px; border-right: 6px solid #888;">
+    <div class="card-header" style="color: #aaa;"><i class="fas fa-archive"></i> 📦 tirdad - لأغراض التوثيق فقط (غير موصى به)</div>
+    
+    <p><strong>ما هي tirdad؟</strong> أداة قديمة كانت تهدف لعشوائية أرقام تسلسل TCP (TCP ISN Randomization).</p>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-check-circle"></i> <strong>✅ لماذا لا نحتاجها؟</strong>
+        <p style="margin-top: 8px;">معلمات النواة الحديثة في هذا الدليل (مثل <code>init_on_free=1</code>، <code>init_on_alloc=1</code>، <code>page_alloc.shuffle=1</code>) توفر <strong>حماية شاملة وأعمق</strong> ضد نفس الهجمات التي كانت tirdad تحاول سدها، بالإضافة إلى الحماية من Spectre و Meltdown وهجمات الذاكرة.</p>
     </div>
+
+    <div class="note-critical" style="margin-top: 15px;">
+        <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ لماذا لا نوصي بها؟</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li><strong>لا تعمل في الإعداد الافتراضي:</strong> tirdad تتطلب <strong>النواة الداخلية (In-VM Kernel)</strong>، وهذا ليس إعداد Qubes الافتراضي.</li>
+            <li><strong>تفعيل النواة الداخلية = مخاطر أمنية إضافية:</strong> يزيد سطح الهجوم، ويستهلك ذاكرة أكبر، وقد يعطل أجهزة حيوية مثل <code>sys-net</code>.</li>
+            <li><strong>حماية زائدة عن الحاجة:</strong> معلمات النواة الحالية توفر حماية كافية وأفضل.</li>
+        </ul>
+    </div>
+
+    <div class="note" style="background: #1a3a3a; margin-top: 15px;">
+        <i class="fas fa-lightbulb"></i> <strong>💡 الخلاصة:</strong> 
+        <p style="margin-top: 8px;">لا حاجة لتفعيل tirdad أو النواة الداخلية. الإعدادات الافتراضية في هذا الدليل (KERNEL_OPTS + sysctl) توفر حماية متقدمة ضد هجمات الشبكة والذاكرة دون أي تعقيدات إضافية.</p>
+    </div>
+</div>
 
     <!-- ======== القسم 4: ما الذي يوحده Kicksecure؟ ======== -->
     <div class="card" style="margin-top: 25px;">
@@ -5823,22 +5822,14 @@ EOF'"
     ok "تم تعطيل الخدمات غير الضرورية"
     
     # ========
-    # 5. تثبيت tirdad - حماية TCP الإضافية
-    # ========
-    info "تثبيت tirdad - أداة عشوائية أرقام تسلسل TCP..."
-    info "توفر حماية إضافية ضد حقن الحزم الضارة في اتصالات الشبكة"
-    qvm-run kicksecure-18 "sudo apt update && sudo apt install tirdad -y" 2>/dev/null || true
-    ok "تم تثبيت tirdad بنجاح"
-    
-    # ========
-    # 6. إغلاق قالب Kicksecure
+    # 5. إغلاق قالب Kicksecure
     # ========
     info "إغلاق قالب Kicksecure 18..."
     qvm-shutdown --wait kicksecure-18 2>/dev/null || true
     ok "تم إغلاق kicksecure-18"
     
     # ========
-    # 7. جعل Kicksecure الأساس
+    # 6. جعل Kicksecure الأساس
     # ========
     read -p "جعل Kicksecure 18 الأساس لـ default-dvm؟ (y/n): " yn
     if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
@@ -5966,68 +5957,6 @@ qvm-prefs "$VM_NAME" kernelopts "$KERNEL_OPTS"
 echo -e "${G}✅ تم إضافة معلمات النواة${N}"
 
 # باقي الإعدادات
-qvm-volume set "$VM_NAME":volatile ephemeral true
-qvm-features "$VM_NAME" anon-timezone 1
-qvm-features "$VM_NAME" no-monitor-layout 1
-
-echo -e "${G}✅ تم إنشاء $VM_NAME بنجاح في RAM${N}"
-EOF
-
-    # ========== create-dvm-template.sh ==========
-    cat > "$DESKTOP_PATH/ram-pool-scripts/create-dvm-template.sh" << 'EOF'
-#!/bin/bash
-VM_NAME="whonix-work-ram-dvm"
-BASE_TEMPLATE="whonix-workstation-18"
-RAM_POOL_PATH="$HOME/ram_pool"
-RAM_POOL_SIZE="4G"
-
-G='\033[0;32m'
-Y='\033[1;33m'
-R='\033[0;31m'
-N='\033[0m'
-
-# ✅ معلمات النواة المراد إضافتها
-KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none"
-
-echo -e "${G}🔧 إنشاء VM في RAM pool...${N}"
-
-# 1. التحقق من القالب
-if ! qvm-ls | grep -q "$BASE_TEMPLATE"; then
-    echo -e "${R}❌ خطأ: القالب $BASE_TEMPLATE غير موجود${N}"
-    exit 1
-fi
-
-# 2. إنشاء RAM pool إذا لزم الأمر
-if ! mount | grep -q "$RAM_POOL_PATH"; then
-    echo -e "${Y}📁 إنشاء RAM pool جديد...${N}"
-    sudo mkdir -p "$RAM_POOL_PATH"
-    sudo mount -t tmpfs -o size=$RAM_POOL_SIZE tmpfs "$RAM_POOL_PATH"
-    
-    if ! qvm-pool ls | grep -q ram_pool; then
-        qvm-pool add ram_pool file -o dir_path="$RAM_POOL_PATH"
-        qvm-pool set ram_pool -o ephemeral_volatile=True 2>/dev/null
-    fi
-    echo -e "${G}✅ RAM pool جاهز${N}"
-fi
-
-# 3. حذف VM قديم
-if qvm-ls | grep -q "$VM_NAME"; then
-    echo -e "${Y}🗑️  إزالة VM قديم...${N}"
-    qvm-kill "$VM_NAME" 2>/dev/null
-    qvm-remove --force "$VM_NAME"
-fi
-
-# 4. إنشاء VM جديد
-echo -e "${Y}🏗️  إنشاء VM جديد...${N}"
-qvm-create -P ram_pool -t "$BASE_TEMPLATE" -l red "$VM_NAME"
-
-# ✅ إضافة معلمات النواة
-echo -e "${Y}⚙️  إضافة معلمات النواة...${N}"
-qvm-prefs "$VM_NAME" kernelopts "$KERNEL_OPTS"
-echo -e "${G}✅ تم إضافة معلمات النواة${N}"
-
-# باقي الإعدادات
-qvm-prefs "$VM_NAME" template_for_dispvms True
 qvm-volume set "$VM_NAME":volatile ephemeral true
 qvm-features "$VM_NAME" anon-timezone 1
 qvm-features "$VM_NAME" no-monitor-layout 1
