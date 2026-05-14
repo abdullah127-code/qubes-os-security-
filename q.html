@@ -3628,35 +3628,68 @@ free -h</pre>
         <p style="margin-top: 10px;">ثم اختر: <strong>3) تطبيق إعدادات Kicksecure</strong></p>
     </div>
     
-    <!-- ======== القسم 1: ما هو Kicksecure؟ ======== -->
-    <div class="section-title">
-        <i class="fas fa-fingerprint"></i>
-        <h2>🧬 Kicksecure - توحيد البصمة وتحصين النظام</h2>
+<!-- ======== القسم 1: ما هو Kicksecure؟ ======== -->
+<div class="section-title">
+    <i class="fas fa-shield-haltered"></i>
+    <h2>🛡️ Kicksecure - نظام تشغيل متكامل التحصين</h2>
+</div>
+
+<div class="card-grid">
+    <div class="card">
+        <div class="card-header"><i class="fas fa-question-circle"></i> ما هو Kicksecure؟</div>
+        <p>Kicksecure هو <strong>نظام تشغيل كامل</strong> مبني على Debian، صُمم من الألف إلى الياء ليكون <strong>شديد التحصين (Hardened)</strong>.</p>
+        <p style="margin-top: 10px;">إنه ليس مجرد "Debian مع بعض الإعدادات الإضافية"، بل هو <strong>حزمة شاملة من الحماية</strong> تطبق نموذج أمان متعدد الطبقات، بدءًا من النواة (kernel) المحصنة، مرورًا بصلاحيات المستخدمين، ووصولاً إلى التطبيقات والشبكة.</p>
+        <p class="note" style="margin-top: 15px;"><i class="fas fa-shield-alt"></i> <strong>النتيجة:</strong> نظام جاهز للاستخدام اليومي، مقاوم للفيروسات والهجمات، ويوفر حماية استباقية بدلاً من رد الفعل.</p>
     </div>
+    <div class="card">
+        <div class="card-header"><i class="fas fa-cubes"></i> Kicksecure داخل Qubes OS</div>
+        <p>في Qubes OS، يعمل Kicksecure كـ <strong>Template (قالب)</strong> ليمنح جميع أجهزتك الافتراضية (AppVMs) تحصيناته تلقائيًا.</p>
+        <ul style="margin-right: 20px; margin-top: 10px;">
+            <li>كل AppVM ترث تلقائيًا <strong>جميع تحصينات</strong> Kicksecure.</li>
+            <li>يمكن توجيهها عبر <code>sys-whonix</code> للحصول على <strong>Whonix + Kicksecure</strong> معاً.</li>
+            <li>عزل كامل بين الهويات المختلفة.</li>
+        </ul>
+        <div class="note" style="margin-top: 15px;"><i class="fas fa-lightbulb"></i> <strong>أفضل ممارسة:</strong> <code>qvm-create --template=kicksecure anon-work && qvm-prefs anon-work netvm sys-whonix</code></div>
+    </div>
+</div>
+
+<!-- ======== طبقات الحماية في Kicksecure ======== -->
+<div class="card" style="margin-top: 25px; border-right: 6px solid #4caf50;">
+    <div class="card-header" style="color: #88ff88;"><i class="fas fa-layer-group"></i> 🧅 طبقات الحماية في Kicksecure</div>
+    <p>Kicksecure لا يعتمد على طبقة حماية واحدة، بل يطبق نموذج "خطة الدفاع متعدد الطبقات" (Multi-Layer Defense Model) ليشمل:</p>
     
-    <div class="card-grid">
-        <div class="card">
-            <div class="card-header"><i class="fas fa-question-circle"></i> ما هو Kicksecure؟</div>
-            <p>Kicksecure هو نظام تشغيل مبني على Debian، معدّل ليكون <strong>شديد التحصين (Hardened)</strong> ضد هجمات التعرف على الجهاز. هدفه الرئيسي هو <strong>توحيد المعلومات (Normalization)</strong> التي يمكن للتطبيقات (خاصة المتصفحات) قراءتها.</p>
-            <p class="note" style="margin-top: 15px;"><i class="fas fa-shield-alt"></i> النتيجة: جميع مستخدمي Kicksecure يبدون <strong>متطابقين إحصائياً</strong>، مما يجعل تتبع الفرد عبر بصمة المتصفح مستحيلاً.</p>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-microchip"></i> <strong>تحصين النواة</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">إعدادات KSPP، تعطيل ميزات خطيرة، عشوائية تخطيط الهياكل (RANDSTRUCT).</p>
         </div>
-        <div class="card">
-            <div class="card-header"><i class="fas fa-cubes"></i> Kicksecure داخل Qubes OS</div>
-            <p>في Qubes OS، يمكن استخدام Kicksecure كـ <strong>Template (قالب)</strong> لإنشاء AppVMs. بهذه الطريقة:</p>
-            <ul style="margin-right: 20px; margin-top: 10px;">
-                <li>كل AppVM تحصل على حماية Kicksecure تلقائياً</li>
-                <li>يمكن توجيهها عبر <code>sys-whonix</code> للحصول على <strong>Whonix + Kicksecure</strong> معاً</li>
-                <li>يتم العزل الكامل بين الهويات المختلفة</li>
-            </ul>
-            <div class="note" style="margin-top: 15px;"><i class="fas fa-lightbulb"></i> <strong>أفضل ممارسة:</strong> <code>qvm-create --template=kicksecure anon-work && qvm-prefs anon-work netvm sys-whonix</code></div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-user-lock"></i> <strong>عزل المستخدمين</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">فصل صارم للحسابات، حماية من هجمات التخمين، تعطيل SUID.</p>
+        </div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-network-wired"></i> <strong>تحصين الشبكة</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">جدار ناري محكم، مزامنة وقت آمنة، حماية من انتحال الحزم.</p>
+        </div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-fingerprint"></i> <strong>توحيد البصمة</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">توحيد معلومات النظام والمتصفح لتبدو متطابقًا إحصائيًا مع بقية المستخدمين.</p>
+        </div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-lock"></i> <strong>تشفير وحماية البيانات</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">تشفير كامل للقرص، مسح الذاكرة عند الإغلاق، إنتروبيا قوية.</p>
+        </div>
+        <div style="background: #1a2a3a; padding: 15px; border-radius: 12px;">
+            <i class="fas fa-code-branch"></i> <strong>أمان سلسلة التوريد</strong>
+            <p style="margin-top: 8px; font-size: 0.9em;">تحقق صارم من التوقيعات الرقمية في كل مراحل التطوير والتحديث.</p>
         </div>
     </div>
+</div>
 
-    <div class="note-critical">
-        <i class="fas fa-exclamation-triangle"></i> <strong>لماذا Kicksecure حتى مع Tor؟</strong>
-        <p style="margin-top: 10px;">Tor يخفي عنوان IP فقط. لكن المواقع يمكنها التعرف عليك عبر <strong>بصمة المتصفح</strong>: الخطوط، دقة الشاشة، الإعدادات... Kicksecure يوحد هذه المعلومات بين جميع مستخدميه، مما يجعل بصمتك غير مميزة.</p>
-    </div>
-
+<div class="note-critical">
+    <i class="fas fa-exclamation-triangle"></i> <strong>لماذا Kicksecure حتى مع Tor؟</strong>
+    <p style="margin-top: 10px;">Tor يخفي عنوان IP فقط. لكن المواقع يمكنها التعرف عليك عبر <strong>بصمة المتصفح</strong>: الخطوط، دقة الشاشة، الإعدادات... Kicksecure يوحد هذه المعلومات بين جميع مستخدميه، مما يجعل بصمتك غير مميزة.</p>
+</div>
     <!-- ======== القسم 2: التثبيت والإعداد الأساسي ======== -->
     <div class="section-title" style="margin-top: 40px;">
         <i class="fas fa-download"></i>
@@ -3672,124 +3705,134 @@ free -h</pre>
         <p><strong>الخطوة 3:</strong> تحديث القالب دورياً:</p>
         <code onclick="copyText(this)">sudo qubes-dom0-update --action=update kicksecure</code>
         <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-info-circle"></i> <strong>حول الاستقرار:</strong> القالب يُصنف "قيد التطوير" لكن هذا تحذير احترازي فقط. المشاكل نادرة جداً (أقل من 1-2%) وتتمحور غالباً حول إشعارات بسيطة قابلة للحل. الاستخدام اليومي مستقر تماماً.
+            <i class="fas fa-info-circle"></i> <strong>حول الاستقرار:</strong> القالب مستقر جداً ويستخدمه المطور الرئيسي شخصياً على Qubes. المشاكل نادرة جداً وتتمحور غالباً حول إشعارات بسيطة قابلة للحل.
         </div>
     </div>
 
     <!-- ======== القسم 3: tirdad - حماية إضافية للشبكة ======== -->
-    <div class="card" style="margin-top: 25px; border-right: 6px solid #4caf50;">
-        <div class="card-header" style="color: #88ff88;"><i class="fas fa-shield-virus"></i> 🛡️ tirdad - حماية إضافية لاتصالات TCP</div>
+    <!-- ======== بطاقة: tirdad والنواة الداخلية - نسخة محدثة ======== -->
+    <div class="card" style="margin-top: 25px; border-right: 6px solid #ff9800;">
+        <div class="card-header" style="color: #ffaa33;"><i class="fas fa-shield-virus"></i> 🛡️ tirdad - حماية متقدمة لاتصالات TCP (اختياري ومتقدم)</div>
+        
         <p><strong>ما هي tirdad؟</strong> أداة تقوم بعشوائية أرقام تسلسل TCP (TCP ISN Randomization)، مما يصعّب على المهاجمين حقن حزم ضارة في اتصالاتك.</p>
-        <p style="margin-top: 10px;"><strong>لتفعيلها:</strong></p>
-        <ol style="margin-right: 20px; margin-top: 10px;">
-            <li>تأكد أن القالب يستخدم <strong>نواة داخلية (In-VM Kernel)</strong> وليس نواة dom0.</li>
-            <li>ثبت الأداة: <code onclick="copyText(this)">sudo apt install tirdad -y</code></li>
-            <li>أغلق القالب وأعد تشغيل AppVMs المبنية عليه.</li>
-        </ol>
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-check-circle"></i> <strong>فائدة tirdad:</strong> تعزز حماية الشبكة على مستوى منخفض، وهي خطوة بسيطة للحصول على حماية Kicksecure الكاملة.
+        
+        <div class="note-critical" style="margin-top: 15px;">
+            <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ متطلب أساسي وهام:</strong>
+            <p style="margin-top: 8px;"><strong>tirdad لا تعمل إطلاقاً مع النواة الافتراضية من <code>dom0</code>.</strong> لتفعيلها، أنت بحاجة ماسة إلى <strong>النواة الداخلية (In-VM Kernel)</strong> وهذه خطوة متقدمة تتطلب وعياً كاملاً بالتبعات.</p>
+        </div>
+
+        <h4 style="margin-top: 20px; color: #ffaa33;">📌 ما هي التبعات والمقايضات؟</h4>
+        <p>تفعيل النواة الداخلية لاستخدام tirdad يعني أنك تختار:</p>
+        <ul style="margin-right: 20px; line-height: 1.8;">
+            <li>✅ <strong>ستحصل على:</strong> حماية tirdad الإضافية ضد حقن حزم TCP.</li>
+            <li>❌ <strong>ستفقد مؤقتاً:</strong> الدعم الكامل لميزات الإقلاع الجديدة في Qubes 4.3، حيث أن دعم النواة الداخلية لهذه الميزات <strong>لا يزال قيد التطوير</strong>.</li>
+            <li>⚠️ <strong>مخاطر محتملة:</strong> قد تواجه مشاكل مع أجهزة حيوية مثل <code>sys-usb</code> أو <code>sys-net</code>، وقد يمنع الأجهزة الأخرى من الإقلاع إذا كان القالب يعمل كبوابة (Gateway).</li>
+        </ul>
+        <p>هذه المقايضات هي السبب في أن tirdad <strong>ليست ضمن الإعدادات الافتراضية أو التلقائية</strong>، وهي موجهة للمستخدمين المتقدمين القادرين على إدارة هذه التعقيدات.</p>
+
+        <div class="note" style="background: #1a3a3a; margin-top: 15px;">
+            <i class="fas fa-info-circle"></i> <strong>لمن هذه الميزة؟</strong> إذا كنت مرتاحاً للمخاطر وتريد أقصى درجات الحماية، فهذه الميزة لك. إذا كنت تفضل الاستقرار وسهولة الاستخدام، فالإعدادات الافتراضية (بدون tirdad) توفر حماية ممتازة.
         </div>
     </div>
 
-<!-- ======== القسم 4: ما الذي يوحده Kicksecure؟ ======== -->
-<div class="card" style="margin-top: 25px;">
-    <div class="card-header"><i class="fas fa-list-check"></i> ما الذي يوحده Kicksecure؟</div>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-        <div><i class="fas fa-font"></i> قائمة الخطوط (Fonts)</div>
-        <div><i class="fas fa-desktop"></i> دقة الشاشة</div>
-        <div><i class="fas fa-language"></i> إعدادات اللغة (en_US.UTF-8)</div>
-        <div><i class="fas fa-clock"></i> المنطقة الزمنية (UTC)</div>
-        <div><i class="fas fa-code-branch"></i> إصدار نظام التشغيل</div>
-        <div><i class="fas fa-firefox"></i> إعدادات المتصفح</div>
-    </div>
-</div>
-
-<!-- ======== القسم 5: مقارنة موثقة - Kicksecure vs Whonix ======== -->
-<div class="section-title" style="margin-top: 40px;">
-    <i class="fas fa-balance-scale-left"></i>
-    <h2>⚖️ مقارنة موثقة: Kicksecure vs Whonix Workstation</h2>
-    <p>مقارنة دقيقة مبنية على وثائق المشروعين الرسمية. الفرق جوهري وليس مجرد تشابه.</p>
-</div>
-
-<div class="card" style="border-right: 6px solid #6c63ff;">
-    <div class="card-header" style="color: #6c63ff;">
-        <i class="fas fa-table"></i> 📊 جدول المقارنة الشامل
-    </div>
-    <div style="overflow-x: auto;">
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>الميزة</th>
-                    <th style="background: #1a2a3a;">🛡️ Kicksecure</th>
-                    <th style="background: #1a2a3a;">🧅 Whonix Workstation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>الهدف الأساسي</strong></td>
-                    <td><strong>تحصين الأمان</strong> (Security Hardening)</td>
-                    <td><strong>إخفاء الهوية</strong> (Anonymity)</td>
-                </tr>
-                <tr>
-                    <td><strong>العلاقة بينهما</strong></td>
-                    <td colspan="2" style="text-align: center;">Whonix مبني على Kicksecure ← يرث جميع تحسيناته الأمنية</td>
-                </tr>
-                <tr>
-                    <td><strong>توجيه الشبكة</strong></td>
-                    <td>❌ لا يوجد توجيه إجباري</td>
-                    <td>✅ توجيه إجباري عبر Tor</td>
-                </tr>
-                <tr>
-                    <td><strong>بنية النظام</strong></td>
-                    <td>نظام تشغيل واحد (Monolithic)</td>
-                    <td>جهازان: Gateway + Workstation</td>
-                </tr>
-                <tr>
-                    <td><strong>تصليب النواة</strong></td>
-                    <td>✅ <code>hardened-kernel</code></td>
-                    <td>✅ <strong>نفس الحزمة</strong> - لا فرق</td>
-                </tr>
-                <tr>
-                    <td><strong>تصليب مساحة المستخدم</strong></td>
-                    <td>🟢 <strong>أقوى</strong> (Hardened Malloc مفعّل)</td>
-                    <td>🟡 أقل (Hardened Malloc غير مفعّل)</td>
-                </tr>
-                <tr>
-                    <td><strong>مُخصص الذاكرة</strong></td>
-                    <td>✅ Hardened Malloc افتراضي</td>
-                    <td>⚠️ غير مفعّل (مشاكل توافق)</td>
-                </tr>
-                <tr>
-                    <td><strong>passwordless-sudo</strong></td>
-                    <td>❌ معطّل</td>
-                    <td>❌ معطّل</td>
-                </tr>
-                <tr>
-                    <td><strong>الاستخدام المثالي</strong></td>
-                    <td>بيئة محصنة بدون متطلبات Tor</td>
-                    <td>مهام تتطلب إخفاء هوية مضمون</td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- ======== القسم 4: ما الذي يوحده Kicksecure؟ ======== -->
+    <div class="card" style="margin-top: 25px;">
+        <div class="card-header"><i class="fas fa-list-check"></i> ما الذي يوحده Kicksecure؟</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+            <div><i class="fas fa-font"></i> قائمة الخطوط (Fonts)</div>
+            <div><i class="fas fa-desktop"></i> دقة الشاشة</div>
+            <div><i class="fas fa-language"></i> إعدادات اللغة (en_US.UTF-8)</div>
+            <div><i class="fas fa-clock"></i> المنطقة الزمنية (UTC)</div>
+            <div><i class="fas fa-code-branch"></i> إصدار نظام التشغيل</div>
+            <div><i class="fas fa-firefox"></i> إعدادات المتصفح</div>
+        </div>
     </div>
 
-    <div class="note" style="background: #1a3a3a; margin-top: 15px;">
-        <i class="fas fa-lightbulb"></i>
-        <strong>💡 الفرق الجوهري باختصار:</strong><br>
-        <strong>Kicksecure</strong> = كل التحصينات الأمنية (بدون Tor إجباري)<br>
-        <strong>Whonix WS</strong> = نفس التحصينات الأساسية + توجيه Tor الإجباري (لكن بتصليب أقل في مساحة المستخدم)
+    <!-- ======== القسم 5: مقارنة موثقة - Kicksecure vs Whonix ======== -->
+    <div class="section-title" style="margin-top: 40px;">
+        <i class="fas fa-balance-scale-left"></i>
+        <h2>⚖️ مقارنة موثقة: Kicksecure vs Whonix Workstation</h2>
+        <p>مقارنة دقيقة مبنية على وثائق المشروعين الرسمية. الفرق جوهري وليس مجرد تشابه.</p>
     </div>
 
-    <div class="note" style="background: #2a1a1a; margin-top: 10px;">
-        <i class="fas fa-question-circle"></i>
-        <strong>❓ لماذا Kicksecure أكثر تصليباً؟</strong>
-        <p style="margin-top: 8px;">
-            Kicksecure يركز على <strong>الأمان</strong> كهدف رئيسي. لذلك يفعّل ميزات قوية مثل <strong>Hardened Memory Allocator</strong> افتراضياً.
-            Whonix يركز على <strong>إخفاء الهوية</strong>، ويضحي ببعض ميزات التصليب القوية لتجنب مشاكل التوافق مع التطبيقات المختلفة.
-        </p>
-    </div>
-</div>
+    <div class="card" style="border-right: 6px solid #6c63ff;">
+        <div class="card-header" style="color: #6c63ff;">
+            <i class="fas fa-table"></i> 📊 جدول المقارنة الشامل
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>الميزة</th>
+                        <th style="background: #1a2a3a;">🛡️ Kicksecure</th>
+                        <th style="background: #1a2a3a;">🧅 Whonix Workstation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>الهدف الأساسي</strong></td>
+                        <td><strong>تحصين الأمان</strong> (Security Hardening)</td>
+                        <td><strong>إخفاء الهوية</strong> (Anonymity)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>العلاقة بينهما</strong></td>
+                        <td colspan="2" style="text-align: center;">Whonix مبني على Kicksecure ← يرث جميع تحسيناته الأمنية</td>
+                    </tr>
+                    <tr>
+                        <td><strong>توجيه الشبكة</strong></td>
+                        <td>❌ لا يوجد توجيه إجباري</td>
+                        <td>✅ توجيه إجباري عبر Tor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>بنية النظام</strong></td>
+                        <td>نظام تشغيل واحد (Monolithic)</td>
+                        <td>جهازان: Gateway + Workstation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>تصليب النواة</strong></td>
+                        <td>✅ <code>hardened-kernel</code></td>
+                        <td>✅ <strong>نفس الحزمة</strong> - لا فرق</td>
+                    </tr>
+                    <tr>
+                        <td><strong>تصليب مساحة المستخدم</strong></td>
+                        <td>🟢 <strong>أقوى</strong> (Hardened Malloc مفعّل)</td>
+                        <td>🟡 أقل (Hardened Malloc غير مفعّل)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>مُخصص الذاكرة</strong></td>
+                        <td>✅ Hardened Malloc افتراضي</td>
+                        <td>⚠️ غير مفعّل (مشاكل توافق)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>passwordless-sudo</strong></td>
+                        <td>❌ معطّل</td>
+                        <td>❌ معطّل</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الاستخدام المثالي</strong></td>
+                        <td>بيئة محصنة بدون متطلبات Tor</td>
+                        <td>مهام تتطلب إخفاء هوية مضمون</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+        <div class="note" style="background: #1a3a3a; margin-top: 15px;">
+            <i class="fas fa-lightbulb"></i>
+            <strong>💡 الفرق الجوهري باختصار:</strong><br>
+            <strong>Kicksecure</strong> = كل التحصينات الأمنية (بدون Tor إجباري)<br>
+            <strong>Whonix WS</strong> = نفس التحصينات الأساسية + توجيه Tor الإجباري (لكن بتصليب أقل في مساحة المستخدم)
+        </div>
+
+        <div class="note" style="background: #2a1a1a; margin-top: 10px;">
+            <i class="fas fa-question-circle"></i>
+            <strong>❓ لماذا Kicksecure أكثر تصليباً؟</strong>
+            <p style="margin-top: 8px;">
+                Kicksecure يركز على <strong>الأمان</strong> كهدف رئيسي. لذلك يفعّل ميزات قوية مثل <strong>Hardened Memory Allocator</strong> افتراضياً.
+                Whonix يركز على <strong>إخفاء الهوية</strong>، ويضحي ببعض ميزات التصليب القوية لتجنب مشاكل التوافق مع التطبيقات المختلفة.
+            </p>
+        </div>
+    </div>
 
     <!-- ======== القسم 6: إعدادات الأمان الأساسية ======== -->
     <div class="section-title" style="margin-top: 40px;">
@@ -3971,73 +4014,73 @@ free -h</pre>
         <p class="note" style="margin-top: 15px;"><i class="fas fa-chart-line"></i> <strong>النتيجة المتوقعة:</strong> بصمتك غير مميزة ضمن أكبر مجموعة من المستخدمين.</p>
     </div>
 
-<!-- ======== القسم 10: جعل Kicksecure افتراضي لـ default-dvm ======== -->
-
-<div class="section-title" style="margin-top: 40px;">
-    <i class="fas fa-sync-alt"></i>
-    <h2>🔄 جعل Kicksecure القالب الافتراضي لـ default-dvm</h2>
-</div>
-
-<div class="card" style="border-right: 6px solid #6c63ff;">
-    <div class="card-header" style="color: #6c63ff;">
-        <i class="fas fa-sitemap"></i> 🧬 لماذا هذا مهم؟
+    <!-- ======== القسم 10: جعل Kicksecure افتراضي لـ default-dvm ======== -->
+    <div class="section-title" style="margin-top: 40px;">
+        <i class="fas fa-sync-alt"></i>
+        <h2>🔄 جعل Kicksecure القالب الافتراضي لـ default-dvm</h2>
     </div>
-    <p><code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code> وجميع الأجهزة المستهلكة (Disposable VMs) مشتقة من <code>default-dvm</code>. تغيير قالبها إلى Kicksecure سيحصن جميع مكونات النظام الأساسية دفعة واحدة.</p>
-<!-- ========== إشارة للسكربت المساعد ========== -->
-<div class="note-success" style="margin: 20px 0;">
-    <i class="fas fa-check-circle"></i>
-    <strong>⚡ للتطبيق التلقائي:</strong>
-    <p style="margin-top: 8px;">
-        كل هذه الخطوات مؤتمتة في <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline;">تبويب 11</a>.
-    </p>
-    <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 8px;">chmod +x auto-script.sh && ./auto-script.sh</code>
-    <p style="margin-top: 8px;">ثم اختر: <strong>3) تطبيق إعدادات Kicksecure</strong></p>
-</div>
 
-<!-- ========== بطاقة موحدة ========== -->
-<div class="card" style="border-right: 6px solid #6c63ff; margin-top: 20px;">
-    <div class="card-header" style="color: #6c63ff;">
-        <i class="fas fa-sitemap"></i> 🧬 العلاقة: default-dvm وجميع مشتقاته
-    </div>
-    
-    <!-- الرسم التوضيحي -->
-    <div style="background: #0d1b2a; padding: 20px; border-radius: 12px; margin: 15px 0; text-align: center;">
-        <code style="font-size: 1.3em; color: #ffaa33; background: #1b2838; padding: 8px 20px; border-radius: 8px;">default-dvm</code>
-        <div style="margin: 12px 0; color: #6c63ff; font-size: 1.2em;">⬇️ يغذي ⬇️</div>
-        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
-            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-usb</code></div>
-            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-net</code></div>
-            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-firewall</code></div>
-            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>جميع DVMs</strong></div>
-            <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>أي DVM جديد</strong></div>
+    <div class="card" style="border-right: 6px solid #6c63ff;">
+        <div class="card-header" style="color: #6c63ff;">
+            <i class="fas fa-sitemap"></i> 🧬 لماذا هذا مهم؟
+        </div>
+        <p><code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code> وجميع الأجهزة المستهلكة (Disposable VMs) مشتقة من <code>default-dvm</code>. تغيير قالبها إلى Kicksecure سيحصن جميع مكونات النظام الأساسية دفعة واحدة.</p>
+        
+        <!-- ========== إشارة للسكربت المساعد ========== -->
+        <div class="note-success" style="margin: 20px 0;">
+            <i class="fas fa-check-circle"></i>
+            <strong>⚡ للتطبيق التلقائي:</strong>
+            <p style="margin-top: 8px;">
+                كل هذه الخطوات مؤتمتة في <strong>السكربت المساعد</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline;">تبويب 11</a>.
+            </p>
+            <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 8px;">chmod +x auto-script.sh && ./auto-script.sh</code>
+            <p style="margin-top: 8px;">ثم اختر: <strong>3) تطبيق إعدادات Kicksecure</strong></p>
+        </div>
+
+        <!-- ========== بطاقة موحدة ========== -->
+        <div class="card" style="border-right: 6px solid #6c63ff; margin-top: 20px;">
+            <div class="card-header" style="color: #6c63ff;">
+                <i class="fas fa-sitemap"></i> 🧬 العلاقة: default-dvm وجميع مشتقاته
+            </div>
+            
+            <!-- الرسم التوضيحي -->
+            <div style="background: #0d1b2a; padding: 20px; border-radius: 12px; margin: 15px 0; text-align: center;">
+                <code style="font-size: 1.3em; color: #ffaa33; background: #1b2838; padding: 8px 20px; border-radius: 8px;">default-dvm</code>
+                <div style="margin: 12px 0; color: #6c63ff; font-size: 1.2em;">⬇️ يغذي ⬇️</div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+                    <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-usb</code></div>
+                    <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-net</code></div>
+                    <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><code>sys-firewall</code></div>
+                    <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>جميع DVMs</strong></div>
+                    <div style="background: #1b2838; padding: 10px; border-radius: 8px;"><strong>أي DVM جديد</strong></div>
+                </div>
+            </div>
+            
+            <div class="note" style="background: #1a3a3a;">
+                <i class="fas fa-lightbulb"></i> <strong>القاعدة:</strong> أي تغيير على <code>default-dvm</code> ينعكس تلقائياً على كل ما هو مشتق منه.
+            </div>
+
+            <!-- النتيجة -->
+            <h4 style="margin-top: 20px; color: #88ff88;"><i class="fas fa-check-circle"></i> 🎯 النتيجة النهائية</h4>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0;">
+                <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🖥️ sys-usb<br><small>محصن</small></div>
+                <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🌐 sys-net<br><small>محصن</small></div>
+                <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🔥 sys-firewall<br><small>محصن</small></div>
+                <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">📦 جميع DVMs<br><small>محصنة</small></div>
+            </div>
+
+            <!-- فاصل -->
+            <hr style="border-color: #2a3a4a; margin: 20px 0;">
+
+            <!-- التنبيهات -->
+            <h4 style="color: #ffaa33;"><i class="fas fa-exclamation-triangle"></i> ⚠️ تنبيهات مهمة</h4>
+            <ul style="margin-right: 20px; line-height: 1.8;">
+                <li><strong>⚠️ استثناء default-mgmt-dvm:</strong> لا تغير قالبه إلى Kicksecure لأنه يعطل <code>passwordless-sudo</code> الضروري لعمل هذا الجهاز. أبقِه على القالب الرسمي.</li>
+                <li><strong>✅ الأجهزة الأخرى:</strong> Kicksecure قالب مجتمعي مُعدّ خصيصاً لـ Qubes ويحتوي على جميع أدوات التكامل. يعمل بنجاح مع <code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code>.</li>
+                <li><strong>🔴 هام:</strong> خذ نسخة احتياطية كاملة قبل أي تغيير على <code>default-dvm</code>.</li>
+            </ul>
         </div>
     </div>
-    
-    <div class="note" style="background: #1a3a3a;">
-        <i class="fas fa-lightbulb"></i> <strong>القاعدة:</strong> أي تغيير على <code>default-dvm</code> ينعكس تلقائياً على كل ما هو مشتق منه.
-    </div>
-
-    <!-- النتيجة -->
-    <h4 style="margin-top: 20px; color: #88ff88;"><i class="fas fa-check-circle"></i> 🎯 النتيجة النهائية</h4>
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0;">
-        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🖥️ sys-usb<br><small>محصن</small></div>
-        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🌐 sys-net<br><small>محصن</small></div>
-        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">🔥 sys-firewall<br><small>محصن</small></div>
-        <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #2a5a2a;">📦 جميع DVMs<br><small>محصنة</small></div>
-    </div>
-
-    <!-- فاصل -->
-    <hr style="border-color: #2a3a4a; margin: 20px 0;">
-
-    <!-- التنبيهات -->
-    <h4 style="color: #ffaa33;"><i class="fas fa-exclamation-triangle"></i> ⚠️ تنبيهات مهمة</h4>
-    <ul style="margin-right: 20px; line-height: 1.8;">
-        <li><strong>⚠️ استثناء default-mgmt-dvm:</strong> لا تغير قالبه إلى Kicksecure لأنه يعطل <code>passwordless-sudo</code> الضروري لعمل هذا الجهاز. أبقِه على القالب الرسمي.</li>
-        <li><strong>✅ الأجهزة الأخرى:</strong> Kicksecure قالب مجتمعي مُعدّ خصيصاً لـ Qubes ويحتوي على جميع أدوات التكامل. يعمل بنجاح مع <code>sys-usb</code> و <code>sys-net</code> و <code>sys-firewall</code>.</li>
-        <li><strong>🔴 هام:</strong> خذ نسخة احتياطية كاملة قبل أي تغيير على <code>default-dvm</code>.</li>
-    </ul>
-</div>
-</div>
 </div>
 
 <!-- ======== تبويب 9: Live Script ======== -->
@@ -5516,7 +5559,7 @@ setup_kernel_opts_vms() {
         qvm-features "$vm_clean" anon-timezone 1 2>/dev/null
         
     done
-
+qvm-prefs sys-whoni* kernelopts ""
     echo ""
     info "إعادة تشغيل sys-net و sys-firewall و sys-usb..."
     for vm in sys-net sys-firewall sys-usb; do
@@ -5825,6 +5868,14 @@ EOF'"
         qvm-start sys-firewall
         
         ok "✓ تم تشغيل sys-net و sys-firewall"
+        
+        # انتظار 5 ثواني ثم إعادة تشغيل الخدمة لإنهاء الإشعارات
+        info "انتظار 5 ثواني لاكتمال تشغيل الأجهزة..."
+        sleep 5
+        info "إعادة تشغيل خدمة qubesd لإنهاء أي إشعارات متبقية..."
+        sudo systemctl restart qubesd.service
+        ok "✓ تم إعادة تشغيل qubesd.service - تم إنهاء الإشعارات"
+        
         ok "تم الانتهاء بنجاح!"
     fi
     
