@@ -3166,22 +3166,51 @@ rm /tmp/luks-setup.sh</pre>
         </div>
     </div>
 </div>
-    <!-- ======== تبويب 5: Amnesic Tmpfs ======== -->
+<!-- ======== تبويب 5: Amnesic Tmpfs ======== -->
 <div class="tab-pane" id="tab5">
     <div class="card">
-        <div class="card-header"><i class="fas fa-memory"></i> Amnesic Tmpfs</div>
-        <p>تقنية tmpfs تجعل المجلدات الحساسة تختفي بعد إعادة التشغيل.</p>
+        <div class="card-header"><i class="fas fa-memory"></i> 🧠 Amnesic Tmpfs - مجلدات في RAM تختفي بعد الإغلاق</div>
+        
+        <p>تقنية <strong>tmpfs</strong> تجعل المجلدات الحساسة (السجلات، الكاش، ملفات المستخدم) موجودة في RAM فقط، وتختفي تماماً عند إعادة التشغيل. هذا يوفر طبقة إضافية من الخصوصية والأمان.</p>
+        
+        <div class="note" style="background: #1a3a3a; margin: 15px 0;">
+            <i class="fas fa-info-circle"></i>
+            <strong>📌 المجلدات التي ستُوضع في RAM:</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li><code>/var/log</code> - سجلات النظام (512MB)</li>
+                <li><code>/var/cache</code> - ذاكرة التخزين المؤقت (512MB)</li>
+                <li><code>/var/tmp</code> - الملفات المؤقتة (256MB)</li>
+                <li><code>/tmp</code> - الملفات المؤقتة (512MB)</li>
+                <li><code>/home/user</code> - مجلد المستخدم الرئيسي (2GB)</li>
+            </ul>
+        </div>
+
+        <div class="note-critical" style="margin: 15px 0;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>⚠️ تنبيهات هامة:</strong>
+            <ul style="margin-right: 20px; margin-top: 8px;">
+                <li>تطبيق Amnesic Tmpfs على <code>default-dvm</code> يجعله <strong>يتورث</strong> إلى جميع الأجهزة الزائلة (DVMs).</li>
+                <li>تطبيقه على قالب عادي (مثل <code>whonix-workstation-18</code>) يؤثر فقط على القالب نفسه <strong>ولا يتورث</strong> للأجهزة المشتقة.</li>
+                <li>المجلدات في RAM تستهلك من ذاكرتك العشوائية - تأكد من وجود ذاكرة كافية.</li>
+                <li>يمكنك <strong>تطبيق أو إلغاء</strong> هذه الإعدادات في أي وقت.</li>
+            </ul>
+        </div>
         
         <div class="note-success" style="margin: 20px 0;">
             <i class="fas fa-check-circle"></i>
-            <strong>⚡ هذه السكريبتات متوفرة في السكريبت المساعد:</strong>
+            <strong>⚡ متوفر في السكريبت المساعد:</strong>
             <p style="margin-top: 10px;">
-                لتطبيق هذه الإعدادات تلقائياً، انتقل إلى 
+                لتطبيق أو إلغاء Amnesic Tmpfs، انتقل إلى 
                 <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: var(--accent-info); text-decoration: underline; font-weight: bold;">تبويب 11 (السكريبت المساعد)</a> 
                 وقم بتشغيل <code>auto-script.sh</code>.
             </p>
             <code class="dynamic-path" onclick="copyText(this)" style="margin-top: 10px;">chmod +x auto-script.sh && ./auto-script.sh</code>
-            <p style="margin-top: 10px;">اختر: <strong>6) إنشاء سكريبت Amnesic Tmpfs</strong></p>
+            <p style="margin-top: 10px;">ثم اختر: <strong>6) Amnesic Tmpfs</strong></p>
+            <p style="margin-top: 5px;">ستظهر لك قائمة:</p>
+            <ul style="margin-right: 20px;">
+                <li><strong>1) تطبيق Amnesic Tmpfs</strong> على جهاز معين</li>
+                <li><strong>2) إلغاء Amnesic Tmpfs</strong> من جهاز معين</li>
+            </ul>
         </div>
     </div>
 </div>
@@ -6291,32 +6320,126 @@ EOF
 # 6. سكريبت Amnesic Tmpfs
 # ========
 amnesic_script() {
-    mkdir -p "$DESKTOP_PATH/amnesic-scripts"
+    clear
+    echo "╔═══════════════════════════════════════════════════════════╗"
+    echo "║  🧠 Amnesic Tmpfs - مجلدات في RAM تختفي بعد الإغلاق      ║"
+    echo "╚═══════════════════════════════════════════════════════════╝"
+    echo ""
+    echo "1) تطبيق Amnesic Tmpfs على جهاز"
+    echo "2) إلغاء Amnesic Tmpfs من جهاز"
+    echo "0) رجوع"
+    echo ""
+    read -p "اختر: " CHOICE
     
-    cat > "$DESKTOP_PATH/amnesic-scripts/apply-tmpfs.sh" << EOF
+    case $CHOICE in
+        1) apply_amnesic ;;
+        2) remove_amnesic ;;
+        0) return ;;
+        *) amnesic_script ;;
+    esac
+}
+
+apply_amnesic() {
+    clear
+    echo "╔═══════════════════════════════════════════════════════════╗"
+    echo "║  📌 تطبيق Amnesic Tmpfs                                   ║"
+    echo "╚═══════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    SCRIPT_PATH="$DESKTOP_PATH/apply-amnesic.sh"
+    
+    cat > "$SCRIPT_PATH" << 'SCRIPTEOF'
 #!/bin/bash
-# ========
-# TMPFS الكامل لـ Amnesic Disposable VM
-# ========
-USER="$REAL_USER"
-mkdir -p /var/log /var/cache /var/tmp /tmp "$REAL_HOME/QubesIncoming"
+clear
+echo "تطبيق Amnesic Tmpfs"
+echo ""
+echo "📋 الأجهزة المتاحة:"
+echo "----------------------------------------"
+qvm-ls --raw-list 2>/dev/null | grep -v dom0
+echo "----------------------------------------"
+echo ""
+read -p "🔧 اسم الجهاز: " TARGET_VM
+[ -z "$TARGET_VM" ] && { echo "❌ لا يوجد اسم"; read -p "Enter..."; exit 1; }
+! qvm-ls "$TARGET_VM" >/dev/null 2>&1 && { echo "❌ غير موجود"; read -p "Enter..."; exit 1; }
+
+echo ""
+echo "🔧 تجهيز: $TARGET_VM"
+qvm-start "$TARGET_VM" 2>/dev/null
+sleep 3
+
+cat > /tmp/rc_local_content.txt << 'RCEOF'
+#!/bin/bash
+mkdir -p /var/log /var/cache /var/tmp /tmp /home/user/QubesIncoming
 mount -t tmpfs tmpfs /var/log -o size=512M,mode=0755,nosuid,nodev
 mount -t tmpfs tmpfs /var/cache -o size=512M,mode=0755,nosuid,nodev
 mount -t tmpfs tmpfs /var/tmp -o size=256M,mode=1777,nosuid,nodev,noexec
 mount -t tmpfs tmpfs /tmp -o size=512M,mode=1777,nosuid,nodev,noexec
-if [ -d "$REAL_HOME" ]; then
-    mount -t tmpfs tmpfs "$REAL_HOME" -o size=2G,mode=0700,nosuid,nodev
-    cp -r /etc/skel/. "$REAL_HOME/" 2>/dev/null
-    mkdir -p "$REAL_HOME/QubesIncoming"
-    chown -R \$USER:\$USER "$REAL_HOME" 2>/dev/null
-fi
+mount -t tmpfs tmpfs /home/user -o size=2G,mode=0700,nosuid,nodev
+cp -r /etc/skel/. /home/user/ 2>/dev/null
+mkdir -p /home/user/QubesIncoming
+chown -R user:user /home/user 2>/dev/null
 exit 0
-EOF
-    chmod +x "$DESKTOP_PATH/amnesic-scripts/apply-tmpfs.sh"
-    ok "تم إنشاء سكريبت Amnesic Tmpfs في $DESKTOP_PATH/amnesic-scripts/"
-    pause
+RCEOF
+
+qvm-run --pass-io "$TARGET_VM" 'sudo tee /rw/config/rc.local' < /tmp/rc_local_content.txt 2>/dev/null
+qvm-run "$TARGET_VM" "sudo chmod +x /rw/config/rc.local" 2>/dev/null
+qvm-shutdown "$TARGET_VM" 2>/dev/null
+rm -f /tmp/rc_local_content.txt
+
+echo ""
+echo "✅ تم تطبيق Amnesic Tmpfs على: $TARGET_VM"
+read -p "Enter..."
+SCRIPTEOF
+
+    chmod +x "$SCRIPT_PATH"
+    bash "$SCRIPT_PATH"
+    rm -f "$SCRIPT_PATH"
 }
 
+remove_amnesic() {
+    clear
+    echo "╔═══════════════════════════════════════════════════════════╗"
+    echo "║  🗑️ إلغاء Amnesic Tmpfs                                   ║"
+    echo "╚═══════════════════════════════════════════════════════════╝"
+    echo ""
+    
+    SCRIPT_PATH="$DESKTOP_PATH/remove-amnesic.sh"
+    
+    cat > "$SCRIPT_PATH" << 'SCRIPTEOF'
+#!/bin/bash
+clear
+echo "إلغاء Amnesic Tmpfs"
+echo ""
+echo "📋 الأجهزة المتاحة:"
+echo "----------------------------------------"
+qvm-ls --raw-list 2>/dev/null | grep -v dom0
+echo "----------------------------------------"
+echo ""
+read -p "🔧 اسم الجهاز: " TARGET_VM
+[ -z "$TARGET_VM" ] && { echo "❌ لا يوجد اسم"; read -p "Enter..."; exit 1; }
+! qvm-ls "$TARGET_VM" >/dev/null 2>&1 && { echo "❌ غير موجود"; read -p "Enter..."; exit 1; }
+
+echo ""
+echo "🔧 تجهيز: $TARGET_VM"
+qvm-start "$TARGET_VM" 2>/dev/null
+sleep 3
+
+# كتابة #!/bin/bash فقط في rc.local
+qvm-run "$TARGET_VM" "sudo bash -c 'echo \"#!/bin/bash\" > /rw/config/rc.local'" 2>/dev/null
+qvm-run "$TARGET_VM" "sudo chmod +x /rw/config/rc.local" 2>/dev/null
+
+qvm-shutdown "$TARGET_VM" 2>/dev/null
+
+echo ""
+echo "✅ تم إلغاء Amnesic Tmpfs من: $TARGET_VM"
+echo "📌 تم استعادة rc.local إلى الوضع الافتراضي"
+read -p "Enter..."
+SCRIPTEOF
+
+    chmod +x "$SCRIPT_PATH"
+    bash "$SCRIPT_PATH"
+    rm -f "$SCRIPT_PATH"
+}
 # ========
 # 7. Live Mode - Overlay فقط (بدون Zram)
 # ========
