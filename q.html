@@ -3482,13 +3482,13 @@ free -h</pre>
     </div>
 </div>
 
-<!-- 8. أدوات التدمير الذاتي (Self-Destruct) -->
+<!-- 8. أدوات التدمير الذاتي (Self<!-- 8. أدوات التدمير الذاتي (Self-Destruct) -->
 <div class="threat-card">
     <div class="card-badge badge-critical">💀 تدمير</div>
     <div class="threat-icon"><i class="fas fa-skull-crossbones"></i></div>
     <div class="threat-title">أدوات التدمير الذاتي (Self-Destruct)</div>
     
-    <p>السكريبتات الأربعة المتوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
+    <p>السكريبتات الستة المتوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
     
     <!-- ① Emergency Wipe -->
     <div style="background: #1a0000; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #ff4444;">
@@ -3539,35 +3539,54 @@ free -h</pre>
         <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/uninstall-deadman.sh</code></p>
     </div>
 
+    <!-- ⑤ Backup LUKS Header -->
+    <div style="background: #001a00; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #44ff44;">
+        <h4 style="color: #88ff88;"><i class="fas fa-key"></i> ⑤ Backup LUKS Header (النسخ الاحتياطي لرأس LUKS)</h4>
+        <p style="font-size: 0.85em;">سكريبت <strong>وقائي</strong> لإنشاء نسخة احتياطية من رأس LUKS <strong>قبل</strong> أي عملية تدمير. يقوم بـ:</p>
+        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
+            <li>🔍 <strong>تحديد قرص النظام المشفر تلقائياً:</strong> عبر <code>blkid | grep crypto_LUKS</code></li>
+            <li>💾 <strong>إنشاء نسخة احتياطية:</strong> <code>luksHeaderBackup</code> على سطح المكتب</li>
+            <li>✅ <strong>تأكيد نجاح العملية</strong> مع عرض مسار الملف</li>
+        </ul>
+        <p style="font-size: 0.85em;"><strong>⚠️ هام:</strong> احفظ ملف <code>backup-luks-header.img</code> في مكان آمن <strong>خارج الجهاز</strong> (USB منفصل، تخزين سحابي مشفر، إلخ).</p>
+        <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/backup-luks-header.sh</code></p>
+        <p style="font-size: 0.8em; color: #aaa;">مخرج النسخة: <code>~/Desktop/backup-luks-header.img</code></p>
+    </div>
+
+<!-- ⑥ Restore LUKS Header -->
+<div style="background: #0d1a2a; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #88aaff;">
+    <h4 style="color: #88aaff;"><i class="fas fa-undo-alt"></i> ⑥ Restore LUKS Header (استعادة رأس LUKS)</h4>
+    <p style="font-size: 0.85em;">سكريبت <strong>مختصر</strong> لاستعادة رأس LUKS من النسخة الاحتياطية. <strong>يُنفذ من توزيعة محمولة (Live USB).</strong> يقوم بـ:</p>
+    <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
+        <li>💾 <strong>القرص محفوظ تلقائياً</strong> من وقت إنشاء السكريبت (يُطلب تأكيد فقط)</li>
+        <li>🖱️ <strong>سحب وإفلات</strong> ملف النسخة الاحتياطية بدل كتابة المسار</li>
+        <li>⚠️ <strong>تحذير مع تأكيد كتابي</strong> (YES)</li>
+        <li>✅ <strong>تنفيذ الاستعادة</strong> مع رسالة نجاح أو فشل</li>
+    </ul>
+    <p style="font-size: 0.85em;"><strong>طريقة الاستخدام:</strong> انقل السكريبت وملف <code>.img</code> إلى USB ← أقلع من Live USB ← شغّل <code>sudo bash restore-luks-header.sh</code> ← اسحب ملف <code>.img</code> وأفلته في الطرفية</p>
+    <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/restore-luks-header.sh</code></p>
+</div>
+
     <!-- جدول المقارنة -->
     <p style="font-size: 0.8em; margin-top: 10px;"><strong>📊 مقارنة سريعة:</strong></p>
     <table class="comparison-table" style="font-size: 0.7em; margin: 5px 0;">
         <thead>
-            <tr><th>المعيار</th><th>Emergency Wipe</th><th>BusKill</th><th>Dead Man's</th></tr>
+            <tr><th>المعيار</th><th>Emergency Wipe</th><th>BusKill</th><th>Dead Man's</th><th>Backup LUKS</th><th>Restore LUKS</th></tr>
         </thead>
         <tbody>
-            <tr><td><strong>الآلية الأساسية</strong></td><td>قتل VMs + مسح رأس LUKS + luksSuspend</td><td>Emergency Wipe + حذف EFI + تدمير /boot</td><td>مثل Emergency Wipe (عبر مؤقت)</td>
-            <tr>
-            <tr><td><strong>حذف Qubes من قائمة الإقلاع</strong></td><td>❌</td><td>✅</td><td>❌</td>
-            </tr>
-            <tr><td><strong>تدمير قسم /boot</strong></td><td>❌</td><td>✅</td><td>❌</td>
-            </tr>
-            <tr><td><strong>قتل VMs</strong></td><td>✅</td><td>✅</td><td>✅</td>
-            </tr>
-            <tr><td><strong>مسح رأس LUKS</strong></td><td>✅</td><td>✅</td><td>✅</td>
-            </tr>
-            <tr><td><strong>الحماية من Cold Boot</strong></td><td>✅ (luksSuspend)</td><td>✅ (luksSuspend)</td><td>✅ (luksSuspend)</td>
-            </tr>
-            <tr><td><strong>التشغيل</strong></td><td>يدوي</td><td>اختصار لوحة مفاتيح</td><td>مؤجل (مؤقت)</td>
-            </tr>
-            <tr><td><strong>السرعة</strong></td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td>
-            </tr>
-            <tr><td><strong>الإلغاء</strong></td><td>❌</td><td>❌</td><td>✅ قبل المهلة</td>
-            </tr>
-            <tr><td><strong>الأفضل لـ</strong></td><td>تدمير سريع للبيانات</td><td>تدمير شامل + منع الإقلاع</td><td>اعتقال / إكراه</td>
-            </tr>
-            <tr><td><strong>يحتاج نسخة احتياطية للاستعادة؟</strong></td><td>✅ رأس LUKS</td><td>✅ رأس LUKS + إصلاح /boot و EFI</td><td>✅ رأس LUKS</td>
-            </tr>
+            <tr><td><strong>النوع</strong></td><td>تدمير</td><td>تدمير</td><td>تدمير مؤجل</td><td>🛡️ وقائي</td><td>🔄 استعادة</td></tr>
+            <tr><td><strong>الآلية الأساسية</strong></td><td>قتل VMs + مسح رأس LUKS + luksSuspend</td><td>Emergency Wipe + حذف EFI + تدمير /boot</td><td>مثل Emergency Wipe (عبر مؤقت)</td><td>نسخ رأس LUKS احتياطياً</td><td>استعادة رأس LUKS من نسخة</td></tr>
+            <tr><td><strong>حذف Qubes من قائمة الإقلاع</strong></td><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+            <tr><td><strong>تدمير قسم /boot</strong></td><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+            <tr><td><strong>قتل VMs</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+            <tr><td><strong>مسح رأس LUKS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+            <tr><td><strong>نسخ/استعادة رأس LUKS</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ نسخ</td><td>✅ استعادة</td></tr>
+            <tr><td><strong>الحماية من Cold Boot</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+            <tr><td><strong>التشغيل</strong></td><td>يدوي</td><td>اختصار لوحة مفاتيح</td><td>مؤجل (مؤقت)</td><td>يدوي</td><td>يدوي (Live USB)</td></tr>
+            <tr><td><strong>بيئة التشغيل</strong></td><td>dom0</td><td>dom0</td><td>dom0</td><td>dom0</td><td>🖥️ توزيعة محمولة</td></tr>
+            <tr><td><strong>السرعة</strong></td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟢 فوري</td><td>🟢 فوري</td></tr>
+            <tr><td><strong>الإلغاء</strong></td><td>❌</td><td>❌</td><td>✅ قبل المهلة</td><td>❌</td><td>✅ قبل التأكيد</td></tr>
+            <tr><td><strong>الأفضل لـ</strong></td><td>تدمير سريع للبيانات</td><td>تدمير شامل + منع الإقلاع</td><td>اعتقال / إكراه</td><td>🛡️ وقاية قبل التدمير</td><td>🔄 استعادة بعد التدمير</td></tr>
         </tbody>
     </table>
 </div>
@@ -3581,21 +3600,30 @@ free -h</pre>
     <p style="font-size: 0.9em;">رأس LUKS هو الجزء الذي يحتوي على مفاتيح التشفير. تدميره يعني فقدان كل البيانات للأبد. <strong>النسخة الاحتياطية هي طوق النجاة الوحيد.</strong></p>
     
     <div class="note-critical" style="margin: 10px 0; font-size: 0.85em;">
-        <i class="fas fa-exclamation-triangle"></i> <strong>هام:</strong> هذه الأوامر <strong>تُنفذ من توزيعة لينكس محمولة (Live USB)</strong>، لأن النظام الأساسي لن يعمل بدون المفتاح الذي تم تدميره.
+        <i class="fas fa-exclamation-triangle"></i> <strong>هام:</strong> سكريبتات وأوامر الاستعادة <strong>تُنفذ من توزيعة لينكس محمولة (Live USB)</strong>، لأن النظام الأساسي لن يعمل بدون المفتاح الذي تم تدميره.
     </div>
     
-    <!-- أمر النسخ الاحتياطي -->
+    <!-- السكريبتات المدمجة -->
+    <div style="background: #001a00; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #44ff44;">
+        <h4 style="color: #88ff88;"><i class="fas fa-terminal"></i> 🛡️ السكريبتات المدمجة</h4>
+        <p style="font-size: 0.85em;">تم تضمين <strong>سكريبتين</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
+        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
+            <li><strong>⑤ Backup LUKS Header:</strong> للنسخ الاحتياطي (يُشغّل من dom0)</li>
+            <li><strong>⑥ Restore LUKS Header:</strong> للاستعادة (يُشغّل من توزيعة محمولة)</li>
+        </ul>
+    </div>
+    
+    <!-- أمر النسخ الاحتياطي اليدوي -->
     <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; margin: 10px 0;">
-        <h4 style="color: #88ff88;"><i class="fas fa-save"></i> 💾 أمر النسخ الاحتياطي</h4>
-        <p style="font-size: 0.85em;">خذ نسخة من رأس LUKS <strong>قبل</strong> أي عملية خطيرة:</p>
+        <h4 style="color: #88ff88;"><i class="fas fa-save"></i> 💾 أمر النسخ الاحتياطي (يدوي - بديل عن السكريبت ⑤)</h4>
         <code onclick="copyText(this)" style="background: #0d1a0d; color: #88ff88; font-size: 0.8em;">sudo cryptsetup luksHeaderBackup /dev/XXXX --header-backup-file /path/to/backup.img</code>
         <p style="font-size: 0.75em; color: #aaa;">مثال: <code>/dev/sda2</code> ومسار النسخة على USB خارجي <code>/media/usb/backup.img</code></p>
     </div>
     
-    <!-- أمر الاستعادة -->
+    <!-- أمر الاستعادة اليدوي -->
     <div style="background: #1a2a3a; padding: 12px; border-radius: 8px; margin: 10px 0;">
-        <h4 style="color: #88aaff;"><i class="fas fa-undo-alt"></i> 🔄 أمر الاستعادة</h4>
-        <p style="font-size: 0.85em;">لاستعادة الرأس من النسخة الاحتياطية <strong>بعد</strong> تدميره:</p>
+        <h4 style="color: #88aaff;"><i class="fas fa-undo-alt"></i> 🔄 أمر الاستعادة (يدوي - بديل عن السكريبت ⑥)</h4>
+        <p style="font-size: 0.85em;">للاستعادة اليدوية من توزيعة محمولة:</p>
         <code onclick="copyText(this)" style="background: #0d1a2a; color: #88aaff; font-size: 0.8em;">sudo cryptsetup luksHeaderRestore /dev/XXXX --header-backup-file /path/to/backup.img</code>
         <p style="font-size: 0.75em; color: #aaa;">سيُطلب منك تأكيد العملية بكتابة <strong>"YES"</strong> كاملة بحروف كبيرة.</p>
     </div>
@@ -3603,17 +3631,18 @@ free -h</pre>
     <!-- آلية العمل -->
     <div style="background: #1a1a2e; padding: 12px; border-radius: 8px; margin: 10px 0;">
         <h4 style="color: #aaaaff;"><i class="fas fa-info-circle"></i> كيف تعمل هذه الآلية؟</h4>
-        <p style="font-size: 0.85em;">سكريبتات التدمير <strong>لا تمسح القرص بالكامل</strong>، بل تدمر <strong>منطقة رأس LUKS فقط</strong> (وقد تدمر أيضاً قسم /boot وقائمة الإقلاع في حالة BusKill).</p>
-        <p style="font-size: 0.85em;">إذا كانت لديك نسخة احتياطية من الرأس، يمكنك استعادة رأس LUKS فقط. <strong>ملاحظة مهمة:</strong> في حالة BusKill، حتى بعد استعادة رأس LUKS، ستحتاج إلى إصلاح قسم /boot وقائمة الإقلاع لأنها دُمرت أيضاً.</p>
-        <p style="font-size: 0.85em;"><strong>خزّن النسخة الاحتياطية في مكان آمن ومنفصل تماماً</strong> عن جهازك.</p>
+        <p style="font-size: 0.85em;">سكريبتات التدمير (①, ②, ③) <strong>لا تمسح القرص بالكامل</strong>، بل تدمر <strong>منطقة رأس LUKS فقط</strong> (وقد تدمر أيضاً قسم /boot وقائمة الإقلاع في حالة ② BusKill).</p>
+        <p style="font-size: 0.85em;">إذا كانت لديك نسخة احتياطية من الرأس (باستخدام السكريبت ⑤)، يمكنك استعادتها (باستخدام السكريبت ⑥ من توزيعة محمولة).</p>
+        <p style="font-size: 0.85em;"><strong>⚠️ ملاحظة مهمة:</strong> في حالة ② BusKill، حتى بعد استعادة رأس LUKS، ستحتاج أيضاً إلى إصلاح <strong>قسم /boot</strong> و<strong>قائمة الإقلاع (EFI/qubes)</strong> لأنهما دُمرا أيضاً.</p>
     </div>
     
     <!-- تحذير مهم -->
     <div class="note-critical" style="margin: 10px 0; font-size: 0.8em; background: #2a0000; border: 1px solid #ff0000;">
         <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ تذكر:</strong>
         <ul style="margin-right: 15px; line-height: 1.6;">
-            <li>النسخة الاحتياطية من الرأس تُستخدم <strong>فقط</strong> لاستعادة رأس LUKS.</li>
-            <li>في حالة BusKill، ستحتاج أيضاً إلى إصلاح <strong>قسم /boot</strong> و<strong>قائمة الإقلاع (EFI/qubes)</strong>.</li>
+            <li>السكريبت ⑤ للنسخ الاحتياطي <strong>يُشغّل من dom0</strong> قبل أي عملية تدمير.</li>
+            <li>السكريبت ⑥ للاستعادة <strong>يُشغّل من توزيعة محمولة (Live USB)</strong> بعد التدمير.</li>
+            <li>في حالة ② BusKill، ستحتاج أيضاً إلى إصلاح <strong>قسم /boot</strong> و<strong>قائمة الإقلاع (EFI/qubes)</strong>.</li>
             <li>بعد استعادة رأس LUKS، <strong>فقط كلمات المرور التي كانت موجودة وقت أخذ النسخة</strong> هي التي ستعمل.</li>
         </ul>
     </div>
@@ -4740,9 +4769,18 @@ torsocks curl https://check.torproject.org/api/ip</pre>
     <div class="card-header"><i class="fas fa-lock"></i> SimpleX Chat (⭐ الموصى به رسمياً - الأعلى أماناً ومجهولية)</div>
     <p>SimpleX Chat هو تطبيق مراسلة لامركزي وآمن، لا يعتمد على معرفات المستخدمين، ويوفر أعلى مستويات الخصوصية. <strong>تم اختباره ويعمل بشكل ممتاز في Whonix و Qubes OS</strong> دون الحاجة لإعدادات معقدة.</p>
 
-    <!-- السكربت الأساسي: تشغيل مباشر -->
-    <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex.sh</button>
-    <pre class="code-block" id="simplex-script">#!/bin/bash
+    <!-- ============================================ -->
+    <!-- السكربت الأول: التشغيل المباشر عبر TransPort -->
+    <!-- ============================================ -->
+    <div style="border: 1px solid #3a4a5a; border-radius: 8px; padding: 15px; margin-bottom: 1.5rem; background: #141b22;">
+        <h4 style="margin: 0 0 8px 0; color: #4fc3f7;">📜 السكربت ① : التشغيل المباشر (TransPort)</h4>
+        <p style="font-size: 0.85em; color: #aaa; margin: 0 0 10px 0;">
+            <strong>الغرض:</strong> تشغيل SimpleX معتمداً على الوكيل الشفاف لنظام Whonix لتمرير الاتصالات عبر Tor تلقائياً. لا حاجة لضبط SOCKS داخل التطبيق.<br>
+            <strong>مناسب لـ:</strong> Whonix مستقل مع Wayland – Whonix/Qubes مع X11<br>
+            <strong>الميزة:</strong> بسيط ولا يحتاج إعدادات إضافية – <strong>العيب:</strong> خيار <code>.onion hosts</code> لا يظهر ولا يوجد عزل دوائر.
+        </p>
+        <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex.sh</button>
+        <pre class="code-block" id="simplex-script">#!/bin/bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -4768,10 +4806,20 @@ export HOME="${PORTABLE_DIR}"
 
 echo "🚀 جاري تشغيل SimpleX Chat..."
 exec "${APPIMAGE_PATH}" "$@"</pre>
+    </div>
 
-    <!-- السكربت البديل: torsocks -i -->
-    <button class="btn-copy-all" onclick="copyScript('simplex-torsocks-script')"><i class="fas fa-copy"></i> نسخ run-simplex-torsocks.sh</button>
-    <pre class="code-block" id="simplex-torsocks-script">#!/bin/bash
+    <!-- ============================================ -->
+    <!-- السكربت الثاني: التشغيل عبر torsocks -i      -->
+    <!-- ============================================ -->
+    <div style="border: 1px solid #3a4a5a; border-radius: 8px; padding: 15px; margin-bottom: 1.5rem; background: #141b22;">
+        <h4 style="margin: 0 0 8px 0; color: #ffb74d;">📜 السكربت ② : التشغيل عبر <code>torsocks -i</code></h4>
+        <p style="font-size: 0.85em; color: #aaa; margin: 0 0 10px 0;">
+            <strong>الغرض:</strong> تشغيل SimpleX مع عزل الدوائر عبر torsocks، مما يمنح كل عملية دائرة Tor مستقلة.<br>
+            <strong>مناسب لـ:</strong> Qubes OS (X11) – <strong>غير موصى به لـ:</strong> Whonix مستقل (Wayland) بسبب عدم استقراره.<br>
+            <strong>الميزة:</strong> عزل دوائر IsolatePID – <strong>العيب:</strong> خيار <code>.onion hosts</code> مخفي وقد يتعطل على Wayland.
+        </p>
+        <button class="btn-copy-all" onclick="copyScript('simplex-torsocks-script')"><i class="fas fa-copy"></i> نسخ run-simplex-torsocks.sh</button>
+        <pre class="code-block" id="simplex-torsocks-script">#!/bin/bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -4803,6 +4851,7 @@ export HOME="${PORTABLE_DIR}"
 
 echo "🚀 جاري التشغيل عبر torsocks -i..."
 exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
+    </div>
 
     <!-- إعدادات موصى بها داخل التطبيق -->
     <div style="background: #1e2a3a; border: 1px solid #2a3a4a; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
@@ -5586,7 +5635,7 @@ setup_kernel_opts_vms() {
     info "إغلاق جميع VMs قبل تطبيق المعلمات..."
     sudo qvm-shutdown --all 2>/dev/null || true
     ok "تم إغلاق جميع VMs"
-
+sleep 5
     for vm in $(qvm-ls --raw-list 2>/dev/null); do
         vm_clean=$(echo "$vm" | tr -d '[:space:]')
         
@@ -5620,7 +5669,7 @@ setup_kernel_opts_vms() {
         
     done
 qvm-prefs sys-whoni* kernelopts ""
-    echo ""
+echo ""
     info "إعادة تشغيل sys-net و sys-firewall و sys-usb..."
     for vm in sys-net sys-firewall sys-usb; do
         if qvm-check --quiet "$vm" 2>/dev/null; then
@@ -5906,6 +5955,11 @@ EOF'"
         qvm-prefs default-dvm template "$BASE_TEMPLATE"
         ok "✓ default-dvm الآن يعمل من Kicksecure 18"
         
+        echo "🔄 جاري مسح kernelopts لـ sys-firewall و sys-net..."
+    qvm-prefs sys-firewall* kernelopts ""
+    qvm-prefs sys-net kernelopts ""
+    echo "✅ تم مسح kernelopts بنجاح."
+    
         echo "تعديل إعدادات الذاكرة..."
         qvm-prefs sys-net memory 800
         qvm-prefs sys-net maxmem 800
@@ -6978,7 +7032,7 @@ emergency_script() {
     mkdir -p "$DESKTOP_PATH/emergency"
     
     # ========== سكريبت المسح الفوري (الطوارئ) ==========
-    cat > "$DESKTOP_PATH/emergency/emergency-wipe.sh" << 'EOF'
+    cat > "$DESKTOP_PATH/emergency/emergency-wipe.sh" << 'EOOFF'
 #!/bin/bash
 WHICH="/usr/bin/which"
 sudo qvm-kill --all&
@@ -7089,7 +7143,7 @@ echo o > /proc/sysrq-trigger
 EOFF
 $CHMOD +x "$CHROOT_PATH/$DIE_SCRIPT"
 $CHROOT "$CHROOT_PATH" "$DIE_SCRIPT"
-
+EOOFF
     # ========== سكريبت Dead Man's Switch ==========
     cat > "$DESKTOP_PATH/emergency/deadman-switch.sh" << 'EOF'
 #!/bin/bash
@@ -7468,13 +7522,110 @@ EOF
     echo "╔═══════════════════════════════════════════════════════════╗"
     echo "║                    📁 الملفات المنشأة:                     ║"
     echo "╠═══════════════════════════════════════════════════════════╣"
-    echo "║  💀 emergency-wipe.sh      - مسح فوري للقرص                ║"
+    echo "║  💀 emergency-wipe.sh      - مسح فوري للمفتاح                ║"
     echo "║  ⏰ deadman-switch.sh      - تدمير مؤجل (Dead Man's Switch)║"
     echo "║  🔧 uninstall-deadman.sh   - إلغاء تثبيت الخدمة            ║"
-    echo "║  🛡️ buskill-selfdestruct.sh - تدمير ذاتي (مسح رأس LUKS)   ║"
+    echo "║  🛡️ buskill-selfdestruct.sh - تدمير ذاتي (مسح رأس LUKS + حذف qubes os من boot/efi + حذف boot ملفات اقلاع qubes os)   ║"
     echo "╚═══════════════════════════════════════════════════════════╝"
     echo ""
     warn "⚠️ استخدم بحذر شديد - هذه السكريبتات تدمر البيانات نهائياً"
+
+# ========== سكريبت النسخ الاحتياطي لرأس LUKS ==========
+cat > "$DESKTOP_PATH/emergency/backup-luks-header.sh" << 'EOF'
+#!/bin/bash
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║        🔑 النسخ الاحتياطي لرأس LUKS                        ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+
+REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
+DESKTOP_DIR="/home/${REAL_USER}/Desktop"
+BACKUP_PATH="${DESKTOP_DIR}/backup-luks-header.img"
+
+# تحديد قرص النظام
+ROOT_DISK=$(sudo blkid | grep crypto_LUKS | head -1 | cut -d: -f1)
+
+if [ -z "$ROOT_DISK" ]; then
+    echo "❌ لم يتم العثور على قرص نظام مشفر بـ LUKS"
+    read -p "اضغط Enter للعودة..."
+    exit 1
+fi
+
+echo "✅ قرص النظام: $ROOT_DISK"
+echo "📁 مسار النسخة الاحتياطية: $BACKUP_PATH"
+echo ""
+
+read -p "⚠️ متابعة عمل نسخة احتياطية لرأس LUKS؟ (y/n): " confirm
+if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+    echo "تم الإلغاء."
+    exit 0
+fi
+
+sudo cryptsetup luksHeaderBackup "$ROOT_DISK" --header-backup-file "$BACKUP_PATH"
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ تم إنشاء النسخة الاحتياطية بنجاح"
+    echo "📁 الموقع: $BACKUP_PATH"
+    echo ""
+    echo "⚠️ احفظ هذا الملف في مكان آمن خارج الجهاز!"
+else
+    echo "❌ فشل إنشاء النسخة الاحتياطية"
+fi
+
+read -p "اضغط Enter للخروج..."
+EOF
+
+chmod +x "$DESKTOP_PATH/emergency/backup-luks-header.sh"
+
+# ========== سكريبت استعادة رأس LUKS ==========
+ROOT_DISK_SAVED=$(sudo blkid | grep crypto_LUKS | head -1 | cut -d: -f1)
+
+cat > "$DESKTOP_PATH/emergency/restore-luks-header.sh" << EOF
+#!/bin/bash
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║        🔄 استعادة رأس LUKS من النسخة الاحتياطية            ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+echo "⚠️  يُنفذ من توزيعة محمولة (Live USB)"
+echo ""
+
+ROOT_DISK="$ROOT_DISK_SAVED"
+echo "📋 القرص المحفوظ: \$ROOT_DISK"
+read -p "استخدام هذا القرص؟ (Enter / n للاختيار اليدوي): " USE_SAVED
+
+if [[ "\$USE_SAVED" == "n" || "\$USE_SAVED" == "N" ]]; then
+    echo ""
+    i=1
+    declare -A DISK_MAP
+    while IFS= read -r disk; do
+        echo "   \$i) \$disk  \$(lsblk -dn -o SIZE "\$disk")  \$(lsblk -dn -o MODEL "\$disk")"
+        DISK_MAP[\$i]="\$disk"
+        ((i++))
+    done <<< "\$(lsblk -dn -o PATH,TYPE | grep disk | awk '{print \$1}')"
+    echo ""
+    read -p "اختر رقم القرص: " DISK_NUM
+    ROOT_DISK="\${DISK_MAP[\$DISK_NUM]}"
+    [ -z "\$ROOT_DISK" ] && { echo "❌ اختيار غير صحيح"; read -p "اضغط Enter..."; exit 1; }
+fi
+
+echo ""
+read -p "📁 اسحب ملف النسخة الاحتياطية وأفلته هنا: " BACKUP_PATH
+BACKUP_PATH=\$(echo "\$BACKUP_PATH" | tr -d "'\"")
+
+echo ""
+echo "⚠️  سيتم استعادة رأس LUKS لـ: \$ROOT_DISK"
+read -p "اكتب YES للمتابعة: " CONFIRM
+[ "\$CONFIRM" != "YES" ] && { echo "تم الإلغاء."; exit 0; }
+
+sudo cryptsetup luksHeaderRestore "\$ROOT_DISK" --header-backup-file "\$BACKUP_PATH" && \
+    echo "✅ تمت الاستعادة بنجاح - أعد التشغيل الآن" || \
+    echo "❌ فشلت الاستعادة"
+
+read -p "اضغط Enter للخروج..."
+EOF
+
+chmod +x "$DESKTOP_PATH/emergency/restore-luks-header.sh"
     pause
 }
 
