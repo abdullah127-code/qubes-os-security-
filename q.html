@@ -2433,22 +2433,134 @@ rm /tmp/luks-setup.sh</pre>
         </div>
     </div>
 
-    <!-- ======== سيناريو عملي: فلاشة LUKS → Whonix ======== -->
-    <div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
-        <div class="card-header" style="color: #4caf50;">
-            <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS → Whonix (GNOME Disks)
-        </div>
-        <p><strong>التدفق:</strong> فلاشة LUKS → storage-vault → GNOME Disks (فتح) → تمرير GUI → Whonix → GNOME Disks (Mount)</p>
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 10px;">1</td><td style="padding: 10px;">أوصل الفلاشة إلى <code>storage-vault</code></td></tr>
-            <tr><td style="padding: 10px;">2</td><td style="padding: 10px;">GNOME Disks ← Unlock ← <strong>لا Mount</strong></td></tr>
-            <tr><td style="padding: 10px;">3</td><td style="padding: 10px;">أيقونة USB: Attach to <code>whonix-workstation</code></td></tr>
-            <tr><td style="padding: 10px;">4</td><td style="padding: 10px;">في <code>whonix-workstation</code>: GNOME Disks ← Mount</td></tr>
-        </table>
-        <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-            <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور LUKS لا تغادر <code>storage-vault</code>.
+<!-- ======== سيناريو عملي: فلاشة LUKS → Whonix ======== -->
+<div class="card" style="margin-top: 30px; border-right: 8px solid #4caf50;">
+    <div class="card-header" style="color: #4caf50;">
+        <i class="fas fa-usb"></i> 💾 سيناريو عملي: فلاشة LUKS → Whonix (GNOME Disks)
+    </div>
+    <p><strong>التدفق:</strong> فلاشة LUKS → storage-vault → GNOME Disks (فتح) → تمرير GUI → Whonix → GNOME Disks (Mount)</p>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr><td style="padding: 10px;">1</td><td style="padding: 10px;">أوصل الفلاشة إلى <code>storage-vault</code></td></tr>
+        <tr><td style="padding: 10px;">2</td><td style="padding: 10px;">GNOME Disks ← Unlock ← <strong>لا Mount</strong></td></tr>
+        <tr><td style="padding: 10px;">3</td><td style="padding: 10px;">أيقونة USB: Attach to <code>whonix-workstation</code></td></tr>
+        <tr><td style="padding: 10px;">4</td><td style="padding: 10px;">في <code>whonix-workstation</code>: GNOME Disks ← Mount</td></tr>
+    </table>
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور LUKS لا تغادر <code>storage-vault</code>.
+    </div>
+</div>
+<!-- ======== بطاقة تحذير: فشل الطريقة المباشرة مع السكربتات ======== -->
+<div class="card" style="margin-top: 30px; border-right: 8px solid #ff9800;">
+    <div class="card-header" style="color: #ff9800;">
+        <i class="fas fa-exclamation-triangle"></i> ⚠️ تحذير هام: فشل تشغيل السكربتات في Whonix
+    </div>
+    <p><strong>الطريقة السابقة (تمرير الفلاشة مباشرة أو حتى توصيلها مباشرة إلى <code>whonix-workstation</code>) لا تعمل إذا كانت الفلاشة تحتوي على سكربتات للتشغيل!</strong></p>
+    <p>بسبب قاعدة <code>noexec</code> الأمنية الصارمة في Whonix، يتم تركيب وحدات التخزين الخارجية <strong>بدون صلاحية تنفيذ</strong>، مما يمنع أي سكربت من العمل. سواء مرّرت البلوك ديفايس أو وصلت USB مباشرة — النتيجة واحدة: <strong>لا صلاحية تنفيذ</strong>.</p>
+    <div class="note" style="margin-top: 15px; background: #2a1a1a;">
+        <i class="fas fa-lightbulb"></i> <strong>الحل:</strong> استخدم السيناريو المتقدم أدناه — <strong>حاوية LUKS داخل فلاشة VeraCrypt</strong> — حيث يتم فتح حاوية LUKS وتثبيتها <strong>يدوياً من ملف <code>.img</code> داخلي</strong> في <code>whonix-work-ram</code>. لأنها تُفتح من ملف داخلي وليس من جهاز خارجي، تمنحها Whonix صلاحيات تنفيذ طبيعية تلقائياً.
+    </div>
+</div>
+
+<!-- ======== سيناريو متقدم: حاوية LUKS داخل فلاشة VeraCrypt → Whonix ======== -->
+<div class="card" style="margin-top: 30px; border-right: 8px solid #9c27b0;">
+    <div class="card-header" style="color: #ce93d8;">
+        <i class="fas fa-layer-group"></i> 🧅 سيناريو متقدم: حاوية LUKS داخل فلاشة VeraCrypt → Whonix
+    </div>
+    <p><strong>الفكرة:</strong> تشفير الفلاشة كاملةً بـ VeraCrypt وتهيئتها بنظام <code>ext4</code>. إنشاء حاوية <strong>LUKS</strong> داخلها مباشرة. عند الاستخدام، فتح الحاوية الداخلية وتثبيتها يدوياً في <code>whonix-work-ram</code> يمنحها صلاحيات تنفيذ طبيعية تلقائياً.</p>
+    
+    <h4 style="color: #ffd966; margin-top: 20px;"><i class="fas fa-cogs"></i> 🛠️ مرحلة الإعداد (مرة واحدة فقط)</h4>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8; width: 30px;">1</td>
+            <td style="padding: 10px;">شغّل <strong>كيوب مؤقت</strong> (مثل <code>work-vault</code>)، وصّل الفلاشة إليه عبر dom0.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">2</td>
+            <td style="padding: 10px;">افتح VeraCrypt واختر <strong>Create Volume → Encrypt a non-system partition/drive</strong>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">3</td>
+            <td style="padding: 10px;">حدد الفلاشة كاملةً، اختر كلمة مرور قوية، وشفرها بنظام <strong>ext4</strong>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">4</td>
+            <td style="padding: 10px;">بعد التشفير، افتح الفلاشة في VeraCrypt و<strong>ثبّتها (Mount)</strong>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">5</td>
+            <td style="padding: 10px;">داخل الفلاشة المثبتة، أنشئ <strong>حاوية LUKS</strong> (ملف <code>.img</code>) باستخدام السكربت التفاعلي أو الأمر المباشر.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">6</td>
+            <td style="padding: 10px;">افتح حاوية LUKS، ثبّتها، وانقل جميع ملفاتك الحساسة وسكربتاتك إلى داخلها.</td>
+        </tr>
+    </table>
+    
+    <h4 style="color: #ffd966; margin-top: 20px;"><i class="fas fa-play"></i> ▶️ مرحلة التشغيل اليومي</h4>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8; width: 30px;">1</td>
+            <td style="padding: 10px;">أوصل الفلاشة إلى <strong>كيوب تخزين زائل</strong> (مثل <code>storage-vault</code>).</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">2</td>
+            <td style="padding: 10px;">افتح VeraCrypt، افتح تشفير الفلاشة الخارجي <strong>لكن لا تقم بتثبيتها (Do not mount)</strong>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">3</td>
+            <td style="padding: 10px;">من dom0، مرّر <strong>البلوك ديفايس</strong> الخاص بالفلاشة المفتوحة إلى <code>whonix-work-ram</code>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">4</td>
+            <td style="padding: 10px;">في <code>whonix-work-ram</code>، ثبت الفلاشة مؤقتاً لترى الملفات، ثم استخدم <strong>GNOME Disks</strong> أو <code>cryptsetup</code> لفتح ملف حاوية LUKS (<code>.img</code>).</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">5</td>
+            <td style="padding: 10px;">ثبّت (Mount) حاوية LUKS — <strong>تمنح صلاحيات تنفيذ طبيعية تلقائياً</strong> لأنها تُفتح من ملف داخلي وليس من جهاز خارجي.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">6</td>
+            <td style="padding: 10px;">شغّل سكربتاتك مباشرة من داخل حاوية LUKS المثبتة.</td>
+        </tr>
+    </table>
+    
+    <div style="background: #0d1b2a; padding: 15px; border-radius: 12px; margin-top: 15px; text-align: center; direction: ltr;">
+        <p style="color: #ffd966; font-weight: bold;">🔑 تدفق التشفير الكامل:</p>
+        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; font-size: 0.85em;">
+            <span style="background: #1a3a3a; padding: 8px 14px; border-radius: 30px;">💾 فلاشة USB</span>
+            <span>→</span>
+            <span style="background: #2a1a4a; padding: 8px 14px; border-radius: 30px;">🔐 VeraCrypt خارجي<br><small>(كلمة مرور ١)</small></span>
+            <span>→</span>
+            <span style="background: #1a3a3a; padding: 8px 14px; border-radius: 30px;">📁 ext4<br><small>(ملف LUKS .img)</small></span>
+            <span>→</span>
+            <span style="background: #2a4a1a; padding: 8px 14px; border-radius: 30px;">🧅 LUKS2 + Argon2id<br><small>(كلمة مرور ٢)</small></span>
+            <span>→</span>
+            <span style="background: #0a3a0a; padding: 8px 14px; border-radius: 30px;">✅ سكربتات وبيانات</span>
         </div>
     </div>
+    
+    <div class="note" style="margin-top: 15px; background: #1a3a3a;">
+        <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور VeraCrypt لا تغادر كيوب التخزين. كلمة مرور LUKS لا تخرج من <code>whonix-work-ram</code>. طبقتا تشفير مستقلتان. LUKS يوفر Argon2id لمقاومة GPU.
+    </div>
+    
+    <div class="note" style="margin-top: 10px; background: #2a1a3a; border-right-color: #ce93d8;">
+        <i class="fas fa-lightbulb"></i> <strong>💡 لماذا تنجح هذه الطريقة بينما تفشل السابقة؟</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li>• <strong>الطريقة المباشرة (تمرير أو توصيل):</strong> Whonix يطبق <code>noexec</code> تلقائياً على أي جهاز خارجي — لا صلاحية تنفيذ.</li>
+            <li>• <strong>هذه الطريقة:</strong> حاوية LUKS تُفتح من <strong>ملف <code>.img</code> داخلي</strong> وليس من جهاز خارجي. Whonix لا يطبق <code>noexec</code> على الملفات الداخلية — صلاحيات تنفيذ طبيعية تلقائياً.</li>
+            <li>• <strong>ext4:</strong> نظام الملفات الداخلي يدعم صلاحيات <code>chmod +x</code> التي تحتاجها السكربتات.</li>
+        </ul>
+    </div>
+
+    <div class="note-critical" style="margin-top: 10px;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>⚠️ ملاحظات هامة:</strong>
+        <ul style="margin-right: 20px; margin-top: 8px;">
+            <li>• <strong>الإنكار المعقول:</strong> VC يخفي LUKS. ملف <code>.img</code> يبدو كبيانات عشوائية. حتى أدوات فحص التشفير لن تميزه.</li>
+            <li>• <strong>تحذير SSD:</strong> تقنية TRIM تجعل هذه الطريقة أقل أماناً. استخدم فلاشات USB تقليدية للحصول على أفضل حماية.</li>
+        </ul>
+    </div>
+</div>
 
     <!-- ======== تقوية قرص نظام LUKS الموجود دون إعادة تهيئته ======== -->
     <div class="card" style="margin-top: 30px; border-right: 8px solid #ff9944;">
@@ -6027,7 +6139,16 @@ fi
 # ========
 ram_pool_scripts() {
     mkdir -p "$DESKTOP_PATH/ram-pool-scripts"
-    
+    echo 'org.gnome.DiskUtility.desktop
+janondisttorbrowser.desktop
+pcmanfm-qt.desktop
+qterminal.desktop
+anondist-torbrowser_update.desktop' | qvm-appmenus --set-default-whitelist - whonix-workstation-18
+
+qvm-appmenus --update whonix-workstation-18
+
+echo "✅ تم تعيين Disks (org.gnome.DiskUtility.desktop) افتراضياً - تأكد من تثبيتها"
+
     # ========== setup-ram-pool.sh ==========
     cat > "$DESKTOP_PATH/ram-pool-scripts/setup-ram-pool.sh" << 'EOF'
 #!/bin/bash
