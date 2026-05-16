@@ -4780,7 +4780,8 @@ torsocks curl https://check.torproject.org/api/ip</pre>
             <strong>الميزة:</strong> بسيط ولا يحتاج إعدادات إضافية – <strong>العيب:</strong> خيار <code>.onion hosts</code> لا يظهر ولا يوجد عزل دوائر.
         </p>
         <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> نسخ run-simplex.sh</button>
-        <pre class="code-block" id="simplex-script">#!/bin/bash
+        <pre class="code-block" id="simplex-script">cat > run-simplex.sh << 'EOF'
+#!/bin/bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -4805,7 +4806,9 @@ export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
 export HOME="${PORTABLE_DIR}"
 
 echo "🚀 جاري تشغيل SimpleX Chat..."
-exec "${APPIMAGE_PATH}" "$@"</pre>
+exec "${APPIMAGE_PATH}" "$@"
+EOF
+chmod +x run-simplex.sh</pre>
     </div>
 
     <!-- ============================================ -->
@@ -4819,7 +4822,8 @@ exec "${APPIMAGE_PATH}" "$@"</pre>
             <strong>الميزة:</strong> عزل دوائر IsolatePID – <strong>العيب:</strong> خيار <code>.onion hosts</code> مخفي وقد يتعطل على Wayland.
         </p>
         <button class="btn-copy-all" onclick="copyScript('simplex-torsocks-script')"><i class="fas fa-copy"></i> نسخ run-simplex-torsocks.sh</button>
-        <pre class="code-block" id="simplex-torsocks-script">#!/bin/bash
+        <pre class="code-block" id="simplex-torsocks-script">cat > run-simplex-torsocks.sh << 'EOF'
+#!/bin/bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -4850,7 +4854,9 @@ export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
 export HOME="${PORTABLE_DIR}"
 
 echo "🚀 جاري التشغيل عبر torsocks -i..."
-exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
+exec torsocks -i "${APPIMAGE_PATH}" "$@"
+EOF
+chmod +x run-simplex-torsocks.sh</pre>
     </div>
 
     <!-- إعدادات موصى بها داخل التطبيق -->
@@ -4978,7 +4984,8 @@ exec torsocks -i "${APPIMAGE_PATH}" "$@"</pre>
         <h3><i class="fas fa-usb"></i> 💾 سكربت Cwtch المحمول (Portable)</h3>
         <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whonix وتشغيلها عند الحاجة:</p>
         <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
-        <pre class="code-block" id="cwtch-portable-script">#!/bin/sh
+        <pre class="code-block" id="cwtch-portable-script">cat > run-cwtch-portable.sh << 'EOF'
+#!/bin/sh
 # =======
 # سكريبت تشغيل Cwtch المحمول لـ Whonix داخل Qubes
 # مطابق لما يفعله install-whonix.sh مع التشغيل المحمول
@@ -4998,7 +5005,9 @@ fi
 # تشغيل Cwtch
 export CWTCH_HOME="${SCRIPTPATH}/cwtch-data"
 exec env LD_LIBRARY_PATH="./lib/:./Tor" \
-    CWTCH_HOME="${SCRIPTPATH}/cwtch-data" ./lib/cwtch</pre>
+    CWTCH_HOME="${SCRIPTPATH}/cwtch-data" ./lib/cwtch
+EOF
+chmod +x run-cwtch-portable.sh</pre>
         <p>📁 <strong>هيكل المجلدات بعد التشغيل:</strong></p>
         <pre class="code-block">cwtch/
 ├── run-cwtch-portable.sh    # ⬅️ استخدم هذا للتشغيل المحمول
@@ -5108,7 +5117,8 @@ sudo apt install gajim gajim-httpupload torsocks -y</pre>
             <strong>⚠️ قيود التحميل:</strong> Gajim <strong>لا يمكن جعله محمولاً بالكامل عبر أنظمة مختلفة</strong> بسبب اعتماده على <strong>gnome-keyring</strong> (مدير كلمات مرور جنوم) لإدارة مفاتيح التشفير والشهادات. السكريبت أدناه يسمح بحفظ <strong>الإعدادات والمحادثات</strong> في مجلد محمول على USB، لكنه سيعمل فقط <strong>داخل نفس النظام/المستخدم</strong>.
         </div>
         <button class="btn-copy-all" onclick="copyScript('gajim-script')"><i class="fas fa-copy"></i> نسخ run-gajim-portable.sh</button>
-        <pre class="code-block" id="gajim-script">#!/bin/bash
+        <pre class="code-block" id="gajim-script">cat > run-gajim-portable.sh << 'EOF'
+#!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/gajim-data"
 mkdir -p "$PORTABLE_DIR"
@@ -5124,7 +5134,9 @@ if ! command -v gajim &> /dev/null; then
     exit 1
 fi
 
-gajim -c "$PORTABLE_DIR" &</pre>
+gajim -c "$PORTABLE_DIR" &
+EOF
+chmod +x run-gajim-portable.sh</pre>
     </div>
 
     <!-- ======== Matrix/Element Cards ======== -->
@@ -5154,7 +5166,8 @@ sudo apt install --no-install-recommends element-desktop</pre>
         <div class="card-header"><i class="fas fa-usb"></i> Element - نسخة محمولة</div>
         <p>هذا السكريبت يجعل Element محمولاً بحيث يحفظ جميع الإعدادات والمحادثات ومفاتيح التشفير داخل مجلد <code>Element-Data</code> على الفلاشة.</p>
         <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> نسخ run-element-portable.sh</button>
-        <pre class="code-block" id="element-script">#!/bin/bash
+        <pre class="code-block" id="element-script">cat > run-element-portable.sh << 'EOF'
+#!/bin/bash
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DATA_DIR="${SCRIPT_DIR}/Element-Data"
@@ -5165,7 +5178,9 @@ if ! command -v element-desktop &> /dev/null; then
     exit 1
 fi
 
-element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &</pre>
+element-desktop --profile-dir="${PORTABLE_DATA_DIR}" &
+EOF
+chmod +x run-element-portable.sh</pre>
     </div>
 
     <!-- ======== Signal Card ======== -->
@@ -5210,7 +5225,8 @@ sudo apt install signal-desktop -y</pre>
 
         <div class="section-title"><i class="fas fa-usb"></i> سكربت Signal المحمول</div>
         <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
-        <pre class="code-block" id="signal-portable">#!/bin/bash
+        <pre class="code-block" id="signal-portable">cat > run-signal-portable.sh << 'EOF'
+#!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
 
@@ -5234,7 +5250,9 @@ while pgrep -P $SIGNAL_PID > /dev/null 2>&1 || kill -0 $SIGNAL_PID 2>/dev/null; 
 done
 
 echo "✅ تم إغلاق Signal"
-exit 0</pre>
+exit 0
+EOF
+chmod +x run-signal-portable.sh</pre>
         
         <div class="note" style="margin-top: 15px; background: #3a1a1a;">
             <i class="fas fa-shield-alt"></i> 
@@ -5258,7 +5276,8 @@ exit 0</pre>
         </div>
         <p>لا يتطلب إعدادات إضافية - يعمل مباشرة عبر شبكة Oxen.</p>
         <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> نسخ run-session.sh</button>
-        <pre class="code-block" id="session-script">#!/bin/bash
+        <pre class="code-block" id="session-script">cat > run-session.sh << 'EOF'
+#!/bin/bash
 if ! ls [sS]ession*.AppImage 1>/dev/null 2>&1; then
     wget -c https://getsession.org/linux -O Session.AppImage
 fi
@@ -5269,7 +5288,9 @@ APPIMAGE=$(ls [sS]ession*.AppImage 2>/dev/null | head -1)
 chmod +x "$APPIMAGE" 2>/dev/null
 [ ! -d "Session.AppImage.home" ] && "./$APPIMAGE" --appimage-portable-home
 [ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
-exec "./$APPIMAGE" "$@"</pre>
+exec "./$APPIMAGE" "$@"
+EOF
+chmod +x run-session.sh</pre>
     </div>
 
     <!-- ======== Telegram Card ======== -->
@@ -5280,7 +5301,8 @@ exec "./$APPIMAGE" "$@"</pre>
             <strong>⚠️ تحذير أمني خطير:</strong> تليجرام <strong>ليس آمناً</strong> في بيئات الخصوصية العالية. نوصي بشدة باستخدام <strong>SimpleX Chat</strong> بدلاً منه.
         </div>
         <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> نسخ run-telegram.sh</button>
-        <pre class="code-block" id="telegram-script">#!/bin/bash
+        <pre class="code-block" id="telegram-script">cat > run-telegram.sh << 'EOF'
+#!/bin/bash
 cd "$(dirname "$0")"
 
 if [[ ! -f "./Telegram/Telegram" ]]; then
@@ -5297,7 +5319,9 @@ export XDG_DATA_HOME="$PWD/data"
 export XDG_CONFIG_HOME="$PWD/data"
 export XDG_CACHE_HOME="$PWD/data/cache"
 
-exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"</pre>
+exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"
+EOF
+chmod +x run-telegram.sh</pre>
     </div>
 
 <!-- ======== إزالة البيانات الوصفية ======== -->
