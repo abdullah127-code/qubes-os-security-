@@ -5419,6 +5419,7 @@ cd "$(dirname "$0")"
 
 if [[ ! -f "./Telegram/Telegram" ]]; then
     echo "📥 جاري تحميل Telegram..."
+    sudo apt install wget -y
     wget -c "https://telegram.org/dl/desktop/linux" -O telegram.tar.xz
     tar -xf telegram.tar.xz
     rm telegram.tar.xz
