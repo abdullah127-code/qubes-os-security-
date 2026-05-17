@@ -5432,7 +5432,7 @@ export XDG_DATA_HOME="$PWD/data"
 export XDG_CONFIG_HOME="$PWD/data"
 export XDG_CACHE_HOME="$PWD/data/cache"
 
-exec torsocks -i ./Telegram/Telegram -workdir "$PWD/data" "$@"
+exec ./Telegram/Telegram -workdir "$PWD/data" "$@"
 EOF
 chmod +x run-telegram.sh</pre>
     </div>
