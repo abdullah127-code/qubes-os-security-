@@ -4823,9 +4823,26 @@ free -h</pre>
             </li>
             <li>☑ فعّل <strong>Use .onion hosts</strong> (سيظهر بعد تفعيل SOCKS)</li>
             <li>اختر <strong>Required</strong> للخصوصية القصوى (يمنع الاتصال من مغادرة شبكة Tor أبداً)، أو <strong>When Available</strong> للتوازن بين الخصوصية والتوفر </li>
-            <li>☑ فعّل <strong>Transport isolation</strong> (اختياري، تجريبي - يمنح كل جهة اتصال دائرة Tor مستقلة)</li>
+            <li>☑ فعّل <strong>Use random credentials</strong> (اختياري، لكنه يزيد من عزل الدوائر عبر ميزة `IsolateSOCKSAuth` في Tor)</li>
             <li>اضغط <strong>Save & Update</strong> للحفظ وإعادة الاتصال</li>
         </ol>
+    </div>
+
+    <!-- إعدادات الشبكة المتقدمة -->
+    <div style="background: #1e2a3a; border: 1px solid #2a3a4a; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
+        <strong>🛠️ إعدادات الشبكة المتقدمة (Advanced Network Settings):</strong>
+        <p style="font-size: 0.85em; color: #aaa; margin: 5px 0;">للوصول لهذه الإعدادات: فعّل <strong>Developer tools</strong> من الإعدادات ← About، ثم ارجع إلى Network & Servers ← Advanced network settings.</p>
+        <ul style="margin: 8px 0 0 0; padding-left: 18px;">
+            <li><strong>Transport isolation:</strong> يتحكم في كيفية عزل اتصالات TCP ودوائر Tor.
+                <ul>
+                    <li><code>App session</code>: لا يوجد عزل. جميع ملفاتك الشخصية تتشارك نفس جلسة التطبيق ودائرة Tor (أداء أعلى، خصوصية أقل).</li>
+                    <li><code>Chat profile</code> <strong>(موصى به)</strong>: يمنح كل ملف شخصي دائرة Tor مستقلة، مما يمنع الخوادم ومراقبي الشبكة من رؤية أن حركة المرور قادمة من نفس الجهاز .</li>
+                    <li><code>Servers</code> (تجريبي BETA): يمنح كل خادم (جهة اتصال/مجموعة) دائرة Tor مستقلة. ⚠️ لا يُنصح به للمجموعات الكبيرة أو عدد جهات الاتصال الكبير لأنه قد يخلق حركة مرور كثيفة ويتجاوز حصة TCP sockets، كما أن إنشاء عدد كبير من دوائر Tor المنفصلة قد يكون بطيئاً جداً .</li>
+                </ul>
+            </li>
+            <li><strong>Private routing:</strong> للتوجيه الخاص لحماية عنوان IP. ينصح باستخدام <code>Unprotected</code> لمستخدمي Whonix (لأن Tor يخفي IP بالفعل).</li>
+            <li><strong>Allow downgrade:</strong> ينصح باستخدام <code>When IP hidden</code> لمستخدمي Whonix (يضمن إخفاء IP دائماً مع السماح بالاتصال بالخوادم القديمة).</li>
+        </ul>
     </div>
 
     <!-- خيارات Use .onion hosts -->
@@ -4887,7 +4904,7 @@ chmod +x run-simplex.sh</pre>
     <div style="background: #1a2a1a; border-left: 3px solid #4caf50; padding: 10px 15px; margin-top: 1rem; border-radius: 4px; font-size: 0.85em;">
         <strong>✅ لماذا SOCKS Proxy هو الحل الأفضل؟</strong>
         <ul style="margin: 5px 0 0 0; padding-left: 18px;">
-            <li><strong>عزل الدوائر الكامل:</strong> يمنح كل ملف تعريف دائرة Tor مستقلة عن بقية التطبيقات، مما يمنع ربط الهويات. مع تفعيل خيار "Transport isolation"، تحصل كل جهة اتصال على دائرتها الخاصة أيضاً.</li>
+            <li><strong>عزل الدوائر الكامل:</strong> يمنح كل ملف تعريف دائرة Tor مستقلة عن بقية التطبيقات، مما يمنع ربط الهويات. مع خيار "Chat profile"، تحصل كل بروفايل على دائرتها الخاصة أيضاً.</li>
             <li><strong>دعم .onion:</strong> خيار <code>Use .onion hosts</code> يظهر ويعمل بكفاءة، مما يسمح بحصر الاتصالات داخل شبكة Tor فقط (عبر اختيار <code>Required</code>)، متجنباً بذلك هجمات عقد الخروج الضارة.</li>
             <li><strong>استقرار كامل:</strong> يعمل بدون أي مشاكل على Whonix المستقل (Wayland) و Qubes OS (X11).</li>
             <li><strong>لا حاجة لإعدادات معقدة:</strong> فقط تفعيل الخيار من داخل التطبيق، لا يتطلب أي تكوين إضافي في Gateway أو Workstation.</li>
@@ -4919,7 +4936,7 @@ chmod +x run-simplex.sh</pre>
                 <tr>
                     <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>عزل الدوائر</strong></td>
                     <td style="padding: 8px 12px; border-bottom: 1px solid #333;">⚠️ غير معزول (كل التطبيقات تتشارك نفس الدائرة)</td>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ معزول (يمنح التطبيق دوائر مستقلة، ويمكن عزلها لكل جهة اتصال عبر "Transport isolation")</td>
+                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ معزول (يمنح التطبيق دوائر مستقلة، ويمكن عزلها لكل ملف شخصي عبر خيار "Chat profile")</td>
                 </tr>
                 <tr>
                     <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>خيار .onion hosts</strong></td>
@@ -4942,7 +4959,7 @@ chmod +x run-simplex.sh</pre>
 
     <!-- خاتمة -->
     <div style="background: #1a1a2e; border: 1px solid #ffb74d; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
-        <strong>💡 الخلاصة:</strong> في Whonix، قم بتشغيل SimpleX باستخدام السكربت أعلاه (أو مباشرة)، ثم <strong>فعّل SOCKS Proxy من الإعدادات (127.0.0.1:9050)</strong>. هذا يمنحك <strong>عزل دوائر كامل + عناوين .onion</strong>، وهو الإعداد الأمثل للخصوصية القصوى دون أي تكوين إضافي في Gateway أو Workstation .
+        <strong>💡 الخلاصة:</strong> في Whonix، قم بتشغيل SimpleX باستخدام السكربت أعلاه (أو مباشرة)، ثم <strong>فعّل SOCKS Proxy من الإعدادات (127.0.0.1:9050)</strong>. هذا يمنحك <strong>عزل دوائر كامل + عناوين .onion</strong>، وهو الإعداد الأمثل للخصوصية القصوى دون أي تكوين إضافي في Gateway أو Workstation. للحصول على عزل أفضل، استخدم إعداد <strong>Transport isolation → Chat profile</strong> في إعدادات الشبكة المتقدمة.
     </div>
 </div>
     <!-- ======== Cwtch Card ======== -->
