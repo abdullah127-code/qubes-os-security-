@@ -7230,7 +7230,7 @@ if [ ! -f "/etc/qubes-rpc/buskill.selfDestruct" ]; then
     sudo tee /etc/qubes-rpc/buskill.selfDestruct > /dev/null << 'BUSKILL'
 #!/bin/bash
 WHICH="/usr/bin/which"
-sudo qvm-kill --all&
+sudo qvm-shutdown --all&
 CRYPTSETUP=$($WHICH --skip-alias cryptsetup) || echo "ERROR: Unable to find cryptsetup"
 LS=$($WHICH --skip-alias ls) || echo "ERROR: Unable to find ls"
 CP=$($WHICH --skip-alias cp) || echo "ERROR: Unable to find cp"
@@ -7338,6 +7338,7 @@ echo o > /proc/sysrq-trigger
 EOFF
 $CHMOD +x "$CHROOT_PATH/$DIE_SCRIPT"
 $CHROOT "$CHROOT_PATH" "$DIE_SCRIPT"
+BUSKILL
     sudo chmod +x /etc/qubes-rpc/buskill.selfDestruct
     
     sudo tee /etc/qubes-rpc/policy/buskill.selfDestruct > /dev/null << 'POLICY'
