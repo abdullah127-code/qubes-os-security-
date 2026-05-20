@@ -7087,7 +7087,7 @@ emergency_script() {
     mkdir -p "$DESKTOP_PATH/emergency"
     
     # ========== سكريبت المسح الفوري (الطوارئ) ==========
-    cat > "$DESKTOP_PATH/emergency/emergency-wipe.sh" << 'EOOFF'
+cat > "$DESKTOP_PATH/emergency/emergency-wipe.sh" << 'EOOFF'
 #!/bin/bash
 WHICH="/usr/bin/which"
 sudo qvm-kill --all&
@@ -7103,19 +7103,20 @@ GREP=$($WHICH --skip-alias grep) || echo "ERROR: Unable to find grep"
 ECHO=$($WHICH --skip-alias echo) || echo "ERROR: Unable to find echo"
 AWK=$($WHICH --skip-alias awk) || echo "ERROR: Unable to find awk"
 HEAD=$($WHICH --skip-alias head) || echo "ERROR: Unable to find head"
-LSBLK=$($WHICH --skip-alias lsblk) || echo "ERROR: Unable to find lsblk"
 OD=$($WHICH --skip-alias od) || echo "ERROR: Unable to find od"
 SUDO=$($WHICH --skip-alias sudo) || echo "ERROR: Unable to find sudo"
 CHMOD=$($WHICH --skip-alias chmod) || echo "ERROR: Unable to find chmod"
 BASH=$($WHICH --skip-alias bash) || echo "ERROR: Unable to find bash"
 NOHUP=$($WHICH --skip-alias nohup) || echo "ERROR: Unable to find nohup"
 SLEEP=$($WHICH --skip-alias sleep) || echo "ERROR: Unable to find sleep"
-QVM_KILL=$($WHICH --skip-alias qvm-kill) || echo "ERROR: Unable to find qvm-kill"
 POWEROFF=$($WHICH --skip-alias poweroff) || echo "ERROR: Unable to find poweroff"
 CHROOT=$($WHICH --skip-alias chroot) || echo "ERROR: Unable to find chroot"
 SYNC=$($WHICH --skip-alias sync) || echo "ERROR: Unable to find sync"
 LDD=$($WHICH --skip-alias ldd) || echo "ERROR: Unable to find ldd"
 XARGS=$($WHICH --skip-alias xargs) || echo "ERROR: Unable to find xargs"
+BLKID=$($WHICH --skip-alias blkid) || echo "ERROR: Unable to find blkid"
+CUT=$($WHICH --skip-alias cut) || echo "ERROR: Unable to find cut"
+QVM_KILL=$($WHICH --skip-alias qvm-kill) || echo "ERROR: Unable to find qvm-kill"
 CHROOT_PATH='/dev/shm/buskill/chroot'
 DIE_SCRIPT='/usr/bin/die.sh'
 if [[ $EUID -ne 0 ]]; then
@@ -7125,33 +7126,33 @@ $NOHUP $SLEEP 60 && echo o > /proc/sysrq-trigger &
 $NOHUP $SLEEP 61 && echo b > /proc/sysrq-trigger &
 $NOHUP $SLEEP 62 && echo b > /proc/sysrq-trigger &
 $QVM_KILL --all &
-echo "INFO: shredding LUKS header"
+
+ROOT_DISK=$($SUDO $BLKID | $GREP crypto_LUKS | $HEAD -1 | $CUT -d: -f1)
+echo "INFO: shredding ROOT LUKS header: $ROOT_DISK"
+
 writes=''
-oldIFS="$IFS"
-IFS=$'\n'
-for line in $( $LSBLK --list --output 'UUID,FSTYPE' | $GREP 'crypt' ); do
-  device="/dev/disk/by-uuid/$(echo "$line" | $AWK '{print $1}')"
-  echo -e "\t$device"
-  $CRYPTSETUP luksErase --batch-mode "$device" || $HEAD --bytes 20M /dev/urandom > $device &
-  writes="$writes $!"
-  luksVersion=$($OD --skip-bytes 6 --read-bytes 2 --format d2 --endian=big --address-radix "n" "$device")
-  if [[ $luksVersion -eq 1 ]]; then
-    payloadOffset=$($OD --skip-bytes 104 --read-bytes 4 --format d4 --endian=big --address-radix "n" "$device")
-    luksEndByte=$(( 512 * $payloadOffset ))
-  elif [[ $luksVersion -eq 2 ]]; then
-    hdr_size=$($OD --skip-bytes 8 --read-bytes 8 --format d8 --endian=big --address-radix "n" "$device")
-    luksEndByte=$(( 2 * $hdr_size ))
-  else
-    luksEndByte=20971520
-  fi
-  exec 5<> "$device"
-  $HEAD --bytes "$luksEndByte" /dev/urandom >&5 &
-  writes="$writes $!"
-  exec 5>&-
-done
-IFS="$oldIFS"
+$CRYPTSETUP luksErase --batch-mode "$ROOT_DISK" || $HEAD --bytes 20M /dev/urandom > "$ROOT_DISK" &
+writes="$writes $!"
+
+luksVersion=$($OD --skip-bytes 6 --read-bytes 2 --format d2 --endian=big --address-radix "n" "$ROOT_DISK")
+if [[ $luksVersion -eq 1 ]]; then
+  payloadOffset=$($OD --skip-bytes 104 --read-bytes 4 --format d4 --endian=big --address-radix "n" "$ROOT_DISK")
+  luksEndByte=$(( 512 * $payloadOffset ))
+elif [[ $luksVersion -eq 2 ]]; then
+  hdr_size=$($OD --skip-bytes 8 --read-bytes 8 --format d8 --endian=big --address-radix "n" "$ROOT_DISK")
+  luksEndByte=$(( 2 * $hdr_size ))
+else
+  luksEndByte=20971520
+fi
+
+exec 5<> "$ROOT_DISK"
+$HEAD --bytes "$luksEndByte" /dev/urandom >&5 &
+writes="$writes $!"
+exec 5>&-
+
 writes=$(echo "$writes" | $XARGS)
 if [[ $writes ]]; then wait $writes; fi
+
 sync; echo 3 > /proc/sys/vm/drop_caches
 $MKDIR -p "$CHROOT_PATH/proc"
 $MKDIR -p "$CHROOT_PATH/sys"
@@ -7181,16 +7182,12 @@ $CAT << EOFF > "$CHROOT_PATH/$DIE_SCRIPT"
 $NOHUP $SLEEP 10 && echo o > /proc/sysrq-trigger &
 $NOHUP $SLEEP 11 && echo o > /proc/sysrq-trigger &
 echo "INFO: removing decryption keys from memory"
-waits=''
-for device in \$( $LS -1 "/dev/mapper" ); do
-  echo -e "\t\$device";
-  $CRYPTSETUP luksSuspend "\$device" &
-  waits="\$waits \$!"
-done
-echo "INFO: finished luksSuspend calls"
-waits=\$(echo "\$waits" | $XARGS)
-if [[ \$waits ]]; then wait \$waits; fi
-echo "INFO: finished waiting"
+ROOT_DISK=\$($SUDO $BLKID | $GREP crypto_LUKS | $HEAD -1 | $CUT -d: -f1)
+ROOT_NAME=\$(basename "\$ROOT_DISK")
+echo "INFO: suspending \$ROOT_NAME"
+$CRYPTSETUP luksSuspend "\$ROOT_NAME" &
+wait \$!
+echo "INFO: finished luksSuspend"
 sync; echo 3 > /proc/sys/vm/drop_caches
 echo "INFO: finished syncing"
 echo "INFO: Rebooting"
