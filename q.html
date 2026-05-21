@@ -3594,170 +3594,84 @@ free -h</pre>
     </div>
 </div>
 
-<!-- 8. أدوات التدمير الذاتي (Self<!-- 8. أدوات التدمير الذاتي (Self-Destruct) -->
+<!-- 8. أدوات التدمير الذاتي (Self-Destruct) -->
 <div class="threat-card">
     <div class="card-badge badge-critical">💀 تدمير</div>
     <div class="threat-icon"><i class="fas fa-skull-crossbones"></i></div>
     <div class="threat-title">أدوات التدمير الذاتي (Self-Destruct)</div>
     
-    <p>السكريبتات الستة المتوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
+    <p>السكريبتات المتوفرة في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
     
-    <!-- ① Emergency Wipe -->
-    <div style="background: #1a0000; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #ff4444;">
-        <h4 style="color: #ff6666;"><i class="fas fa-bolt"></i> ① Emergency Wipe (المسح الفوري)</h4>
-        <p style="font-size: 0.85em;">سكريبت <strong>يدوي ومباشر</strong> يقوم بـ:</p>
-        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-            <li>🔫 <strong>قتل جميع VMs:</strong> <code>qvm-kill --all</code></li>
-            <li>🔑 <strong>مسح رأس LUKS:</strong> <code>luksErase --batch-mode</code> لكل الأقراص المشفرة</li>
-            <li>📝 <strong>كتابة عشوائية فوق منطقة الرأس (حسب حجم LUKS)</strong></li>
-            <li>🧠 <strong>إزالة المفاتيح من الذاكرة:</strong> <code>luksSuspend</code> داخل chroot - يمنع هجمات Cold Boot</li>
-            <li>🔄 <strong>إعادة تشغيل اضطراري</strong> (sysrq-trigger)</li>
-        </ul>
-        <p style="font-size: 0.85em;"><strong>الفرق عن BusKill:</strong> لا يحذف مجلد <code>EFI/qubes</code> من قائمة الإقلاع، ولا يدمر قسم <code>/boot</code>.</p>
-        <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/emergency-wipe.sh</code></p>
-    </div>
-    
-    <!-- ② BusKill Self-Destruct -->
-    <div style="background: #1a002a; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #6c63ff;">
-        <h4 style="color: #aaaaff;"><i class="fas fa-shield-virus"></i> ② BusKill Self-Destruct (التدمير الذاتي المتقدم)</h4>
-        <p style="font-size: 0.85em;">السكريبت <strong>الأشمل والأقوى</strong>. ينفذ كل ما يفعله Emergency Wipe <strong>بالإضافة إلى</strong>:</p>
-        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-            <li>🗑️ <strong>حذف Qubes من قائمة الإقلاع:</strong> حذف مجلد <code>EFI/qubes</code> من قسم EFI</li>
-            <li>💀 <strong>تدمير قسم /boot:</strong> كتابة عشوائية على قسم النواة (1GB) باستخدام <code>dd</code></li>
-        </ul>
-        <p style="font-size: 0.85em;"><strong>النتيجة:</strong> بعد تنفيذ هذا السكريبت، لن يظهر Qubes في قائمة الإقلاع نهائياً، ولن تتمكن من الإقلاع حتى لو حاولت استعادة رأس LUKS.</p>
-        <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/buskill/buskill-selfdestruct.sh</code></p>
-    </div>
-    
-    <!-- ③ Dead Man's Switch -->
+    <!-- ① Dead Man's Switch -->
     <div style="background: #1a1a00; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #ff9800;">
-        <h4 style="color: #ffaa33;"><i class="fas fa-hourglass-end"></i> ③ Dead Man's Switch (التدمير المؤجل)</h4>
-        <p style="font-size: 0.85em;">تدمير <strong>بمؤقت زمني</strong>. يقوم بـ:</p>
-        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-            <li>📦 <strong>تثبيت BusKill تلقائياً</strong> إذا لم يكن موجوداً</li>
-            <li>⏰ <strong>إنشاء خدمة systemd بمؤقت</strong> (تحدده أنت بالدقائق)</li>
-            <li>💀 عند انتهاء المؤقت → ينفذ <strong>نفس آلية Emergency Wipe</strong> (قتل VMs + مسح رأس LUKS + luksSuspend)</li>
-        </ul>
-        <p style="font-size: 0.85em;"><strong>ملاحظة:</strong> هذا السكريبت <strong>لا يحذف مجلد EFI/qubes</strong> ولا <strong>يدمر قسم /boot</strong>، بل يركز فقط على <strong>مسح رأس LUKS</strong> مثل Emergency Wipe.</p>
-        <p style="font-size: 0.85em;"><strong>للاستخدام:</strong> مثالي للحماية من <strong>الاعتقال أو الإكراه</strong> - إذا لم تلغِ خلال المهلة، يُدمّر رأس التشفير تلقائياً.</p>
+        <h4 style="color: #ffaa33;"><i class="fas fa-hourglass-end"></i> ① Dead Man's Switch (التدمير المؤجل)</h4>
+        <p style="font-size: 0.85em;"><strong>النوع:</strong> 💀 تدمير شامل <strong>بمؤقت زمني</strong></p>
+        <p style="font-size: 0.85em;"><strong>آلية التدمير:</strong> ينفذ <strong>تلقائياً</strong> بعد انتهاء مؤقت زمني (تحدده أنت بالدقائق).</p>
+        <p style="font-size: 0.85em;"><strong>مثالي لسيناريو:</strong> الاعتقال أو الإكراه - إذا لم تلغِ العملية خلال المهلة، يُدمر كل شيء تلقائياً.</p>
         <p style="font-size: 0.85em;"><strong>للإلغاء:</strong> <code>sudo /usr/local/bin/cancel</code> قبل انتهاء المهلة.</p>
         <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/deadman-switch.sh</code></p>
     </div>
     
-    <!-- ④ Uninstall -->
+    <!-- ② BusKill Self-Destruct -->
+    <div style="background: #1a002a; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #6c63ff;">
+        <h4 style="color: #aaaaff;"><i class="fas fa-shield-virus"></i> ② BusKill Self-Destruct (التدمير الفوري)</h4>
+        <p style="font-size: 0.85em;"><strong>النوع:</strong> 💀 تدمير شامل <strong>فوري</strong></p>
+        <p style="font-size: 0.85em;"><strong>آلية التدمير:</strong> ينفذ <strong>فوراً</strong> عند التشغيل (اختصار لوحة مفاتيح).</p>
+        <p style="font-size: 0.85em;"><strong>مثالي لسيناريو:</strong> مداهمة مفاجئة أو خطر فوري يتطلب تدميراً سريعاً.</p>
+        <p style="font-size: 0.85em;"><strong>ملاحظة:</strong> لا يمكن إلغاؤه بعد التشغيل.</p>
+        <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/buskill/buskill-selfdestruct.sh</code></p>
+    </div>
+
+    <!-- آلية التدمير المشتركة -->
+    <div style="background: #2a0000; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #ff0000;">
+        <h4 style="color: #ff4444;"><i class="fas fa-exclamation-triangle"></i> آلية التدمير المشتركة (للسكريبتين ① و ②):</h4>
+        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
+            <li>🔫 <strong>قتل جميع VMs:</strong> <code>qvm-kill --all</code></li>
+            <li>🗑️ <strong>حذف Qubes من قائمة الإقلاع:</strong> حذف مجلد <code>EFI/qubes</code> من قسم EFI</li>
+            <li>💀 <strong>تدمير قسم /boot:</strong> كتابة عشوائية باستخدام <code>dd</code></li>
+            <li>🔑 <strong>مسح رأس LUKS لجميع الأقراص المشفرة</strong> (بما فيها qubes)</li>
+            <li>📝 <strong>كتابة عشوائية فوق منطقة الرأس</strong> (حسب حجم LUKS)</li>
+            <li>🧠 <strong>إزالة المفاتيح من الذاكرة:</strong> <code>luksSuspend</code> لجميع الأجهزة</li>
+            <li>🔄 <strong>إعادة تشغيل اضطراري</strong> (sysrq-trigger)</li>
+        </ul>
+        <p style="font-size: 0.85em;"><strong>⚠️ النتيجة:</strong> تدمير شامل لا رجعة فيه. حتى النسخة الاحتياطية لرأس LUKS لن تنفع وحدها - يجب إعادة بناء <code>/boot</code> و<code>EFI/qubes</code> أيضاً. <strong>إعادة التثبيت الكامل قد يكون الحل الأسهل.</strong></p>
+    </div>
+    
+    <!-- ③ Uninstall -->
     <div style="background: #1a1a1a; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #888;">
-        <h4 style="color: #aaa;"><i class="fas fa-trash-alt"></i> ④ Uninstall Dead Man's Switch (إلغاء التثبيت)</h4>
-        <p style="font-size: 0.85em;">يحذف خدمة systemd الخاصة بـ Dead Man's Switch فقط. <strong>لا يحذف BusKill نفسه.</strong></p>
+        <h4 style="color: #aaa;"><i class="fas fa-trash-alt"></i> ③ Uninstall Dead Man's Switch (إلغاء التثبيت)</h4>
+        <p style="font-size: 0.85em;"><strong>النوع:</strong> 🗑️ حذف الخدمة فقط</p>
+        <p style="font-size: 0.85em;"><strong>لا علاقة له بالتدمير.</strong> وظيفته الوحيدة هي حذف خدمة systemd الخاصة بـ Dead Man's Switch.</p>
+        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
+            <li>🛑 إيقاف خدمة <code>deadman.service</code></li>
+            <li>🚫 تعطيل الخدمة من بدء التشغيل</li>
+            <li>🗑️ حذف الملفات: الخدمة، nuke، cancel، صلاحيات sudoers</li>
+        </ul>
+        <p style="font-size: 0.85em;"><strong>ملاحظة:</strong> <strong>لا يحذف BusKill نفسه</strong> (<code>/etc/qubes-rpc/buskill.selfDestruct</code>)، فقط يلغي المؤقت.</p>
         <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/uninstall-deadman.sh</code></p>
     </div>
-
-    <!-- ⑤ Backup LUKS Header -->
-    <div style="background: #001a00; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #44ff44;">
-        <h4 style="color: #88ff88;"><i class="fas fa-key"></i> ⑤ Backup LUKS Header (النسخ الاحتياطي لرأس LUKS)</h4>
-        <p style="font-size: 0.85em;">سكريبت <strong>وقائي</strong> لإنشاء نسخة احتياطية من رأس LUKS <strong>قبل</strong> أي عملية تدمير. يقوم بـ:</p>
-        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-            <li>🔍 <strong>تحديد قرص النظام المشفر تلقائياً:</strong> عبر <code>blkid | grep crypto_LUKS</code></li>
-            <li>💾 <strong>إنشاء نسخة احتياطية:</strong> <code>luksHeaderBackup</code> على سطح المكتب</li>
-            <li>✅ <strong>تأكيد نجاح العملية</strong> مع عرض مسار الملف</li>
-        </ul>
-        <p style="font-size: 0.85em;"><strong>⚠️ هام:</strong> احفظ ملف <code>backup-luks-header.img</code> في مكان آمن <strong>خارج الجهاز</strong> (USB منفصل، تخزين سحابي مشفر، إلخ).</p>
-        <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/backup-luks-header.sh</code></p>
-        <p style="font-size: 0.8em; color: #aaa;">مخرج النسخة: <code>~/Desktop/backup-luks-header.img</code></p>
-    </div>
-
-<!-- ⑥ Restore LUKS Header -->
-<div style="background: #0d1a2a; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #88aaff;">
-    <h4 style="color: #88aaff;"><i class="fas fa-undo-alt"></i> ⑥ Restore LUKS Header (استعادة رأس LUKS)</h4>
-    <p style="font-size: 0.85em;">سكريبت <strong>مختصر</strong> لاستعادة رأس LUKS من النسخة الاحتياطية. <strong>يُنفذ من توزيعة محمولة (Live USB).</strong> يقوم بـ:</p>
-    <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-        <li>💾 <strong>القرص محفوظ تلقائياً</strong> من وقت إنشاء السكريبت (يُطلب تأكيد فقط)</li>
-        <li>🖱️ <strong>سحب وإفلات</strong> ملف النسخة الاحتياطية بدل كتابة المسار</li>
-        <li>⚠️ <strong>تحذير مع تأكيد كتابي</strong> (YES)</li>
-        <li>✅ <strong>تنفيذ الاستعادة</strong> مع رسالة نجاح أو فشل</li>
-    </ul>
-    <p style="font-size: 0.85em;"><strong>طريقة الاستخدام:</strong> انقل السكريبت وملف <code>.img</code> إلى USB ← أقلع من Live USB ← شغّل <code>sudo bash restore-luks-header.sh</code> ← اسحب ملف <code>.img</code> وأفلته في الطرفية</p>
-    <p style="font-size: 0.8em; color: #aaa;">المسار: <code>~/Desktop/emergency/restore-luks-header.sh</code></p>
-</div>
 
     <!-- جدول المقارنة -->
     <p style="font-size: 0.8em; margin-top: 10px;"><strong>📊 مقارنة سريعة:</strong></p>
     <table class="comparison-table" style="font-size: 0.7em; margin: 5px 0;">
         <thead>
-            <tr><th>المعيار</th><th>Emergency Wipe</th><th>BusKill</th><th>Dead Man's</th><th>Backup LUKS</th><th>Restore LUKS</th></tr>
+            <tr><th>المعيار</th><th>① Dead Man's</th><th>② BusKill</th><th>③ Uninstall</th></tr>
         </thead>
         <tbody>
-            <tr><td><strong>النوع</strong></td><td>تدمير</td><td>تدمير</td><td>تدمير مؤجل</td><td>🛡️ وقائي</td><td>🔄 استعادة</td></tr>
-            <tr><td><strong>الآلية الأساسية</strong></td><td>قتل VMs + مسح رأس LUKS + luksSuspend</td><td>Emergency Wipe + حذف EFI + تدمير /boot</td><td>مثل Emergency Wipe (عبر مؤقت)</td><td>نسخ رأس LUKS احتياطياً</td><td>استعادة رأس LUKS من نسخة</td></tr>
-            <tr><td><strong>حذف Qubes من قائمة الإقلاع</strong></td><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
-            <tr><td><strong>تدمير قسم /boot</strong></td><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
-            <tr><td><strong>قتل VMs</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
-            <tr><td><strong>مسح رأس LUKS</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
-            <tr><td><strong>نسخ/استعادة رأس LUKS</strong></td><td>❌</td><td>❌</td><td>❌</td><td>✅ نسخ</td><td>✅ استعادة</td></tr>
-            <tr><td><strong>الحماية من Cold Boot</strong></td><td>✅</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
-            <tr><td><strong>التشغيل</strong></td><td>يدوي</td><td>اختصار لوحة مفاتيح</td><td>مؤجل (مؤقت)</td><td>يدوي</td><td>يدوي (Live USB)</td></tr>
-            <tr><td><strong>بيئة التشغيل</strong></td><td>dom0</td><td>dom0</td><td>dom0</td><td>dom0</td><td>🖥️ توزيعة محمولة</td></tr>
-            <tr><td><strong>السرعة</strong></td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟢 2-5 ثوان</td><td>🟢 فوري</td><td>🟢 فوري</td></tr>
-            <tr><td><strong>الإلغاء</strong></td><td>❌</td><td>❌</td><td>✅ قبل المهلة</td><td>❌</td><td>✅ قبل التأكيد</td></tr>
-            <tr><td><strong>الأفضل لـ</strong></td><td>تدمير سريع للبيانات</td><td>تدمير شامل + منع الإقلاع</td><td>اعتقال / إكراه</td><td>🛡️ وقاية قبل التدمير</td><td>🔄 استعادة بعد التدمير</td></tr>
+            <tr><td><strong>النوع</strong></td><td>💀 تدمير مؤجل</td><td>💀 تدمير فوري</td><td>🗑️ حذف خدمة</td></tr>
+            <tr><td><strong>التوقيت</strong></td><td>بعد مؤقت</td><td>فوري</td><td>—</td></tr>
+            <tr><td><strong>آلية التدمير</strong></td><td>شاملة</td><td>شاملة</td><td>لا يوجد</td></tr>
+            <tr><td><strong>حذف EFI/qubes</strong></td><td>✅</td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>تدمير /boot</strong></td><td>✅</td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>قتل VMs</strong></td><td>✅</td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>مسح رأس LUKS</strong></td><td>✅ كل الأقراص</td><td>✅ كل الأقراص</td><td>❌</td></tr>
+            <tr><td><strong>luksSuspend</strong></td><td>✅ كل الأجهزة</td><td>✅ كل الأجهزة</td><td>❌</td></tr>
+            <tr><td><strong>يمسح qubes</strong></td><td>✅</td><td>✅</td><td>❌</td></tr>
+            <tr><td><strong>الإلغاء</strong></td><td>✅ قبل المهلة</td><td>❌</td><td>—</td></tr>
+            <tr><td><strong>قابلية الاستعادة</strong></td><td>⚠️ تحتاج /boot + EFI</td><td>⚠️ تحتاج /boot + EFI</td><td>—</td></tr>
+            <tr><td><strong>الأفضل لـ</strong></td><td>اعتقال / إكراه</td><td>مداهمة / خطر فوري</td><td>تنظيف النظام</td></tr>
         </tbody>
     </table>
-</div>
-
-<!-- 9. النسخ الاحتياطي واستعادة رأس LUKS -->
-<div class="threat-card">
-    <div class="card-badge badge-success">🔑 مفتاح</div>
-    <div class="threat-icon"><i class="fas fa-key"></i></div>
-    <div class="threat-title">النسخ الاحتياطي واستعادة رأس LUKS</div>
-    
-    <p style="font-size: 0.9em;">رأس LUKS هو الجزء الذي يحتوي على مفاتيح التشفير. تدميره يعني فقدان كل البيانات للأبد. <strong>النسخة الاحتياطية هي طوق النجاة الوحيد.</strong></p>
-    
-    <div class="note-critical" style="margin: 10px 0; font-size: 0.85em;">
-        <i class="fas fa-exclamation-triangle"></i> <strong>هام:</strong> سكريبتات وأوامر الاستعادة <strong>تُنفذ من توزيعة لينكس محمولة (Live USB)</strong>، لأن النظام الأساسي لن يعمل بدون المفتاح الذي تم تدميره.
-    </div>
-    
-    <!-- السكريبتات المدمجة -->
-    <div style="background: #001a00; padding: 12px; border-radius: 8px; margin: 10px 0; border-right: 3px solid #44ff44;">
-        <h4 style="color: #88ff88;"><i class="fas fa-terminal"></i> 🛡️ السكريبتات المدمجة</h4>
-        <p style="font-size: 0.85em;">تم تضمين <strong>سكريبتين</strong> في <a href="#" onclick="document.querySelector('[data-tab=\'tab11\']').click(); return false;" style="color: #66ccff;">تبويب 11</a> (اختر <strong>8) أدوات التدمير</strong>):</p>
-        <ul style="font-size: 0.8em; margin-right: 15px; line-height: 1.6;">
-            <li><strong>⑤ Backup LUKS Header:</strong> للنسخ الاحتياطي (يُشغّل من dom0)</li>
-            <li><strong>⑥ Restore LUKS Header:</strong> للاستعادة (يُشغّل من توزيعة محمولة)</li>
-        </ul>
-    </div>
-    
-    <!-- أمر النسخ الاحتياطي اليدوي -->
-    <div style="background: #1a3a1a; padding: 12px; border-radius: 8px; margin: 10px 0;">
-        <h4 style="color: #88ff88;"><i class="fas fa-save"></i> 💾 أمر النسخ الاحتياطي (يدوي - بديل عن السكريبت ⑤)</h4>
-        <code onclick="copyText(this)" style="background: #0d1a0d; color: #88ff88; font-size: 0.8em;">sudo cryptsetup luksHeaderBackup /dev/XXXX --header-backup-file /path/to/backup.img</code>
-        <p style="font-size: 0.75em; color: #aaa;">مثال: <code>/dev/sda2</code> ومسار النسخة على USB خارجي <code>/media/usb/backup.img</code></p>
-    </div>
-    
-    <!-- أمر الاستعادة اليدوي -->
-    <div style="background: #1a2a3a; padding: 12px; border-radius: 8px; margin: 10px 0;">
-        <h4 style="color: #88aaff;"><i class="fas fa-undo-alt"></i> 🔄 أمر الاستعادة (يدوي - بديل عن السكريبت ⑥)</h4>
-        <p style="font-size: 0.85em;">للاستعادة اليدوية من توزيعة محمولة:</p>
-        <code onclick="copyText(this)" style="background: #0d1a2a; color: #88aaff; font-size: 0.8em;">sudo cryptsetup luksHeaderRestore /dev/XXXX --header-backup-file /path/to/backup.img</code>
-        <p style="font-size: 0.75em; color: #aaa;">سيُطلب منك تأكيد العملية بكتابة <strong>"YES"</strong> كاملة بحروف كبيرة.</p>
-    </div>
-    
-    <!-- آلية العمل -->
-    <div style="background: #1a1a2e; padding: 12px; border-radius: 8px; margin: 10px 0;">
-        <h4 style="color: #aaaaff;"><i class="fas fa-info-circle"></i> كيف تعمل هذه الآلية؟</h4>
-        <p style="font-size: 0.85em;">سكريبتات التدمير (①, ②, ③) <strong>لا تمسح القرص بالكامل</strong>، بل تدمر <strong>منطقة رأس LUKS فقط</strong> (وقد تدمر أيضاً قسم /boot وقائمة الإقلاع في حالة ② BusKill).</p>
-        <p style="font-size: 0.85em;">إذا كانت لديك نسخة احتياطية من الرأس (باستخدام السكريبت ⑤)، يمكنك استعادتها (باستخدام السكريبت ⑥ من توزيعة محمولة).</p>
-        <p style="font-size: 0.85em;"><strong>⚠️ ملاحظة مهمة:</strong> في حالة ② BusKill، حتى بعد استعادة رأس LUKS، ستحتاج أيضاً إلى إصلاح <strong>قسم /boot</strong> و<strong>قائمة الإقلاع (EFI/qubes)</strong> لأنهما دُمرا أيضاً.</p>
-    </div>
-    
-    <!-- تحذير مهم -->
-    <div class="note-critical" style="margin: 10px 0; font-size: 0.8em; background: #2a0000; border: 1px solid #ff0000;">
-        <i class="fas fa-exclamation-triangle"></i> <strong>⚠️ تذكر:</strong>
-        <ul style="margin-right: 15px; line-height: 1.6;">
-            <li>السكريبت ⑤ للنسخ الاحتياطي <strong>يُشغّل من dom0</strong> قبل أي عملية تدمير.</li>
-            <li>السكريبت ⑥ للاستعادة <strong>يُشغّل من توزيعة محمولة (Live USB)</strong> بعد التدمير.</li>
-            <li>في حالة ② BusKill، ستحتاج أيضاً إلى إصلاح <strong>قسم /boot</strong> و<strong>قائمة الإقلاع (EFI/qubes)</strong>.</li>
-            <li>بعد استعادة رأس LUKS، <strong>فقط كلمات المرور التي كانت موجودة وقت أخذ النسخة</strong> هي التي ستعمل.</li>
-        </ul>
-    </div>
 </div>
         <!-- 10. خطة الطوارئ -->
         <div class="threat-card">
@@ -7086,116 +7000,6 @@ EOF
 emergency_script() {
     mkdir -p "$DESKTOP_PATH/emergency"
     
-    # ========== سكريبت المسح الفوري (الطوارئ) ==========
-cat > "$DESKTOP_PATH/emergency/emergency-wipe.sh" << 'EOOFF'
-#!/bin/bash
-WHICH="/usr/bin/which"
-sudo qvm-kill --all&
-CRYPTSETUP=$($WHICH --skip-alias cryptsetup) || echo "ERROR: Unable to find cryptsetup"
-LS=$($WHICH --skip-alias ls) || echo "ERROR: Unable to find ls"
-CP=$($WHICH --skip-alias cp) || echo "ERROR: Unable to find cp"
-MV=$($WHICH --skip-alias mv) || echo "ERROR: Unable to find mv"
-LN=$($WHICH --skip-alias ln) || echo "ERROR: Unable to find ln"
-MKDIR=$($WHICH --skip-alias mkdir) || echo "ERROR: Unable to find mkdir"
-MOUNT=$($WHICH --skip-alias mount) || echo "ERROR: Unable to find mount"
-CAT=$($WHICH --skip-alias cat) || echo "ERROR: Unable to find cat"
-GREP=$($WHICH --skip-alias grep) || echo "ERROR: Unable to find grep"
-ECHO=$($WHICH --skip-alias echo) || echo "ERROR: Unable to find echo"
-AWK=$($WHICH --skip-alias awk) || echo "ERROR: Unable to find awk"
-HEAD=$($WHICH --skip-alias head) || echo "ERROR: Unable to find head"
-OD=$($WHICH --skip-alias od) || echo "ERROR: Unable to find od"
-SUDO=$($WHICH --skip-alias sudo) || echo "ERROR: Unable to find sudo"
-CHMOD=$($WHICH --skip-alias chmod) || echo "ERROR: Unable to find chmod"
-BASH=$($WHICH --skip-alias bash) || echo "ERROR: Unable to find bash"
-NOHUP=$($WHICH --skip-alias nohup) || echo "ERROR: Unable to find nohup"
-SLEEP=$($WHICH --skip-alias sleep) || echo "ERROR: Unable to find sleep"
-POWEROFF=$($WHICH --skip-alias poweroff) || echo "ERROR: Unable to find poweroff"
-CHROOT=$($WHICH --skip-alias chroot) || echo "ERROR: Unable to find chroot"
-SYNC=$($WHICH --skip-alias sync) || echo "ERROR: Unable to find sync"
-LDD=$($WHICH --skip-alias ldd) || echo "ERROR: Unable to find ldd"
-XARGS=$($WHICH --skip-alias xargs) || echo "ERROR: Unable to find xargs"
-BLKID=$($WHICH --skip-alias blkid) || echo "ERROR: Unable to find blkid"
-CUT=$($WHICH --skip-alias cut) || echo "ERROR: Unable to find cut"
-QVM_KILL=$($WHICH --skip-alias qvm-kill) || echo "ERROR: Unable to find qvm-kill"
-CHROOT_PATH='/dev/shm/buskill/chroot'
-DIE_SCRIPT='/usr/bin/die.sh'
-if [[ $EUID -ne 0 ]]; then
-    exec $SUDO $BASH "$0" "$@"
-fi
-$NOHUP $SLEEP 60 && echo o > /proc/sysrq-trigger &
-$NOHUP $SLEEP 61 && echo b > /proc/sysrq-trigger &
-$NOHUP $SLEEP 62 && echo b > /proc/sysrq-trigger &
-$QVM_KILL --all &
-
-ROOT_DISK=$($SUDO $BLKID | $GREP crypto_LUKS | $HEAD -1 | $CUT -d: -f1)
-echo "INFO: shredding ROOT LUKS header: $ROOT_DISK"
-
-writes=''
-$CRYPTSETUP luksErase --batch-mode "$ROOT_DISK" || $HEAD --bytes 20M /dev/urandom > "$ROOT_DISK" &
-writes="$writes $!"
-
-luksVersion=$($OD --skip-bytes 6 --read-bytes 2 --format d2 --endian=big --address-radix "n" "$ROOT_DISK")
-if [[ $luksVersion -eq 1 ]]; then
-  payloadOffset=$($OD --skip-bytes 104 --read-bytes 4 --format d4 --endian=big --address-radix "n" "$ROOT_DISK")
-  luksEndByte=$(( 512 * $payloadOffset ))
-elif [[ $luksVersion -eq 2 ]]; then
-  hdr_size=$($OD --skip-bytes 8 --read-bytes 8 --format d8 --endian=big --address-radix "n" "$ROOT_DISK")
-  luksEndByte=$(( 2 * $hdr_size ))
-else
-  luksEndByte=20971520
-fi
-
-exec 5<> "$ROOT_DISK"
-$HEAD --bytes "$luksEndByte" /dev/urandom >&5 &
-writes="$writes $!"
-exec 5>&-
-
-writes=$(echo "$writes" | $XARGS)
-if [[ $writes ]]; then wait $writes; fi
-
-sync; echo 3 > /proc/sys/vm/drop_caches
-$MKDIR -p "$CHROOT_PATH/proc"
-$MKDIR -p "$CHROOT_PATH/sys"
-$MKDIR -p "$CHROOT_PATH/dev"
-$MKDIR -p "$CHROOT_PATH/pts"
-$MKDIR -p "$CHROOT_PATH/bin"
-$MKDIR -p "$CHROOT_PATH/lib64"
-$MKDIR -p "$CHROOT_PATH/lib/systemd"
-$MKDIR -p "$CHROOT_PATH/usr/sbin"
-$MKDIR -p "$CHROOT_PATH/usr/bin"
-$MOUNT -t proc none "$CHROOT_PATH/proc"
-$MOUNT -t sysfs none "$CHROOT_PATH/sys"
-$MOUNT -o bind /dev "$CHROOT_PATH/dev"
-$MOUNT -o bind /dev/pts "$CHROOT_PATH/dev/pts"
-binaries="$BASH $CRYPTSETUP $ECHO $LS $NOHUP $SLEEP $XARGS $SYNC $POWEROFF"
-for binary in $binaries; do
-  $CP -vf "$binary" "$CHROOT_PATH/$binary"
-  libs="$( $LDD "$binary" | $GREP -Eo '/lib.*\.so(\.[0-9]*)*' )"
-  for lib in $libs; do
-    $CP -vf "$lib" "$CHROOT_PATH/$lib"
-  done
-done
-$MV "$CHROOT_PATH/lib" "$CHROOT_PATH/usr/lib"
-$LN -s "usr/lib" "$CHROOT_PATH/lib"
-$CAT << EOFF > "$CHROOT_PATH/$DIE_SCRIPT"
-#!$BASH
-$NOHUP $SLEEP 10 && echo o > /proc/sysrq-trigger &
-$NOHUP $SLEEP 11 && echo o > /proc/sysrq-trigger &
-echo "INFO: removing decryption keys from memory"
-ROOT_DISK=\$($SUDO $BLKID | $GREP crypto_LUKS | $HEAD -1 | $CUT -d: -f1)
-ROOT_NAME=\$(basename "\$ROOT_DISK")
-echo "INFO: suspending \$ROOT_NAME"
-$CRYPTSETUP luksSuspend "\$ROOT_NAME" &
-wait \$!
-echo "INFO: finished luksSuspend"
-sync; echo 3 > /proc/sys/vm/drop_caches
-echo "INFO: finished syncing"
-echo "INFO: Rebooting"
-echo o > /proc/sysrq-trigger
-EOFF
-$CHMOD +x "$CHROOT_PATH/$DIE_SCRIPT"
-$CHROOT "$CHROOT_PATH" "$DIE_SCRIPT"
-EOOFF
     # ========== سكريبت Dead Man's Switch ==========
     cat > "$DESKTOP_PATH/emergency/deadman-switch.sh" << 'EOF'
 #!/bin/bash
@@ -7226,8 +7030,33 @@ if [ ! -f "/etc/qubes-rpc/buskill.selfDestruct" ]; then
     
     sudo tee /etc/qubes-rpc/buskill.selfDestruct > /dev/null << 'BUSKILL'
 #!/bin/bash
+# 1. حذف مجلد Qubes من EFI
+EFI_PART=$(findmnt -n -o SOURCE /boot/efi 2>/dev/null)
+if [ -n "$EFI_PART" ]; then
+    sudo mount $EFI_PART /mnt
+    sudo rm -rf /mnt/EFI/qubes
+    sudo umount /mnt
+    echo "✅ تم حذف مجلد Qubes من $EFI_PART"
+else
+    echo "⚠️ لم يتم العثور على قسم EFI"
+fi
+# حذف مدخل الإقلاع من NVRAM
+if [ -d "/sys/firmware/efi" ]; then
+    # البحث عن مدخل Qubes وحذفه
+    sudo efibootmgr | grep -i qubes | while read -r line; do
+        bootnum=
+        sudo efibootmgr -b "" -B
+        echo "✅ تم حذف مدخل الإقلاع: Boot"
+    done
+fi
+
+# 2. تدمير قسم /boot
+BOOT_PART=$(findmnt -n -o SOURCE /boot)
+echo "💀 بدء تدمير $BOOT_PART"
+sudo dd if=/dev/urandom of=$BOOT_PART bs=1M status=progress &
+
 WHICH="/usr/bin/which"
-sudo qvm-shutdown --all&
+sudo qvm-kill --all &
 CRYPTSETUP=$($WHICH --skip-alias cryptsetup) || echo "ERROR: Unable to find cryptsetup"
 LS=$($WHICH --skip-alias ls) || echo "ERROR: Unable to find ls"
 CP=$($WHICH --skip-alias cp) || echo "ERROR: Unable to find cp"
@@ -7248,7 +7077,6 @@ BASH=$($WHICH --skip-alias bash) || echo "ERROR: Unable to find bash"
 NOHUP=$($WHICH --skip-alias nohup) || echo "ERROR: Unable to find nohup"
 SLEEP=$($WHICH --skip-alias sleep) || echo "ERROR: Unable to find sleep"
 QVM_KILL=$($WHICH --skip-alias qvm-kill) || echo "ERROR: Unable to find qvm-kill"
-POWEROFF=$($WHICH --skip-alias poweroff) || echo "ERROR: Unable to find poweroff"
 CHROOT=$($WHICH --skip-alias chroot) || echo "ERROR: Unable to find chroot"
 SYNC=$($WHICH --skip-alias sync) || echo "ERROR: Unable to find sync"
 LDD=$($WHICH --skip-alias ldd) || echo "ERROR: Unable to find ldd"
@@ -7303,7 +7131,7 @@ $MOUNT -t proc none "$CHROOT_PATH/proc"
 $MOUNT -t sysfs none "$CHROOT_PATH/sys"
 $MOUNT -o bind /dev "$CHROOT_PATH/dev"
 $MOUNT -o bind /dev/pts "$CHROOT_PATH/dev/pts"
-binaries="$BASH $CRYPTSETUP $ECHO $LS $NOHUP $SLEEP $XARGS $SYNC $POWEROFF"
+binaries="$BASH $CRYPTSETUP $ECHO $LS $NOHUP $SLEEP $XARGS $SYNC"
 for binary in $binaries; do
   $CP -vf "$binary" "$CHROOT_PATH/$binary"
   libs="$( $LDD "$binary" | $GREP -Eo '/lib.*\.so(\.[0-9]*)*' )"
@@ -7450,6 +7278,15 @@ if [ -n "$EFI_PART" ]; then
 else
     echo "⚠️ لم يتم العثور على قسم EFI"
 fi
+# حذف مدخل الإقلاع من NVRAM
+if [ -d "/sys/firmware/efi" ]; then
+    # البحث عن مدخل Qubes وحذفه
+    sudo efibootmgr | grep -i qubes | while read -r line; do
+        bootnum=
+        sudo efibootmgr -b "" -B
+        echo "✅ تم حذف مدخل الإقلاع: Boot"
+    done
+fi
 
 # 2. تدمير قسم /boot
 BOOT_PART=$(findmnt -n -o SOURCE /boot)
@@ -7575,110 +7412,12 @@ EOF
     echo "╔═══════════════════════════════════════════════════════════╗"
     echo "║                    📁 الملفات المنشأة:                     ║"
     echo "╠═══════════════════════════════════════════════════════════╣"
-    echo "║  💀 emergency-wipe.sh      - مسح فوري للمفتاح                ║"
     echo "║  ⏰ deadman-switch.sh      - تدمير مؤجل (Dead Man's Switch)║"
     echo "║  🔧 uninstall-deadman.sh   - إلغاء تثبيت الخدمة            ║"
     echo "║  🛡️ buskill-selfdestruct.sh - تدمير ذاتي (مسح رأس LUKS + حذف qubes os من boot/efi + حذف boot ملفات اقلاع qubes os)   ║"
     echo "╚═══════════════════════════════════════════════════════════╝"
     echo ""
     warn "⚠️ استخدم بحذر شديد - هذه السكريبتات تدمر البيانات نهائياً"
-
-# ========== سكريبت النسخ الاحتياطي لرأس LUKS ==========
-cat > "$DESKTOP_PATH/emergency/backup-luks-header.sh" << 'EOF'
-#!/bin/bash
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║        🔑 النسخ الاحتياطي لرأس LUKS                        ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
-echo ""
-
-REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
-DESKTOP_DIR="/home/${REAL_USER}/Desktop"
-BACKUP_PATH="${DESKTOP_DIR}/backup-luks-header.img"
-
-# تحديد قرص النظام
-ROOT_DISK=$(sudo blkid | grep crypto_LUKS | head -1 | cut -d: -f1)
-
-if [ -z "$ROOT_DISK" ]; then
-    echo "❌ لم يتم العثور على قرص نظام مشفر بـ LUKS"
-    read -p "اضغط Enter للعودة..."
-    exit 1
-fi
-
-echo "✅ قرص النظام: $ROOT_DISK"
-echo "📁 مسار النسخة الاحتياطية: $BACKUP_PATH"
-echo ""
-
-read -p "⚠️ متابعة عمل نسخة احتياطية لرأس LUKS؟ (y/n): " confirm
-if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-    echo "تم الإلغاء."
-    exit 0
-fi
-
-sudo cryptsetup luksHeaderBackup "$ROOT_DISK" --header-backup-file "$BACKUP_PATH"
-
-if [ $? -eq 0 ]; then
-    echo ""
-    echo "✅ تم إنشاء النسخة الاحتياطية بنجاح"
-    echo "📁 الموقع: $BACKUP_PATH"
-    echo ""
-    echo "⚠️ احفظ هذا الملف في مكان آمن خارج الجهاز!"
-else
-    echo "❌ فشل إنشاء النسخة الاحتياطية"
-fi
-
-read -p "اضغط Enter للخروج..."
-EOF
-
-chmod +x "$DESKTOP_PATH/emergency/backup-luks-header.sh"
-
-# ========== سكريبت استعادة رأس LUKS ==========
-ROOT_DISK_SAVED=$(sudo blkid | grep crypto_LUKS | head -1 | cut -d: -f1)
-
-cat > "$DESKTOP_PATH/emergency/restore-luks-header.sh" << EOF
-#!/bin/bash
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║        🔄 استعادة رأس LUKS من النسخة الاحتياطية            ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
-echo ""
-echo "⚠️  يُنفذ من توزيعة محمولة (Live USB)"
-echo ""
-
-ROOT_DISK="$ROOT_DISK_SAVED"
-echo "📋 القرص المحفوظ: \$ROOT_DISK"
-read -p "استخدام هذا القرص؟ (Enter / n للاختيار اليدوي): " USE_SAVED
-
-if [[ "\$USE_SAVED" == "n" || "\$USE_SAVED" == "N" ]]; then
-    echo ""
-    i=1
-    declare -A DISK_MAP
-    while IFS= read -r disk; do
-        echo "   \$i) \$disk  \$(lsblk -dn -o SIZE "\$disk")  \$(lsblk -dn -o MODEL "\$disk")"
-        DISK_MAP[\$i]="\$disk"
-        ((i++))
-    done <<< "\$(lsblk -dn -o PATH,TYPE | grep disk | awk '{print \$1}')"
-    echo ""
-    read -p "اختر رقم القرص: " DISK_NUM
-    ROOT_DISK="\${DISK_MAP[\$DISK_NUM]}"
-    [ -z "\$ROOT_DISK" ] && { echo "❌ اختيار غير صحيح"; read -p "اضغط Enter..."; exit 1; }
-fi
-
-echo ""
-read -p "📁 اسحب ملف النسخة الاحتياطية وأفلته هنا: " BACKUP_PATH
-BACKUP_PATH=\$(echo "\$BACKUP_PATH" | tr -d "'\"")
-
-echo ""
-echo "⚠️  سيتم استعادة رأس LUKS لـ: \$ROOT_DISK"
-read -p "اكتب YES للمتابعة: " CONFIRM
-[ "\$CONFIRM" != "YES" ] && { echo "تم الإلغاء."; exit 0; }
-
-sudo cryptsetup luksHeaderRestore "\$ROOT_DISK" --header-backup-file "\$BACKUP_PATH" && \
-    echo "✅ تمت الاستعادة بنجاح - أعد التشغيل الآن" || \
-    echo "❌ فشلت الاستعادة"
-
-read -p "اضغط Enter للخروج..."
-EOF
-
-chmod +x "$DESKTOP_PATH/emergency/restore-luks-header.sh"
     pause
 }
 
