@@ -4876,6 +4876,15 @@ chmod +x run-simplex.sh</pre>
         <strong>💡 الخلاصة:</strong> في Whonix، قم بتشغيل SimpleX باستخدام السكربت أعلاه (أو مباشرة)، ثم <strong>فعّل SOCKS Proxy من الإعدادات (127.0.0.1:9050)</strong>. هذا يمنحك <strong>عزل دوائر كامل + عناوين .onion</strong>، وهو الإعداد الأمثل للخصوصية القصوى دون أي تكوين إضافي في Gateway أو Workstation. للحصول على عزل أفضل، استخدم إعداد <strong>Transport isolation → Chat profile</strong> في إعدادات الشبكة المتقدمة.
     </div>
 </div>
+    <!-- ======== تنبيه Qubes-Whonix ======== -->
+    <div class="note" style="margin-bottom: 20px; background: #3a1a1a; border-right-color: #ff4444;">
+        <i class="fas fa-exclamation-circle"></i>
+        <strong>⚠️ لمستخدمي Qubes-Whonix:</strong>
+        <p>لا تستخدم <code>sudo</code> مباشرة. استبدله بـ:</p>
+        <pre class="code-block" style="direction: ltr;">qvm-run -u root anon-whonix '&lt;command&gt;'</pre>
+        <p>مثال: <code>qvm-run -u root anon-whonix 'whonix_firewall'</code></p>
+    </div>
+
     <!-- ======== Cwtch Card ======== -->
     <div class="card">
         <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (⭐ الموصى به - ند للند مقاوم للبيانات الوصفية)</div>
@@ -4890,33 +4899,35 @@ chmod +x run-simplex.sh</pre>
                 <li>📦 محمول بالكامل - يعمل من مجلد واحد (USB)</li>
                 <li>🔐 Perfect Forward Secrecy (PFS)</li>
                 <li>🛡️ مقاوم للبيانات الوصفية</li>
-                <li>🚫 <strong>الإنكار الآمن (Plausible Deniability):</strong> يتيح بروتوكول المصادقة في Cwtch <strong>إنكار حدوث المحادثة تماماً بعد إغلاقها</strong>. يمكن لأي طرف <strong>تزوير سجلات المحادثة</strong> بالكامل، مما يجعل من المستحيل إثبات أن المحادثة "الحقيقية" قد حدثت. هذا يجعله الخيار الوحيد الذي يوفر هذه الحماية بين تطبيقات المراسلة.</li>
+                <li>🚫 <strong>الإنكار الآمن (Plausible Deniability):</strong> يتيح بروتوكول المصادقة في Cwtch <strong>إنكار حدوث المحادثة تماماً بعد إغلاقها</strong>. يمكن لأي طرف <strong>تزوير سجلات المحادثة</strong> بالكامل، مما يجعل من المستحيل إثبات أن المحادثة "الحقيقية" قد حدثت.</li>
             </ul>
         </div>
 
         <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #ffaa33;">
             <i class="fas fa-exclamation-triangle"></i> <strong>القيود:</strong>
-            <ul><li>🐢 يتطلب اتصالاً متزامناً (الطرفان معاً) للمحادثات الخاصة</li><li>📱 غير متوفر على iOS (Android و Desktop فقط)</li><li>🔧 يتطلب إعدادات خاصة على Whonix/Qubes</li><li>📊 قاعدة مستخدمين صغيرة: ~5,000+ تحميل على Android، وغير معروف على Desktop (تحميل مباشر)</li><li>🔍 لم يخضع لتدقيق أمني مستقل بعد (حسب صفحة Whonix الرسمية)</li></ul>
+            <ul>
+                <li>🐢 يتطلب اتصالاً متزامناً (الطرفان معاً) للمحادثات الخاصة</li>
+                <li>📱 غير متوفر على iOS (Android و Desktop فقط)</li>
+                <li>🔧 يتطلب إعدادات خاصة على Whonix/Qubes</li>
+                <li>📊 قاعدة مستخدمين صغيرة</li>
+                <li>🔍 لم يخضع لتدقيق أمني مستقل بعد (حسب صفحة Whonix الرسمية)</li>
+            </ul>
         </div>
 
-        <!-- ============ هيكل التثبيت الرسمي ============ -->
-        <h3><i class="fas fa-folder-tree"></i> 📁 هيكل التثبيت الرسمي (من المستودع)</h3>
-        <p>عند تحميل Cwtch من الموقع الرسمي، يحتوي المجلد على سكريبتات التثبيت التالية:</p>
-        <pre class="code-block" style="direction: ltr; text-align: left;">cwtch/
-├── cwtch                    # سكريبت التشغيل (يشير لـ ./lib/cwtch)
-├── lib/                     # مجلد المكتبات
-│   ├── cwtch                # الملف التنفيذي الرئيسي
-│   └── libcwtch.so          # المكتبة الأساسية
-├── Tor/                     # Tor مدمج للتطبيق
-├── install.sh               # تثبيت عام للمجلد ~/.local/lib/
-├── install-home.sh          # تثبيت منزلي خاص
-├── install-sys.sh           # تثبيت على مستوى النظام
-├── install-whonix.sh        # إعداد خاص لـ Whonix
-└── cwtch-whonix.yml         # ملف إعداد onion-grater لـ Whonix</pre>
+        <h3><i class="fas fa-folder-tree"></i> 📁 هيكل التثبيت الرسمي</h3>
+        <pre class="code-block">cwtch/
+├── cwtch                    # سكريبت التشغيل
+├── lib/
+│   ├── cwtch                # الملف التنفيذي
+│   └── libcwtch.so
+├── Tor/
+├── install.sh
+├── install-home.sh
+├── install-sys.sh
+├── install-whonix.sh
+└── cwtch-whonix.yml</pre>
 
-        <!-- ============ سكربت التشغيل المحمول ============ -->
-        <h3><i class="fas fa-usb"></i> 💾 سكربت Cwtch المحمول (Portable)</h3>
-        <p>مبني على السكريبت الرسمي مع <strong>تعديلات بسيطة</strong>: توجيه البيانات إلى مجلد <code>cwtch-data/</code> بجانب السكريبت، مع فحص تلقائي لإعدادات Whonix وتشغيلها عند الحاجة:</p>
+        <h3><i class="fas fa-usb"></i> 💾 سكربت التشغيل المحمول</h3>
         <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> نسخ run-cwtch-portable.sh</button>
         <pre class="code-block" id="cwtch-portable-script">cat > run-cwtch-portable.sh << 'EOF'
 #!/bin/sh
@@ -4932,29 +4943,42 @@ export CWTCH_BIND_EXTERNAL_WHONIX=true
 exec ./lib/cwtch
 EOF
 chmod +x run-cwtch-portable.sh</pre>
-        <p>📁 <strong>هيكل المجلدات بعد التشغيل:</strong></p>
-        <pre class="code-block">cwtch/
-├── run-cwtch-portable.sh    # ⬅️ استخدم هذا للتشغيل المحمول
-├── lib/
-│   └── cwtch                # الملف التنفيذي
-├── Tor/                     # Tor مدمج
-└── cwtch-data/              # 🆕 بيانات محمولة (تنشأ تلقائياً)</pre>
 
         <!-- ============ ملاحظة هامة حول Whonix ============ -->
         <div class="note" style="margin-top: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
             <i class="fas fa-exclamation-triangle"></i>
             <strong>⚠️ تذكير هام لمستخدمي Whonix:</strong>
-            <p>بعد تشغيل السكريبت، لا تنس تنفيذ الأمر التالي في <strong>Whonix-Gateway (البوابة)</strong>:</p>
+            
+            <p><strong>1. على Whonix-Gateway (البوابة):</strong></p>
             <pre class="code-block">sudo onion-grater-add 40_cwtch</pre>
-            <p>بدون هذا الأمر في البوابة، لن يتمكن Cwtch من الاتصال بشبكة Tor.</p>
+            
+            <p><strong>2. على Whonix-Workstation (محطة العمل):</strong></p>
+            <pre class="code-block">sudo mkdir -p /etc/whonix_firewall.d/
+echo 'EXTERNAL_OPEN_PORTS+=" $(seq 15000 15378) "' | sudo tee -a /etc/whonix_firewall.d/50_user.conf</pre>
+            <p>ثم أعد تحميل جدار الحماية:</p>
+            <pre class="code-block">sudo whonix_firewall</pre>
+            
+            <p><strong>3. داخل تطبيق Cwtch (بعد التشغيل لأول مرة):</strong></p>
+            <ul>
+                <li>اضغط على أيقونة <strong>Tor</strong> (البصلة) في الواجهة الرئيسية</li>
+                <li>اختر <strong>Advanced Tor Configuration</strong></li>
+                <li>أدخل:
+                    <ul>
+                        <li><strong>Custom SOCKS port:</strong> <code>9050</code></li>
+                        <li><strong>Custom Control port:</strong> <code>9051</code></li>
+                    </ul>
+                </li>
+                <li>ثم اضغط زر <strong>Restart</strong></li>
+            </ul>
+            <p>📌 <strong>لماذا؟</strong> بدون إدخال هذه المنافذ، يحاول Cwtch تشغيل نسخته المدمجة من Tor داخل Workstation (وهو ما لا يعمل). بإدخالها، تخبره باستخدام Tor الخاص بـ Gateway مباشرة.</p>
+            
+            <p>⚠️ <strong>بدون هذه الإعدادات الثلاثة، لن يتمكن Cwtch من الاتصال بشبكة Tor.</strong></p>
         </div>
 
-        <!-- ============ روابط التحميل ============ -->
         <h3><i class="fas fa-download"></i> 📥 روابط التحميل</h3>
         <ul>
             <li><strong>Desktop:</strong> <a href="https://docs.cwtch.im/download" target="_blank">docs.cwtch.im/download</a></li>
             <li><strong>Android:</strong> <a href="https://play.google.com/store/apps/details?id=im.cwtch.flwtch" target="_blank">Google Play</a></li>
-            <li><strong>Linux (Portable):</strong> ملف <code>cwtch-*.tar.gz</code> يحتوي على جميع سكريبتات التثبيت أعلاه</li>
         </ul>
     </div>
 
