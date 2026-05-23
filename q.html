@@ -2540,23 +2540,31 @@ rm /tmp/luks-setup.sh</pre>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">2</td>
-            <td style="padding: 10px;">افتح VeraCrypt واختر <strong>Create Volume → Encrypt a non-system partition/drive</strong>.</td>
+            <td style="padding: 10px;">شغّل <i class="fas fa-shield-alt"></i> <strong>VeraCrypt</strong>، اختر <strong>Create Volume → Encrypt a non-system partition/drive</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">3</td>
-            <td style="padding: 10px;">حدد الفلاشة كاملةً، اختر كلمة مرور قوية، وشفرها بنظام <strong>ext4</strong>.</td>
+            <td style="padding: 10px;">حدد الفلاشة كاملةً أو القسم المراد تشفيره، اختر كلمة مرور قوية، <strong>ولا تقم بفرمتتها</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">4</td>
-            <td style="padding: 10px;">بعد التشفير، افتح الفلاشة في VeraCrypt و<strong>ثبّتها (Mount)</strong>.</td>
+            <td style="padding: 10px;">بعد التشفير، ارجع لـ VeraCrypt و<strong>افتح الفلاشة فقط دون تثبيتها</strong> <i class="fas fa-lock-open"></i> (Do not mount).</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">5</td>
-            <td style="padding: 10px;">داخل الفلاشة المثبتة، أنشئ <strong>حاوية LUKS</strong> (ملف <code>.img</code>) باستخدام السكربت التفاعلي أو الأمر المباشر.</td>
+            <td style="padding: 10px;">شغّل <i class="fas fa-hdd"></i> <strong>GNOME Disks</strong>، ستجد الجهاز المفتوح في القائمة. اختره و<strong>Format Partition → Ext4</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">6</td>
-            <td style="padding: 10px;">افتح حاوية LUKS، ثبّتها، وانقل جميع ملفاتك الحساسة وسكربتاتك إلى داخلها.</td>
+            <td style="padding: 10px;">ثبّت الفلاشة مؤقتاً <i class="fas fa-thumbtack"></i>، ثم داخل <strong>GNOME Disks</strong> اختر <strong>Create Disk Image → أنشئ ملف <code>.img</code></strong> بالحجم المطلوب.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">7</td>
+            <td style="padding: 10px;">في GNOME Disks، <strong>Attach Disk Image</strong> للملف المنشأ، ثم <strong>Format → Ext4 مع تفعيل LUKS</strong>. GNOME Disks سيفتح الحاوية تلقائياً بعد التهيئة <i class="fas fa-check-circle" style="color: #4caf50;"></i>.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">8</td>
+            <td style="padding: 10px;">انقل جميع ملفاتك الحساسة وسكربتاتك إلى داخل حاوية LUKS المفتوحة.</td>
         </tr>
     </table>
     
@@ -2568,23 +2576,27 @@ rm /tmp/luks-setup.sh</pre>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">2</td>
-            <td style="padding: 10px;">افتح VeraCrypt، افتح تشفير الفلاشة الخارجي <strong>لكن لا تقم بتثبيتها (Do not mount)</strong>.</td>
+            <td style="padding: 10px;">شغّل <i class="fas fa-shield-alt"></i> <strong>VeraCrypt</strong>، افتح تشفير الفلاشة الخارجي <strong>لكن لا تقم بتثبيتها (Do not mount)</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">3</td>
-            <td style="padding: 10px;">من dom0، مرّر <strong>البلوك ديفايس</strong> الخاص بالفلاشة المفتوحة إلى <code>whonix-work-ram</code>.</td>
+            <td style="padding: 10px;">من <strong>dom0</strong>، مرّر <strong>البلوك ديفايس</strong> الخاص بالفلاشة المفتوحة إلى <code>whonix-work-ram</code>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">4</td>
-            <td style="padding: 10px;">في <code>whonix-work-ram</code>، ثبت الفلاشة مؤقتاً لترى الملفات، ثم استخدم <strong>GNOME Disks</strong> أو <code>cryptsetup</code> لفتح ملف حاوية LUKS (<code>.img</code>).</td>
+            <td style="padding: 10px;">في <code>whonix-work-ram</code>، ثبّت الفلاشة مؤقتاً. شغّل <i class="fas fa-hdd"></i> <strong>GNOME Disks</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">5</td>
-            <td style="padding: 10px;">ثبّت (Mount) حاوية LUKS — <strong>تمنح صلاحيات تنفيذ طبيعية تلقائياً</strong> لأنها تُفتح من ملف داخلي وليس من جهاز خارجي.</td>
+            <td style="padding: 10px;">من <strong>GNOME Disks</strong>: <strong>Attach Disk Image → اختر ملف <code>.img</code> → افتح LUKS → ثبّت الحاوية</strong>.</td>
         </tr>
         <tr>
             <td style="padding: 10px; font-weight: bold; color: #ce93d8;">6</td>
-            <td style="padding: 10px;">شغّل سكربتاتك مباشرة من داخل حاوية LUKS المثبتة.</td>
+            <td style="padding: 10px;"><strong>تمنح صلاحيات تنفيذ طبيعية تلقائياً</strong> <i class="fas fa-check-circle" style="color: #4caf50;"></i> لأنها تُفتح من ملف داخلي وليس من جهاز خارجي.</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold; color: #ce93d8;">7</td>
+            <td style="padding: 10px;">شغّل سكربتاتك مباشرة <i class="fas fa-play"></i> من داخل حاوية LUKS المثبتة.</td>
         </tr>
     </table>
     
@@ -2597,14 +2609,14 @@ rm /tmp/luks-setup.sh</pre>
             <span>→</span>
             <span style="background: #1a3a3a; padding: 8px 14px; border-radius: 30px;">📁 ext4<br><small>(ملف LUKS .img)</small></span>
             <span>→</span>
-            <span style="background: #2a4a1a; padding: 8px 14px; border-radius: 30px;">🧅 LUKS2 + Argon2id<br><small>(كلمة مرور ٢)</small></span>
+            <span style="background: #2a4a1a; padding: 8px 14px; border-radius: 30px;">🧅 LUKS<br><small>(كلمة مرور ٢)</small></span>
             <span>→</span>
             <span style="background: #0a3a0a; padding: 8px 14px; border-radius: 30px;">✅ سكربتات وبيانات</span>
         </div>
     </div>
     
     <div class="note" style="margin-top: 15px; background: #1a3a3a;">
-        <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور VeraCrypt لا تغادر كيوب التخزين. كلمة مرور LUKS لا تخرج من <code>whonix-work-ram</code>. طبقتا تشفير مستقلتان. LUKS يوفر Argon2id لمقاومة GPU.
+        <i class="fas fa-shield-alt"></i> <strong>🛡️ آمن:</strong> كلمة مرور VeraCrypt لا تغادر كيوب التخزين. كلمة مرور LUKS لا تخرج من <code>whonix-work-ram</code>. طبقتا تشفير مستقلتان. كلمتا المرور مختلفتان تماماً.
     </div>
     
     <div class="note" style="margin-top: 10px; background: #2a1a3a; border-right-color: #ce93d8;">
@@ -2621,7 +2633,7 @@ rm /tmp/luks-setup.sh</pre>
         <strong>⚠️ ملاحظات هامة:</strong>
         <ul style="margin-right: 20px; margin-top: 8px;">
             <li>• <strong>الإنكار المعقول:</strong> VC يخفي LUKS. ملف <code>.img</code> يبدو كبيانات عشوائية. حتى أدوات فحص التشفير لن تميزه.</li>
-            <li>• <strong>تحذير SSD:</strong> تقنية TRIM تجعل هذه الطريقة أقل أماناً. استخدم فلاشات USB تقليدية للحصول على أفضل حماية.</li>
+            <li>• <strong>تحذير SSD:</strong> تقنية TRIM قد تكشف حجم البيانات الحقيقية داخل الحاوية وتضعف الإنكار المعقول. استخدم فلاشات USB تقليدية للحصول على أفضل حماية.</li>
         </ul>
     </div>
 </div>
