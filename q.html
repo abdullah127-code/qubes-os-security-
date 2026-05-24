@@ -5733,10 +5733,10 @@ qvm-pool set ram_pool -o ephemeral_volatile=True
 echo "✅ RAM pool جاهز مع ephemeral_volatile مفعل"
 EOF
 
-    # ========== create-ram-vm.sh ==========
+    # ========== create-ram-vm-cwtch.sh ==========
     
 mkdir -p "$DESKTOP_PATH/ram-pool-scripts"
-cat > "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh" << 'EOF'
+cat > "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm-cwtch.sh" << 'EOF'
 #!/bin/bash
 
 # إعداد Whonix RAM VM مع دعم Cwtch و OnionShare
@@ -5779,17 +5779,114 @@ if [[ "$APPLY_APPS" =~ ^[yY] ]]; then
 else
     echo "⏭️ تم تخطي إعدادات Cwtch و OnionShare"
 fi
-
-# توصيل وتركيب قرص اختياري
-read -p "❓ توصيل قرص USB؟ (y/n): " ATTACH
-if [[ "$ATTACH" =~ ^[yY] ]]; then
-    read -p "اسم القرص [xvdi]: " DISK
-    DISK=${DISK:-xvdi}
-    qvm-run --pass-io -u root "$WORKSTATION" "mkdir -p $USB_MOUNT && mount /dev/$DISK $USB_MOUNT && echo '✅ تم تركيب القرص على $USB_MOUNT' || echo '❌ فشل التركيب'"
-fi
 EOF
 
 chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh"
+    # ========== mount-to-whonix.sh ==========
+cat > "$HOME/Desktop/ram-pool-scripts/mount-to-whonix.sh" << 'EOF'
+#!/bin/bash
+# mount-to-whonix.sh - اختيار كيوب Whonix وقرص عبر qvm-run (من dom0)
+# يُفترض أن القرص مُمرَّر مسبقًا إلى الكيوب عبر Qubes Devices
+
+set -e
+
+MOUNT_POINT="/home/user/usb"
+DEFAULT_DISK="xvdi"
+
+# 1. البحث عن كيوبات Whonix العاملة (باستثناء sys-whonix)
+echo "🔍 البحث عن كيوبات Whonix العاملة..."
+mapfile -t RUNNING_VMS < <(qvm-ls --running --raw-list | grep -i 'whonix' | grep -v 'sys-whonix')
+
+if [ ${#RUNNING_VMS[@]} -eq 0 ]; then
+    echo "❌ لا توجد كيوبات Whonix عاملة. شغّل whonix-work-ram أو whonix-workstation أولًا."
+    exit 1
+fi
+
+# عرض قائمة الكيوبات
+echo "📋 كيوبات Whonix المتاحة:"
+for i in "${!RUNNING_VMS[@]}"; do
+    echo "  $((i+1))) ${RUNNING_VMS[$i]}"
+done
+
+# إجبار المستخدم على اختيار رقم صحيح
+while true; do
+    read -p "👉 أدخل رقم الكيوب المطلوب (1-${#RUNNING_VMS[@]}): " CHOICE
+    if [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 1 ] && [ "$CHOICE" -le "${#RUNNING_VMS[@]}" ]; then
+        TARGET_VM="${RUNNING_VMS[$((CHOICE-1))]}"
+        break
+    else
+        echo "❌ اختيار غير صحيح. أدخل رقمًا بين 1 و ${#RUNNING_VMS[@]}."
+    fi
+done
+echo "✅ تم اختيار: $TARGET_VM"
+
+# 2. استعراض الأقراص المتاحة داخل الكيوب المختار
+echo ""
+echo "🔎 جاري فحص الأقراص داخل $TARGET_VM ..."
+echo "----------------------------------------"
+qvm-run --pass-io -u root "$TARGET_VM" "lsblk -o NAME,SIZE,TYPE,MOUNTPOINT | head -20"
+echo "----------------------------------------"
+
+# 3. اقتراح القسم الأول تلقائياً إذا كان القرص موجوداً
+SUGGESTED_PART="${DEFAULT_DISK}"
+echo ""
+echo "💡 إذا كان القرص الظاهر هو $DEFAULT_DISK وقسمه $SUGGESTED_PART، فقط اضغط Enter للقبول."
+
+# 4. إدخال اسم القرص مع التحقق من صحة الإدخال
+while true; do
+    read -p "📀 أدخل اسم القرص من القائمة أعلاه [$SUGGESTED_PART]: " DISK
+    DISK=${DISK:-$SUGGESTED_PART}
+    
+    # التحقق من صحة المُدخل: يسمح فقط بالأحرف والأرقام والشرطات
+    if [[ ! "$DISK" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        echo "❌ اسم القرص غير صالح. استخدم فقط الأحرف الإنجليزية والأرقام والشرطات."
+        continue
+    fi
+    break
+done
+
+# 5. التحقق من وجود الجهاز داخل الكيوب (باستخدام كود الخروج مباشرة)
+echo "🔍 التحقق من وجود /dev/$DISK داخل $TARGET_VM ..."
+if ! qvm-run --pass-io -u root "$TARGET_VM" "test -b /dev/$DISK"; then
+    echo "❌ الجهاز /dev/$DISK غير موجود في $TARGET_VM."
+    exit 1
+fi
+
+# 6. فحص إذا كانت نقطة التركيب مُستخدمة مسبقًا
+echo "🔍 فحص نقطة التركيب $MOUNT_POINT ..."
+MOUNT_CHECK=$(qvm-run --pass-io -u root "$TARGET_VM" "mountpoint -q $MOUNT_POINT && echo 'MOUNTED' || echo 'FREE'")
+if echo "$MOUNT_CHECK" | grep -q "MOUNTED"; then
+    echo "⚠️ نقطة التركيب $MOUNT_POINT مُستخدمة مسبقًا."
+    read -p "❓ هل تريد فك التركيب الحالي والمتابعة؟ (y/n): " UNMOUNT_CHOICE
+    if [[ "$UNMOUNT_CHOICE" =~ ^[yY] ]]; then
+        qvm-run --pass-io -u root "$TARGET_VM" "umount $MOUNT_POINT"
+        echo "✅ تم فك التركيب السابق."
+    else
+        echo "❌ تم إلغاء العملية."
+        exit 1
+    fi
+fi
+
+# 7. تنفيذ التركيب مع تأكيد فعلي للنجاح
+echo "📂 جاري التركيب على $MOUNT_POINT ..."
+MOUNT_OUTPUT=$(qvm-run --pass-io -u root "$TARGET_VM" \
+    "mkdir -p $MOUNT_POINT && mount /dev/$DISK $MOUNT_POINT 2>&1 && echo 'MOUNT_OK' || echo 'MOUNT_FAIL'")
+
+if echo "$MOUNT_OUTPUT" | grep -q "MOUNT_OK"; then
+    echo "✅ تم التركيب بنجاح على $MOUNT_POINT"
+else
+    echo "❌ فشل التركيب: $MOUNT_OUTPUT"
+    exit 1
+fi
+
+# 8. تذكير بإلغاء التركيب
+echo ""
+echo "🏁 انتهى. يمكنك الآن الوصول إلى ملفاتك في $TARGET_VM:$MOUNT_POINT"
+echo "💡 لإلغاء التركيب لاحقًا استخدم:"
+echo "   qvm-run -u root $TARGET_VM 'umount $MOUNT_POINT'"
+EOF
+
+chmod +x "$HOME/Desktop/ram-pool-scripts/mount-to-whonix.sh"
 
     # ========== create-multi-ram-vm.sh (معدل مع معلمات النواة والحفظ) ==========
     cat > "$DESKTOP_PATH/ram-pool-scripts/create-multi-ram-vm.sh" << 'EOF'
