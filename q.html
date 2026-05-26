@@ -6138,8 +6138,6 @@ chmod +x /rw/config/rc.local
 "
 
         qvm-shutdown --wait "$VM_NAME"
-        sleep 2
-        qvm-start "$VM_NAME"
         echo -e "  ${G}✅ المراقب التلقائي مفعل في $VM_NAME${N}"
 
     else
@@ -6232,8 +6230,6 @@ chmod +x /rw/config/rc.local
 "
     # إعادة تشغيل لتفعيل rc.local
     qvm-shutdown --wait "\$VM_NAME"
-    sleep 2
-    qvm-start "\$VM_NAME"
     echo -e "  \${G}✅ المراقب التلقائي مفعل\${N}"
 else
     echo -e "  \${R}❌ فشل الإنشاء\${N}"
