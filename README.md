@@ -52,7 +52,7 @@ The guide is available in two languages:
 ## 📥 Download & Usage
 
 1. Download the HTML file:
-   - English: [`q_en.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/main/q_en.html)
+   - English: [`q_en.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/main/docs/q_en.html)
    - Arabic: [`q.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/main/q.html)
 2. Open it in any modern browser (Firefox, Chrome, Brave).
 3. Use the tabs at the top to navigate.
