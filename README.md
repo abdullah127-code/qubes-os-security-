@@ -16,8 +16,6 @@ The guide is available in two languages:
 - **English** (`q_en.html`)
 - **Arabic** (`q.html`)
 
-All files are located in the [`docs`](https://github.com/abdullah127-code/qubes-os-security-/tree/docs) branch of this repository.
-
 ---
 
 ## ✨ Features
@@ -68,7 +66,7 @@ All files are located in the [`docs`](https://github.com/abdullah127-code/qubes-
 You can preview the guide directly via GitHub’s HTML Preview:
 
 - 🔗 [**English version preview**](https://htmlpreview.github.io/?https://github.com/abdullah127-code/qubes-os-security-/blob/docs/q_en.html)
-- 🔗 [**Arabic version preview**](https://htmlpreview.github.io/?https://github.com/abdullah127-code/qubes-os-security-/blob/docs/q.html)
+- 🔗 [**Arabic version preview**](https://htmlpreview.github.io/?https://github.com/abdullah127-code/qubes-os-security-/blob/main/q.html)
 
 ---
 
