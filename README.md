@@ -55,7 +55,7 @@ All files are located in the [`docs`](https://github.com/abdullah127-code/qubes-
 
 1. Download the HTML file from the [`docs` branch](https://github.com/abdullah127-code/qubes-os-security-/tree/docs):
    - English: [`q_en.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/docs/q_en.html) – [Raw](https://raw.githubusercontent.com/abdullah127-code/qubes-os-security-/docs/q_en.html)
-   - Arabic: [`q.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/docs/q.html) – [Raw](https://raw.githubusercontent.com/abdullah127-code/qubes-os-security-/docs/q.html)
+   - Arabic: [`q.html`](https://github.com/abdullah127-code/qubes-os-security-/blob/main/q.html) – [Raw](https://raw.githubusercontent.com/abdullah127-code/qubes-os-security-/main/q.html)
 2. Open the downloaded file in any modern browser (Firefox, Chrome, Brave).
 3. Use the tabs at the top to navigate.
 4. Click on any command to copy it instantly.
