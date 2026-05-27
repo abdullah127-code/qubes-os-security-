@@ -6109,8 +6109,8 @@ SCRIPT_EOF
 
     chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh"
 
-    # ========== mount-to-whonix.sh (short: attach + safe detach) ==========
-    cat > "$DESKTOP_PATH/ram-pool-scripts/mount-to-whonix.sh" << 'EOF'
+# ========== mount-to-whonix.sh (short: attach + safe detach) ==========
+cat > "$DESKTOP_PATH/ram-pool-scripts/mount-to-whonix.sh" << 'EOF'
 #!/bin/bash
 # mount-to-whonix.sh - Attach/Detach disks in Whonix VMs
 set -e
@@ -6144,30 +6144,35 @@ case $OP in
         qvm-run --pass-io -u root "$TARGET" "test -b /dev/$DISK" || { echo -e "${R}❌ Not found${N}"; exit 1; }
         qvm-run --pass-io -u root "$TARGET" "mkdir -p $MOUNT_POINT && mount /dev/$DISK $MOUNT_POINT && echo '✅ Done'" || echo -e "${R}❌ Failed${N}"
         ;;
-    2) # Safe detach: umount + direct detach
+    2) # Safe detach
         find_vm
-        echo -e "${Y}Detaching devices mounted on $MOUNT_POINT...${N}"
+        echo -e "${Y}Mounted devices on $MOUNT_POINT:${N}"
         qvm-run --pass-io -u root "$TARGET" "mount | grep $MOUNT_POINT" 2>/dev/null || echo -e "${Y}Nothing mounted${N}"
         read -p "Proceed with full detach? (y/n): " CONFIRM
         [[ "$CONFIRM" =~ ^[Yy] ]] || exit 0
 
-   # Unmount inside VM
-echo -e "${Y}Unmounting from VM...${N}"
-qvm-run --pass-io -u root "$TARGET" "umount -l $MOUNT_POINT 2>/dev/null" && echo -e "${G}✅ Unmounted${N}" || echo -e "${Y}⚠️ Not mounted or unmount failed${N}"
+        # Unmount inside VM
+        echo -e "${Y}Unmounting from VM...${N}"
+        qvm-run --pass-io -u root "$TARGET" "sync && umount $MOUNT_POINT 2>/dev/null" && echo -e "${G}✅ Unmounted${N}" || echo -e "${Y}⚠️ Not mounted or unmount failed${N}"
 
-# Detach all devices from dom0
-echo -e "${Y}Detaching devices from dom0...${N}"
-qvm-block list | grep "$TARGET" | while read -r line; do
-    DEVICE=$(echo "$line" | awk '{print $1}')
-    echo -e "Detaching $DEVICE..."
-    qvm-block detach "$TARGET" "$DEVICE" 2>/dev/null && echo -e "${G}✅ $DEVICE detached${N}" || echo -e "${R}❌ Failed to detach $DEVICE${N}"
-done
+        # Detach all devices from dom0
+        echo -e "${Y}Detaching devices from dom0...${N}"
+        qvm-block list | grep "$TARGET" | while read -r line; do
+            DEVICE=$(echo "$line" | awk '{print $1}')
+            echo -e "Detaching $DEVICE..."
+            qvm-block detach "$TARGET" "$DEVICE" 2>/dev/null && echo -e "${G}✅ $DEVICE detached${N}" || echo -e "${R}❌ Failed to detach $DEVICE${N}"
+        done
 
-echo -e "${G}🎉 Full detach completed. You can reconnect the device later and the monitor will auto-mount it.${N}"
+        echo -e "${G}🎉 Full detach completed. You can reconnect the device later and the monitor will auto-mount it.${N}"
         ;;
     3) # Show status
         find_vm
-        qvm-run --pass-io -u root "$TARGET" "lsblk -o NAME,SIZE,TYPE,MOUNTPOINT && echo '---' && mountpoint -q $MOUNT_POINT && echo '✅ Mounted' || echo '⚠️ Not mounted'"
+        echo -e "${Y}=== Device Status ===${N}"
+        qvm-run --pass-io -u root "$TARGET" "lsblk -o NAME,SIZE,TYPE,MOUNTPOINT"
+        echo -e "\n${Y}=== Mount Status ===${N}"
+        qvm-run --pass-io -u root "$TARGET" "mountpoint -q $MOUNT_POINT 2>/dev/null && echo '✅ Mounted' || echo '⚠️ Not mounted'"
+        echo -e "\n${Y}=== Attached Devices ===${N}"
+        qvm-block list | grep "$TARGET" || echo "No devices attached"
         ;;
     4) echo -e "${G}👋${N}"; exit 0 ;;
     *) echo -e "${R}❌ Invalid${N}"; exit 1 ;;
