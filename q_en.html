@@ -6151,16 +6151,19 @@ case $OP in
         read -p "Proceed with full detach? (y/n): " CONFIRM
         [[ "$CONFIRM" =~ ^[Yy] ]] || exit 0
 
-        # Unmount inside VM
-        qvm-run --pass-io -u root "$TARGET" "umount $MOUNT_POINT 2>/dev/null" && echo -e "${G}✅ Unmounted${N}"
+   # Unmount inside VM
+echo -e "${Y}Unmounting from VM...${N}"
+qvm-run --pass-io -u root "$TARGET" "umount -l $MOUNT_POINT 2>/dev/null" && echo -e "${G}✅ Unmounted${N}" || echo -e "${Y}⚠️ Not mounted or unmount failed${N}"
 
-        # Detach all visible storage devices from dom0
-        echo -e "${Y}Detaching devices from dom0...${N}"
-        for DEV in $(qvm-run --pass-io -u root "$TARGET" "lsblk -o NAME -n | grep -E '^sd|^xvd|^vd'" 2>/dev/null); do
-            qvm-block detach "$TARGET" "dom0:/dev/$DEV" 2>/dev/null && echo -e "${G}✅ $DEV detached${N}"
-        done
+# Detach all devices from dom0
+echo -e "${Y}Detaching devices from dom0...${N}"
+qvm-block list | grep "$TARGET" | while read -r line; do
+    DEVICE=$(echo "$line" | awk '{print $1}')
+    echo -e "Detaching $DEVICE..."
+    qvm-block detach "$TARGET" "$DEVICE" 2>/dev/null && echo -e "${G}✅ $DEVICE detached${N}" || echo -e "${R}❌ Failed to detach $DEVICE${N}"
+done
 
-        echo -e "${G}🎉 Full detach completed. You can reconnect the device later and the monitor will auto-mount it.${N}"
+echo -e "${G}🎉 Full detach completed. You can reconnect the device later and the monitor will auto-mount it.${N}"
         ;;
     3) # Show status
         find_vm
