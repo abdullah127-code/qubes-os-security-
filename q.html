@@ -2123,12 +2123,27 @@ rm /tmp/luks-setup.sh</pre>
     </ol>
   </div>
 
-<h4 style="color:#ffd966;margin-top:20px;">▶️ التشغيل اليومي (التسلسل الصحيح – تلقائي)</h4>
-<table style="width:100%;border-collapse:collapse;">
-  <tr><td style="padding:8px;font-weight:bold;color:#ce93d8;width:30px;">1</td><td style="padding:8px;">في كيوب التخزين: افتح VeraCrypt <strong>بدون تثبيت</strong> (Do not mount) ← يظهر <code>/dev/mapper/veracrypt1</code>.</td></tr>
-  <tr><td style="padding:8px;font-weight:bold;color:#ce93d8;">2</td><td style="padding:8px;"><strong>في نفس كيوب التخزين:</strong> افتح LUKS على <code>/dev/mapper/veracrypt1</code> <strong>بدون تثبيت</strong> (Unlock only) ← يظهر <code>/dev/mapper/luks-...</code>.</td></tr>
-  <tr><td style="padding:8px;font-weight:bold;color:#ce93d8;">3</td><td style="padding:8px;">من dom0: مرّر البلوك ديفايس LUKS المفتوح (أيقونة Qubes Devices) إلى <strong>whonix-work-ram</strong>.</td></tr>
-  <tr><td style="padding:8px;font-weight:bold;color:#ce93d8;">4</td><td style="padding:8px;"><strong>تلقائياً:</strong> خلال ثوانٍ، يراقب <code>/rw/config/rc.local</code> وجود القرص ويُثبّته على <code>/home/user/usb</code>. <br>لا حاجة لأي أمر يدوي – القرص جاهز للاستخدام فوراً.</td></tr>
+<h4 style="color:#ffd966; margin-top:20px;">▶️ التشغيل اليومي (التسلسل الصحيح – تلقائي)</h4>
+<table style="width:100%; border-collapse:collapse;">
+  <tr>
+    <td style="padding:8px; font-weight:bold; color:#ce93d8; width:30px;">1</td>
+    <td style="padding:8px;">في كيوب التخزين: افتح VeraCrypt <strong>بدون تثبيت</strong> (Do not mount) ← يظهر <code>/dev/mapper/veracrypt1</code>.</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; font-weight:bold; color:#ce93d8;">2</td>
+    <td style="padding:8px;"><strong>في نفس كيوب التخزين:</strong> افتح LUKS على <code>/dev/mapper/veracrypt1</code> <strong>بدون تثبيت</strong> (Unlock only) ← يظهر <code>/dev/mapper/luks-...</code>.</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; font-weight:bold; color:#ce93d8;">3</td>
+    <td style="padding:8px;">من dom0: مرّر البلوك ديفايس LUKS المفتوح (أيقونة Qubes Devices) إلى <strong>whonix-work-ram</strong> أو أي Whonix workstation.</td>
+  </tr>
+  <tr>
+    <td style="padding:8px; font-weight:bold; color:#ce93d8;">4</td>
+    <td style="padding:8px;">
+      <strong>تلقائياً:</strong> خلال 10 ثوانٍ، تكتشف خدمة <code>mount-usb.service</code> (التي تم تفعيلها مسبقاً عبر <strong>الخيار 10 في السكربت المساعد</strong>) القرص <code>/dev/xvdi</code> وتُثبّته فوراً على <code>/home/user/usb</code>.<br>
+      لا حاجة لأي أمر يدوي – القرص جاهز للاستخدام.
+    </td>
+  </tr>
 </table>
 
 <div style="background:#0d1b2a;padding:12px;border-radius:12px;margin-top:15px;text-align:center;direction:ltr;">
@@ -5065,7 +5080,8 @@ menu() {
     echo "7) تشغيل Live Mode"
     echo "8) 💀 أدوات التدمير (BusKill + الطوارئ)"
     echo "9) 🛡️ تقوية تشفير قرص النظام (LUKS PBKDF)"
-    echo "10) تنفيذ الأقسام التلقائية (1 إلى 8)"
+    echo "10) إعداد توصيل تلقائي للأقراص في Whonix"
+    echo "11) تنفيذ الأقسام التلقائية (1 إلى 8)"
     echo "0) خروج"
     echo ""
     read -p "اختر: " c
@@ -5079,7 +5095,8 @@ menu() {
         7) live_mode ;;
         8) emergency_script ;;
         9) luks_hardening ;;
-        10) run_auto ;;
+        10) whonix_auto_mount ;;
+        11) run_auto ;;
         0) exit 0 ;;
         *) menu ;;
     esac
@@ -5755,18 +5772,30 @@ qvm-pool set ram_pool -o ephemeral_volatile=True
 echo "✅ RAM pool جاهز مع ephemeral_volatile مفعل"
 EOF
 
-    # ========== create-ram-vm.sh (فردي مع rc.local تلقائي) ==========
-    cat > "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh" << 'SCRIPT_EOF'
+# ========== setup-ram-pool.sh ==========
+cat > "$DESKTOP_PATH/ram-pool-scripts/setup-ram-pool.sh" << 'EOF'
 #!/bin/bash
-# create-ram-vm.sh - إنشاء whonix-work-ram + مراقب دائم عبر /rw/config/rc.local
+RAM_POOL_PATH="$HOME/ram_pool"
+RAM_POOL_SIZE="4G"
+sudo mkdir -p "$RAM_POOL_PATH"
+sudo mount -t tmpfs -o size=$RAM_POOL_SIZE tmpfs "$RAM_POOL_PATH"
+if ! qvm-pool ls | grep -q ram_pool; then
+    qvm-pool add ram_pool file -o dir_path="$RAM_POOL_PATH"
+fi
+qvm-pool set ram_pool -o ephemeral_volatile=True
+echo "✅ RAM pool جاهز مع ephemeral_volatile مفعل"
+EOF
+
+# ========== create-ram-vm.sh (فردي - بدون توصيل تلقائي) ==========
+cat > "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh" << 'SCRIPT_EOF'
+#!/bin/bash
+# create-ram-vm.sh - إنشاء whonix-work-ram
 set -e
 
 GATEWAY="sys-whonix"
 WORKSTATION="whonix-work-ram"
 TEMPLATE="whonix-workstation-18"
 RAM_PATH="$HOME/ram_pool"
-USB_MOUNT="/home/user/usb"
-AUTO_DISK="xvdi"
 
 KERNEL_OPTS="xen_scrub_pages=1 init_on_free=1 init_on_alloc=1 page_poison=1 mitigations=auto random.trust_cpu=off random.trust_bootloader=off spec_store_bypass_disable=on tsx_async_abort=full mds=full,nosmt page_alloc.shuffle=1 randomize_kstack_offset=on l1tf=full,force ipv6.disable=1 slab_nomerge vsyscall=none retbleed=stuff spectre_v2_user=on kvm.nx_huge_pages=force"
 
@@ -5785,48 +5814,11 @@ qvm-create -P ram_pool -t "$TEMPLATE" -l red "$WORKSTATION"
 qvm-prefs "$WORKSTATION" kernelopts "$KERNEL_OPTS"
 echo "✅ تم إنشاء $WORKSTATION"
 
-# 3. انتظار جاهزية VM
-echo "⏳ انتظار جاهزية $WORKSTATION ..."
-while ! qvm-run --quiet --pass-io -u root "$WORKSTATION" "echo ready" &>/dev/null; do
-    sleep 2
-done
-echo "✅ $WORKSTATION جاهز."
-
-# 4. كتابة المراقب في /rw/config/rc.local
-echo "📝 إنشاء /rw/config/rc.local لتركيب القرص تلقائيًا..."
-qvm-run --pass-io -u root "$WORKSTATION" '
-mkdir -p /rw/config
-cat > /rw/config/rc.local << '\''EOF'\''
-#!/bin/bash
-# مراقب دائم لتركيب xvdi
-(
-    USB_MOUNT="/home/user/usb"
-    while true; do
-        if mountpoint -q "$USB_MOUNT"; then
-            sleep 10
-        elif [ -b /dev/xvdi ]; then
-            mkdir -p "$USB_MOUNT"
-            mount /dev/xvdi "$USB_MOUNT" 2>/dev/null
-            sleep 10
-        else
-            sleep 10
-        fi
-    done
-) &
-EOF
-chmod +x /rw/config/rc.local
-'
-echo "✅ تم إنشاء rc.local بنجاح."
-
-# 5. إعادة تشغيل VM لتفعيل المراقب
-echo "🔄 إعادة تشغيل $WORKSTATION لتطبيق الإعدادات..."
-qvm-shutdown --wait "$WORKSTATION"
-sleep 2
-qvm-start "$WORKSTATION"
-echo "✅ تمت إعادة التشغيل. المراقب الدائم يعمل الآن."
+# 3. توصيل البوابة (اختياري - تأكد من وجودها)
+qvm-prefs "$WORKSTATION" netvm "$GATEWAY" 2>/dev/null || echo "⚠️ تعذّر توصيل البوابة"
 SCRIPT_EOF
 
-    chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh"
+chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-ram-vm.sh"
 
 # ========== mount-to-whonix.sh (توصيل + فصل آمن) ==========
 cat > "$DESKTOP_PATH/ram-pool-scripts/mount-to-whonix.sh" << 'EOF'
@@ -5964,8 +5956,8 @@ EOF
 
     chmod +x "$DESKTOP_PATH/ram-pool-scripts/apply-cwtch-onionshare.sh"
 
-    # ========== create-multi-ram-vm.sh (متعدد مع rc.local تلقائي) ==========
-    cat > "$DESKTOP_PATH/ram-pool-scripts/create-multi-ram-vm.sh" << 'EOF'
+# ========== create-multi-ram-vm.sh (متعدد - بدون توصيل تلقائي) ==========
+cat > "$DESKTOP_PATH/ram-pool-scripts/create-multi-ram-vm.sh" << 'EOF'
 #!/bin/bash
 
 BASE_TEMPLATE="whonix-workstation-18"
@@ -5973,8 +5965,6 @@ VM_BASE="whonix-work-ram"
 RAM_POOL_PATH="$HOME/ram_pool"
 RAM_POOL_SIZE="4G"
 SAVE_SCRIPT_PATH="$HOME/Desktop/qubes-auto-create.sh"
-USB_MOUNT="/home/user/usb"
-AUTO_DISK="xvdi"
 
 G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; B='\033[0;34m'; N='\033[0m'
 
@@ -6115,39 +6105,6 @@ for (( i=1; i<=VM_COUNT; i++ )); do
 
         qvm-features "$VM_NAME" no-monitor-layout 1 2>/dev/null || true
 
-        # --- إعداد rc.local والتشغيل التلقائي ---
-        echo -e "  ${Y}📝 حقن rc.local وإعادة التشغيل...${N}"
-
-        if ! qvm-check --running "$VM_NAME" &>/dev/null; then
-            qvm-start "$VM_NAME"
-            while ! qvm-run --quiet --pass-io -u root "$VM_NAME" "echo ready" &>/dev/null; do sleep 2; done
-        fi
-
-        qvm-run --pass-io -u root "$VM_NAME" "
-mkdir -p /rw/config
-cat > /rw/config/rc.local << 'RCEOF'
-#!/bin/bash
-(
-    USB_MOUNT=\"$USB_MOUNT\"
-    while true; do
-        if mountpoint -q \"\$USB_MOUNT\"; then
-            sleep 10
-        elif [ -b /dev/$AUTO_DISK ]; then
-            mkdir -p \"\$USB_MOUNT\"
-            mount /dev/$AUTO_DISK \"\$USB_MOUNT\" 2>/dev/null
-            sleep 10
-        else
-            sleep 10
-        fi
-    done
-) &
-RCEOF
-chmod +x /rw/config/rc.local
-"
-
-        qvm-shutdown --wait "$VM_NAME"
-        echo -e "  ${G}✅ المراقب التلقائي مفعل في $VM_NAME${N}"
-
     else
         echo -e "  ${R}❌ فشل إنشاء $VM_NAME${N}"
     fi
@@ -6155,21 +6112,19 @@ done
 
 echo -e "\n${G}🎉 تم إنشاء ${#CREATED_VMS[@]} جهاز${N}"
 
-# 9. حفظ الإعدادات مع إعادة التشغيل لكل VM
+# 9. حفظ الإعدادات بدون أي توصيل تلقائي
 echo -e "\n${B}💾 حفظ الإعدادات كسكريبت؟${N}"
 read -p "اختيار (y/n): " SAVE_SCRIPT
 
 if [[ "$SAVE_SCRIPT" =~ ^[Yy]$ ]]; then
     cat > "$SAVE_SCRIPT_PATH" << EOT
 #!/bin/bash
-# سكريبت محفوظ - إنشاء الأجهزة مع المراقب التلقائي
+# سكريبت محفوظ - إنشاء أجهزة Whonix في RAM
 BASE_TEMPLATE="$BASE_TEMPLATE"
 VM_BASE="$VM_BASE"
 RAM_POOL_PATH="$RAM_POOL_PATH"
 RAM_POOL_SIZE="$RAM_POOL_SIZE"
 KERNEL_OPTS="$KERNEL_OPTS"
-USB_MOUNT="$USB_MOUNT"
-AUTO_DISK="$AUTO_DISK"
 
 G='\\033[0;32m'
 Y='\\033[1;33m'
@@ -6209,36 +6164,6 @@ if qvm-create -P ram_pool -t "\$BASE_TEMPLATE" -l red "\$VM_NAME" 2>/dev/null; t
     qvm-prefs "\$VM_NAME" kernelopts "\$KERNEL_OPTS" 2>/dev/null
     qvm-prefs "\$VM_NAME" netvm "\$GATEWAY" 2>/dev/null
     qvm-features "\$VM_NAME" no-monitor-layout 1 2>/dev/null
-
-    # بدء تشغيل VM مؤقتًا لكتابة rc.local
-    if ! qvm-check --running "\$VM_NAME" &>/dev/null; then
-        qvm-start "\$VM_NAME"
-        while ! qvm-run --quiet -u root "\$VM_NAME" "echo ready" &>/dev/null; do sleep 2; done
-    fi
-    qvm-run --quiet -u root "\$VM_NAME" "
-mkdir -p /rw/config
-cat > /rw/config/rc.local << 'RCEOF'
-#!/bin/bash
-(
-    USB_MOUNT=\"$USB_MOUNT\"
-    while true; do
-        if mountpoint -q \"\$USB_MOUNT\"; then
-            sleep 10
-        elif [ -b /dev/$AUTO_DISK ]; then
-            mkdir -p \"\$USB_MOUNT\"
-            mount /dev/$AUTO_DISK \"\$USB_MOUNT\" 2>/dev/null
-            sleep 10
-        else
-            sleep 10
-        fi
-    done
-) &
-RCEOF
-chmod +x /rw/config/rc.local
-"
-    # إعادة تشغيل لتفعيل rc.local
-    qvm-shutdown --wait "\$VM_NAME"
-    echo -e "  \${G}✅ المراقب التلقائي مفعل\${N}"
 else
     echo -e "  \${R}❌ فشل الإنشاء\${N}"
 fi
@@ -6247,7 +6172,7 @@ EOT
 
     cat >> "$SAVE_SCRIPT_PATH" << EOT
 
-echo -e "\n\${G}✅ تم إنشاء الأجهزة مع المراقب التلقائي\${N}"
+echo -e "\n\${G}✅ تم إنشاء الأجهزة بدون توصيل تلقائي\${N}"
 EOT
 
     chmod +x "$SAVE_SCRIPT_PATH"
@@ -6255,7 +6180,7 @@ EOT
 fi
 EOF
 
-    chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-multi-ram-vm.sh"
+chmod +x "$DESKTOP_PATH/ram-pool-scripts/create-multi-ram-vm.sh"
 
     # ========== cleanup-ram-pool.sh ==========
     cat > "$DESKTOP_PATH/ram-pool-scripts/cleanup-ram-pool.sh" << 'EOF'
@@ -7465,8 +7390,40 @@ SCRIPTEOF
     read -p "اضغط Enter للعودة..."
 }
 
+#==========
+10. whonix_auto_mount
+#==========
+whonix_auto_mount() {
+    echo -e "${G}🔧 إعداد التوصيل التلقائي في قالب Whonix workstation...${N}"
+    
+    qvm-run -u root whonix-workstation-18 "
+cat > /etc/systemd/system/mount-usb.service << 'EOF'
+[Unit]
+Description=USB mount watcher (like rc.local)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'while true; do if [ -b /dev/xvdi ] && ! mountpoint -q /home/user/usb; then mkdir -p /home/user/usb && mount /dev/xvdi /home/user/usb; fi; sleep 10; done'
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable mount-usb.service
+"
+
+    echo -e "${Y}إيقاف القالب لحفظ التغييرات...${N}"
+    qvm-shutdown whonix-workstation-18
+    echo -e "${G}✅ تم. يعمل تلقائياً كـ rc.local على كل VM جديد.${N}"
+    pause
+}
 # ========
-# 10. تنفيذ التلقائي فقط (يشغل من 1 إلى 8)
+# 11. تنفيذ التلقائي فقط (يشغل من 1 إلى 8)
 # ========
 run_auto() {
     info "بدء التنفيذ التلقائي لجميع الأقسام..."
