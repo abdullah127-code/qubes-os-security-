@@ -6091,7 +6091,7 @@ DEFAULT_DISK="xvdi"
 G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; N='\033[0m'
 
 find_vm() {
-    mapfile -t VMS < <(qvm-ls --running --raw-list | grep -i whonix | grep -v sys-whonix)
+    mapfile -t VMS < <(qvm-ls --raw-list --running --template-source whonix-workstation-18 --template-source whonix-workstation-18-dvm | grep -v "^sys-whonix")
     [ ${#VMS[@]} -eq 0 ] && { echo -e "${R}❌ No running Whonix VMs${N}"; exit 1; }
     echo -e "${G}Available VMs:${N}"
     for i in "${!VMS[@]}"; do echo -e "  ${Y}[$((i+1))]${N} ${VMS[$i]}"; done
