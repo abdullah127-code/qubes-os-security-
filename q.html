@@ -5063,7 +5063,8 @@ err() { echo -e "${R}✗ $1${N}"; }
 
 pause() { echo; read -p "اضغط Enter للمتابعة..."; }
 
-BASE_TEMPLATE="debian-13-xfce"
+BASE_TEMPLATE=$(qubes-prefs default_template) 
+
 
 menu() {
     clear
@@ -5489,108 +5490,53 @@ kicksecure() {
     echo "=========================================="
     echo ""
     echo "📌 ملاحظة: في Qubes OS، القوالب تشارك نواة dom0."
-    echo "   لذلك سيتم تطبيق تحصينات مساحة المستخدم فقط."
-    echo "   معلمات النواة تُطبق على dom0 وجميع VMs عبر kernelopts."
+    echo "   سيتم تطبيق تقوية المستخدم (userspace) فقط داخل القالب."
+    echo "   يجب ضبط معاملات النواة عبر kernelopts أو GRUB."
     echo ""
-    
-    local SYSCTL_CONTENT='# ============================================================
-# إعدادات أمان متقدمة لـ Qubes + Kicksecure 18
-# المصادر: Kicksecure security-misc, Qubes Forum, linux-hardened
-# ملاحظة: هذه إعدادات مساحة المستخدم فقط.
-#         معلمات النواة تُطبق عبر kernelopts و GRUB.
-# ============================================================
-
-# -------------------- حماية النواة والذاكرة --------------------
-kernel.dmesg_restrict = 1
-kernel.kptr_restrict = 2
-kernel.perf_event_paranoid = 3
-kernel.unprivileged_bpf_disabled = 1
-kernel.kexec_load_disabled = 1
-kernel.io_uring_disabled = 2
-kernel.sysrq = 0
-kernel.printk = 3 3 3 3
-kernel.panic = 5
-kernel.panic_on_oops = 1
-
-# -------------------- حماية نظام الملفات --------------------
-fs.protected_symlinks = 1
-fs.protected_hardlinks = 1
-fs.protected_fifos = 2
-fs.protected_regular = 2
-
-# -------------------- حماية الشبكة --------------------
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_rfc1337 = 1
-net.ipv4.conf.all.rp_filter = 1
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.icmp_ignore_bogus_error_responses = 1
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv4.conf.default.accept_redirects = 0
-net.ipv4.conf.all.secure_redirects = 0
-net.ipv4.conf.default.secure_redirects = 0
-net.ipv4.conf.all.send_redirects = 0
-net.ipv4.conf.default.send_redirects = 0
-net.ipv4.tcp_timestamps = 0
-net.ipv6.conf.all.accept_ra = 0
-net.ipv6.conf.default.accept_ra = 0
-net.ipv6.conf.all.accept_redirects = 0
-net.ipv6.conf.default.accept_redirects = 0
-net.core.bpf_jit_harden = 2
-
-# -------------------- ASLR --------------------
-vm.mmap_rnd_bits = 32
-vm.mmap_rnd_compat_bits = 16
-
-# -------------------- حماية إضافية --------------------
-kernel.yama.ptrace_scope = 2
-fs.suid_dumpable = 0'
 
     info "التحقق من وجود قالب Kicksecure 18..."
-    
     if qvm-ls | grep -q kicksecure-18; then
-        ok "قالب Kicksecure 18 موجود بالفعل"
+        ok "قالب Kicksecure 18 موجود مسبقاً"
         info "تخطي مرحلة التثبيت..."
     else
         info "قالب Kicksecure 18 غير موجود، جاري التثبيت..."
         qvm-template --enablerepo qubes-templates-community install kicksecure-18
-        
         if ! qvm-ls | grep -q kicksecure-18; then
             err "فشل تثبيت kicksecure-18"
             pause
             return
         fi
-        ok "تم تثبيت kicksecure-18 بنجاح"
+        ok "تم تثبيت Kicksecure-18 بنجاح"
     fi
-    
+
     info "تثبيت الإضافات..."
     sudo qubes-dom0-update --action=install -y qubes-core-admin-addon-kicksecure
-    
+
     info "إعادة تشغيل خدمة qubesd..."
     sudo systemctl restart qubesd.service
     ok "تم إعادة تشغيل qubesd.service"
-    
+
     info "تشغيل قالب Kicksecure 18..."
     qvm-start kicksecure-18
-    
+
     local MAX_WAIT=30
     local WAIT_COUNT=0
     while ! qvm-check --running kicksecure-18 2>/dev/null; do
         sleep 2
         WAIT_COUNT=$((WAIT_COUNT + 1))
         if [ $WAIT_COUNT -ge $MAX_WAIT ]; then
-            warn "القالب لم يكتمل تشغيله، استمرار مع الحذر..."
+            warn "القالب لم ينته من التشغيل، نكمل بحذر..."
             break
         fi
     done
-    
     sleep 5
-    
+
     # 1. ضبط المنطقة الزمنية
-    info "ضبط المنطقة الزمنية على UTC..."
+    info "ضبط المنطقة الزمنية إلى UTC..."
     qvm-run kicksecure-18 "sudo timedatectl set-timezone Etc/UTC" 2>/dev/null || true
     ok "تم ضبط المنطقة الزمنية"
-    
-    # 2. MAC Randomization
+
+    # 2. تفعيل MAC Randomization
     info "إعداد MAC Randomization..."
     qvm-run kicksecure-18 "sudo bash -c 'mkdir -p /usr/lib/NetworkManager/conf.d/ && cat > /usr/lib/NetworkManager/conf.d/31-randomize-mac.conf << \"EOF\"
 [connection]
@@ -5598,148 +5544,124 @@ ethernet.cloned-mac-address=random
 wifi.cloned-mac-address=random
 wifi.scan-rand-mac-address=yes
 EOF'" 2>/dev/null || true
-    ok "تم إعداد MAC Randomization"
-    
-    # 3. sysctl hardening (مساحة المستخدم فقط)
-    info "تطبيق إعدادات sysctl المتقدمة (مساحة المستخدم)..."
-    
-    echo "$SYSCTL_CONTENT" | qvm-run --pass-io kicksecure-18 "sudo tee /etc/sysctl.d/99-qubes-hardening.conf > /dev/null"
-    
-    qvm-run kicksecure-18 "sudo sysctl --system" 2>/dev/null || true
-    ok "تم تطبيق إعدادات sysctl"
-    
-    # 4. تعطيل IPv6 داخل القالب (إضافي)
-    info "تعطيل IPv6 داخل القالب..."
-    qvm-run kicksecure-18 "sudo bash -c 'echo \"net.ipv6.conf.all.disable_ipv6=1\" >> /etc/sysctl.d/99-disable-ipv6.conf'" 2>/dev/null || true
-    qvm-run kicksecure-18 "sudo sysctl -p /etc/sysctl.d/99-disable-ipv6.conf" 2>/dev/null || true
-    ok "تم تعطيل IPv6"
-    
-    # 5. تعطيل الخدمات غير الضرورية
+    ok "تم تكوين MAC Randomization"
+
+    # 3. تعطيل الخدمات غير الضرورية
     info "تعطيل الخدمات غير الضرورية..."
     qvm-run kicksecure-18 "sudo systemctl mask bluetooth.service cups.service avahi-daemon.service ModemManager.service 2>/dev/null || true" 2>/dev/null || true
     qvm-run kicksecure-18 "sudo systemctl disable --now NetworkManager-wait-online.service 2>/dev/null || true" 2>/dev/null || true
     ok "تم تعطيل الخدمات غير الضرورية"
-    
-    # 6. إزالة الحزم غير الضرورية
+
+    # 4. إزالة الحزم غير الضرورية
     info "إزالة الحزم غير الضرورية..."
     qvm-run kicksecure-18 "sudo apt remove -y --purge thunderbird hexchat transmission-common 2>/dev/null || true" 2>/dev/null || true
     qvm-run kicksecure-18 "sudo apt autoremove -y 2>/dev/null || true" 2>/dev/null || true
-    ok "تم إزالة الحزم غير الضرورية"
-    
-    # 7. إغلاق القالب
+    ok "تمت إزالة الحزم غير الضرورية"
+
+    # 5. إغلاق القالب
     info "إغلاق قالب Kicksecure 18..."
     qvm-shutdown --wait kicksecure-18 2>/dev/null || true
-    ok "تم إغلاق kicksecure-18"
-    
-    # 8. جعل Kicksecure الأساس
+    ok "تم إغلاق Kicksecure-18"
+
+    # 6. إنشاء قالب DVM مقوّى (بدون rw False)
     echo ""
     echo "╔═══════════════════════════════════════════════════════════════╗"
-    echo "║  🎯 جعل Kicksecure 18 القالب الأساسي                         ║"
+    echo "║  🧬 إنشاء قالب DVM مقوّى (قالب عابر)                         ║"
     echo "╚═══════════════════════════════════════════════════════════════╝"
     echo ""
-    read -p "جعل Kicksecure 18 الأساس لـ default-dvm؟ (y/n): " yn
+    read -p "هل تريد إنشاء قالب DVM مقوّى من Kicksecure؟ (y/n): " create_dvm
+
+    if [[ "$create_dvm" == "y" || "$create_dvm" == "Y" ]]; then
+        info "إنشاء قالب DVM مقوّى..."
+        if ! qvm-ls kicksecure-18-dvm >/dev/null 2>&1; then
+            qvm-clone kicksecure-18 kicksecure-18-dvm
+            ok "✓ تم إنشاء kicksecure-18-dvm"
+        else
+            info "kicksecure-18-dvm موجود مسبقاً"
+        fi
+        qvm-prefs kicksecure-18-dvm template_for_dispvms true
+        # تم حذف: qvm-volume config kicksecure-18-dvm:root rw False
+        qvm-prefs kicksecure-18-dvm kernelopts "init_on_free=1 init_on_alloc=1 page_poison=1 slab_nomerge"
+        ok "✓ تم تعيين kicksecure-18-dvm كـ DVM مقوّى"
+
+        read -p "هل تريد جعله الـ default-dvm؟ (y/n): " make_default
+        if [[ "$make_default" == "y" || "$make_default" == "Y" ]]; then
+            qvm-prefs default-dvm template kicksecure-18-dvm
+            ok "✓ default-dvm يستخدم الآن kicksecure-18-dvm"
+        fi
+    fi
+
+    # 7. السؤال عن جعل Kicksecure القالب الافتراضي (يتضمن تعديل sys-usb)
+    echo ""
+    echo "╔═══════════════════════════════════════════════════════════════╗"
+    echo "║  🎯 جعل Kicksecure 18 القالب الافتراضي لـ default-dvm        ║"
+    echo "╚═══════════════════════════════════════════════════════════════╝"
+    echo ""
+    read -p "هل تريد جعل Kicksecure 18 الافتراضي لـ default-dvm؟ (y/n): " yn
     if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
         BASE_TEMPLATE="kicksecure-18"
-        
         if ! qvm-ls --raw-list | grep -q "^$BASE_TEMPLATE$"; then
             err "القالب $BASE_TEMPLATE غير موجود"
             pause
             return
         fi
-        
-        info "إغلاق الأجهزة المتأثرة..."
+
+        info "إيقاف الآلات المتأثرة..."
         qvm-kill sys-* 2>/dev/null
         qvm-kill default-dvm 2>/dev/null
-        
+
         info "تغيير قالب default-dvm..."
         qvm-prefs default-dvm template "$BASE_TEMPLATE"
-        ok "✓ default-dvm الآن يعمل من Kicksecure 18"
-        
+        ok "✓ default-dvm يعمل الآن من Kicksecure 18"
+
         echo ""
         info "مسح kernelopts لـ sys-firewall و sys-net..."
         qvm-prefs sys-firewall kernelopts "" 2>/dev/null
         qvm-prefs sys-net kernelopts "" 2>/dev/null
-        ok "✓ تم مسح kernelopts"
-        
+        ok "✓ تم مسح kernelopts للآلات المعنية"
+
         echo ""
-        info "تعديل إعدادات الذاكرة..."
+        info "رفع إعدادات الذاكرة لـ sys-net و sys-firewall..."
         qvm-prefs sys-net memory 800 2>/dev/null
         qvm-prefs sys-net maxmem 800 2>/dev/null
         qvm-prefs sys-firewall memory 800 2>/dev/null
         qvm-prefs sys-firewall maxmem 800 2>/dev/null
         ok "✓ تم رفع إعدادات الذاكرة"
-        
+
+        # تعديل sys-usb فقط إذا وافق المستخدم على جعل Kicksecure افتراضياً
+        if qvm-ls sys-usb >/dev/null 2>&1; then
+            info "تعديل إعدادات sys-usb..."
+            qvm-prefs sys-usb memory 800 2>/dev/null
+            qvm-prefs sys-usb maxmem 800 2>/dev/null
+            qvm-start sys-usb 2>/dev/null || true
+            ok "✓ تم رفع ذاكرة sys-usb إلى 800MB"
+        fi
+
         echo ""
-        info "تشغيل الأجهزة..."
+        info "تشغيل الآلات..."
         qvm-start sys-net 2>/dev/null
         qvm-start sys-firewall 2>/dev/null
-        
+
         sleep 5
         sudo systemctl restart qubesd.service
-        ok "✓ تم الانتهاء بنجاح"
+        ok "✓ اكتمل بنجاح"
     fi
-    
-    # 9. التحقق من sys-usb
-    if qvm-ls sys-usb >/dev/null 2>&1; then
-        info "تعديل إعدادات sys-usb..."
-        qvm-prefs sys-usb memory 800 2>/dev/null
-        qvm-prefs sys-usb maxmem 800 2>/dev/null
-        qvm-start sys-usb 2>/dev/null || true
-        ok "✓ تم رفع ذاكرة sys-usb إلى 800MB"
-    fi
-    
-    # 10. إنشاء قالب DVM محصن
+
     echo ""
     echo "╔═══════════════════════════════════════════════════════════════╗"
-    echo "║  🧬 إنشاء قالب DVM محصن (Ephemeral Template)                 ║"
-    echo "╚═══════════════════════════════════════════════════════════════╝"
-    echo ""
-    read -p "هل تريد إنشاء قالب DVM محصن من Kicksecure؟ (y/n): " create_dvm
-    
-    if [[ "$create_dvm" == "y" || "$create_dvm" == "Y" ]]; then
-        info "إنشاء قالب DVM محصن..."
-        
-        if ! qvm-ls kicksecure-18-dvm >/dev/null 2>&1; then
-            qvm-clone kicksecure-18 kicksecure-18-dvm
-            ok "✓ تم إنشاء kicksecure-18-dvm"
-        else
-            info "kicksecure-18-dvm موجود بالفعل"
-        fi
-        
-        qvm-prefs kicksecure-18-dvm template_for_dispvms true
-        qvm-volume config kicksecure-18-dvm:root rw False
-        
-        # إضافة kernelopts محسنة لـ DVM
-        qvm-prefs kicksecure-18-dvm kernelopts "init_on_free=1 init_on_alloc=1 page_poison=1 slab_nomerge"
-        
-        ok "✓ تم إعداد kicksecure-18-dvm كـ DVM محصن"
-        
-        read -p "هل تريد جعله default-dvm؟ (y/n): " make_default
-        if [[ "$make_default" == "y" || "$make_default" == "Y" ]]; then
-            qvm-prefs default-dvm template kicksecure-18-dvm
-            ok "✓ default-dvm الآن يستخدم kicksecure-18-dvm"
-        fi
-    fi
-    
-    echo ""
-    echo "╔═══════════════════════════════════════════════════════════════╗"
-    echo "║                    ✅ اكتمل إعداد Kicksecure!                  ║"
+    echo "║                    ✅ اكتمل إعداد Kicksecure!                 ║"
     echo "╠═══════════════════════════════════════════════════════════════╣"
-    echo "║  📋 ما تم تطبيقه:                                              ║"
-    echo "║  • المنطقة الزمنية UTC                                        ║"
-    echo "║  • MAC Randomization                                          ║"
-    echo "║  • sysctl hardening (40+ إعداد) - مساحة المستخدم فقط          ║"
-    echo "║  • تعطيل IPv6                                                 ║"
-    echo "║  • تعطيل الخدمات غير الضرورية                                 ║"
-    echo "║  • إزالة الحزم غير الضرورية                                   ║"
-    echo "║  • mat2 + exiftool لإزالة البيانات الوصفية                   ║"
+    echo "║  📋 تم تطبيق:                                                ║"
+    echo "║  • المنطقة الزمنية UTC                                       ║"
+    echo "║  • تفعيل MAC Randomization                                   ║"
+    echo "║  • تعطيل الخدمات غير الضرورية                                ║"
+    echo "║  • إزالة الحزم غير الضرورية                                  ║"
     echo "║                                                               ║"
-    echo "║  ⚠️  ملاحظة: معلمات النواة تُطبق عبر:                         ║"
-    echo "║     • dom0: GRUB (في تبويب 0 أو الخيار 1 من السكريبت)        ║"
-    echo "║     • VMs: kernelopts (الخيار 2 من السكريبت)                 ║"
+    echo "║  ⚠️  ملاحظة: يتم تطبيق معاملات النواة عبر:                    ║"
+    echo "║     • dom0: GRUB (التبويب 0 أو الخيار 1 من السكربت)          ║"
+    echo "║     • الآلات: kernelopts (الخيار 2 من السكربت)               ║"
     echo "╚═══════════════════════════════════════════════════════════════╝"
     echo ""
-    
     pause
 }
 
