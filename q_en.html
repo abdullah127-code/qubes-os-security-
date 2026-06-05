@@ -5336,7 +5336,8 @@ err() { echo -e "${R}✗ $1${N}"; }
 
 pause() { echo; read -p "Press Enter to continue..."; }
 
-BASE_TEMPLATE="debian-13-xfce"
+BASE_TEMPLATE=$(qubes-prefs default_template) 
+
 
 menu() {
     clear
@@ -5752,9 +5753,9 @@ whonix_gws() {
     pause
 }
 
-# ========
-# 4. Install Kicksecure + Make it default + Advanced settings (fixed for Qubes)
-# ========
+# ===========
+4. kicksecure + default-dvm
+# ===========
 kicksecure() {
     clear
     echo "=========================================="
@@ -5762,71 +5763,17 @@ kicksecure() {
     echo "=========================================="
     echo ""
     echo "📌 Note: In Qubes OS, templates share the dom0 kernel."
-    echo "   Therefore, only userspace hardening will be applied."
-    echo "   Kernel parameters are applied to dom0 and all VMs via kernelopts."
+    echo "   Only userspace hardening is applied inside the template."
+    echo "   Kernel parameters must be set via kernelopts or GRUB."
     echo ""
-    
-    local SYSCTL_CONTENT='# ============================================================
-# Advanced security settings for Qubes + Kicksecure 18
-# Sources: Kicksecure security-misc, Qubes Forum, linux-hardened
-# Note: These are userspace settings only.
-#       Kernel parameters are applied via kernelopts and GRUB.
-# ============================================================
-
-# -------------------- Kernel and Memory Protection --------------------
-kernel.dmesg_restrict = 1
-kernel.kptr_restrict = 2
-kernel.perf_event_paranoid = 3
-kernel.unprivileged_bpf_disabled = 1
-kernel.kexec_load_disabled = 1
-kernel.io_uring_disabled = 2
-kernel.sysrq = 0
-kernel.printk = 3 3 3 3
-kernel.panic = 5
-kernel.panic_on_oops = 1
-
-# -------------------- Filesystem Protection --------------------
-fs.protected_symlinks = 1
-fs.protected_hardlinks = 1
-fs.protected_fifos = 2
-fs.protected_regular = 2
-
-# -------------------- Network Protection --------------------
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_rfc1337 = 1
-net.ipv4.conf.all.rp_filter = 1
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.icmp_ignore_bogus_error_responses = 1
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv4.conf.default.accept_redirects = 0
-net.ipv4.conf.all.secure_redirects = 0
-net.ipv4.conf.default.secure_redirects = 0
-net.ipv4.conf.all.send_redirects = 0
-net.ipv4.conf.default.send_redirects = 0
-net.ipv4.tcp_timestamps = 0
-net.ipv6.conf.all.accept_ra = 0
-net.ipv6.conf.default.accept_ra = 0
-net.ipv6.conf.all.accept_redirects = 0
-net.ipv6.conf.default.accept_redirects = 0
-net.core.bpf_jit_harden = 2
-
-# -------------------- ASLR --------------------
-vm.mmap_rnd_bits = 32
-vm.mmap_rnd_compat_bits = 16
-
-# -------------------- Additional Protection --------------------
-kernel.yama.ptrace_scope = 2
-fs.suid_dumpable = 0'
 
     info "Checking for Kicksecure 18 template..."
-    
     if qvm-ls | grep -q kicksecure-18; then
         ok "Kicksecure 18 template already exists"
         info "Skipping installation phase..."
     else
         info "Kicksecure 18 template not found, installing..."
         qvm-template --enablerepo qubes-templates-community install kicksecure-18
-        
         if ! qvm-ls | grep -q kicksecure-18; then
             err "Failed to install kicksecure-18"
             pause
@@ -5834,17 +5781,17 @@ fs.suid_dumpable = 0'
         fi
         ok "Kicksecure-18 installed successfully"
     fi
-    
+
     info "Installing addons..."
     sudo qubes-dom0-update --action=install -y qubes-core-admin-addon-kicksecure
-    
+
     info "Restarting qubesd service..."
     sudo systemctl restart qubesd.service
     ok "qubesd.service restarted"
-    
+
     info "Starting Kicksecure 18 template..."
     qvm-start kicksecure-18
-    
+
     local MAX_WAIT=30
     local WAIT_COUNT=0
     while ! qvm-check --running kicksecure-18 2>/dev/null; do
@@ -5855,14 +5802,13 @@ fs.suid_dumpable = 0'
             break
         fi
     done
-    
     sleep 5
-    
+
     # 1. Set timezone
     info "Setting timezone to UTC..."
     qvm-run kicksecure-18 "sudo timedatectl set-timezone Etc/UTC" 2>/dev/null || true
     ok "Timezone set"
-    
+
     # 2. MAC Randomization
     info "Setting up MAC Randomization..."
     qvm-run kicksecure-18 "sudo bash -c 'mkdir -p /usr/lib/NetworkManager/conf.d/ && cat > /usr/lib/NetworkManager/conf.d/31-randomize-mac.conf << \"EOF\"
@@ -5872,128 +5818,108 @@ wifi.cloned-mac-address=random
 wifi.scan-rand-mac-address=yes
 EOF'" 2>/dev/null || true
     ok "MAC Randomization configured"
-    
-    # 3. sysctl hardening (userspace only)
-    info "Applying advanced sysctl settings (userspace)..."
-    
-    echo "$SYSCTL_CONTENT" | qvm-run --pass-io kicksecure-18 "sudo tee /etc/sysctl.d/99-qubes-hardening.conf > /dev/null"
-    
-    qvm-run kicksecure-18 "sudo sysctl --system" 2>/dev/null || true
-    ok "sysctl settings applied"
-    
-    # 4. Disable IPv6 inside template (additional)
-    info "Disabling IPv6 inside template..."
-    qvm-run kicksecure-18 "sudo bash -c 'echo \"net.ipv6.conf.all.disable_ipv6=1\" >> /etc/sysctl.d/99-disable-ipv6.conf'" 2>/dev/null || true
-    qvm-run kicksecure-18 "sudo sysctl -p /etc/sysctl.d/99-disable-ipv6.conf" 2>/dev/null || true
-    ok "IPv6 disabled"
-    
-    # 5. Disable unnecessary services
+
+    # 3. Disable unnecessary services
     info "Disabling unnecessary services..."
     qvm-run kicksecure-18 "sudo systemctl mask bluetooth.service cups.service avahi-daemon.service ModemManager.service 2>/dev/null || true" 2>/dev/null || true
     qvm-run kicksecure-18 "sudo systemctl disable --now NetworkManager-wait-online.service 2>/dev/null || true" 2>/dev/null || true
     ok "Unnecessary services disabled"
-    
-    # 6. Remove unnecessary packages
+
+    # 4. Remove unnecessary packages
     info "Removing unnecessary packages..."
     qvm-run kicksecure-18 "sudo apt remove -y --purge thunderbird hexchat transmission-common 2>/dev/null || true" 2>/dev/null || true
     qvm-run kicksecure-18 "sudo apt autoremove -y 2>/dev/null || true" 2>/dev/null || true
     ok "Unnecessary packages removed"
-    
-    # 7. Shut down the template
+
+    # 5. Shut down the template
     info "Shutting down Kicksecure 18 template..."
     qvm-shutdown --wait kicksecure-18 2>/dev/null || true
     ok "Kicksecure-18 shut down"
-    
-    # 8. Make Kicksecure the default
-    echo ""
-    echo "╔═══════════════════════════════════════════════════════════════╗"
-    echo "║  🎯 Make Kicksecure 18 the default template                  ║"
-    echo "╚═══════════════════════════════════════════════════════════════╝"
-    echo ""
-    read -p "Make Kicksecure 18 the default for default-dvm? (y/n): " yn
-    if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
-        BASE_TEMPLATE="kicksecure-18"
-        
-        if ! qvm-ls --raw-list | grep -q "^$BASE_TEMPLATE$"; then
-            err "Template $BASE_TEMPLATE does not exist"
-            pause
-            return
-        fi
-        
-        info "Shutting down affected VMs..."
-        qvm-kill sys-* 2>/dev/null
-        qvm-kill default-dvm 2>/dev/null
-        
-        info "Changing default-dvm template..."
-        qvm-prefs default-dvm template "$BASE_TEMPLATE"
-        ok "✓ default-dvm now runs from Kicksecure 18"
-        
-        echo ""
-        info "Clearing kernelopts for sys-firewall and sys-net..."
-        qvm-prefs sys-firewall kernelopts "" 2>/dev/null
-        qvm-prefs sys-net kernelopts "" 2>/dev/null
-        ok "✓ kernelopts cleared"
-        
-        echo ""
-        info "Adjusting memory settings..."
-        qvm-prefs sys-net memory 800 2>/dev/null
-        qvm-prefs sys-net maxmem 800 2>/dev/null
-        qvm-prefs sys-firewall memory 800 2>/dev/null
-        qvm-prefs sys-firewall maxmem 800 2>/dev/null
-        ok "✓ Memory settings increased"
-        
-        echo ""
-        info "Starting VMs..."
-        qvm-start sys-net 2>/dev/null
-        qvm-start sys-firewall 2>/dev/null
-        
-        sleep 5
-        sudo systemctl restart qubesd.service
-        ok "✓ Completed successfully"
-    fi
-    
-    # 9. Check sys-usb
-    if qvm-ls sys-usb >/dev/null 2>&1; then
-        info "Adjusting sys-usb settings..."
-        qvm-prefs sys-usb memory 800 2>/dev/null
-        qvm-prefs sys-usb maxmem 800 2>/dev/null
-        qvm-start sys-usb 2>/dev/null || true
-        ok "✓ sys-usb memory increased to 800MB"
-    fi
-    
-    # 10. Create a hardened DVM template
+
+    # 6. Create a hardened DVM template (without rw False)
     echo ""
     echo "╔═══════════════════════════════════════════════════════════════╗"
     echo "║  🧬 Create Hardened DVM Template (Ephemeral Template)         ║"
     echo "╚═══════════════════════════════════════════════════════════════╝"
     echo ""
     read -p "Do you want to create a hardened DVM template from Kicksecure? (y/n): " create_dvm
-    
+
     if [[ "$create_dvm" == "y" || "$create_dvm" == "Y" ]]; then
         info "Creating hardened DVM template..."
-        
         if ! qvm-ls kicksecure-18-dvm >/dev/null 2>&1; then
             qvm-clone kicksecure-18 kicksecure-18-dvm
             ok "✓ kicksecure-18-dvm created"
         else
             info "kicksecure-18-dvm already exists"
         fi
-        
         qvm-prefs kicksecure-18-dvm template_for_dispvms true
-        qvm-volume config kicksecure-18-dvm:root rw False
-        
-        # Add enhanced kernelopts for DVM
+        # تم حذف: qvm-volume config kicksecure-18-dvm:root rw False
         qvm-prefs kicksecure-18-dvm kernelopts "init_on_free=1 init_on_alloc=1 page_poison=1 slab_nomerge"
-        
         ok "✓ kicksecure-18-dvm set as a hardened DVM"
-        
+
         read -p "Do you want to make it the default-dvm? (y/n): " make_default
         if [[ "$make_default" == "y" || "$make_default" == "Y" ]]; then
             qvm-prefs default-dvm template kicksecure-18-dvm
             ok "✓ default-dvm now uses kicksecure-18-dvm"
         fi
     fi
-    
+
+    # 7. Ask to make Kicksecure the default template (now includes sys-usb adjustment)
+    echo ""
+    echo "╔═══════════════════════════════════════════════════════════════╗"
+    echo "║  🎯 Make Kicksecure 18 the default template for default-dvm  ║"
+    echo "╚═══════════════════════════════════════════════════════════════╝"
+    echo ""
+    read -p "Make Kicksecure 18 the default for default-dvm? (y/n): " yn
+    if [[ "$yn" == "y" || "$yn" == "Y" ]]; then
+        BASE_TEMPLATE="kicksecure-18"
+        if ! qvm-ls --raw-list | grep -q "^$BASE_TEMPLATE$"; then
+            err "Template $BASE_TEMPLATE does not exist"
+            pause
+            return
+        fi
+
+        info "Shutting down affected VMs..."
+        qvm-kill sys-* 2>/dev/null
+        qvm-kill default-dvm 2>/dev/null
+
+        info "Changing default-dvm template..."
+        qvm-prefs default-dvm template "$BASE_TEMPLATE"
+        ok "✓ default-dvm now runs from Kicksecure 18"
+
+        echo ""
+        info "Clearing kernelopts for sys-firewall and sys-net..."
+        qvm-prefs sys-firewall kernelopts "" 2>/dev/null
+        qvm-prefs sys-net kernelopts "" 2>/dev/null
+        ok "✓ kernelopts cleared for relevant VMs"
+
+        echo ""
+        info "Adjusting memory settings for sys-net and sys-firewall..."
+        qvm-prefs sys-net memory 800 2>/dev/null
+        qvm-prefs sys-net maxmem 800 2>/dev/null
+        qvm-prefs sys-firewall memory 800 2>/dev/null
+        qvm-prefs sys-firewall maxmem 800 2>/dev/null
+        ok "✓ Memory settings increased"
+
+        # 🆕 Adjust sys-usb only if user agreed to make Kicksecure default
+        if qvm-ls sys-usb >/dev/null 2>&1; then
+            info "Adjusting sys-usb settings..."
+            qvm-prefs sys-usb memory 800 2>/dev/null
+            qvm-prefs sys-usb maxmem 800 2>/dev/null
+            qvm-start sys-usb 2>/dev/null || true
+            ok "✓ sys-usb memory increased to 800MB"
+        fi
+
+        echo ""
+        info "Starting VMs..."
+        qvm-start sys-net 2>/dev/null
+        qvm-start sys-firewall 2>/dev/null
+
+        sleep 5
+        sudo systemctl restart qubesd.service
+        ok "✓ Completed successfully"
+    fi
+
     echo ""
     echo "╔═══════════════════════════════════════════════════════════════╗"
     echo "║                    ✅ Kicksecure Setup Complete!              ║"
@@ -6001,21 +5927,16 @@ EOF'" 2>/dev/null || true
     echo "║  📋 What was applied:                                        ║"
     echo "║  • UTC timezone                                              ║"
     echo "║  • MAC Randomization                                         ║"
-    echo "║  • sysctl hardening (40+ settings) - userspace only          ║"
-    echo "║  • IPv6 disabled                                             ║"
     echo "║  • Unnecessary services disabled                             ║"
     echo "║  • Unnecessary packages removed                              ║"
-    echo "║  • mat2 + exiftool for metadata removal                      ║"
     echo "║                                                               ║"
     echo "║  ⚠️  Note: Kernel parameters are applied via:                 ║"
     echo "║     • dom0: GRUB (tab 0 or option 1 of the script)           ║"
     echo "║     • VMs: kernelopts (option 2 of the script)               ║"
     echo "╚═══════════════════════════════════════════════════════════════╝"
     echo ""
-    
     pause
 }
-
 # ========
 # 5. RAM Pool Scripts
 # ========
