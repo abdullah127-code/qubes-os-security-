@@ -4867,25 +4867,35 @@ chmod +x run-session.sh</pre>
         <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> نسخ run-telegram.sh</button>
         <pre class="code-block" id="telegram-script">cat > run-telegram.sh << 'EOF'
 #!/bin/bash
+set -e
 cd "$(dirname "$0")"
 
-if [[ ! -f "./Telegram/Telegram" ]]; then
-    echo "📥 جاري تحميل Telegram..."
-    sudo apt install wget -y
-    wget -c "https://telegram.org/dl/desktop/linux" -O telegram.tar.xz
-    tar -xf telegram.tar.xz
-    rm telegram.tar.xz
+TELEGRAM_DIR="./Telegram"
+TELEGRAM_BIN="$TELEGRAM_DIR/Telegram"
+PORTABLE_FLAG_DIR="$TELEGRAM_DIR/TelegramForcePortable"
+
+# التحقق من وجود wget، وإن لم يوجد نثبته باستخدام apt (بدون التحقق من وجود apt)
+if ! command -v wget &> /dev/null; then
+    echo "⚠️ wget غير موجود. جاري التثبيت باستخدام apt..."
+    sudo apt update
+    sudo apt install -y wget
+    echo "✅ تم تثبيت wget."
 fi
 
-# ملاحظة: Telegram/Telegram هو المسار الصحيح بعد فك الضغط
-mkdir -p data/tdata data/downloads data/user_data data/temp data/cache
+if [[ ! -f "$TELEGRAM_BIN" ]]; then
+    echo "📥 جاري تحميل Telegram..."
+    wget -c --show-progress -O telegram.tar.xz "https://telegram.org/dl/desktop/linux"
+    mkdir -p "$TELEGRAM_DIR"
+    tar -xf telegram.tar.xz -C "$TELEGRAM_DIR" --strip-components=1
+    rm telegram.tar.xz
+    echo "✅ تم التثبيت."
+fi
 
-export XDG_DATA_HOME="$PWD/data"
-export XDG_CONFIG_HOME="$PWD/data"
-export XDG_CACHE_HOME="$PWD/data/cache"
-
-exec ./Telegram/Telegram -workdir "$PWD/data" "$@"
+mkdir -p "$PORTABLE_FLAG_DIR"
+echo "🚀 تشغيل Telegram (وضع محمول)..."
+exec "$TELEGRAM_BIN" "$@"
 EOF
+
 chmod +x run-telegram.sh</pre>
     </div>
 
