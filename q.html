@@ -4874,24 +4874,34 @@ TELEGRAM_DIR="./Telegram"
 TELEGRAM_BIN="$TELEGRAM_DIR/Telegram"
 PORTABLE_FLAG_DIR="$TELEGRAM_DIR/TelegramForcePortable"
 
-# التحقق من وجود wget، وإن لم يوجد نثبته باستخدام apt (بدون التحقق من وجود apt)
-if ! command -v wget &> /dev/null; then
-    echo "⚠️ wget غير موجود. جاري التثبيت باستخدام apt..."
-    sudo apt update
-    sudo apt install -y wget
-    echo "✅ تم تثبيت wget."
-fi
-
+# 1. هل تيليجرام موجود أصلاً؟
 if [[ ! -f "$TELEGRAM_BIN" ]]; then
+    echo "ℹ️ تيليجرام غير موجود، سنحتاج إلى تحميله."
+
+    # 2. هل أداة التحميل wget موجودة؟
+    if ! command -v wget &> /dev/null; then
+        echo "⚠️ wget غير موجودة. تثبيتها الآن..."
+        sudo apt update
+        sudo apt install -y wget
+        echo "✅ تم تثبيت wget."
+    else
+        echo "✅ wget موجودة مسبقاً."
+    fi
+
+    # 3. تحميل تيليجرام
     echo "📥 جاري تحميل Telegram..."
     wget -c --show-progress -O telegram.tar.xz "https://telegram.org/dl/desktop/linux"
     mkdir -p "$TELEGRAM_DIR"
     tar -xf telegram.tar.xz -C "$TELEGRAM_DIR" --strip-components=1
     rm telegram.tar.xz
-    echo "✅ تم التثبيت."
+    echo "✅ تم تثبيت تيليجرام."
+else
+    echo "✅ تيليجرام موجود مسبقاً، لا داعي للتحميل."
 fi
 
+# 4. إنشاء مجلد ForcePortable (ضروري للتشغيل المحمول)
 mkdir -p "$PORTABLE_FLAG_DIR"
+
 echo "🚀 تشغيل Telegram (وضع محمول)..."
 exec "$TELEGRAM_BIN" "$@"
 EOF
@@ -4971,10 +4981,10 @@ chmod +x run-telegram.sh</pre>
 │   ├── Gajim/                          ⚠️ محمول داخل نفس النظام فقط
 │   │   ├── run-gajim-portable.sh
 │   │   └── gajim-data/
-│   └── Telegram/                       ⚠️ غير آمن
+│   └── Telegram/                       ✅ آمن بعد التصحيح
 │       ├── run-telegram.sh
-│       ├── Telegram/Telegram
-│       └── data/
+│       ├── Telegram
+│       └── TelegramForcePortable/
 ├── backups/                            # 📦 نسخ احتياطية
 │   └── backup-YYYYMMDD.tar.gz
 └── README.md</pre>
