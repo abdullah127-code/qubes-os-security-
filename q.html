@@ -4842,17 +4842,33 @@ chmod +x run-signal-portable.sh</pre>
         <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> نسخ run-session.sh</button>
         <pre class="code-block" id="session-script">cat > run-session.sh << 'EOF'
 #!/bin/bash
-if ! ls [sS]ession*.AppImage 1>/dev/null 2>&1; then
-    wget -c https://getsession.org/linux -O Session.AppImage
+set -e
+cd "$(dirname "$0")"
+SCRIPT_DIR="$(pwd)"
+
+# البحث عن AppImage
+APPIMAGE=$(find "$SCRIPT_DIR" -maxdepth 1 -iname "session*.AppImage" -type f 2>/dev/null | head -1)
+
+# إذا لم يوجد: تثبيت wget (إن لزم) ثم تحميل
+if [ -z "$APPIMAGE" ]; then
+    command -v wget &>/dev/null || { echo "⚠️ تثبيت wget..."; sudo apt update && sudo apt install -y wget; }
+    echo "📥 تحميل Session..."
+    wget -qc --show-progress -O "$SCRIPT_DIR/Session.AppImage" "https://getsession.org/linux"
+    APPIMAGE="$SCRIPT_DIR/Session.AppImage"
+else
+    APPIMAGE="$(basename "$APPIMAGE")"
 fi
 
-cd "$(dirname "$0")"
-APPIMAGE=$(ls [sS]ession*.AppImage 2>/dev/null | head -1)
-[ -z "$APPIMAGE" ] && exit 1
-chmod +x "$APPIMAGE" 2>/dev/null
-[ ! -d "Session.AppImage.home" ] && "./$APPIMAGE" --appimage-portable-home
-[ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
-exec "./$APPIMAGE" "$@"
+# تأكيد الوجود + صلاحيات التنفيذ
+[ -f "$SCRIPT_DIR/$APPIMAGE" ] || { echo "❌ لم يعثر على AppImage"; exit 1; }
+chmod +x "$SCRIPT_DIR/$APPIMAGE"
+
+# البيئة المحمولة (إن لزم)
+[ -d "$SCRIPT_DIR/Session.AppImage.home" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-home
+[ -d "$SCRIPT_DIR/Session.AppImage.config" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-config
+
+echo "🚀 تشغيل Session..."
+exec "$SCRIPT_DIR/$APPIMAGE" "$@"
 EOF
 chmod +x run-session.sh</pre>
     </div>
