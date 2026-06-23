@@ -4613,36 +4613,52 @@ You → [channel 1] → [server] → [channel 2] → your friend</pre>
         • <strong>Required (maximum privacy):</strong> Enforce .onion only; will not connect to regular servers
     </div>
 
-    <!-- ============================================ -->
-    <!-- Portable run script (optional – to keep data locally) -->
-    <!-- ============================================ -->
-    <h4 style="color: #4fc3f7; margin-top: 1.5rem;">📜 Portable run script (optional – to keep data locally)</h4>
-    <p style="font-size: 0.9em; color: #aaa;">This script makes SimpleX data portable in a folder next to the application. <strong>Note:</strong> After running, you still need to enable SOCKS Proxy manually inside the app (steps above) to benefit from circuit isolation and .onion addresses.</p>
-    
-    <div style="border: 1px solid #3a4a5a; border-radius: 8px; padding: 15px; margin-bottom: 1rem; background: #141b22;">
-        <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> Copy run-simplex.sh</button>
-        <pre class="code-block" id="simplex-script">cat > run-simplex.sh << 'EOF'
+<!-- ============================================ -->
+<!-- Script: Portable Run with TransPort -->
+<!-- ============================================ -->
+<h4 style="color: #4fc3f7; margin-top: 1.5rem;">📜 Portable Run Script (Optional - for local data storage)</h4>
+<p style="font-size: 0.9em; color: #aaa;">This script makes SimpleX data portable in a folder next to the app. <strong>Note:</strong> After launching, manually enable SOCKS Proxy from inside the app according to the steps above to benefit from circuit isolation and .onion addresses.</p>
+
+<div style="border: 1px solid #3a4a5a; border-radius: 8px; padding: 15px; margin-bottom: 1rem; background: #141b22;">
+    <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> Copy run-simplex.sh</button>
+    <pre class="code-block" id="simplex-script">cat > run-simplex.sh << 'EOF'
 #!/bin/bash
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/simplex-chat-data"
+APP_DIR="${SCRIPT_DIR}/simplex"  # subfolder for binaries
 
-if ! command -v wget &> /dev/null; then
-    echo "📥 wget not found. Installing..."
-    sudo apt update && sudo apt install -y wget
-    echo "✅ wget installed"
+mkdir -p "${APP_DIR}"
+
+# 1️⃣ First: look for AppImage in subfolder or top level
+APPIMAGE_PATH=$(ls "${APP_DIR}"/simplex*.AppImage 2>/dev/null | head -1)
+if [[ -z "${APPIMAGE_PATH}" ]]; then
+    APPIMAGE_PATH=$(ls "${SCRIPT_DIR}"/simplex*.AppImage 2>/dev/null | head -1)
 fi
 
-if ! ls "${SCRIPT_DIR}"/simplex*.AppImage 1>/dev/null 2>&1; then
+# 2️⃣ If not found, check for wget then download
+if [[ -z "${APPIMAGE_PATH}" ]]; then
+    echo "📥 SimpleX not found. Need to download."
+
+    if ! command -v wget &> /dev/null; then
+        echo "⚠️ wget not found. Installing now..."
+        sudo apt update && sudo apt install -y wget
+        echo "✅ wget installed"
+    fi
+
     echo "📥 Downloading SimpleX..."
     wget -c "https://github.com/simplex-chat/simplex-chat/releases/latest/download/simplex-desktop-x86_64.AppImage" \
-         -O "${SCRIPT_DIR}/simplex-desktop-x86_64.AppImage"
-    echo "✅ Download complete"
+         -O "${APP_DIR}/simplex-desktop-x86_64.AppImage"
+    APPIMAGE_PATH="${APP_DIR}/simplex-desktop-x86_64.AppImage"
+    echo "✅ Downloaded"
 fi
 
-APPIMAGE_PATH=$(ls "${SCRIPT_DIR}"/simplex*.AppImage 2>/dev/null | head -1)
-[[ -z "${APPIMAGE_PATH}" ]] && { echo "❌ Error: AppImage not found"; exit 1; }
+# 3️⃣ Final check that file exists
+if [[ ! -f "${APPIMAGE_PATH}" ]]; then
+    echo "❌ Error: AppImage file not found after download."
+    exit 1
+fi
 
 mkdir -p "${PORTABLE_DIR}"
 chmod +x "${APPIMAGE_PATH}"
@@ -4652,80 +4668,79 @@ export XDG_DATA_HOME="${PORTABLE_DIR}/.local/share"
 export XDG_CACHE_HOME="${PORTABLE_DIR}/.cache"
 export HOME="${PORTABLE_DIR}"
 
-echo "🚀 Running SimpleX Chat..."
-echo "💡 Remember: enable SOCKS Proxy in Settings → Network & Servers → 127.0.0.1:9050"
+echo "🚀 Launching SimpleX Chat..."
+echo "💡 Reminder: Enable SOCKS Proxy from Settings → Network & Servers → 127.0.0.1:9050"
 exec "${APPIMAGE_PATH}" "$@"
 EOF
 chmod +x run-simplex.sh</pre>
-    </div>
-
-    <!-- Why SOCKS is best -->
-    <div style="background: #1a2a1a; border-left: 3px solid #4caf50; padding: 10px 15px; margin-top: 1rem; border-radius: 4px; font-size: 0.85em;">
-        <strong>✅ Why SOCKS Proxy is the best solution?</strong>
-        <ul style="margin: 5px 0 0 18px;">
-            <li><strong>Full circuit isolation:</strong> Gives each profile an independent Tor circuit, preventing identity linking. With "Chat profile" transport isolation, each profile gets its own circuit as well.</li>
-            <li><strong>.onion support:</strong> The <code>Use .onion hosts</code> option appears and works efficiently, allowing you to restrict connections to the Tor network only (via <code>Required</code>), avoiding malicious exit nodes.</li>
-            <li><strong>Complete stability:</strong> Works without issues on standalone Whonix (Wayland) and Qubes OS (X11).</li>
-            <li><strong>No complex configuration:</strong> Just enable the option inside the app – no extra setup in Gateway or Workstation needed.</li>
-        </ul>
-    </div>
-
-    <!-- Comparison table of connection methods -->
-    <h4 style="margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 0.9rem;">📊 Comparison of connection methods in Whonix / Qubes OS</h4>
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; background: #1e1e2e; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
-            <thead>
-                <tr>
-                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">Aspect</th>
-                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">Transparent proxy (TransPort)</th>
-                    <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">⭐ SOCKS Proxy (127.0.0.1:9050)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Connection mechanism</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">Whonix passes all traffic through Tor automatically</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">App connects directly to the SOCKS port (<code>127.0.0.1:9050</code>)</pre>
-                </tr>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>IP hiding</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ guaranteed (servers see Tor exit IP)</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ guaranteed</pre>
-                </tr>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Circuit isolation</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">⚠️ not isolated (all apps share the same circuit)</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ isolated (gives the app its own circuits, and can isolate per profile via "Chat profile")</pre>
-                </tr>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>.onion hosts option</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">❌ option hidden in the UI</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ appears and works efficiently</pre>
-                </tr>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Required configuration</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">none (works by default in Whonix)</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">only enable SOCKS proxy in settings</pre>
-                </tr>
-                <tr>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Stability on all environments</strong></pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ excellent</pre>
-                    <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ excellent</pre>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Conclusion -->
-    <div style="background: #1a1a2e; border: 1px solid #ffb74d; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
-        <strong>💡 Conclusion:</strong> In Whonix, run SimpleX using the script above (or directly), then <strong>enable SOCKS Proxy in settings (127.0.0.1:9050)</strong>. This gives you <strong>full circuit isolation + .onion addresses</strong>, which is the optimal configuration for maximum privacy without any extra setup in Gateway or Workstation. For even better isolation, use <strong>Transport isolation → Chat profile</strong> in the advanced network settings.
-    </div>
 </div>
 
-<!-- ======== Qubes‑Whonix note ======== -->
-<div class="note" style="margin-bottom: 20px; background: #3a1a1a; border-left-color: #ff4444;">
+<!-- Why SOCKS is Best -->
+<div style="background: #1a2a1a; border-left: 3px solid #4caf50; padding: 10px 15px; margin-top: 1rem; border-radius: 4px; font-size: 0.85em;">
+    <strong>✅ Why SOCKS Proxy is the Best Solution?</strong>
+    <ul style="margin: 5px 0 0 0; padding-left: 18px;">
+        <li><strong>Full Circuit Isolation:</strong> Gives each profile an independent Tor circuit separate from other apps, preventing identity correlation. With the "Chat profile" option, each profile gets its own circuit as well.</li>
+        <li><strong>.onion Support:</strong> The <code>Use .onion hosts</code> option appears and works effectively, allowing you to restrict connections to the Tor network only (by choosing <code>Required</code>), thus avoiding malicious exit node attacks.</li>
+        <li><strong>Full Stability:</strong> Works without any issues on standalone Whonix (Wayland) and Qubes OS (X11).</li>
+        <li><strong>No Complex Setup:</strong> Just enable the option from inside the app, no additional configuration needed in Gateway or Workstation.</li>
+    </ul>
+</div>
+
+<!-- Comparison Table -->
+<h4 style="margin-top: 1.2rem; margin-bottom: 0.5rem; font-size: 0.9rem;">📊 Connection Methods Comparison in Whonix / Qubes OS</h4>
+<div style="overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; background: #1e1e2e; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+        <thead>
+            <tr>
+                <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">Aspect</th>
+                <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">Transparent Proxy (TransPort)</th>
+                <th style="padding: 8px 12px; background: #2a2a3a; text-align: left; border-bottom: 2px solid #444;">⭐ SOCKS Proxy (127.0.0.1:9050)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Connection Mechanism</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">Whonix transparently routes all connections through Tor</td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">App connects directly to SOCKS port (<code>127.0.0.1:9050</code>) </td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>IP Concealment</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Guaranteed (shows Tor exit node IP to servers)</td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Guaranteed</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Circuit Isolation</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">⚠️ Not isolated (all apps share the same circuit)</td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Isolated (gives the app independent circuits, can isolate per profile via "Chat profile" option)</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>.onion hosts option</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">❌ Option hidden in the interface </td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Appears and works effectively</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Required Setup</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">None (works by default in Whonix)</td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">Only enable SOCKS proxy from settings</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;"><strong>Stability on All Environments</strong></td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Excellent</td>
+                <td style="padding: 8px 12px; border-bottom: 1px solid #333;">✅ Excellent</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Conclusion -->
+<div style="background: #1a1a2e; border: 1px solid #ffb74d; border-radius: 6px; padding: 12px 15px; margin-top: 1rem; font-size: 0.9em;">
+    <strong>💡 Conclusion:</strong> In Whonix, run SimpleX using the script above (or directly), then <strong>enable SOCKS Proxy from settings (127.0.0.1:9050)</strong>. This gives you <strong>full circuit isolation + .onion addresses</strong>, the optimal setup for maximum privacy without any extra configuration in Gateway or Workstation. For better isolation, use the <strong>Transport isolation → Chat profile</strong> setting in advanced network settings.
+</div>
+</div>
+<!-- ======== Qubes-Whonix Alert ======== -->
+<div class="note" style="margin-bottom: 20px; background: #3a1a1a; border-right-color: #ff4444;">
     <i class="fas fa-exclamation-circle"></i>
-    <strong>⚠️ For Qubes‑Whonix users:</strong>
+    <strong>⚠️ For Qubes-Whonix Users:</strong>
     <p>Do not use <code>sudo</code> directly. Replace it with:</p>
     <pre class="code-block" style="direction: ltr;">qvm-run -u root anon-whonix '&lt;command&gt;'</pre>
     <p>Example: <code>qvm-run -u root anon-whonix 'whonix_firewall'</code></p>
@@ -4733,36 +4748,36 @@ chmod +x run-simplex.sh</pre>
 
 <!-- ======== Cwtch Card ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (⭐ recommended – peer‑to‑peer, metadata‑resistant)</div>
-    <p><strong>Cwtch</strong> (pronounced /kʊtʃ/) is a <strong>decentralised, metadata‑resistant</strong> messaging protocol built on the <strong>Tor v3 Onion Services</strong>. It is developed by the <strong>Open Privacy Research Society</strong> (Canada).</p>
+    <div class="card-header"><i class="fas fa-shield-alt"></i> Cwtch (⭐ Recommended - Peer-to-Peer Metadata Resistant)</div>
+    <p><strong>Cwtch</strong> (pronounced /kʊtʃ/) is a <strong>decentralized, metadata-resistant</strong> messaging protocol built on <strong>Tor v3 Onion Services</strong>. Developed by the <strong>Open Privacy Research Society</strong> (Canada).</p>
     
-    <div class="note" style="background: #1a2a3a; border-left-color: #4caf50;">
+    <div class="note" style="background: #1a2a3a; border-right-color: #4caf50;">
         <i class="fas fa-check-circle"></i> <strong>Features:</strong>
         <ul>
-            <li>🔒 True peer‑to‑peer – direct connection without intermediary servers</li>
-            <li>🧅 Built‑in Tor – complete IP hiding</li>
-            <li>🎭 Multiple profiles – completely isolated personas</li>
-            <li>📦 Fully portable – runs from a single folder (USB)</li>
+            <li>🔒 True Peer-to-Peer (P2P) - direct connection without intermediary servers</li>
+            <li>🧅 Built-in Tor - full IP concealment</li>
+            <li>🎭 Multiple Identities (Profiles) - completely isolated personas</li>
+            <li>📦 Fully Portable - runs from a single folder (USB)</li>
             <li>🔐 Perfect Forward Secrecy (PFS)</li>
-            <li>🛡️ Metadata‑resistant</li>
-            <li>🚫 <strong>Plausible deniability:</strong> The authentication protocol in Cwtch allows <strong>complete denial that a conversation ever happened after it is closed</strong>. Either party can <strong>forge the entire chat log</strong>, making it impossible to prove that the "real" conversation took place.</li>
+            <li>🛡️ Metadata Resistant</li>
+            <li>🚫 <strong>Plausible Deniability:</strong> Cwtch's authentication protocol allows <strong>complete denial of a conversation after it's closed</strong>. Either party can <strong>forge chat logs</strong> entirely, making it impossible to prove a "real" conversation occurred.</li>
         </ul>
     </div>
 
-    <div class="note" style="margin-top: 15px; background: #2a4a6a; border-left-color: #ffaa33;">
+    <div class="note" style="margin-top: 15px; background: #2a4a6a; border-right-color: #ffaa33;">
         <i class="fas fa-exclamation-triangle"></i> <strong>Limitations:</strong>
         <ul>
-            <li>🐢 Requires simultaneous connection (both parties must be online for private chats)</li>
-            <li>📱 Not available on iOS (Android and Desktop only)</li>
-            <li>🔧 Requires special configuration on Whonix/Qubes</li>
+            <li>🐢 Requires synchronous connection (both parties online) for private chats</li>
+            <li>📱 Not available on iOS (Android & Desktop only)</li>
+            <li>🔧 Requires special setup on Whonix/Qubes</li>
             <li>📊 Small user base</li>
-            <li>🔍 No independent security audit yet (according to the official Whonix page)</li>
+            <li>🔍 Has not undergone independent security audit yet (per Whonix official page)</li>
         </ul>
     </div>
 
-    <h3><i class="fas fa-folder-tree"></i> 📁 Official installation structure</h3>
+    <h3><i class="fas fa-folder-tree"></i> 📁 Official Installation Structure</h3>
     <pre class="code-block">cwtch/
-├── cwtch                    # run script
+├── cwtch                    # launch script
 ├── lib/
 │   ├── cwtch                # executable
 │   └── libcwtch.so
@@ -4773,7 +4788,7 @@ chmod +x run-simplex.sh</pre>
 ├── install-whonix.sh
 └── cwtch-whonix.yml</pre>
 
-    <h3><i class="fas fa-usb"></i> 💾 Portable run script</h3>
+    <h3><i class="fas fa-usb"></i> 💾 Portable Run Script</h3>
     <button class="btn-copy-all" onclick="copyScript('cwtch-portable-script')"><i class="fas fa-copy"></i> Copy run-cwtch-portable.sh</button>
     <pre class="code-block" id="cwtch-portable-script">cat > run-cwtch-portable.sh << 'EOF'
 #!/bin/sh
@@ -4790,21 +4805,21 @@ exec ./lib/cwtch
 EOF
 chmod +x run-cwtch-portable.sh</pre>
 
-    <!-- ============ Important note for Whonix ============ -->
-    <div class="note" style="margin-top: 15px; background: #2a2a1a; border-left-color: #ffaa33;">
+    <!-- ============ Important Whonix Note ============ -->
+    <div class="note" style="margin-top: 15px; background: #2a2a1a; border-right-color: #ffaa33;">
         <i class="fas fa-exclamation-triangle"></i>
-        <strong>⚠️ Important reminder for Whonix users:</strong>
+        <strong>⚠️ Important Reminder for Whonix Users:</strong>
         
-        <p><strong>1. On Whonix‑Gateway:</strong></p>
+        <p><strong>1. On Whonix-Gateway:</strong></p>
         <pre class="code-block">sudo onion-grater-add 40_cwtch</pre>
         
-        <p><strong>2. On Whonix‑Workstation:</strong></p>
+        <p><strong>2. On Whonix-Workstation:</strong></p>
         <pre class="code-block">sudo mkdir -p /etc/whonix_firewall.d/
 echo 'EXTERNAL_OPEN_PORTS+=" $(seq 15000 15378) "' | sudo tee -a /etc/whonix_firewall.d/50_user.conf</pre>
         <p>Then reload the firewall:</p>
         <pre class="code-block">sudo whonix_firewall</pre>
         
-        <p><strong>3. Inside the Cwtch app (after first run):</strong></p>
+        <p><strong>3. Inside the Cwtch app (after first launch):</strong></p>
         <ul>
             <li>Click the <strong>Tor</strong> icon (onion) on the main interface</li>
             <li>Choose <strong>Advanced Tor Configuration</strong></li>
@@ -4814,14 +4829,14 @@ echo 'EXTERNAL_OPEN_PORTS+=" $(seq 15000 15378) "' | sudo tee -a /etc/whonix_fir
                     <li><strong>Custom Control port:</strong> <code>9051</code></li>
                 </ul>
             </li>
-            <li>Then click <strong>Restart</strong></li>
+            <li>Then click the <strong>Restart</strong> button</li>
         </ul>
-        <p>📌 <strong>Why?</strong> Without entering these ports, Cwtch tries to run its own embedded Tor inside the Workstation (which does not work). By entering them, you tell it to use the Gateway’s Tor directly.</p>
+        <p>📌 <strong>Why?</strong> Without entering these ports, Cwtch tries to run its own built-in Tor inside the Workstation (which won't work). By entering them, you tell it to use the Gateway's Tor directly.</p>
         
-        <p>⚠️ <strong>Without all three of these configurations, Cwtch will not be able to connect to the Tor network.</strong></p>
+        <p>⚠️ <strong>Without these three steps, Cwtch will not be able to connect to the Tor network.</strong></p>
     </div>
 
-    <h3><i class="fas fa-download"></i> 📥 Download links</h3>
+    <h3><i class="fas fa-download"></i> 📥 Download Links</h3>
     <ul>
         <li><strong>Desktop:</strong> <a href="https://docs.cwtch.im/download" target="_blank">docs.cwtch.im/download</a></li>
         <li><strong>Android:</strong> <a href="https://play.google.com/store/apps/details?id=im.cwtch.flwtch" target="_blank">Google Play</a></li>
@@ -4830,36 +4845,36 @@ echo 'EXTERNAL_OPEN_PORTS+=" $(seq 15000 15378) "' | sudo tee -a /etc/whonix_fir
 
 <!-- ======== OnionShare Card ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-onion"></i> 🧅 OnionShare (⭐ secure, anonymous file sharing + temporary chat)</div>
+    <div class="card-header"><i class="fas fa-onion"></i> 🧅 OnionShare (⭐ Secure & Anonymous File Sharing + Ephemeral Chat)</div>
     
-    <p><strong>OnionShare</strong> is an open‑source tool from the <strong>Freedom of the Press Foundation</strong> that allows you to share or receive files securely and anonymously over the Tor network. Files go <strong>directly from your device to the recipient’s device</strong> without passing through any intermediary server. <strong>It also supports hosting websites and anonymous chat.</strong></p>
+    <p><strong>OnionShare</strong> is an open-source tool from the <strong>Freedom of the Press Foundation</strong> that allows secure and anonymous file sharing or receiving over the Tor network. Files travel <strong>directly from your device to the recipient's device</strong> without passing through any intermediary server. <strong>It also supports website hosting and anonymous chat.</strong></p>
     
-    <div class="note" style="background: #1a3a2a; border-left-color: #4caf50;">
+    <div class="note" style="background: #1a3a2a; border-right-color: #4caf50;">
         <i class="fas fa-check-circle"></i>
-        <strong>✅ Why OnionShare is secure:</strong>
-        <ul><li>🔒 No intermediary server – your device is the server</li><li>🧅 Tor network – traffic encrypted through 3 layers</li><li>🎛️ Full control – the link works only while the app is open</li><li>📁 No size limits – can share very large files</li><li>💬 Supports anonymous chat – no accounts, no logs</li><li>🌐 Supports hosting temporary <code>.onion</code> websites</li><li>⚠️ <strong>Does not support plausible deniability</strong> – according to the official Whonix page</li></ul>
+        <strong>✅ Why OnionShare is Secure?</strong>
+        <ul><li>🔒 No intermediary server – your device is the server</li><li>🧅 Tor network – encrypted connection through 3 layers</li><li>🎛️ Full control – the link works only while the app is open</li><li>📁 No size limits – can share very large files</li><li>💬 Supports Anonymous Chat – no accounts, no logs</li><li>🌐 Supports hosting temporary <code>.onion</code> websites</li><li>⚠️ <strong>Does not support Plausible Deniability</strong> – per Whonix official page</li></ul>
     </div>
 
-    <h3><i class="fas fa-download"></i> 📥 Receive Files mode – for journalists</h3>
-    <ol><li>Open OnionShare and choose <strong>"Receive Files"</strong></li><li>Choose a folder to save received files</li><li>The app generates a <code>.onion</code> link</li><li>Send the link to the source (via SimpleX or another secure channel)</li></ol>
+    <h3><i class="fas fa-download"></i> 📥 Receive Mode – For Journalists</h3>
+    <ol><li>Open OnionShare and select <strong>"Receive Files"</strong></li><li>Choose a folder to save received files</li><li>The app generates an <code>.onion</code> link</li><li>Send the link to the source (via SimpleX or any secure means)</li></ol>
 
-    <h3><i class="fas fa-comments"></i> 💬 Anonymous chat mode</h3>
-    <ol><li>Select the <strong>"Chat"</strong> tab and click <strong>"Start chat server"</strong></li><li>Send the address and key to participants</li><li>Once OnionShare is closed, the chat room disappears completely with no logs</li></ol>
+    <h3><i class="fas fa-comments"></i> 💬 Anonymous Chat Mode</h3>
+    <ol><li>Select the <strong>"Chat"</strong> tab and click <strong>"Start chat server"</strong></li><li>Send the address and key to participants</li><li>Once OnionShare is closed, <strong>the chat room disappears completely</strong> with no logs remaining</li></ol>
 
     <h3><i class="fas fa-cog"></i> 🔧 Running OnionShare on Whonix (Gateway + Workstation)</h3>
     
-    <h4>🔹 Step 1: On Whonix‑Gateway</h4>
-    <pre class="code-block"># Open a terminal as root and run
+    <h4>🔹 Step 1: On Whonix-Gateway</h4>
+    <pre class="code-block"># Open terminal as root and run
 sudo onion-grater-add 40_onionshare
 
-# ⚠️ Critical step: make sure the file is decompressed if it was compressed
+# ⚠️ Critical step: Make sure to decompress the file if it's compressed
 sudo gunzip /usr/local/etc/onion-grater-merger.d/40_onionshare.yml.gz
 
 # To verify success
-ls /usr/local/etc/onion-grater-merger.d/  # should show 40_onionshare.yml without .gz</pre>
+ls /usr/local/etc/onion-grater-merger.d/  # you should see 40_onionshare.yml without .gz</pre>
 
-    <h4>🔹 Step 2: On Whonix‑Workstation</h4>
-    <pre class="code-block"># Open the required ports in the firewall
+    <h4>🔹 Step 2: On Whonix-Workstation</h4>
+    <pre class="code-block"># Open required ports in the firewall
 sudo mkdir -p /usr/local/etc/whonix_firewall.d
 echo 'EXTERNAL_OPEN_PORTS+=" $(seq 17600 17659) "' | sudo tee -a /usr/local/etc/whonix_firewall.d/50_user.conf
 sudo whonix_firewall
@@ -4867,40 +4882,15 @@ sudo whonix_firewall
 # Run OnionShare
 onionshare</pre>
 
-    <h3><i class="fas fa-balance-scale"></i> 📊 OnionShare vs. Signal vs. cloud storage</h3>
+    <h3><i class="fas fa-balance-scale"></i> 📊 OnionShare vs Signal vs Cloud Storage</h3>
     <table class="comparison-table">
-        <thead><tr><th>Criteria</th><th>🧅 OnionShare</th><th>📱 Signal</th><th>☁️ Google Drive</th></tr></thead>
+        <thead><tr><th>Criterion</th><th>🧅 OnionShare</th><th>📱 Signal</th><th>☁️ Google Drive</th></tr></thead>
         <tbody>
-            <tr>
-                <td><strong>Where the file is stored</strong></pre>
-                <td>✅ your device only</pre>
-                <td>🟡 Signal servers (temporarily)</pre>
-                <td>❌ Google servers</pre>
-            </tr>
-            <tr>
-                <td><strong>File size</strong></pre>
-                <td>✅ unlimited</pre>
-                <td>🟡 100 MB</pre>
-                <td>✅ very large</pre>
-            </tr>
-            <tr>
-                <td><strong>Logging</strong></pre>
-                <td>✅ none</pre>
-                <td>🟡 minimal</pre>
-                <td>❌ logs everything</pre>
-            </tr>
-            <tr>
-                <td><strong>Anonymous chat</strong></pre>
-                <td>✅ supported</pre>
-                <td>🟡 messaging only</pre>
-                <td>❌ not supported</pre>
-            </tr>
-            <tr>
-                <td><strong>Recommendation for journalism</strong></pre>
-                <td>⭐ ideal for large files</pre>
-                <td>🟡 good for quick messaging</pre>
-                <td>❌ insecure</pre>
-            </tr>
+            <tr><td><strong>File storage location</strong></td><td>✅ Your device only</td><td>🟡 Signal servers (temporarily)</td><td>❌ Google servers</td></tr>
+            <tr><td><strong>File size limit</strong></td><td>✅ Unlimited</td><td>🟡 100MB</td><td>✅ Very large</td></tr>
+            <tr><td><strong>Data logging</strong></td><td>✅ None</td><td>🟡 Minimal</td><td>❌ Logs everything</td></tr>
+            <tr><td><strong>Anonymous chat</strong></td><td>✅ Supported</td><td>🟡 Messaging only</td><td>❌ Not supported</td></tr>
+            <tr><td><strong>Recommendation for journalism</strong></td><td>⭐ Ideal for large files</td><td>🟡 Good for quick messaging</td><td>❌ Not secure</td></tr>
         </tbody>
     </table>
 </div>
@@ -4908,32 +4898,32 @@ onionshare</pre>
 <!-- ======== XMPP/Gajim Cards ======== -->
 <div class="card">
     <div class="card-header"><i class="fas fa-info-circle"></i> What is XMPP?</div>
-    <p><strong>XMPP</strong> is an open, decentralised instant messaging protocol. It supports strong end‑to‑end encryption via <strong>OMEMO</strong> and does not require a phone number to register. Choose a trusted server such as <code>conversations.im</code>.</p>
-    <p>🔒 <strong>Privacy:</strong> Message content is fully encrypted. However, <strong>metadata protection is weak</strong> – it is possible to monitor who talks to whom (social graph).</p>
+    <p><strong>XMPP</strong> is an open, decentralized instant messaging protocol. It supports strong end-to-end encryption via <strong>OMEMO</strong> and does not require a phone number to register. Choose a trusted server like <code>conversations.im</code>.</p>
+    <p>🔒 <strong>Privacy:</strong> Message content is fully encrypted. However, <strong>metadata protection is weak</strong>, as who talks to whom (social graph) can be monitored.</p>
 </div>
 
 <div class="card">
     <div class="card-header"><i class="fas fa-download"></i> Installing Gajim on Whonix Workstation</div>
-    <p>Gajim does not require additional gateway setup – it works directly through the system’s Tor. <strong>The proxy settings must be configured manually.</strong></p>
+    <p>Gajim requires no extra Gateway setup – it works directly through system Tor. <strong>Proxy settings must be configured manually.</strong></p>
     <button class="btn-copy-all" onclick="copyScript('gajim-install')"><i class="fas fa-copy"></i> Copy installation commands</button>
     <pre class="code-block" id="gajim-install">sudo apt update
 sudo apt install gajim gajim-httpupload -y</pre>
     
-    <h4>⚙️ Recommended Gajim settings (from the official Whonix page):</h4>
+    <h4>⚙️ Recommended Gajim Settings (from Whonix official page):</h4>
     <ul>
-        <li><strong>Logs:</strong> Edit → Accounts → disable "Save conversation logs"</li>
-        <li><strong>Privacy:</strong> Preferences → Advanced → Privacy → uncheck all options</li>
-        <li><strong>Proxy:</strong> Preferences → Advanced → global proxy → <strong>Tor</strong> ← then Manage → enable <strong>Use proxy authentication</strong> leaving the fields blank</li>
-        <li><strong>Status:</strong> Preferences → Status → disable "Away after" and "Not available after"</li>
-        <li><strong>Applications:</strong> Preferences → Advanced → applications → Custom → clear the fields for Browser, Mail Client, File Browser</li>
+        <li><strong>Logs:</strong> Edit → Accounts → Disable Save conversation logs</li>
+        <li><strong>Privacy:</strong> Preferences → Advanced → Privacy → Uncheck all options</li>
+        <li><strong>Proxy:</strong> Preferences → Advanced → global proxy → <strong>Tor</strong> ← then Manage → Enable <strong>Use proxy authentication</strong> leaving fields empty</li>
+        <li><strong>Activity:</strong> Preferences → Status → Uncheck Away after and Not available after</li>
+        <li><strong>Applications:</strong> Preferences → Advanced → applications → Custom → Clear Browser, Mail Client, and File Browser fields</li>
     </ul>
 </div>
 
 <div class="card">
-    <div class="card-header"><i class="fas fa-usb"></i> Gajim – portable version (⚠️ same system only)</div>
+    <div class="card-header"><i class="fas fa-usb"></i> Gajim - Portable Version (⚠️ Within the same system only)</div>
     <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
         <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ Portability limitation:</strong> Gajim <strong>cannot be made fully portable across different systems</strong> because it relies on <strong>gnome‑keyring</strong> to manage encryption keys and certificates. The script below allows saving <strong>settings and conversations</strong> to a portable folder on a USB drive, but it will only work <strong>on the same system/user</strong>.
+        <strong>⚠️ Portability Limitations:</strong> Gajim <strong>cannot be made fully portable across different systems</strong> because it depends on <strong>gnome-keyring</strong> (GNOME keyring) to manage encryption keys and certificates. The script below allows saving <strong>settings and conversations</strong> in a portable USB folder, but it will only work <strong>within the same system/user</strong>.
     </div>
     <button class="btn-copy-all" onclick="copyScript('gajim-script')"><i class="fas fa-copy"></i> Copy run-gajim-portable.sh</button>
     <pre class="code-block" id="gajim-script">cat > run-gajim-portable.sh << 'EOF'
@@ -4949,7 +4939,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 if ! command -v gajim &> /dev/null; then
-    echo "❌ Gajim is not installed"
+    echo "❌ Gajim not installed"
     exit 1
 fi
 
@@ -4960,30 +4950,30 @@ chmod +x run-gajim-portable.sh</pre>
 
 <!-- ======== Matrix/Element Cards ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-info-circle"></i> What is Matrix? (⚠️ serious security reservations)</div>
-    <p><strong>Matrix</strong> is an open, decentralised communication protocol that uses a server‑to‑server federation model. <strong>According to the official Whonix page, it has serious security reservations:</strong></p>
+    <div class="card-header"><i class="fas fa-info-circle"></i> What is Matrix? (⚠️ Has security concerns)</div>
+    <p><strong>Matrix</strong> is an open, decentralized communication protocol based on a "server-to-server" (Federation) model. <strong>According to the Whonix official page, it has serious security concerns:</strong></p>
     <ul>
-        <li>🔴 <strong>Lack of forward secrecy</strong> in Element specifically – compromising one key reveals all past messages</li>
+        <li>🔴 <strong>Lack of forward secrecy</strong> in Element specifically – compromising any key reveals all past messages</li>
         <li>🔴 <strong>Wide metadata leakage</strong></li>
         <li>🔴 <strong>libolm library vulnerabilities</strong> (later deprecated)</li>
-        <li>🔴 <strong>Server admins can intercept encrypted new messages</strong> by logging into the user’s account</li>
-        <li>🟡 Device verification is necessary but often fails</li>
+        <li>🔴 <strong>Server admins could intercept newly encrypted messages</strong> by logging into the user's account</li>
+        <li>🟡 Device verification is essential but often malfunctioning</li>
     </ul>
 </div>
 
 <div class="card">
-    <div class="card-header"><i class="fas fa-download"></i> Installing Element Desktop (using the official extrepo)</div>
-    <p>As recommended by Whonix, use <code>extrepo</code> to add the Element repository securely:</p>
+    <div class="card-header"><i class="fas fa-download"></i> Installing Element Desktop (using official extrepo)</div>
+    <p>Per Whonix recommendation, use <code>extrepo</code> to safely add the Element repository:</p>
     <button class="btn-copy-all" onclick="copyScript('element-install-script')"><i class="fas fa-copy"></i> Copy installation commands</button>
-    <pre class="code-block" id="element-install-script"># The method recommended by Whonix
+    <pre class="code-block" id="element-install-script"># Whonix recommended method
 sudo extrepo enable element.io
 sudo apt update && sudo apt full-upgrade
 sudo apt install --no-install-recommends element-desktop</pre>
 </div>
 
 <div class="card">
-    <div class="card-header"><i class="fas fa-usb"></i> Element – portable version</div>
-    <p>This script makes Element portable, saving all settings, conversations, and encryption keys inside an <code>Element-Data</code> folder on the USB drive.</p>
+    <div class="card-header"><i class="fas fa-usb"></i> Element - Portable Version</div>
+    <p>This script makes Element portable, storing all settings, conversations, and encryption keys inside the <code>Element-Data</code> folder on the flash drive.</p>
     <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> Copy run-element-portable.sh</button>
     <pre class="code-block" id="element-script">cat > run-element-portable.sh << 'EOF'
 #!/bin/bash
@@ -4993,7 +4983,7 @@ PORTABLE_DATA_DIR="${SCRIPT_DIR}/Element-Data"
 mkdir -p "${PORTABLE_DATA_DIR}"
 
 if ! command -v element-desktop &> /dev/null; then
-    echo "❌ Element is not installed"
+    echo "❌ Element not installed"
     exit 1
 fi
 
@@ -5004,45 +4994,45 @@ chmod +x run-element-portable.sh</pre>
 
 <!-- ======== Signal Card ======== -->
 <div class="card">
-    <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (❌ not recommended for anonymity – mandatory phone number)</div>
+    <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (❌ Not recommended for anonymity – phone number mandatory)</div>
     
     <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
         <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ Official Whonix warning:</strong> Signal is <strong>not recommended</strong> for anonymous use in Whonix because <strong>a phone number is required for registration</strong>. This makes hiding the social graph from the server impossible. Use <strong>SimpleX Chat</strong> as a better alternative.
+        <strong>⚠️ Whonix Official Warning:</strong> Signal is <strong>not recommended</strong> for anonymous use in Whonix due to <strong>mandatory phone number</strong> for registration. This makes hiding the social graph from the server impossible. Use <strong>SimpleX Chat</strong> as a better alternative.
     </div>
 
     <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
         <i class="fas fa-globe"></i> 
-        <strong>⚠️ Important: temporary network access needed in the template</strong><br>
-        To install Signal from the official repository, you must temporarily allow the template to access the internet. After installation, disable network access again to maintain security.
+        <strong>⚠️ Important Note: Temporarily enable networking in the template</strong><br>
+        To install Signal from the official repository, you must temporarily allow the template to connect to the internet. After installation, re-disable networking for security.
     </div>
 
-    <div class="section-title"><i class="fas fa-download"></i> Installing Signal in a Whonix template</div>
-    <p>Run the following commands in the <strong>Whonix Workstation template</strong> (with network access temporarily enabled):</p>
+    <div class="section-title"><i class="fas fa-download"></i> Installing Signal in Whonix Template</div>
+    <p>Run the following commands in the <strong>Whonix Workstation Template</strong> (with networking temporarily enabled):</p>
     <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> Copy installation commands</button>
-    <pre class="code-block" id="signal-install"># 0. Install prerequisites
+    <pre class="code-block" id="signal-install"># 0. Install basic requirements
 sudo apt update > /dev/null 2>&1
 sudo apt install wget gnupg -y > /dev/null 2>&1
 
-# 1. Install the official signing key
+# 1. Install official signing key
 wget -O- https://updates.signal.org/desktop/apt/keys.asc 2> /dev/null | gpg --dearmor > signal-desktop-keyring.gpg
 cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
 
-# 2. Add the official repository to sources
+# 2. Add official repository to sources list
 wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources 2> /dev/null
 cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sources > /dev/null
 
-# 3. Update and install Signal
+# 3. Update database and install Signal
 sudo apt update > /dev/null 2>&1
 sudo apt install signal-desktop -y</pre>
-    <p>✅ After installation, disable network access in the template again and restart the Whonix Workstation AppVM.</p>
+    <p>✅ After installation, re-disable networking in the template and restart the Whonix Workstation AppVM.</p>
 
     <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
         <i class="fas fa-info-circle"></i> 
-        <strong>📱 Important note:</strong> To use Signal Desktop, you must first install Signal on your phone and scan the QR code for pairing. The desktop app does not work independently. <strong>The phone number will be linked to your account.</strong>
+        <strong>📱 Important Note:</strong> To use Signal Desktop, you must first install Signal on your phone and scan the QR code to sync. The app does not work independently without a phone. <strong>Your phone number will be linked to your account.</strong>
     </div>
 
-    <div class="section-title"><i class="fas fa-usb"></i> Signal portable script</div>
+    <div class="section-title"><i class="fas fa-usb"></i> Portable Signal Script</div>
     <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> Copy run-signal-portable.sh</button>
     <pre class="code-block" id="signal-portable">cat > run-signal-portable.sh << 'EOF'
 #!/bin/bash
@@ -5052,7 +5042,7 @@ PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
 mkdir -p "$PORTABLE_DIR"
 
 if ! command -v signal-desktop &> /dev/null; then
-    echo "❌ Signal is not installed"
+    echo "❌ Signal not installed"
     exit 1
 fi
 
@@ -5060,10 +5050,10 @@ fi
 signal-desktop --user-data-dir="$PORTABLE_DIR" --password-store="basic" &
 SIGNAL_PID=$!
 
-echo "🚀 Signal is running"
-echo "📁 Data folder: $PORTABLE_DIR"
+echo "🚀 Signal running"
+echo "📁 Data: $PORTABLE_DIR"
 
-# Wait until the Signal window closes
+# Wait until the Signal window disappears (fallback)
 while pgrep -P $SIGNAL_PID > /dev/null 2>&1 || kill -0 $SIGNAL_PID 2>/dev/null; do
     sleep 1
 done
@@ -5075,84 +5065,120 @@ chmod +x run-signal-portable.sh</pre>
     
     <div class="note" style="margin-top: 15px; background: #3a1a1a;">
         <i class="fas fa-shield-alt"></i> 
-        <strong>🛡️ Security reminder:</strong> Signal may not work properly over Tor in Whonix. If connection fails, use <strong>SimpleX Chat</strong> as the recommended Whonix alternative.
+        <strong>🛡️ Security Reminder:</strong> Signal may not work properly over Tor in Whonix. If connection fails, use <strong>SimpleX Chat</strong> as the Whonix-recommended alternative.
     </div>
 </div>
 
 <!-- ======== Session Card ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-key"></i> Session (❌ officially not recommended – known security issues)</div>
+    <div class="card-header"><i class="fas fa-key"></i> Session (❌ Not officially recommended – known security issues)</div>
     <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
         <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ Official Whonix warning:</strong> Session is <strong>not recommended</strong> for the following reasons:
+        <strong>⚠️ Whonix Official Warning:</strong> Session is <strong>not recommended</strong> for the following reasons:
         <ul>
-            <li>🔴 <strong>Single static identifier</strong> on the desktop app</li>
-            <li>🔴 <strong>Encryption problems</strong> identified in 2025</li>
-            <li>🔴 <strong>Lack of Perfect Forward Secrecy (PFS)</strong> – although an update in December 2025 added it, the official position has not changed</li>
+            <li>🔴 <strong>Single persistent identifier</strong> in the desktop app</li>
+            <li>🔴 <strong>Encryption issues</strong> identified in 2025</li>
+            <li>🔴 <strong>Lack of Perfect Forward Secrecy (PFS)</strong> – despite December 2025 update, official stance remains unchanged</li>
             <li>🔴 <strong>91 NPM vulnerabilities</strong> in the supply chain</li>
             <li>🔴 <strong>Does not prevent supply chain attacks</strong></li>
         </ul>
     </div>
-    <p>It requires no additional configuration – works directly over the Oxen network.</p>
+    <p>Requires no additional setup – works directly through the Oxen network.</p>
     <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> Copy run-session.sh</button>
     <pre class="code-block" id="session-script">cat > run-session.sh << 'EOF'
 #!/bin/bash
-if ! ls [sS]ession*.AppImage 1>/dev/null 2>&1; then
-    wget -c https://getsession.org/linux -O Session.AppImage
+set -e
+cd "$(dirname "$0")"
+SCRIPT_DIR="$(pwd)"
+
+# Search for AppImage
+APPIMAGE=$(find "$SCRIPT_DIR" -maxdepth 1 -iname "session*.AppImage" -type f 2>/dev/null | head -1)
+
+# If not found: install wget (if needed) then download
+if [ -z "$APPIMAGE" ]; then
+    command -v wget &>/dev/null || { echo "⚠️ Installing wget..."; sudo apt update && sudo apt install -y wget; }
+    echo "📥 Downloading Session..."
+    wget -qc --show-progress -O "$SCRIPT_DIR/Session.AppImage" "https://getsession.org/linux"
+    APPIMAGE="$SCRIPT_DIR/Session.AppImage"
+else
+    APPIMAGE="$(basename "$APPIMAGE")"
 fi
 
-cd "$(dirname "$0")"
-APPIMAGE=$(ls [sS]ession*.AppImage 2>/dev/null | head -1)
-[ -z "$APPIMAGE" ] && exit 1
-chmod +x "$APPIMAGE" 2>/dev/null
-[ ! -d "Session.AppImage.home" ] && "./$APPIMAGE" --appimage-portable-home
-[ ! -d "Session.AppImage.config" ] && "./$APPIMAGE" --appimage-portable-config
-exec "./$APPIMAGE" "$@"
+# Confirm existence + executable permission
+[ -f "$SCRIPT_DIR/$APPIMAGE" ] || { echo "❌ AppImage not found"; exit 1; }
+chmod +x "$SCRIPT_DIR/$APPIMAGE"
+
+# Portable environment (if needed)
+[ -d "$SCRIPT_DIR/Session.AppImage.home" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-home
+[ -d "$SCRIPT_DIR/Session.AppImage.config" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-config
+
+echo "🚀 Launching Session..."
+exec "$SCRIPT_DIR/$APPIMAGE" "$@"
 EOF
 chmod +x run-session.sh</pre>
 </div>
 
 <!-- ======== Telegram Card ======== -->
 <div class="card">
-    <div class="card-header"><i class="fab fa-telegram"></i> Telegram (❌ insecure – not recommended at all)</div>
+    <div class="card-header"><i class="fab fa-telegram"></i> Telegram (❌ Not secure – not recommended at all)</div>
     <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
         <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ Serious security warning:</strong> Telegram is <strong>not secure</strong> in high‑privacy environments. We strongly recommend using <strong>SimpleX Chat</strong> instead.
+        <strong>⚠️ Serious Security Warning:</strong> Telegram is <strong>not secure</strong> in high-privacy environments. We strongly recommend using <strong>SimpleX Chat</strong> instead.
     </div>
     <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> Copy run-telegram.sh</button>
     <pre class="code-block" id="telegram-script">cat > run-telegram.sh << 'EOF'
 #!/bin/bash
+set -e
 cd "$(dirname "$0")"
 
-if [[ ! -f "./Telegram/Telegram" ]]; then
+TELEGRAM_DIR="./Telegram"
+TELEGRAM_BIN="$TELEGRAM_DIR/Telegram"
+PORTABLE_FLAG_DIR="$TELEGRAM_DIR/TelegramForcePortable"
+
+# 1. Is Telegram already present?
+if [[ ! -f "$TELEGRAM_BIN" ]]; then
+    echo "ℹ️ Telegram not found, need to download."
+
+    # 2. Is download tool wget available?
+    if ! command -v wget &> /dev/null; then
+        echo "⚠️ wget not found. Installing now..."
+        sudo apt update
+        sudo apt install -y wget
+        echo "✅ wget installed."
+    else
+        echo "✅ wget already present."
+    fi
+
+    # 3. Download Telegram
     echo "📥 Downloading Telegram..."
-    sudo apt install wget -y
-    wget -c "https://telegram.org/dl/desktop/linux" -O telegram.tar.xz
-    tar -xf telegram.tar.xz
+    wget -c --show-progress -O telegram.tar.xz "https://telegram.org/dl/desktop/linux"
+    mkdir -p "$TELEGRAM_DIR"
+    tar -xf telegram.tar.xz -C "$TELEGRAM_DIR" --strip-components=1
     rm telegram.tar.xz
+    echo "✅ Telegram installed."
+else
+    echo "✅ Telegram already present, no download needed."
 fi
 
-# Note: Telegram/Telegram is the correct path after extraction
-mkdir -p data/tdata data/downloads data/user_data data/temp data/cache
+# 4. Create ForcePortable folder (required for portable mode)
+mkdir -p "$PORTABLE_FLAG_DIR"
 
-export XDG_DATA_HOME="$PWD/data"
-export XDG_CONFIG_HOME="$PWD/data"
-export XDG_CACHE_HOME="$PWD/data/cache"
-
-exec ./Telegram/Telegram -workdir "$PWD/data" "$@"
+echo "🚀 Launching Telegram (portable mode)..."
+exec "$TELEGRAM_BIN" "$@"
 EOF
+
 chmod +x run-telegram.sh</pre>
 </div>
 
-<!-- ======== Metadata removal ======== -->
+<!-- ======== Metadata Removal ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-eraser"></i> 🧹 Removing metadata – before sharing</div>
-    <p>Even with the strongest messaging apps, images and documents carry hidden metadata that can reveal information about you (GPS, camera type, author name, creation date).</p>
+    <div class="card-header"><i class="fas fa-eraser"></i> 🧹 Metadata Removal – Before Sharing</div>
+    <p>Even with the strongest messaging apps, images and documents carry hidden data that can reveal you (GPS, camera type, author name, creation date).</p>
     
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
         <div style="text-align: center;">
             <i class="fas fa-shield" style="font-size: 2em;"></i>
-            <h4>mat2 (best)</h4>
+            <h4>mat2 (Best)</h4>
             <code onclick="copyText(this)">mat2 document.pdf</code>
             <p style="font-size: 0.9em;">Built into Whonix/Tails – creates a clean copy</p>
         </div>
@@ -5171,44 +5197,26 @@ chmod +x run-telegram.sh</pre>
     </div>
     
     <div class="note"><i class="fas fa-info-circle"></i> <strong>Quick install:</strong> <code onclick="copyText(this)">sudo apt install mat2 exiftool</code></div>
-    <div class="note"><i class="fas fa-lightbulb"></i> <strong>Additional tools:</strong> <strong>ExifCleaner</strong> (easy GUI) | <strong>Dangerzone</strong> (converts suspicious files to safe PDF) | <strong>PDF Redact Tools</strong> (specialised for PDFs)</div>
-    <div class="note"><i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> Removing metadata does not prevent watermarks or steganography.</div>
+    <div class="note"><i class="fas fa-lightbulb"></i> <strong>Additional Tools:</strong> <strong>ExifCleaner</strong> (easy GUI) | <strong>Dangerzone</strong> (converts suspicious files to safe PDF) | <strong>PDF Redact Tools</strong> (specialized for PDFs)</div>
+    <div class="note"><i class="fas fa-exclamation-triangle"></i> <strong>Note:</strong> Metadata removal does not prevent watermarks or steganography techniques.</div>
 </div>
 
-<!-- ======== 🆘 What to do if… ======== -->
+<!-- ======== 🆘 What to do if... ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-life-ring"></i> 🆘 Troubleshooting – what to do if...</div>
+    <div class="card-header"><i class="fas fa-life-ring"></i> 🆘 Troubleshooting – What to do if...</div>
     <table class="comparison-table">
-        <tr>
-            <td><strong>The app fails to connect over Tor</strong>
-            <td>Make sure you ran <code>sudo onion-grater-add</code> on the gateway and decompressed any <code>.gz</code> files. Try <code>torsocks -i</code> instead of direct execution. Make sure Whonix‑Gateway is running and connected to the internet.
-        </tr>
-        <tr>
-            <td><strong>Very slow messaging</strong>
-            <td>Normal for Tor. Using <code>torsocks -i</code> for circuit isolation may help. Avoid sending very large files at once.
-        </tr>
-        <tr>
-            <td><strong>Keys disappear after reboot</strong>
-            <td>Make sure the app data is being directed to the correct portable folder (<code>cwtch-data/</code>, <code>simplex-chat-data/</code>, etc.). Verify folder permissions with <code>ls -la</code>.
-        </tr>
-        <tr>
-            <td><strong>AppImage does not work</strong>
-            <td>Make sure you ran <code>chmod +x application.AppImage</code>. Try running it from the terminal to see error messages. Make sure <code>fuse</code> is installed: <code>sudo apt install fuse -y</code>.
-        </tr>
-        <tr>
-            <td><strong>Suspected compromise</strong>
-            <td>Close the app immediately. Delete the entire portable folder. Start fresh with all new identifiers. Use <code>torsocks -i</code> for a completely new circuit.
-        </tr>
-        <tr>
-            <td><strong>"Permission denied" error</strong>
-            <td>Make sure the USB drive is formatted with a filesystem that supports permissions (ext4). FAT32/NTFS do not support <code>chmod</code> and can cause problems.
-        </tr>
+        <tr><td><strong>App fails to connect over Tor</strong></td><td>Ensure you ran <code>sudo onion-grater-add</code> on the Gateway and decompressed <code>.gz</code> files. Try <code>torsocks -i</code> instead of direct run. Make sure Whonix-Gateway is running and online.</td></tr>
+        <tr><td><strong>Extremely slow messaging</strong></td><td>Normal with Tor. Using <code>torsocks -i</code> to isolate the circuit may help. Avoid sending very large files all at once.</td></tr>
+        <tr><td><strong>Keys disappear after restart</strong></td><td>Ensure app data is directed to the correct portable folder (<code>cwtch-data/</code>, <code>simplex-chat-data/</code>, etc.). Check folder permissions with <code>ls -la</code>.</td></tr>
+        <tr><td><strong>AppImage does not run</strong></td><td>Make sure you ran <code>chmod +x application.AppImage</code>. Try running from terminal to see errors. Ensure <code>fuse</code> is installed: <code>sudo apt install fuse -y</code>.</td></tr>
+        <tr><td><strong>Suspected compromise</strong></td><td>Close the app immediately. Delete the entire portable folder. Start fresh with all new identifiers. Use <code>torsocks -i</code> for a completely new circuit.</td></tr>
+        <tr><td><strong>"Permission denied" error</strong></td><td>Ensure the flash drive is formatted with a filesystem that supports permissions (ext4). FAT32/NTFS systems do not support <code>chmod</code> and may cause issues.</td></tr>
     </table>
 </div>
 
-<!-- ======== Unified file structure ======== -->
+<!-- ======== Unified Folder Structure ======== -->
 <div class="card">
-    <div class="card-header"><i class="fas fa-folder-tree"></i> 📁 Unified file structure (to run from a USB drive)</div>
+    <div class="card-header"><i class="fas fa-folder-tree"></i> 📁 Unified Folder Structure (for USB Flash Drive)</div>
     <pre class="code-block" style="direction: ltr; text-align: left;">USB/
 ├── PortableApps/
 │   ├── SimpleXChat/
@@ -5217,13 +5225,14 @@ chmod +x run-telegram.sh</pre>
 │   │   └── simplex-chat-data/
 │   ├── Cwtch/
 │   │   ├── run-cwtch-portable.sh
-│   │   ├── lib/cwtch
+│   │   ├── lib/
+│   │   │   └── cwtch
 │   │   ├── Tor/
 │   │   └── cwtch-data/
-│   ├── Signal/                         ⚠️ not recommended for anonymity
+│   ├── Signal/                         ⚠️ Not secure for anonymity
 │   │   ├── run-signal-portable.sh
 │   │   └── signal-data/
-│   ├── Session/                        ⚠️ not recommended
+│   ├── Session/                        ⚠️ Not secure
 │   │   ├── run-session.sh
 │   │   ├── Session.AppImage
 │   │   ├── Session.AppImage.home/
@@ -5231,14 +5240,15 @@ chmod +x run-telegram.sh</pre>
 │   ├── Element/
 │   │   ├── run-element-portable.sh
 │   │   └── Element-Data/
-│   ├── Gajim/                          ⚠️ portable only on the same system
+│   ├── Gajim/                          ⚠️ Partially portable
 │   │   ├── run-gajim-portable.sh
 │   │   └── gajim-data/
-│   └── Telegram/                       ⚠️ insecure
+│   └── Telegram/                       ⚠️ Not secure
 │       ├── run-telegram.sh
-│       ├── Telegram/Telegram
-│       └── data/
-├── backups/                            # 📦 backups
+│       └── Telegram/
+│           ├── Telegram
+│           └── TelegramForcePortable/
+├── backups/                            📦 Backups
 │   └── backup-YYYYMMDD.tar.gz
 └── README.md</pre>
 </div>
