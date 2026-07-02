@@ -5857,7 +5857,7 @@ EOF'" 2>/dev/null || true
     if [[ "$create_dvm" == "y" || "$create_dvm" == "Y" ]]; then
         info "Creating hardened DVM template..."
         if ! qvm-ls kicksecure-18-dvm >/dev/null 2>&1; then
-            qvm-clone kicksecure-18 kicksecure-18-dvm
+            qvm-create --template kicksecure-18 --label red kicksecure-18-dvm
             ok "✓ kicksecure-18-dvm created"
         else
             info "kicksecure-18-dvm already exists"
