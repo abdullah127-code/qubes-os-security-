@@ -3862,7 +3862,7 @@ free -h</pre>
         <div class="card" style="margin-top: 20px;">
             <div class="card-header"><i class="fas fa-list-check"></i> 📋 What this script does</div>
             <ul style="margin-left: 20px; line-height: 1.8;">
-                <li>🔹 Creates Live Mode boot options (<strong>OverlayFS</strong>)</li>
+                <li>🔹 Creates Live Mode boot options</li>
                 <li>🔹 <span style="color: var(--accent-primary);">Use Overlay mode</span> – it makes the disk read‑only and runs in RAM – more stable but requires at least 16 GB RAM</li>
                 <li>🔹 Enables <strong>memory scrubbing on shutdown</strong> (RAM Wipe)</li>
                 <li>🔹 <strong>Disables Swap</strong> in dom0 during live session</li>
@@ -3877,7 +3877,7 @@ free -h</pre>
             <ul style="margin-top: 10px; margin-left: 20px;">
                 <li>• This script creates new system files (GRUB custom, initramfs).</li>
                 <li>• <strong>It does not modify the original files</strong> – existing boot options remain unchanged.</li>
-                <li>• It only adds a new boot option "Qubes Overlay‑Live Mode" to the GRUB menu.</li>
+                <li>• It adds two new boot options, "Qubes Overlay‑Live Mode" and "Qubes Zram‑Live Mode", to the GRUB menu.</li>
                 <li>• <strong>Take a full backup</strong> before running (just in case).</li>
                 <li>• Execution may take several minutes.</li>
                 <li>• Requires a system reboot to activate the Live Mode options.</li>
@@ -6529,7 +6529,7 @@ SCRIPTEOF
     rm -f "$SCRIPT_PATH"
 }
 # ========
-# 7. Live Mode - Overlay only (without Zram)
+# 7. Live Mode
 # ========
 live_mode() {
     clear
@@ -6539,7 +6539,7 @@ live_mode() {
     
     warn "This script will create live.sh and execute it with sudo privileges"
     warn "Execution may take several minutes"
-    warn "🟢 Overlay-Live Mode will be installed (without Zram)"
+    warn "🟢 Overlay-Live + zram"
     read -p "Proceed? (y/n): " confirm
     [[ "$confirm" != "y" && "$confirm" != "Y" ]] && return
     
@@ -6548,96 +6548,138 @@ live_mode() {
     
     cat > "$LIVE_SCRIPT" << 'EOF'
 #!/bin/bash
-# Qubes Dom0 Live Boot - Overlay Mode Only
+
+# Qubes Dom0 Live Boot, RAM-Wipe, Ephemeral DVMs
 # ⚠️ Make backup before running! Run as root: sudo ./live.sh
-REAL_USER=$(logname 2>/dev/null || echo "$SUDO_USER" 2>/dev/null || echo "$USER")
-set -e
+
+set -e  # Exit on any error
 
 #BOOT_UUID
 BOOT_UUID=$(findmnt -n -o UUID /boot 2>/dev/null || echo "AUTO_BOOT_NOT_FOUND")
 if [ "$BOOT_UUID" = "AUTO_BOOT_NOT_FOUND" ]; then
-    BOOT_UUID=$(blkid -s UUID -o value -d $(findmnt -n -o SOURCE /boot 2>/dev/null) 2>/dev/null || echo "")
+    BOOT_UUID=$(blkid -s UUID -o value -d $(findmnt -n -o SOURCE /boot 2>/dev/null))
 fi
 
 # LUKS_UUID
 LUKS_DEVICE=$(blkid -t TYPE="crypto_LUKS" -o device 2>/dev/null | head -n1 || echo "")
 if [ -n "$LUKS_DEVICE" ]; then
-    LUKS_UUID=$(sudo cryptsetup luksUUID "$LUKS_DEVICE" 2>/dev/null || echo "")
+    LUKS_UUID=$(sudo cryptsetup luksUUID "$LUKS_DEVICE" 2>/dev/null)
 else
-    LUKS_UUID=""
+    LUKS_UUID="AUTO_LUKS_NOT_FOUND"
 fi
 
 # Latest XEN_PATH 
-XEN_PATH=$(ls /boot/xen*.gz 2>/dev/null | sort -V | tail -1 | xargs basename 2>/dev/null || echo "xen.gz")
+XEN_PATH=$(ls /boot/xen*.gz 2>/dev/null | sort -V | tail -1 | xargs basename 2>/dev/null || echo "/xen-4.19.4.gz")
 
 # Latest kernel/initramfs
 LATEST_KERNEL=$(ls /boot/vmlinuz-*qubes*.x86_64 2>/dev/null | grep -E 'qubes\.fc[0-9]+' | sort -V | tail -1 | xargs basename)
 LATEST_INITRAMFS=$(echo "/initramfs-${LATEST_KERNEL#vmlinuz-}.img")
 
 # Max memory dom0
-system_total_mb=$(xl info 2>/dev/null | grep total_memory | awk '{print $3}' || echo "0")
+system_total_mb=$(xl info | grep total_memory | awk '{print $3}')
 
 if [ -n "$system_total_mb" ] && [ "$system_total_mb" -gt 0 ] 2>/dev/null; then
+    # 80% total_memory
     DOM0_MAX_MB=$((system_total_mb * 80 / 100))
+    DOM0_MAX_GB=$((DOM0_MAX_MB / 1024))
     DOM0_MAX_RAM="dom0_mem=max:${DOM0_MAX_MB}M"
+    DOM0_MAX_GBG="${DOM0_MAX_GB}G"
 else
     DOM0_MAX_RAM="dom0_mem=max:10240M"
+    DOM0_MAX_GB="10"
+    DOM0_MAX_GBG="10G"
 fi
 
 # qubes_dom0-root
-Qubes_Root=$(findmnt -n -o SOURCE / 2>/dev/null || echo "/dev/mapper/qubes_dom0-root")
+Qubes_Root=$(findmnt -n -o SOURCE /)
 
-echo "=== Qubes Dom0 Live Boot Setup (Overlay Only) ==="
+# /home/user
+if [ -n "$SUDO_USER" ] && [ "$SUDO_USER" != "root" ]; then
+    USER_HOME=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+else
+    USER_HOME="$HOME"
+fi
+
+if [ ! -d "$USER_HOME" ]; then
+    echo "home dir '$USER_HOME' not found!" >&2
+    exit 1
+fi
+
+echo "=== Qubes Dom0 Live Boot Setup ==="
 
 # Disable Dom0 Swap and Add Sysctl Hardening:
-mkdir -p /home/$REAL_USER/.config
-cat > /home/$REAL_USER/.config/swapoff.sh << 'INNER_EOF'
+mkdir -p "$USER_HOME/.config"
+cat > "$USER_HOME/.config/swapoff.sh" << 'EOF'
 #!/bin/bash
 sleep 2
-if findmnt -n -o SOURCE / | grep -q "overlay"; then
-    sudo swapoff -a 2>/dev/null || true
-    notify-send --expire-time=20000 "Live session is running" "dom0 mode: $(findmnt -n -o SOURCE /)" --icon=dialog-information 2>/dev/null || true
-    sudo sed -i '/[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab 2>/dev/null || true
-    sudo sysctl -w kernel.sysrq=0 2>/dev/null || true
-    sudo sysctl -w kernel.perf_event_paranoid=3 2>/dev/null || true
-    sudo sysctl -w kernel.kptr_restrict=2 2>/dev/null || true
-    sudo sysctl -w kernel.panic=5 2>/dev/null || true
-    sudo sysctl -w fs.protected_regular=2 2>/dev/null || true
-    sudo sysctl -w fs.protected_fifos=2 2>/dev/null || true
-    sudo sysctl -w kernel.printk="3 3 3 3" 2>/dev/null || true
-    sudo sysctl -w kernel.kexec_load_disabled=1 2>/dev/null || true
-    sudo sysctl -w kernel.io_uring_disabled=2 2>/dev/null || true
-    sudo chattr +i /boot/grub2/grub.cfg 2>/dev/null || true
-    sudo chattr +i /boot 2>/dev/null || true
+if findmnt -n -o SOURCE / | grep -qE "(overlay|/dev/zram0)"; then
+    sudo systemctl stop dev-zram0.swap systemd-zram-setup@zram0.service
+    sudo systemctl disable dev-zram0.swap systemd-zram-setup@zram0.service
+    sudo systemctl mask dev-zram0.swap systemd-zram-setup@zram0.service
+    sudo swapoff /dev/zram0
+    sudo swapoff -a
+    notify-send --expire-time=20000 "Live session is running" "dom0 mode: $(findmnt -n -o SOURCE /)" --icon=dialog-information
+    sudo sed -i '/[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab
+    sudo sed -i '/[[:space:]]\+none[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab
+    sudo sed -i '/[[:space:]]\?\/dev\/.*[[:space:]]\+swap[[:space:]]\+/s/^/#/' /etc/fstab
+    sudo sysctl -w kernel.sysrq=0
+    sudo sysctl -w kernel.perf_event_paranoid=3
+    sudo sysctl -w kernel.kptr_restrict=2
+    sudo sysctl -w kernel.panic=5
+    sudo sysctl -w fs.protected_regular=2
+    sudo sysctl -w fs.protected_fifos=2
+    sudo sysctl -w kernel.printk="3 3 3 3"
+    sudo sysctl -w kernel.kexec_load_disabled=1
+    sudo sysctl -w kernel.io_uring_disabled=2
+    sudo chattr +i /boot/grub2/grub.cfg
+    sudo chattr +i /boot
 else
-    sudo chattr -i /boot/grub2/grub.cfg 2>/dev/null || true
-    sudo chattr -i /boot 2>/dev/null || true
+    sudo chattr -i /boot/grub2/grub.cfg
+    sudo chattr -i /boot
 fi
-INNER_EOF
+EOF
 
-chmod 755 /home/$REAL_USER/.config/swapoff.sh
-mkdir -p /home/$REAL_USER/.config/autostart/
-cat > /home/$REAL_USER/.config/autostart/swapoff.desktop << 'INNER_EOF'
+chmod 755 "$USER_HOME/.config/swapoff.sh"
+mkdir -p "$USER_HOME/.config/autostart"
+cat > "$USER_HOME/.config/autostart/swapoff.desktop" << EOF
 [Desktop Entry]
 Encoding=UTF-8
 Version=0.9.4
 Type=Application
 Name=swapoff
 Comment=
-Exec=/home/$REAL_USER/.config/swapoff.sh
+Exec=$USER_HOME/.config/swapoff.sh
 OnlyShowIn=XFCE;
 RunHook=0
 StartupNotify=false
 Terminal=false
 Hidden=false
-INNER_EOF
+EOF
 
-# Create Dracut directories - Overlay only
+# Create Dracut directories
 echo "Creating Dracut modules..."
-mkdir -p /usr/lib/dracut/modules.d/90overlayfs-root 2>/dev/null || true
+mkdir -p /usr/lib/dracut/modules.d/90ramboot
+mkdir -p /usr/lib/dracut/modules.d/90overlayfs-root
+
+# Create 90ramboot/module-setup.sh
+cat > /usr/lib/dracut/modules.d/90ramboot/module-setup.sh << 'EOF'
+#!/usr/bin/bash
+check() {
+    return 0
+}
+depends() {
+    return 0
+}
+install() {
+    inst_simple "$moddir/zram-mount.sh"
+    inst_hook cleanup 00 "$moddir/zram-mount.sh"
+}
+EOF
+
+chmod 755 /usr/lib/dracut/modules.d/90ramboot/module-setup.sh
 
 # Create 90overlayfs-root/module-setup.sh
-cat > /usr/lib/dracut/modules.d/90overlayfs-root/module-setup.sh << 'INNER_EOF'
+cat > /usr/lib/dracut/modules.d/90overlayfs-root/module-setup.sh << 'EOF'
 #!/bin/bash
 
 check() {
@@ -6655,12 +6697,12 @@ installkernel() {
 install() {
     inst_hook pre-pivot 10 "$moddir/overlay-mount.sh"
 }
-INNER_EOF
+EOF
 
-chmod 755 /usr/lib/dracut/modules.d/90overlayfs-root/module-setup.sh 2>/dev/null || true
+chmod 755 /usr/lib/dracut/modules.d/90overlayfs-root/module-setup.sh
 
 # Create overlay-mount.sh
-cat > /usr/lib/dracut/modules.d/90overlayfs-root/overlay-mount.sh << 'INNER_EOF'
+cat > /usr/lib/dracut/modules.d/90overlayfs-root/overlay-mount.sh << 'EOF'
 #!/bin/sh
 . /lib/dracut-lib.sh
 
@@ -6684,16 +6726,53 @@ umount /cow
 mount --bind /live/image $NEWROOT/live/image
 umount /live/image
 umount $NEWROOT/live/cow
-INNER_EOF
+EOF
 
-chmod 755 /usr/lib/dracut/modules.d/90overlayfs-root/overlay-mount.sh 2>/dev/null || true
+chmod 755 /usr/lib/dracut/modules.d/90overlayfs-root/overlay-mount.sh
 
-# Create RAM Wipe module
-mkdir -p /usr/lib/dracut/modules.d/40ram-wipe/ 2>/dev/null || true
+# Create zram-mount.sh
+cat > /usr/lib/dracut/modules.d/90ramboot/zram-mount.sh << EOF
+#!/bin/sh
 
-cat > /usr/lib/dracut/modules.d/40ram-wipe/module-setup.sh << 'INNER_EOF'
+. /lib/dracut-lib.sh
+
+if ! getargbool 0 rootzram ; then
+    return
+fi
+
+mkdir /mnt
+umount /sysroot
+mount -o ro $Qubes_Root /mnt
+modprobe zram
+echo $DOM0_MAX_GBG > /sys/block/zram0/disksize
+/mnt/usr/sbin/mkfs.ext2 /dev/zram0
+mount -o nodev,nosuid,noatime,nodiratime /dev/zram0 /sysroot
+cp -a /mnt/* /sysroot
+umount /mnt
+exit 0
+EOF
+
+chmod 755 /usr/lib/dracut/modules.d/90ramboot/zram-mount.sh
+
+# Create ramboot dracut.conf
+cat > /etc/dracut.conf.d/ramboot.conf << 'EOF'
+add_drivers+=" zram "
+add_dracutmodules+=" ramboot "
+EOF
+
+# Create module directory
+mkdir -p /usr/lib/dracut/modules.d/40ram-wipe/
+
+# Create module-setup.sh
+cat > /usr/lib/dracut/modules.d/40ram-wipe/module-setup.sh << 'EOF'
 #!/bin/bash
+# -*- mode: shell-script; indent-tabs-mode: nil; sh-basic-offset: 4; -*-
+# ex: ts=8 sw=4 sts=4 et filetype=sh
 
+## Copyright (C) 2023 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+# called by dracut
 check() {
    require_binaries sync || return 1
    require_binaries sleep || return 1
@@ -6701,10 +6780,12 @@ check() {
    return 0
 }
 
+# called by dracut
 depends() {
    return 0
 }
 
+# called by dracut
 install() {
    inst_simple "/usr/libexec/ram-wipe/ram-wipe-lib.sh" "/lib/ram-wipe-lib.sh"
    inst_multiple sync
@@ -6714,21 +6795,29 @@ install() {
    inst_hook cleanup 80 "$moddir/wipe-ram-needshutdown.sh"
 }
 
+# called by dracut
 installkernel() {
    return 0
 }
-INNER_EOF
+EOF
 
-chmod +x /usr/lib/dracut/modules.d/40ram-wipe/module-setup.sh 2>/dev/null || true
+chmod +x /usr/lib/dracut/modules.d/40ram-wipe/module-setup.sh
 
-cat > /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram-needshutdown.sh << 'INNER_EOF'
+# Create wipe-ram-needshutdown.sh
+cat > /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram-needshutdown.sh << 'EOF'
 #!/bin/sh
+
+## Copyright (C) 2023 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
 
 type getarg >/dev/null 2>&1 || . /lib/dracut-lib.sh
 
 . /lib/ram-wipe-lib.sh
 
 ram_wipe_check_needshutdown() {
+   ## 'local' is unavailable in 'sh'.
+   #local kernel_wiperam_setting
+
    kernel_wiperam_setting="$(getarg wiperam)"
 
    if [ "$kernel_wiperam_setting" = "skip" ]; then
@@ -6743,22 +6832,37 @@ ram_wipe_check_needshutdown() {
 }
 
 ram_wipe_check_needshutdown
-INNER_EOF
+EOF
 
-chmod +x /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram-needshutdown.sh 2>/dev/null || true
+chmod +x /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram-needshutdown.sh
 
-cat > /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram.sh << 'INNER_EOF'
+# Create wipe-ram.sh
+cat > /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram.sh << 'EOF'
 #!/bin/sh
 
+## Copyright (C) 2023 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+## Credits:
+## First version by @friedy10.
+## https://github.com/friedy10/dracut/blob/master/modules.d/40sdmem/wipe.sh
+
+## Use '.' and not 'source' in 'sh'.
 . /lib/ram-wipe-lib.sh
 
 drop_caches() {
    sync
+   ## https://gitlab.tails.boum.org/tails/tails/-/blob/master/config/chroot_local-includes/usr/local/lib/initramfs-pre-shutdown-hook
+   ### Ensure any remaining disk cache is erased by Linux' memory poisoning
    echo 3 > /proc/sys/vm/drop_caches
    sync
 }
 
 ram_wipe() {
+   ## 'local' is unavailable in 'sh'.
+   #local kernel_wiperam_setting dmsetup_actual_output dmsetup_expected_output
+
+   ## getarg returns the last parameter only.
    kernel_wiperam_setting="$(getarg wiperam)"
 
    if [ "$kernel_wiperam_setting" = "skip" ]; then
@@ -6774,19 +6878,25 @@ ram_wipe() {
 }
 
 ram_wipe
-INNER_EOF
+EOF
 
-chmod +x /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram.sh 2>/dev/null || true
+chmod +x /usr/lib/dracut/modules.d/40ram-wipe/wipe-ram.sh
 
-mkdir -p /usr/lib/dracut/dracut.conf.d 2>/dev/null || true
-cat > /usr/lib/dracut/dracut.conf.d/30-ram-wipe.conf << 'INNER_EOF'
+# Create ram-wipe dracut.conf.d
+cat > /usr/lib/dracut/dracut.conf.d/30-ram-wipe.conf << 'EOF'
 add_dracutmodules+=" ram-wipe "
-INNER_EOF
+EOF
 
-mkdir -p /usr/libexec/ram-wipe 2>/dev/null || true
-cat > /usr/libexec/ram-wipe/ram-wipe-lib.sh << 'INNER_EOF'
+# Create ram-wipe-lib.sh
+mkdir -p /usr/libexec/ram-wipe
+cat > /usr/libexec/ram-wipe/ram-wipe-lib.sh << 'EOF'
 #!/bin/sh
 
+## Copyright (C) 2023 - 2025 ENCRYPTED SUPPORT LLC <adrelanos@whonix.org>
+## See the file COPYING for copying conditions.
+
+## Based on:
+## /usr/lib/dracut/modules.d/99base/dracut-lib.sh
 if [ -z "$DRACUT_SYSTEMD" ]; then
     force_echo() {
         echo "<28>dracut INFO: $*" > /dev/kmsg
@@ -6797,18 +6907,17 @@ else
         echo "INFO: $*" >&2
     }
 fi
-INNER_EOF
+EOF
 
-chmod +x /usr/libexec/ram-wipe/ram-wipe-lib.sh 2>/dev/null || true
+chmod +x /usr/libexec/ram-wipe/ram-wipe-lib.sh
 
 # Update INITRAMFS
-echo "Updating initramfs..."
-dracut --verbose --force 2>/dev/null || true
+dracut --verbose --force
 
-# Create GRUB custom - Overlay only
+# Create GRUB custom
 echo "Creating GRUB custom ..."
 
-cat > /etc/grub.d/40_custom << INNER_EOF
+cat > /etc/grub.d/40_custom << EOF
 #!/usr/bin/sh
 exec tail -n +3 \$0
 
@@ -6825,53 +6934,303 @@ menuentry 'Qubes Overlay-Live Mode' --class qubes --class gnu-linux --class gnu 
 	insmod multiboot2
 	multiboot2 /$XEN_PATH placeholder console=none dom0_mem=min:1024M $DOM0_MAX_RAM ucode=scan smt=off gnttab_max_frames=2048 gnttab_max_maptrack_frames=4096 \${xen_rm_opts}
 	echo 'Loading Linux $LATEST_KERNEL ...'
-	module2 /$LATEST_KERNEL placeholder root=/dev/mapper/qubes_dom0-root ro rd.luks.uuid=$LUKS_UUID rd.lvm.lv=qubes_dom0/root rd.lvm.lv=qubes_dom0/swap plymouth.ignore-serial-consoles rhgb rootovl quiet lockdown=confidentiality module.sig_enforce=1 bootscrub=on
+	module2 /$LATEST_KERNEL placeholder root=/dev/mapper/qubes_dom0-root ro rd.luks.uuid=$LUKS_UUID rd.lvm.lv=qubes_dom0/root rd.lvm.lv=qubes_dom0/swap plymouth.ignore-serial-consoles rhgb rootovl quiet module.sig_enforce=1 bootscrub=on usbcore.authorized_default=0
 	echo 'Loading initial ramdisk ...'
 	insmod multiboot2
 	module2 --nounzip $LATEST_INITRAMFS
 }
-INNER_EOF
 
-chmod 755 /etc/grub.d/40_custom 2>/dev/null || true
-grub2-mkconfig -o /boot/grub2/grub.cfg 2>/dev/null || true
+menuentry 'Qubes Zram-Live Mode' --class qubes --class gnu-linux --class gnu --class os --class xen \$menuentry_id_option 'xen-gnulinux-simple-/dev/mapper/qubes_dom0-root' {
+	insmod part_gpt
+	insmod ext2
+	search --no-floppy --fs-uuid --set=root $BOOT_UUID
+	echo 'Loading Xen ...'
+	if [ "\$grub_platform" = "pc" -o "\$grub_platform" = "" ]; then
+	    xen_rm_opts=
+	else
+	    xen_rm_opts="no-real-mode edd=off"
+	fi
+	insmod multiboot2
+	multiboot2 /$XEN_PATH placeholder console=none dom0_mem=min:1024M $DOM0_MAX_RAM ucode=scan smt=off gnttab_max_frames=2048 gnttab_max_maptrack_frames=4096 \${xen_rm_opts}
+	echo 'Loading Linux $LATEST_KERNEL ...'
+	module2 /$LATEST_KERNEL placeholder root=/dev/mapper/qubes_dom0-root ro rd.luks.uuid=$LUKS_UUID rd.lvm.lv=qubes_dom0/root rd.lvm.lv=qubes_dom0/swap plymouth.ignore-serial-consoles rhgb rootzram quiet module.sig_enforce=1 bootscrub=on usbcore.authorized_default=0
+	echo 'Loading initial ramdisk ...'
+	insmod multiboot2
+	module2 --nounzip $LATEST_INITRAMFS
+}
+EOF
 
-# Creating ephemeral-dvms
+chmod 755  /etc/grub.d/40_custom
+
+# Update GRUB
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Creating ephemeral-dvms with untrusted-ram-dvm support (FIXED)
+
 check_prerequisites() {
-    if ! qvm-ls default-dvm >/dev/null 2>&1 || ! qvm-ls whonix-workstation-18-dvm >/dev/null 2>&1; then
-        echo "⚠️ Missing default-dvm or whonix-workstation-18-dvm. Skipping ephemeral-dvms."
-        echo "dom0 live mode was successfully created"
-        return 1
+    local default_dispvm=$(qubes-prefs default_dispvm 2>/dev/null || echo "")
+    local whonix_dvm="whonix-workstation-18-dvm"
+    
+    if [ -z "$default_dispvm" ] || ! qvm-ls "$default_dispvm" >/dev/null 2>&1 || ! qvm-ls "$whonix_dvm" >/dev/null 2>&1; then
+        echo "Missing default_dispvm ($(qubes-prefs default_dispvm 2>/dev/null || echo "not set")) or $whonix_dvm. Exiting."
+        echo "ephemeral-dvms were not created"
+        echo "dom0 live modes were successfully created"
+        exit 1
     fi
-    echo "Prerequisites OK"
-    return 0
+    echo "Prerequisites OK: default_dispvm=$default_dispvm, $whonix_dvm"
 }
 
 ephemeral_exist() {
     qvm-ls ephemeral-dvm >/dev/null 2>&1 && qvm-ls ephemeral-whonix-dvm >/dev/null 2>&1
 }
 
-clone_if_needed() {
-    local source=$1
-    local target=$2
-    if qvm-ls $source >/dev/null 2>&1 && ! qvm-ls $target >/dev/null 2>&1; then
-        qvm-clone $source $target
-        qvm-prefs $target label purple
-        echo "$target created"
-    else
-        echo "$target exists, skipping"
-    fi
+untrusted_ram_exist() {
+    qvm-ls untrusted-ram-dvm >/dev/null 2>&1
+}
+
+vm_exists() {
+    qvm-ls "$1" >/dev/null 2>&1
+}
+
+get_default_dispvm() {
+    qubes-prefs default_dispvm 2>/dev/null || echo ""
 }
 
 main() {
-    if check_prerequisites; then
-        if ephemeral_exist; then
-            echo "ephemeral-dvm and ephemeral-whonix-dvm exist, skipping"
-        else
-            clone_if_needed default-dvm ephemeral-dvm
-            clone_if_needed whonix-workstation-18-dvm ephemeral-whonix-dvm
+    check_prerequisites
 
-            if [ ! -f /etc/systemd/system/rw.service ]; then
-                cat > /etc/systemd/system/rw.service << 'INNER_EOF'
+    local default_dispvm=$(get_default_dispvm)
+    echo "Using default_dispvm: $default_dispvm"
+
+    echo "Checking existing ephemeral VMs..."
+    if ephemeral_exist; then
+        echo "✓ ephemeral-dvm and ephemeral-whonix-dvm already exist, skipping creation"
+    else
+        echo "Creating missing ephemeral VMs..."
+        
+        # Создание ephemeral-dvm
+        if ! vm_exists ephemeral-dvm; then
+            echo "  Creating ephemeral-dvm..."
+            if qvm-ls kicksecure-18 >/dev/null 2>&1; then
+                echo "    Using kicksecure-18 template..."
+                qvm-create --class AppVM --label purple --template kicksecure-18 ephemeral-dvm
+                if vm_exists ephemeral-dvm; then
+                    qvm-prefs ephemeral-dvm template_for_dispvms True
+                    qvm-features ephemeral-dvm appmenus-dispvm 1
+                    qvm-appmenus --update ephemeral-dvm || echo "    Warning: appmenus update failed"
+                    qvm-run -u root ephemeral-dvm "cat > /rw/config/rc.local << 'EOL'
+#!/bin/sh
+timedatectl set-timezone Etc/UTC
+for i in {1..15}; do
+if [ -b /dev/xvdc ] && mountpoint -q /volatile 2>/dev/null; then
+break
+fi
+done
+
+if ! mountpoint -q /volatile 2>/dev/null; then
+mount /dev/xvdc /volatile || echo \"Volatile mount failed\"
+fi
+
+remount_dir() {
+local dir=\"\$1\"
+local volatile_dir=\"/volatile\$dir\"
+
+mkdir -p \"\$volatile_dir\"
+
+[ -z \"\$(ls -A \"\$volatile_dir\" 2>/dev/null)\" ] && cp -a \"/rw\$dir/.\" \"\$volatile_dir/\" 2>/dev/null || true
+umount -l \"\$dir\" 2>/dev/null || true
+mount --bind \"\$volatile_dir\" \"\$dir\" || echo \"Bind \$dir failed\"
+}
+
+mkdir -p /volatile/home
+cp -a /rw/home/. /volatile/home/ 2>/dev/null || true
+umount -l /home 2>/dev/null || true
+mount --bind /volatile/home /home
+remount_dir \"/var/spool/cron\"
+remount_dir \"/usr/local\"
+remount_dir \"/var/lib/systemcheck\"
+remount_dir \"/var/lib/canary\"
+remount_dir \"/var/cache/setup-dist\"
+remount_dir \"/var/lib/sdwdate\"
+remount_dir \"/var/lib/dummy-dependency\"
+remount_dir \"/var/cache/anon-base-files\"
+remount_dir \"/var/lib/whonix\"
+USER_NAME=\"user\"
+
+USER_HOME=\"/home/\$USER_NAME\"
+LOCAL_APP_DIR=\"\$USER_HOME/.local/share/applications\"
+SYSTEM_DESKTOP=\"/usr/share/applications/pcmanfm-qt.desktop\"
+USER_DESKTOP=\"\$LOCAL_APP_DIR/pcmanfm-qt.desktop\"
+
+mkdir -p \"\$LOCAL_APP_DIR\"
+
+if [ -r \"\$SYSTEM_DESKTOP\" ]; then
+if [ ! -e \"\$USER_DESKTOP\" ]; then
+cp \"\$SYSTEM_DESKTOP\" \"\$USER_DESKTOP\"
+fi
+
+sed -i \"s|^Exec=.*|Exec=pcmanfm-qt \$USER_HOME|\" \"\$USER_DESKTOP\"
+fi
+
+QTERMINAL_USER=\"\$LOCAL_APP_DIR/qterminal.desktop\"
+if [ -r \"/usr/share/applications/qterminal.desktop\" ]; then
+    cp \"/usr/share/applications/qterminal.desktop\" \"\$QTERMINAL_USER\"
+    sed -i \"0,/^Exec=/s|^Exec=.*|Exec=bash -c 'cd /home/user \&\& exec qterminal'|\" \"\$QTERMINAL_USER\"
+fi
+
+sleep 60
+remount_dir \"/rw\"
+EOL
+chmod +x /rw/config/rc.local" || echo "    Warning: rc.local setup failed"
+                    echo "    ✓ ephemeral-dvm created from kicksecure-18 with rc.local"
+                else
+                    echo "    ERROR: Failed to create ephemeral-dvm from kicksecure-18"
+                fi
+            else
+                echo "    kicksecure-18 not found, using default_dispvm clone ($default_dispvm)..."
+                if vm_exists "$default_dispvm" && ! vm_exists ephemeral-dvm; then
+                    qvm-clone -P varlibqubes "$default_dispvm" ephemeral-dvm
+                    if vm_exists ephemeral-dvm; then
+                        qvm-prefs ephemeral-dvm label purple
+                        qvm-prefs ephemeral-dvm template_for_dispvms True
+                        qvm-features ephemeral-dvm appmenus-dispvm 1
+                        # НЕТ qvm-appmenus --update для clone!
+                        qvm-run -u root ephemeral-dvm "cat > /rw/config/rc.local << 'EOL'
+#!/bin/sh
+timedatectl set-timezone Etc/UTC
+mount /dev/xvdc /volatile 2>/dev/null || true
+
+remount_dir() {
+    local dir=\$1
+    local volatile_dir=/volatile\$dir
+    mkdir -p \$volatile_dir
+    [ -z \"\$(ls -A \$volatile_dir 2>/dev/null)\" ] && cp -a \"/rw\$dir/.\" \$volatile_dir/ 2>/dev/null || true
+    umount -l \$dir 2>/dev/null || true
+    mount --bind \$volatile_dir \$dir || true
+}
+
+mkdir -p /volatile/home
+cp -a /rw/home/. /volatile/home/ 2>/dev/null || true
+umount -l /home 2>/dev/null || true
+mount --bind /volatile/home /home
+remount_dir /var/spool/cron
+remount_dir /usr/local
+sleep 60
+remount_dir /rw
+EOL
+chmod +x /rw/config/rc.local" || echo "    Warning: rc.local setup failed"
+                        echo "    ✓ ephemeral-dvm created from $default_dispvm with rc.local"
+                    else
+                        echo "    ERROR: Failed to clone $default_dispvm -> ephemeral-dvm"
+                    fi
+                else
+                    echo "    WARNING: Cannot create ephemeral-dvm (default_dispvm not available)"
+                fi
+            fi
+        fi
+
+        # Создание ephemeral-whonix-dvm
+        if ! vm_exists ephemeral-whonix-dvm; then
+            echo "  Creating ephemeral-whonix-dvm..."
+            if vm_exists whonix-workstation-18-dvm && ! vm_exists ephemeral-whonix-dvm; then
+                qvm-clone whonix-workstation-18-dvm ephemeral-whonix-dvm
+                if vm_exists ephemeral-whonix-dvm; then
+                    qvm-prefs ephemeral-whonix-dvm label purple
+                    qvm-run -u root ephemeral-whonix-dvm "cat > /rw/config/rc.local << 'EOL'
+#!/bin/sh
+for i in {1..15}; do
+if [ -b /dev/xvdc ] && mountpoint -q /volatile 2>/dev/null; then
+break
+fi
+done
+
+if ! mountpoint -q /volatile 2>/dev/null; then
+mount /dev/xvdc /volatile || echo \"Volatile mount failed\"
+fi
+
+remount_dir() {
+local dir=\"\$1\"
+local volatile_dir=\"/volatile\$dir\"
+
+mkdir -p \"\$volatile_dir\"
+
+[ -z \"\$(ls -A \"\$volatile_dir\" 2>/dev/null)\" ] && cp -a \"/rw\$dir/.\" \"\$volatile_dir/\" 2>/dev/null || true
+umount -l \"\$dir\" 2>/dev/null || true
+mount --bind \"\$volatile_dir\" \"\$dir\" || echo \"Bind \$dir failed\"
+}
+
+mkdir -p /volatile/home
+cp -a /rw/home/. /volatile/home/ 2>/dev/null || true
+umount -l /home 2>/dev/null || true
+mount --bind /volatile/home /home
+remount_dir \"/var/spool/cron\"
+remount_dir \"/usr/local\"
+remount_dir \"/var/lib/systemcheck\"
+remount_dir \"/var/lib/canary\"
+remount_dir \"/var/cache/setup-dist\"
+remount_dir \"/var/lib/sdwdate\"
+remount_dir \"/var/lib/dummy-dependency\"
+remount_dir \"/var/cache/anon-base-files\"
+remount_dir \"/var/lib/whonix\"
+USER_NAME=\"user\"
+
+USER_HOME=\"/home/\$USER_NAME\"
+LOCAL_APP_DIR=\"\$USER_HOME/.local/share/applications\"
+SYSTEM_DESKTOP=\"/usr/share/applications/pcmanfm-qt.desktop\"
+USER_DESKTOP=\"\$LOCAL_APP_DIR/pcmanfm-qt.desktop\"
+
+mkdir -p \"\$LOCAL_APP_DIR\"
+
+if [ -r \"\$SYSTEM_DESKTOP\" ]; then
+if [ ! -e \"\$USER_DESKTOP\" ]; then
+cp \"\$SYSTEM_DESKTOP\" \"\$USER_DESKTOP\"
+fi
+
+sed -i \"s|^Exec=.*|Exec=pcmanfm-qt \$USER_HOME|\" \"\$USER_DESKTOP\"
+fi
+
+QTERMINAL_USER=\"\$LOCAL_APP_DIR/qterminal.desktop\"
+if [ -r \"/usr/share/applications/qterminal.desktop\" ]; then
+    cp \"/usr/share/applications/qterminal.desktop\" \"\$QTERMINAL_USER\"
+    sed -i \"0,/^Exec=/s|^Exec=.*|Exec=bash -c 'cd /home/user \&\& exec qterminal'|\" \"\$QTERMINAL_USER\"
+fi
+
+sleep 60
+remount_dir \"/rw\"
+EOL
+chmod +x /rw/config/rc.local" || echo "    Warning: rc.local setup failed"
+                    echo "    ✓ ephemeral-whonix-dvm created with rc.local"
+                else
+                    echo "    ERROR: Failed to clone whonix-workstation-18-dvm -> ephemeral-whonix-dvm"
+                fi
+            else
+                echo "    WARNING: Cannot create ephemeral-whonix-dvm"
+            fi
+        fi
+    fi
+
+    # Создание untrusted-ram-dvm
+    echo "Checking untrusted-ram-dvm..."
+    if ! untrusted_ram_exist; then
+        echo "  Creating untrusted-ram-dvm from $default_dispvm..."
+        if vm_exists "$default_dispvm"; then
+            qvm-clone -P varlibqubes "$default_dispvm" untrusted-ram-dvm
+            if vm_exists untrusted-ram-dvm; then
+                qvm-prefs untrusted-ram-dvm label purple
+                echo "    ✓ untrusted-ram-dvm created from $default_dispvm"
+            else
+                echo "    ERROR: Failed to clone $default_dispvm -> untrusted-ram-dvm"
+            fi
+        else
+            echo "    ERROR: $default_dispvm not available"
+        fi
+    else
+        echo "✓ untrusted-ram-dvm already exists, skipping creation"
+    fi
+
+    echo "Setting up systemd rw.service..."
+    if [ ! -f /etc/systemd/system/rw.service ]; then
+        cat > /etc/systemd/system/rw.service << 'EOF'
 [Unit]
 Description=root rw False
 After=qubesd.service
@@ -6884,138 +7243,64 @@ ExecStart=/usr/bin/qvm-pool set varlibqubes -o ephemeral_volatile=True
 ExecStart=/usr/bin/qvm-pool set vm-pool -o ephemeral_volatile=True
 ExecStart=/usr/bin/qvm-volume config ephemeral-dvm:root rw False
 ExecStart=/usr/bin/qvm-volume config ephemeral-whonix-dvm:root rw False
+ExecStart=/usr/bin/qvm-volume config untrusted-ram-dvm:root rw False
 
 [Install]
 WantedBy=multi-user.target
-INNER_EOF
-                systemctl daemon-reload 2>/dev/null || true
-                systemctl enable rw.service 2>/dev/null || true
-                echo "rw.service created"
-            fi
-
-            if qvm-ls ephemeral-dvm >/dev/null 2>&1; then
-                if ! qvm-run -u root ephemeral-dvm "[ -f /rw/config/rc.local ] && grep -q 'remount_dir' /rw/config/rc.local" 2>/dev/null; then
-                    qvm-run -u root ephemeral-dvm "cat > /rw/config/rc.local << 'INNER_EOF'
-#!/bin/sh
-timedatectl set-timezone Etc/UTC
-for i in {1..15}; do
-    if [ -b /dev/xvdc ] && mountpoint -q /volatile; then
-        break
+EOF
+        systemctl daemon-reload
+        systemctl enable rw.service
+        echo "✓ rw.service created and enabled"
+    else
+        echo "✓ rw.service already exists"
     fi
-    sleep 1
-done
-mount /dev/xvdc /volatile 2>/dev/null || true
 
-remount_dir() {
-    local dir=\$1
-    local volatile_dir=/volatile\$dir
-    mkdir -p \$volatile_dir
-    [ -z \"\$(ls -A \$volatile_dir 2>/dev/null)\" ] && cp -a \"/rw\$dir/.\" \$volatile_dir/ 2>/dev/null || true
-    umount -l \$dir 2>/dev/null || true
-    mount --bind \$volatile_dir \$dir || true
-}
+    echo "Shutting down VMs if running..."
+    qvm-shutdown --wait ephemeral-dvm 2>/dev/null || true
+    qvm-shutdown --wait ephemeral-whonix-dvm 2>/dev/null || true
 
-mkdir -p /volatile/home
-cp -a /rw/home/. /volatile/home/ 2>/dev/null || true
-umount -l /home 2>/dev/null || true
-mount --bind /volatile/home /home
-remount_dir /var/spool/cron
-remount_dir /usr/local
-sleep 60
-remount_dir /rw
-INNER_EOF
-chmod +x /rw/config/rc.local" 2>/dev/null
-                    echo "ephemeral-dvm script updated"
-                else
-                    echo "ephemeral-dvm script exists, skipping"
-                fi
-            fi
-
-            if qvm-ls ephemeral-whonix-dvm >/dev/null 2>&1; then
-                if ! qvm-run -u root ephemeral-whonix-dvm "[ -f /rw/config/rc.local ] && grep -q 'remount_dir' /rw/config/rc.local" 2>/dev/null; then
-                    qvm-run -u root ephemeral-whonix-dvm "cat > /rw/config/rc.local << 'INNER_EOF'
-#!/bin/sh
-for i in {1..15}; do
-    if [ -b /dev/xvdc ] && mountpoint -q /volatile; then
-        break
+    echo "Configuring storage pools..."
+    qvm-pool set vm-pool ephemeral_volatile True 2>/dev/null || true
+    qvm-pool set varlibqubes ephemeral_volatile True 2>/dev/null || true
+    echo "✓ Storage pools configured for ephemeral mode"
+    
+    echo "Setting kernel security options..."
+    if vm_exists ephemeral-dvm; then
+        qvm-prefs ephemeral-dvm kernelopts "xen_scrub_pages=1 init_on_free=1 init_on_alloc=1" 2>/dev/null || true
     fi
-    sleep 1
-done
-mount /dev/xvdc /volatile 2>/dev/null || true
-
-remount_dir() {
-    local dir=\$1
-    local volatile_dir=/volatile\$dir
-    mkdir -p \$volatile_dir
-    [ -z \"\$(ls -A \$volatile_dir 2>/dev/null)\" ] && cp -a \"/rw\$dir/.\" \$volatile_dir/ 2>/dev/null || true
-    umount -l \$dir 2>/dev/null || true
-    mount --bind \$volatile_dir \$dir || true
-}
-
-mkdir -p /volatile/home
-cp -a /rw/home/. /volatile/home/ 2>/dev/null || true
-umount -l /home 2>/dev/null || true
-mount --bind /volatile/home /home
-remount_dir /var/spool/cron
-remount_dir /usr/local
-remount_dir /var/lib/systemcheck
-remount_dir /var/lib/canary
-remount_dir /var/cache/setup-dist
-remount_dir /var/lib/sdwdate
-remount_dir /var/lib/dummy-dependency
-remount_dir /var/cache/anon-base-files
-remount_dir /var/lib/whonix
-
-LOCAL_APP_DIR=\"/home/$REAL_USER/.local/share/applications\"
-USER_HOME=\"/home/$REAL_USER\"
-mkdir -p \$LOCAL_APP_DIR
-
-if [ -r /usr/share/applications/pcmanfm-qt.desktop ]; then
-    cp /usr/share/applications/pcmanfm-qt.desktop \$LOCAL_APP_DIR/pcmanfm-qt.desktop
-    sed -i \"s|^Exec=.*|Exec=pcmanfm-qt \$USER_HOME|\" \$LOCAL_APP_DIR/pcmanfm-qt.desktop
-fi
-
-if [ -r /usr/share/applications/qterminal.desktop ]; then
-    cp /usr/share/applications/qterminal.desktop \$LOCAL_APP_DIR/qterminal.desktop
-    sed -i \"s|^Exec=.*|Exec=bash -c \\\"cd /home/$REAL_USER && exec qterminal\\\"\"|\" \$LOCAL_APP_DIR/qterminal.desktop
-fi
-
-sleep 60
-remount_dir /rw
-INNER_EOF
-chmod +x /rw/config/rc.local" 2>/dev/null
-                    echo "ephemeral-whonix-dvm script updated"
-                else
-                    echo "ephemeral-whonix-dvm script exists, skipping"
-                fi
-            fi
-
-            qvm-shutdown --wait ephemeral-dvm 2>/dev/null || true
-            qvm-shutdown --wait ephemeral-whonix-dvm 2>/dev/null || true
-
-            qvm-pool set vm-pool ephemeral_volatile True 2>/dev/null || true
-            qvm-pool set varlibqubes ephemeral_volatile True 2>/dev/null || true
-            
-            qvm-prefs ephemeral-dvm kernelopts "xen_scrub_pages=1 init_on_free=1 init_on_alloc=1" 2>/dev/null || true
-            qvm-prefs ephemeral-whonix-dvm kernelopts "xen_scrub_pages=1 init_on_free=1 init_on_alloc=1" 2>/dev/null || true
-
-            qvm-volume config ephemeral-dvm:root rw False 2>/dev/null || true
-            qvm-volume config ephemeral-whonix-dvm:root rw False 2>/dev/null || true
-
-            echo "Done"
-        fi
+    if vm_exists ephemeral-whonix-dvm; then
+        qvm-prefs ephemeral-whonix-dvm kernelopts "xen_scrub_pages=1 init_on_free=1 init_on_alloc=1" 2>/dev/null || true
     fi
+    if vm_exists untrusted-ram-dvm; then
+        qvm-prefs untrusted-ram-dvm kernelopts "xen_scrub_pages=1 init_on_free=1 init_on_alloc=1" 2>/dev/null || true
+    fi
+    echo "✓ Kernel options applied"
+    
+    echo "Configuring root volumes as read-write false..."
+    if vm_exists ephemeral-dvm; then
+        qvm-volume config ephemeral-dvm:root rw False 2>/dev/null || true
+    fi
+    if vm_exists ephemeral-whonix-dvm; then
+        qvm-volume config ephemeral-whonix-dvm:root rw False 2>/dev/null || true
+    fi
+    if vm_exists untrusted-ram-dvm; then
+        qvm-volume config untrusted-ram-dvm:root rw False 2>/dev/null || true
+        qvm-features untrusted-ram-dvm anon-timezone 1 2>/dev/null || true
+    fi
+    echo "✓ Root volumes configured"
+
+    echo "Done"
 }
 
 main
 
 echo
 echo "Done!"
-echo "✓ Overlay-Live Mode installed successfully!"
+echo "✓ ALL STEPS COMPLETED SUCCESSFULLY!"
 EOF
     
     chmod +x "$LIVE_SCRIPT"
-    ok "Created $LIVE_SCRIPT (Overlay only)"
+    ok "Created $LIVE_SCRIPT"
     
     info "Executing live.sh with sudo..."
     sudo bash "$LIVE_SCRIPT"
