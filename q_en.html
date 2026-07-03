@@ -6546,7 +6546,7 @@ live_mode() {
     LIVE_SCRIPT="/home/$REAL_USER/Desktop/live.sh"
     info "Creating $LIVE_SCRIPT ..."
     
-    cat > "$LIVE_SCRIPT" << 'EOF'
+    cat > "$LIVE_SCRIPT" << 'EOOFF'
 #!/bin/bash
 
 # Qubes Dom0 Live Boot, RAM-Wipe, Ephemeral DVMs
@@ -7297,7 +7297,7 @@ main
 echo
 echo "Done!"
 echo "✓ ALL STEPS COMPLETED SUCCESSFULLY!"
-EOF
+EOOFF
     
     chmod +x "$LIVE_SCRIPT"
     ok "Created $LIVE_SCRIPT"
