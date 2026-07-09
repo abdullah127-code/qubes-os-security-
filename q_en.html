@@ -4992,49 +4992,97 @@ EOF
 chmod +x run-element-portable.sh</pre>
 </div>
 
-<!-- ======== Signal Card ======== -->
-<div class="card">
-    <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (❌ Not recommended for anonymity – phone number mandatory)</div>
-    
-    <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
-        <i class="fas fa-exclamation-triangle"></i> 
-        <strong>⚠️ Whonix Official Warning:</strong> Signal is <strong>not recommended</strong> for anonymous use in Whonix due to <strong>mandatory phone number</strong> for registration. This makes hiding the social graph from the server impossible. Use <strong>SimpleX Chat</strong> as a better alternative.
-    </div>
+    <!-- ======== Signal Card ======== -->
+    <div class="card">
+        <div class="card-header"><i class="fab fa-signal-messenger"></i> Signal Desktop (❌ Not recommended for anonymity - Phone number required)</div>
+        
+        <div class="note-critical" style="margin-top: 0; margin-bottom: 15px;">
+            <i class="fas fa-exclamation-triangle"></i> 
+            <strong>⚠️ Official Whonix Warning:</strong> Signal is <strong>not recommended</strong> for anonymous use in Whonix due to the <strong>mandatory phone number</strong> required for registration. This makes hiding your social graph from the server impossible. Use <strong>SimpleX Chat</strong> as a better alternative.
+        </div>
 
-    <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
-        <i class="fas fa-globe"></i> 
-        <strong>⚠️ Important Note: Temporarily enable networking in the template</strong><br>
-        To install Signal from the official repository, you must temporarily allow the template to connect to the internet. After installation, re-disable networking for security.
-    </div>
-
-    <div class="section-title"><i class="fas fa-download"></i> Installing Signal in Whonix Template</div>
-    <p>Run the following commands in the <strong>Whonix Workstation Template</strong> (with networking temporarily enabled):</p>
-    <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> Copy installation commands</button>
-    <pre class="code-block" id="signal-install"># 0. Install basic requirements
+        <!-- ============================================================ -->
+        <!-- Method 1: APT Installation (in the Template)                 -->
+        <!-- ============================================================ -->
+        <div class="section-title"><i class="fas fa-server"></i> Method 1: APT Installation (in the Whonix Template)</div>
+        <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
+            <i class="fas fa-globe"></i> 
+            <strong>🌐 Template-Specific Notice:</strong> To install Signal via APT, you must <strong>temporarily enable networking for the template</strong> (as it is blocked by default). After the installation is complete, disable networking again immediately.
+        </div>
+        <p>This method installs Signal directly into the <strong>Whonix Template</strong>, making it available to all AppVMs derived from it.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> Copy APT Installation Commands</button>
+        <pre class="code-block" id="signal-install"># 0. Install required dependencies
 sudo apt update > /dev/null 2>&1
 sudo apt install wget gnupg -y > /dev/null 2>&1
 
-# 1. Install official signing key
+# 1. Install the official signing key
 wget -O- https://updates.signal.org/desktop/apt/keys.asc 2> /dev/null | gpg --dearmor > signal-desktop-keyring.gpg
 cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
 
-# 2. Add official repository to sources list
+# 2. Add the official repository to your sources list
 wget -O signal-desktop.sources https://updates.signal.org/static/desktop/apt/signal-desktop.sources 2> /dev/null
 cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sources > /dev/null
 
-# 3. Update database and install Signal
+# 3. Update the database and install Signal
 sudo apt update > /dev/null 2>&1
 sudo apt install signal-desktop -y</pre>
-    <p>✅ After installation, re-disable networking in the template and restart the Whonix Workstation AppVM.</p>
+        <p>✅ After installation, re-lock the network for the template. To run it in an AppVM: <code>signal-desktop</code>.</p>
 
-    <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
-        <i class="fas fa-info-circle"></i> 
-        <strong>📱 Important Note:</strong> To use Signal Desktop, you must first install Signal on your phone and scan the QR code to sync. The app does not work independently without a phone. <strong>Your phone number will be linked to your account.</strong>
-    </div>
+        <!-- ============================================================ -->
+        <!-- Method 2: AppImage (in the AppVM - Recommended)              -->
+        <!-- ============================================================ -->
+        <div class="section-title" style="margin-top: 25px;"><i class="fas fa-usb"></i> Method 2: AppImage (in the AppVM - Recommended)</div>
+        <p>This method <strong>does not touch the template at all</strong> and does not require enabling any network (the AppVM's network is already open via Tor). The AppImage file is downloaded and run directly inside the isolated <strong>AppVM</strong>.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-appimage')"><i class="fas fa-copy"></i> Copy run-signal.sh</button>
+        <pre class="code-block" id="signal-appimage">cat > ~/run-signal.sh << 'EOF'
+#!/bin/bash
+set -e
+cd "$(dirname "$0")"
+SCRIPT_DIR="$(pwd)"
 
-    <div class="section-title"><i class="fas fa-usb"></i> Portable Signal Script</div>
-    <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> Copy run-signal-portable.sh</button>
-    <pre class="code-block" id="signal-portable">cat > run-signal-portable.sh << 'EOF'
+# Search for the AppImage
+APPIMAGE=$(find "$SCRIPT_DIR" -maxdepth 1 -iname "signal*.AppImage" -type f 2>/dev/null | head -1)
+
+# If not found: install wget (if needed) then download the official stable release
+if [ -z "$APPIMAGE" ]; then
+    command -v wget &>/dev/null || { echo "⚠️ Installing wget..."; sudo apt update && sudo apt install -y wget; }
+    echo "📥 Downloading Signal AppImage (stable release)..."
+    wget -qc --show-progress -O "$SCRIPT_DIR/signal-desktop.AppImage" "https://updates.signal.org/desktop/signal-desktop.AppImage"
+    APPIMAGE="$SCRIPT_DIR/signal-desktop.AppImage"
+else
+    APPIMAGE="$(basename "$APPIMAGE")"
+fi
+
+# Confirm existence + set execute permissions
+[ -f "$SCRIPT_DIR/$APPIMAGE" ] || { echo "❌ AppImage not found"; exit 1; }
+chmod +x "$SCRIPT_DIR/$APPIMAGE"
+
+# Portable environment (all settings are saved inside the script's folder)
+[ -d "$SCRIPT_DIR/Signal.AppImage.home" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-home
+[ -d "$SCRIPT_DIR/Signal.AppImage.config" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-config
+
+echo "🚀 Running Signal inside the AppVM..."
+exec "$SCRIPT_DIR/$APPIMAGE" "$@"
+EOF
+chmod +x ~/run-signal.sh</pre>
+        <div class="note" style="margin-top: 15px; margin-bottom: 0; background: #1a3a2a;">
+            <i class="fas fa-check-circle"></i> 
+            <strong>✅ Why this method is better in Qubes:</strong>
+            <ul style="margin: 5px 0 0 20px; color: #ccc;">
+                <li>No need to modify the base template (keeps it clean).</li>
+                <li><strong>Does not require enabling networking</strong> in the template, only the normal AppVM connection (via Tor).</li>
+                <li>Does not require <code>sudo</code> privileges (except for installing wget once inside the AppVM).</li>
+                <li>Copy the folder to any other AppVM and it will work immediately with its data.</li>
+            </ul>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- Portable Script for the APT Method (Optional)                -->
+        <!-- ============================================================ -->
+        <div class="section-title" style="margin-top: 25px;"><i class="fas fa-folder-open"></i> (Optional) Portable Script for the APT Method in the AppVM</div>
+        <p>If you prefer the APT method in the template, you can use this script inside the AppVM to save data locally in a separate folder.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-portable-apt')"><i class="fas fa-copy"></i> Copy run-signal-portable.sh</button>
+        <pre class="code-block" id="signal-portable-apt">cat > ~/run-signal-portable.sh << 'EOF'
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
@@ -5042,32 +5090,30 @@ PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
 mkdir -p "$PORTABLE_DIR"
 
 if ! command -v signal-desktop &> /dev/null; then
-    echo "❌ Signal not installed"
+    echo "❌ Signal is not installed in the template. Run the APT commands first."
     exit 1
 fi
 
-# Run Signal
+echo "🚀 Running Signal with a portable environment inside the AppVM..."
+echo "📁 Data is saved in: $PORTABLE_DIR"
+
 signal-desktop --user-data-dir="$PORTABLE_DIR" --password-store="basic" &
 SIGNAL_PID=$!
 
-echo "🚀 Signal running"
-echo "📁 Data: $PORTABLE_DIR"
-
-# Wait until the Signal window disappears (fallback)
-while pgrep -P $SIGNAL_PID > /dev/null 2>&1 || kill -0 $SIGNAL_PID 2>/dev/null; do
+while kill -0 $SIGNAL_PID 2>/dev/null; do
     sleep 1
 done
 
-echo "✅ Signal closed"
+echo "✅ Signal has been closed."
 exit 0
 EOF
-chmod +x run-signal-portable.sh</pre>
-    
-    <div class="note" style="margin-top: 15px; background: #3a1a1a;">
-        <i class="fas fa-shield-alt"></i> 
-        <strong>🛡️ Security Reminder:</strong> Signal may not work properly over Tor in Whonix. If connection fails, use <strong>SimpleX Chat</strong> as the Whonix-recommended alternative.
+chmod +x ~/run-signal-portable.sh</pre>
+
+        <div class="note" style="margin-top: 0; background: #3a1a1a;">
+            <i class="fas fa-shield-alt"></i> 
+            <strong>🛡️ Security Reminder:</strong> Signal may not connect properly over Tor in Whonix. If you encounter connection issues, use <strong>SimpleX Chat</strong> as the officially recommended alternative by Whonix.
+        </div>
     </div>
-</div>
 
 <!-- ======== Session Card ======== -->
 <div class="card">
