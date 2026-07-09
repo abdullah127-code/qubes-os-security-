@@ -4771,15 +4771,16 @@ chmod +x run-element-portable.sh</pre>
             <strong>⚠️ تحذير Whonix الرسمي:</strong> Signal <strong>غير موصى به</strong> للاستخدام المجهول في Whonix بسبب <strong>إلزامية رقم الهاتف</strong> للتسجيل. هذا يجعل إخفاء الـ social graph عن الخادم مستحيلاً. استخدم <strong>SimpleX Chat</strong> كبديل أفضل.
         </div>
 
+        <!-- ============================================================ -->
+        <!-- الطريقة الأولى: تثبيت APT (في القالب)                        -->
+        <!-- ============================================================ -->
+        <div class="section-title"><i class="fas fa-server"></i> الطريقة 1: تثبيت APT (في قالب Whonix)</div>
         <div class="note" style="margin-top: 0; margin-bottom: 15px; background: #6a4a2a;">
             <i class="fas fa-globe"></i> 
-            <strong>⚠️ تنبيه هام: يجب فتح الشبكة مؤقتاً في القالب</strong><br>
-            لتثبيت Signal من المستودع الرسمي، يجب السماح للقالب بالاتصال بالإنترنت مؤقتاً. بعد التثبيت، أعد إغلاق الشبكة للحفاظ على الأمان.
+            <strong>🌐 تنبيه خاص بالقالب:</strong> لتثبيت Signal عبر APT، يجب <strong>فتح الشبكة مؤقتاً للقالب</strong> (لأنه مغلق افتراضياً). بعد الانتهاء من التثبيت، أعد إغلاق الشبكة فوراً.
         </div>
-
-        <div class="section-title"><i class="fas fa-download"></i> تثبيت Signal في قالب Whonix</div>
-        <p>قم بتنفيذ الأوامر التالية في <strong>قالب Whonix Workstation</strong> (مع فتح الشبكة مؤقتاً):</p>
-        <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت</button>
+        <p>هذه الطريقة تُثبّت Signal في <strong>قالب Whonix</strong> نفسه، مما يجعله متاحاً لجميع الـ AppVMs المشتقة منه.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-install')"><i class="fas fa-copy"></i> نسخ أوامر التثبيت (APT)</button>
         <pre class="code-block" id="signal-install"># 0. تثبيت المتطلبات الأساسية
 sudo apt update > /dev/null 2>&1
 sudo apt install wget gnupg -y > /dev/null 2>&1
@@ -4795,16 +4796,63 @@ cat signal-desktop.sources | sudo tee /etc/apt/sources.list.d/signal-desktop.sou
 # 3. تحديث قاعدة البيانات وتثبيت Signal
 sudo apt update > /dev/null 2>&1
 sudo apt install signal-desktop -y</pre>
-        <p>✅ بعد التثبيت، أعد إغلاق الشبكة في القالب وأعد تشغيل Whonix Workstation AppVM.</p>
+        <p>✅ بعد التثبيت، أعد إغلاق الشبكة عن القالب. لتشغيله في الـ AppVM: <code>signal-desktop</code>.</p>
 
-        <div class="note" style="margin-top: 15px; margin-bottom: 15px; background: #2a4a6a;">
-            <i class="fas fa-info-circle"></i> 
-            <strong>📱 ملاحظة هامة:</strong> لاستخدام Signal Desktop، يجب أولاً تثبيت Signal على هاتفك ومسح رمز QR للمزامنة. التطبيق لا يعمل بشكل مستقل بدون هاتف. <strong>رقم الهاتف سيكون مرتبطاً بحسابك.</strong>
+        <!-- ============================================================ -->
+        <!-- الطريقة الثانية: AppImage (في الكيوب - الطريقة المُفضلة)     -->
+        <!-- ============================================================ -->
+        <div class="section-title" style="margin-top: 25px;"><i class="fas fa-usb"></i> الطريقة 2: AppImage (في الـ AppVM / الكيوب - مُفضل)</div>
+        <p>هذه الطريقة <strong>لا تمس القالب نهائياً</strong> ولا تحتاج لفتح أي شبكة (شبكة الكيوب مفتوحة أصلاً عبر Tor). يتم تحميل ملف AppImage وتشغيله مباشرة داخل الـ <strong>AppVM</strong> المعزول.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-appimage')"><i class="fas fa-copy"></i> نسخ run-signal.sh</button>
+        <pre class="code-block" id="signal-appimage">cat > ~/run-signal.sh << 'EOF'
+#!/bin/bash
+set -e
+cd "$(dirname "$0")"
+SCRIPT_DIR="$(pwd)"
+
+# البحث عن AppImage
+APPIMAGE=$(find "$SCRIPT_DIR" -maxdepth 1 -iname "signal*.AppImage" -type f 2>/dev/null | head -1)
+
+# إذا لم يوجد: تثبيت wget (إن لزم) ثم تحميل النسخة المستقرة الرسمية
+if [ -z "$APPIMAGE" ]; then
+    command -v wget &>/dev/null || { echo "⚠️ تثبيت wget..."; sudo apt update && sudo apt install -y wget; }
+    echo "📥 تحميل Signal AppImage (الإصدار المستقر)..."
+    wget -qc --show-progress -O "$SCRIPT_DIR/signal-desktop.AppImage" "https://updates.signal.org/desktop/signal-desktop.AppImage"
+    APPIMAGE="$SCRIPT_DIR/signal-desktop.AppImage"
+else
+    APPIMAGE="$(basename "$APPIMAGE")"
+fi
+
+# تأكيد الوجود + صلاحيات التنفيذ
+[ -f "$SCRIPT_DIR/$APPIMAGE" ] || { echo "❌ لم يعثر على AppImage"; exit 1; }
+chmod +x "$SCRIPT_DIR/$APPIMAGE"
+
+# البيئة المحمولة (جميع الإعدادات تُحفظ داخل مجلد السكربت)
+[ -d "$SCRIPT_DIR/Signal.AppImage.home" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-home
+[ -d "$SCRIPT_DIR/Signal.AppImage.config" ] || "$SCRIPT_DIR/$APPIMAGE" --appimage-portable-config
+
+echo "🚀 تشغيل Signal داخل الكيوب..."
+exec "$SCRIPT_DIR/$APPIMAGE" "$@"
+EOF
+chmod +x ~/run-signal.sh</pre>
+        <div class="note" style="margin-top: 15px; margin-bottom: 0; background: #1a3a2a;">
+            <i class="fas fa-check-circle"></i> 
+            <strong>✅ لماذا هذه الطريقة الأفضل في Qubes:</strong>
+            <ul style="margin: 5px 0 0 20px; color: #ccc;">
+                <li>لا حاجة لتعديل القالب الأساسي (يبقى نظيفاً).</li>
+                <li><strong>لا يحتاج فتح الشبكة</strong> في القالب، فقط اتصال الكيوب العادي (عبر Tor).</li>
+                <li>لا يحتاج صلاحيات <code>sudo</code> (عدا تثبيت wget داخل الكيوب مرة واحدة).</li>
+                <li>انسخ المجلد إلى أي كيوب آخر وسيعمل فوراً مع بياناته.</li>
+            </ul>
         </div>
 
-        <div class="section-title"><i class="fas fa-usb"></i> سكربت Signal المحمول</div>
-        <button class="btn-copy-all" onclick="copyScript('signal-portable')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
-        <pre class="code-block" id="signal-portable">cat > run-signal-portable.sh << 'EOF'
+        <!-- ============================================================ -->
+        <!-- سكربت محمول لطريقة APT (اختياري)                             -->
+        <!-- ============================================================ -->
+        <div class="section-title" style="margin-top: 25px;"><i class="fas fa-folder-open"></i> (اختياري) سكربت محمول لطريقة APT في الكيوب</div>
+        <p>إذا فضّلت طريقة APT في القالب، يمكنك استخدام هذا السكربت داخل الـ AppVM لحفظ البيانات محلياً في مجلد منفصل.</p>
+        <button class="btn-copy-all" onclick="copyScript('signal-portable-apt')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
+        <pre class="code-block" id="signal-portable-apt">cat > ~/run-signal-portable.sh << 'EOF'
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
@@ -4812,30 +4860,28 @@ PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
 mkdir -p "$PORTABLE_DIR"
 
 if ! command -v signal-desktop &> /dev/null; then
-    echo "❌ Signal غير مثبت"
+    echo "❌ Signal غير مثبت في القالب. نفّذ أوامر APT أولاً."
     exit 1
 fi
 
-# تشغيل Signal
+echo "🚀 تشغيل Signal ببيئة محمولة داخل الكيوب..."
+echo "📁 البيانات تُحفظ في: $PORTABLE_DIR"
+
 signal-desktop --user-data-dir="$PORTABLE_DIR" --password-store="basic" &
 SIGNAL_PID=$!
 
-echo "🚀 Signal يعمل"
-echo "📁 البيانات: $PORTABLE_DIR"
-
-# انتظر حتى تختفي نافذة Signal (حل بديل)
-while pgrep -P $SIGNAL_PID > /dev/null 2>&1 || kill -0 $SIGNAL_PID 2>/dev/null; do
+while kill -0 $SIGNAL_PID 2>/dev/null; do
     sleep 1
 done
 
-echo "✅ تم إغلاق Signal"
+echo "✅ تم إغلاق Signal."
 exit 0
 EOF
-chmod +x run-signal-portable.sh</pre>
-        
-        <div class="note" style="margin-top: 15px; background: #3a1a1a;">
+chmod +x ~/run-signal-portable.sh</pre>
+
+        <div class="note" style="margin-top: 0; background: #3a1a1a;">
             <i class="fas fa-shield-alt"></i> 
-            <strong>🛡️ تذكير أمني:</strong> Signal قد لا يعمل بشكل صحيح عبر Tor في Whonix. إذا فشل الاتصال، استخدم <strong>SimpleX Chat</strong> كبديل موصى به من Whonix.
+            <strong>🛡️ تذكير أمني:</strong> Signal قد لا يتصل عبر Tor في Whonix. إذا واجهت مشاكل في الاتصال، استخدم <strong>SimpleX Chat</strong> كبديل موصى به رسمياً من Whonix.
         </div>
     </div>
 
