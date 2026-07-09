@@ -4804,7 +4804,7 @@ sudo apt install signal-desktop -y</pre>
         <div class="section-title" style="margin-top: 25px;"><i class="fas fa-usb"></i> الطريقة 2: AppImage (في الـ AppVM / الكيوب - مُفضل)</div>
         <p>هذه الطريقة <strong>لا تمس القالب نهائياً</strong> ولا تحتاج لفتح أي شبكة (شبكة الكيوب مفتوحة أصلاً عبر Tor). يتم تحميل ملف AppImage وتشغيله مباشرة داخل الـ <strong>AppVM</strong> المعزول.</p>
         <button class="btn-copy-all" onclick="copyScript('signal-appimage')"><i class="fas fa-copy"></i> نسخ run-signal.sh</button>
-        <pre class="code-block" id="signal-appimage">cat > ~/run-signal.sh << 'EOF'
+        <pre class="code-block" id="signal-appimage">cat > run-signal.sh << 'EOF'
 #!/bin/bash
 set -e
 cd "$(dirname "$0")"
@@ -4852,7 +4852,7 @@ chmod +x ~/run-signal.sh</pre>
         <div class="section-title" style="margin-top: 25px;"><i class="fas fa-folder-open"></i> (اختياري) سكربت محمول لطريقة APT في الكيوب</div>
         <p>إذا فضّلت طريقة APT في القالب، يمكنك استخدام هذا السكربت داخل الـ AppVM لحفظ البيانات محلياً في مجلد منفصل.</p>
         <button class="btn-copy-all" onclick="copyScript('signal-portable-apt')"><i class="fas fa-copy"></i> نسخ run-signal-portable.sh</button>
-        <pre class="code-block" id="signal-portable-apt">cat > ~/run-signal-portable.sh << 'EOF'
+        <pre class="code-block" id="signal-portable-apt">cat > run-signal-portable.sh << 'EOF'
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/signal-data"
