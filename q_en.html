@@ -4623,7 +4623,6 @@ You → [channel 1] → [server] → [channel 2] → your friend</pre>
     <button class="btn-copy-all" onclick="copyScript('simplex-script')"><i class="fas fa-copy"></i> Copy run-simplex.sh</button>
     <pre class="code-block" id="simplex-script">cat > run-simplex.sh << 'EOF'
 #!/bin/bash
-set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORTABLE_DIR="${SCRIPT_DIR}/simplex-chat-data"
@@ -4977,7 +4976,6 @@ sudo apt install --no-install-recommends element-desktop</pre>
     <button class="btn-copy-all" onclick="copyScript('element-script')"><i class="fas fa-copy"></i> Copy run-element-portable.sh</button>
     <pre class="code-block" id="element-script">cat > run-element-portable.sh << 'EOF'
 #!/bin/bash
-set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PORTABLE_DATA_DIR="${SCRIPT_DIR}/Element-Data"
 mkdir -p "${PORTABLE_DATA_DIR}"
@@ -5036,7 +5034,6 @@ sudo apt install signal-desktop -y</pre>
         <button class="btn-copy-all" onclick="copyScript('signal-appimage')"><i class="fas fa-copy"></i> Copy run-signal.sh</button>
         <pre class="code-block" id="signal-appimage">cat > run-signal.sh << 'EOF'
 #!/bin/bash
-set -e
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
 
@@ -5133,7 +5130,6 @@ chmod +x run-signal-portable.sh</pre>
     <button class="btn-copy-all" onclick="copyScript('session-script')"><i class="fas fa-copy"></i> Copy run-session.sh</button>
     <pre class="code-block" id="session-script">cat > run-session.sh << 'EOF'
 #!/bin/bash
-set -e
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
 
@@ -5174,7 +5170,6 @@ chmod +x run-session.sh</pre>
     <button class="btn-copy-all" onclick="copyScript('telegram-script')"><i class="fas fa-copy"></i> Copy run-telegram.sh</button>
     <pre class="code-block" id="telegram-script">cat > run-telegram.sh << 'EOF'
 #!/bin/bash
-set -e
 cd "$(dirname "$0")"
 
 TELEGRAM_DIR="./Telegram"
