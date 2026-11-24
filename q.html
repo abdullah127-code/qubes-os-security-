@@ -7557,8 +7557,8 @@ systemctl enable mount-usb.service
     qvm-shutdown whonix-workstation-18
     echo -e "${G}✅ تم. يعمل تلقائياً كـ rc.local على كل VM جديد.${N}"
     # ========== mount-to-whonix.sh (توصيل + فصل آمن) ==========
-    
-cat > "$DESKTOP_PATH/ram-pool-scripts/mount-to-whonix.sh" << 'EOF'
+   mkdir -p "$DESKTOP_PATH/mount_whonix"
+cat > "$DESKTOP_PATH/mount_whonix/mount-to-whonix.sh" << 'EOF'
 #!/bin/bash
 # mount-to-whonix.sh - توصيل/فصل الأقراص في Whonix VMs
 set -e
